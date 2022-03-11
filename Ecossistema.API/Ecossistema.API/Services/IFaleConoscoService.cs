@@ -1,7 +1,9 @@
-﻿namespace Ecossistema.API.Services
+﻿using Ecossistema.API.Models.DTO;
+
+namespace Ecossistema.API.Services
 {
     public interface IFaleConoscoService
     {
-        Task EnviarEmail();
+        Task<string> Registrar(FaleConoscoDTO obj);
     }
 }
