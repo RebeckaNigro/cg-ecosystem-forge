@@ -16,6 +16,7 @@ namespace Ecossistema.API.Models.DTO
             Para.AddRange(para.Select(x => MailboxAddress.Parse(x)));
         }
 
+        #region Fale Conosco
         public void SetFaleConoscoSolicitante(FaleConoscoDTO obj, int codigo)
         {
             Assunto += "Fale Conosco";
@@ -66,8 +67,7 @@ namespace Ecossistema.API.Models.DTO
                         "Mensagem: " + obj.Mensagem;
             Conteudo += BottomHtml;
         }
-
-
+        #endregion
 
         #region Recuperação de senha
         //public void SetEmailDeTrocaDeSenha(string baseUrl, int usuarioId, string token, string nome, int origemId)
