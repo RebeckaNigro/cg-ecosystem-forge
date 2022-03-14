@@ -5,16 +5,23 @@ namespace Ecossistema.API.Services
 {
     public class FaleConoscoService : IFaleConoscoService
     {
+        private readonly IEmailService _emailService;
+        public FaleConoscoService(IEmailService emailService)
+        {
+            _emailService = emailService;
+        }
+
         public async Task<string> Registrar(FaleConoscoDTO obj)
         {
             //validações
             if (!Validar(obj)) return "Erro de validação";
 
-
             if (!await GravarMensagem(obj))
                 return "Erro ao registrar a mensagem!";
 
-            if (await EnviarEmailFaleConosco(obj))
+            await EnviarEmailFaleConoscoSolicitado(obj);
+
+            if (await EnviarEmailFaleConoscoSolicitante(obj))
                 return "Sua mensagem foi registrada com sucesso!";
             else
                 return "Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail";
@@ -26,10 +33,34 @@ namespace Ecossistema.API.Services
             return Task.FromResult(true);
         }
 
-        private Task<bool> EnviarEmailFaleConosco(FaleConoscoDTO obj)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj)
         {
+            try
+            {
+                var mensagem = new Mensagem(new List<string> { obj.EmailCorporativo });
+                mensagem.SetFaleConoscoSolicitante(obj, 123);
+                await _emailService.EnviarEmail(mensagem);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
 
-            return Task.FromResult(false);
+        private async Task<bool> EnviarEmailFaleConoscoSolicitado(FaleConoscoDTO obj)
+        {
+            try
+            {
+                var mensagem = new Mensagem(new List<string> { "victor.gimenez@sesims.com.br" });
+                mensagem.SetFaleConoscoSolicitado(obj, 123);
+                await _emailService.EnviarEmail(mensagem);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
 
         #region Validações
