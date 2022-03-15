@@ -1,0 +1,16 @@
+﻿using Ecossistema.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ecossistema.Services.Interfaces
+{
+    public interface IFaleConoscoService
+    {
+        Task<object> ObterFaleConosco();
+
+        Task<object> ObterContatosSetor(int faleConoscoSetorId);        
+    }
+}
