@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\EcossitemaTeste\Ecossistema.Services\Ecossistema.Services.csproj" />
+    <ProjectReference Include="..\Ecossistema.Services\Ecossistema.Services.csproj" />
   </ItemGroup>
 
 </Project>
