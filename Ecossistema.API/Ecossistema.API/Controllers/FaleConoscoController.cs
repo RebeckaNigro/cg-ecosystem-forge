@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Ecossistema.Services.Dto;
+using Ecossistema.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -7,9 +8,28 @@ namespace Ecossistema.API.Controllers
     [ApiController]
     public class FaleConoscoController : ControllerBase
     {
-        public FaleConoscoController()
+        private readonly IFaleConoscoService _faleConoscoService;
+        public FaleConoscoController(IFaleConoscoService faleConoscoService)
         {
-            //teste
+            _faleConoscoService = faleConoscoService;
+        }
+
+        [HttpPost("registrar")]
+        public async Task<string> Registrar([FromBody] FaleConoscoDTO obj)
+        {
+            return await _faleConoscoService.Registrar(obj);
+        }
+
+        [HttpGet("ObterFaleConosco")]
+        public async Task<object> ObterFaleConosco()
+        {
+            return await _faleConoscoService.ObterFaleConosco();
+        }
+
+        [HttpGet("ObterContatosSetor")]
+        public async Task<object> GetAll(int faleConoscoSetorId)
+        {
+            return await _faleConoscoService.ObterContatosSetor(faleConoscoSetorId);
         }
     }
 }
