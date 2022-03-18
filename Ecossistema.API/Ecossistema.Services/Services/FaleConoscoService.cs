@@ -74,8 +74,9 @@ namespace Ecossistema.Services.Services
 
         public async Task<string> Registrar(FaleConoscoDTO obj)
         {
+            RespostaPadrao resposta = new RespostaPadrao();
             //validações
-            if (!Validar(obj)) return "Erro de validação";
+            if (!Validar(obj, resposta)) return "Erro de validação";
 
             try
             {
@@ -235,7 +236,7 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarTamanhoTelefone(FaleConoscoDTO obj)
         {
-            var tamanhoCampo = 15;
+            var tamanhoCampo = 12;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.Telefone, tamanhoCampo))
             {
                 return false;
