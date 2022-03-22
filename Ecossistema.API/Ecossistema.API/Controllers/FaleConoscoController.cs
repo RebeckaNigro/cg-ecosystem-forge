@@ -15,7 +15,7 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPost("registrar")]
-        public async Task<string> Registrar([FromBody] FaleConoscoDTO obj)
+        public async Task<RespostaPadrao> Registrar([FromBody] FaleConoscoDTO obj)
         {
             return await _faleConoscoService.Registrar(obj);
         }

@@ -55,7 +55,7 @@ namespace Ecossistema.Services.Services
                     id = y.Id,
                     nome = y.Nome,
                     email = y.Email
-                }).Distinct()                
+                }).Distinct()
             });
 
             return result;
@@ -72,27 +72,36 @@ namespace Ecossistema.Services.Services
         //    _unitOfWork.Complete();
         //}
 
-        public async Task<string> Registrar(FaleConoscoDTO obj)
+        public async Task<RespostaPadrao> Registrar(FaleConoscoDTO obj)
         {
             RespostaPadrao resposta = new RespostaPadrao();
             //validações
-            if (!Validar(obj, resposta)) return "Erro de validação";
+            if (!await Validar(obj, resposta)) return resposta;
 
             try
             {
                 if (!await GravarMensagem(obj))
-                    return "Erro ao registrar a mensagem!";
+                {
+                    resposta.SetErroInterno("Erro ao gravar a solicitação.");
+                    return resposta;
+                }
 
                 await EnviarEmailFaleConoscoSolicitado(obj);
 
                 if (await EnviarEmailFaleConoscoSolicitante(obj))
-                    return "Sua mensagem foi registrada com sucesso!";
+                {
+                    resposta.SetMensagem("Sua mensagem foi registrada com sucesso!");
+                    return resposta;
+                }
                 else
-                    return "Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail";
+                {
+                    resposta.SetMensagem("Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail");
+                    return resposta;
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                resposta.SetErroInterno(ex.Message);
                 throw;
             }
 
@@ -107,7 +116,7 @@ namespace Ecossistema.Services.Services
                 Telefone = obj.Telefone,
                 Empresa = obj.Empresa,
                 Cargo = obj.Cargo,
-                FaleConoscoSetorId = (int)obj.Setor,
+                FaleConoscoSetorId = (int)obj.SetorId,
                 Descricao = obj.Mensagem,
                 Ativo = true,
                 DataCriacao = DateTime.Now,
@@ -142,7 +151,7 @@ namespace Ecossistema.Services.Services
         {
             try
             {
-                var mensagem = new Mensagem(new List<string> { "victor.gimenez@sesims.com.br" });
+                var mensagem = new Mensagem(new List<string> { "startupsuporte@sesims.com.br" });
                 mensagem.SetFaleConoscoSolicitado(obj, 123);
                 await _emailService.EnviarEmail(mensagem);
             }
@@ -155,166 +164,178 @@ namespace Ecossistema.Services.Services
 
         #region Validações
 
-        private bool Validar(FaleConoscoDTO obj)
+        private async Task<bool> Validar(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarNome(obj)) return false;
-            if (!ValidarEmailCorporativo(obj)) return false;
-            if (!ValidarTelefone(obj)) return false;
-            if (!ValidarEmpresa(obj)) return false;
-            if (!ValidarCargo(obj)) return false;
-            if (!ValidarSetor(obj)) return false;
-            if (!ValidarMensagem(obj)) return false;
+            if (!ValidarNome(obj, resposta)) return false;
+            if (!ValidarEmailCorporativo(obj, resposta)) return false;
+            if (!ValidarTelefone(obj, resposta)) return false;
+            if (!ValidarEmpresa(obj, resposta)) return false;
+            if (!ValidarCargo(obj, resposta)) return false;
+            if (!await ValidarSetor(obj, resposta)) return false;
+            if (!ValidarMensagem(obj, resposta)) return false;
 
             return true;
         }
 
-        private bool ValidarNome(FaleConoscoDTO obj)
+        private bool ValidarNome(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.Nome))
             {
+                resposta.SetCampoVazio("nome");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarEmailCorporativo(FaleConoscoDTO obj)
+        private bool ValidarEmailCorporativo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarStringEmailCorporativo(obj)) return false;
-            if (!ValidarTamanhoEmailCorporativo(obj)) return false;
-            if (!ValidarEmailCorporativoValido(obj)) return false;
+            if (!ValidarStringEmailCorporativo(obj, resposta)) return false;
+            if (!ValidarTamanhoEmailCorporativo(obj, resposta)) return false;
+            if (!ValidarEmailCorporativoValido(obj, resposta)) return false;
 
             return true;
         }
 
         #region Validações Internas Email
-        private bool ValidarStringEmailCorporativo(FaleConoscoDTO obj)
+        private bool ValidarStringEmailCorporativo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.EmailCorporativo))
             {
+                resposta.SetCampoVazio("emailCorporativo");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarTamanhoEmailCorporativo(FaleConoscoDTO obj)
+        private bool ValidarTamanhoEmailCorporativo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             var tamanhoCampo = 250;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.EmailCorporativo, tamanhoCampo))
             {
+                resposta.SetCampoInvalido("emailCorporativo", "O tamanho do e-mail não pode ser mais de 250 caracteres.");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarEmailCorporativoValido(FaleConoscoDTO obj)
+        private bool ValidarEmailCorporativoValido(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidaEMail(obj.EmailCorporativo))
             {
+                resposta.SetCampoInvalido("emailCorporativo", "O e-mail não está em um formato válido.");
                 return false;
             }
             return true;
         }
         #endregion
 
-        private bool ValidarTelefone(FaleConoscoDTO obj)
+        private bool ValidarTelefone(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarStringTelefone(obj)) return false;
-            if (!ValidarTamanhoTelefone(obj)) return false;
+            if (!ValidarStringTelefone(obj, resposta)) return false;
+            if (!ValidarTamanhoTelefone(obj, resposta)) return false;
 
             return true;
         }
 
         #region Validações Internas Telefone
-        private bool ValidarStringTelefone(FaleConoscoDTO obj)
+        private bool ValidarStringTelefone(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.Telefone))
             {
+                resposta.SetCampoVazio("telefone");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarTamanhoTelefone(FaleConoscoDTO obj)
+        private bool ValidarTamanhoTelefone(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             var tamanhoCampo = 12;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.Telefone, tamanhoCampo))
             {
+                resposta.SetCampoInvalido("telefone", "O número de telefone não pode conter mais do que 12 caracteres");
                 return false;
             }
             return true;
         }
         #endregion
 
-        private bool ValidarEmpresa(FaleConoscoDTO obj)
+        private bool ValidarEmpresa(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.Empresa))
             {
+                resposta.SetCampoVazio("empresa");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarCargo(FaleConoscoDTO obj)
+        private bool ValidarCargo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.Cargo))
             {
+                resposta.SetCampoVazio("cargo");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarSetor(FaleConoscoDTO obj)
+        private async Task<bool> ValidarSetor(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarSetorInteiroValido(obj)) return false;
-            if (!ValidarSetorExistente(obj)) return false;
+            if (!ValidarSetorInteiroValido(obj, resposta)) return false;
+            if (! await ValidarSetorExistente(obj, resposta)) return false;
 
             return true;
         }
 
         #region Validações Internas Setor
-        private bool ValidarSetorInteiroValido(FaleConoscoDTO obj)
+        private bool ValidarSetorInteiroValido(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidacaoUtil.ValidarInteiroValido(obj.Setor))
+            if (!ValidacaoUtil.ValidarInteiroValido(obj.SetorId))
             {
+                resposta.SetCampoInvalido("setor", "O setor não é válido.");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarSetorExistente(FaleConoscoDTO obj)
+        private async Task<bool> ValidarSetorExistente(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            //TODO colocar validação no banco e os awaits
-            if (false)
+            var setor = await _unitOfWork.FaleConoscoSetores.GetByIdAsync((int)obj.SetorId);
+            if (setor == null)
             {
+                resposta.SetNaoEncontrado("O setor selecionado não existe.");
                 return false;
             }
             return true;
         }
         #endregion
 
-        private bool ValidarMensagem(FaleConoscoDTO obj)
+        private bool ValidarMensagem(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarStringMensagem(obj)) return false;
-            if (!ValidarTamanhoMensagem(obj)) return false;
+            if (!ValidarStringMensagem(obj, resposta)) return false;
+            if (!ValidarTamanhoMensagem(obj, resposta)) return false;
 
             return true;
         }
 
         #region Validações Internas Mensagem
-        private bool ValidarStringMensagem(FaleConoscoDTO obj)
+        private bool ValidarStringMensagem(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(obj.Mensagem))
             {
+                resposta.SetCampoVazio("mensagem");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarTamanhoMensagem(FaleConoscoDTO obj)
+        private bool ValidarTamanhoMensagem(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             var tamanhoCampo = 800;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.Mensagem, tamanhoCampo))
             {
+                resposta.SetCampoInvalido("mensagem", "A mensagem não pode ser maior do que 800 caracteres.");
                 return false;
             }
             return true;

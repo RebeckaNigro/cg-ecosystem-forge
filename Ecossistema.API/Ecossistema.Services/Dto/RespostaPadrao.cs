@@ -142,13 +142,13 @@ namespace Ecossistema.Services.Dto
 
         public void SetErroInterno()
         {
-            Codigo = 666;
+            Codigo = 661;
             Resposta = "Erro interno durante o processamento";
         }
 
         public void SetErroInterno(string erro)
         {
-            Codigo = 666;
+            Codigo = 661;
             Resposta = "Erro interno durante o processamento. " + erro;
         }
 
