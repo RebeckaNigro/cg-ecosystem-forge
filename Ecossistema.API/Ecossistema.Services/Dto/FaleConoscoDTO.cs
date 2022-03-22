@@ -7,7 +7,7 @@
         public string? Telefone { get; set; }
         public string? Empresa { get; set; }
         public string? Cargo { get; set; }
-        public int? Setor { get; set; }
+        public int? SetorId { get; set; }
         public string? Mensagem { get; set; }
 
 

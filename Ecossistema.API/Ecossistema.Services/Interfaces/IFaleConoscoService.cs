@@ -7,6 +7,6 @@ namespace Ecossistema.Services.Interfaces
         Task<object> ObterFaleConosco();
 
         Task<object> ObterContatosSetor(int faleConoscoSetorId);
-        Task<string> Registrar(FaleConoscoDTO obj);
+        Task<RespostaPadrao> Registrar(FaleConoscoDTO obj);
     }
 }
