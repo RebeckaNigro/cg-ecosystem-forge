@@ -18,7 +18,7 @@ namespace Ecossistema.API.Controllers
         [HttpGet("ObterFaleConoscoSetores")]
         public async Task<RespostaPadrao> GetAll()
         {
-            return await _faleConoscoSetorService.ObterTodosFaleConosco();
+            return await _faleConoscoSetorService.ObterTodosFaleConoscoSetor();
         }
     }
 }

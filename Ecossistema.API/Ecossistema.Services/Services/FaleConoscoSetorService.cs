@@ -12,7 +12,7 @@ namespace Ecossistema.Services.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<RespostaPadrao> ObterTodosFaleConosco()
+        public async Task<RespostaPadrao> ObterTodosFaleConoscoSetor()
         {
             RespostaPadrao resposta = new RespostaPadrao();
 
