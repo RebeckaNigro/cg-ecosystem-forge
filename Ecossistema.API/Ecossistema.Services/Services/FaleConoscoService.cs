@@ -3,11 +3,6 @@ using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Ecossistema.Util.Validacao;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ecossistema.Services.Services
 {
@@ -44,6 +39,8 @@ namespace Ecossistema.Services.Services
 
         public async Task<object> ObterContatosSetor(int faleConoscoSetorId)
         {
+            RespostaPadrao resposta = new RespostaPadrao();
+
             var query = await _unitOfWork.FaleConoscoSetores.FindAllAsync(x => x.Id == faleConoscoSetorId, new[] { "FaleConoscoSetoresContatos" });
 
             var result = query.Select(x => new
@@ -80,22 +77,27 @@ namespace Ecossistema.Services.Services
 
             try
             {
-                if (!await GravarMensagem(obj))
+                int sucessoGravar = await GravarMensagem(obj);
+                if (sucessoGravar <= 0)
                 {
                     resposta.SetErroInterno("Erro ao gravar a solicitação.");
                     return resposta;
                 }
 
-                await EnviarEmailFaleConoscoSolicitado(obj);
+                string numeroProtocolo = DateTime.Now.Year.ToString() + sucessoGravar.ToString("D8");
 
-                if (await EnviarEmailFaleConoscoSolicitante(obj))
+                var emailsSetor = _unitOfWork.FaleConoscoSetoresContatos.FindAllAsync(x => x.FaleConoscoSetorId == obj.SetorId).Result;
+
+                await EnviarEmailFaleConoscoSolicitado(obj, emailsSetor, numeroProtocolo);
+
+                if (await EnviarEmailFaleConoscoSolicitante(obj, numeroProtocolo))
                 {
-                    resposta.SetMensagem("Sua mensagem foi registrada com sucesso!");
+                    resposta.SetMensagem("Sua mensagem foi registrada com sucesso! O número do protocolo é " + numeroProtocolo.ToString());
                     return resposta;
                 }
                 else
                 {
-                    resposta.SetMensagem("Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail");
+                    resposta.SetMensagem("Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail. O número do protocolo é " + numeroProtocolo.ToString());
                     return resposta;
                 }
             }
@@ -107,7 +109,7 @@ namespace Ecossistema.Services.Services
 
         }
 
-        private Task<bool> GravarMensagem(FaleConoscoDTO obj)
+        private Task<int> GravarMensagem(FaleConoscoDTO obj)
         {
             var faleConosco = new FaleConosco
             {
@@ -129,15 +131,15 @@ namespace Ecossistema.Services.Services
             _unitOfWork.FaleConoscos.AddAsync(faleConosco);
             _unitOfWork.Complete();
 
-            return Task.FromResult(true);
+            return Task.FromResult(faleConosco.Id);
         }
 
-        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroProtocolo)
         {
             try
             {
                 var mensagem = new Mensagem(new List<string> { obj.EmailCorporativo });
-                mensagem.SetFaleConoscoSolicitante(obj, 123);
+                mensagem.SetFaleConoscoSolicitante(obj, numeroProtocolo);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)
@@ -147,12 +149,16 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private async Task<bool> EnviarEmailFaleConoscoSolicitado(FaleConoscoDTO obj)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitado(FaleConoscoDTO obj, IEnumerable<FaleConoscoSetorContato> lista, string numeroProtocolo)
         {
             try
             {
-                var mensagem = new Mensagem(new List<string> { "startupsuporte@sesims.com.br" });
-                mensagem.SetFaleConoscoSolicitado(obj, 123);
+                var emails = new List<string>();
+                foreach (FaleConoscoSetorContato contato in lista) emails.Add(contato.Email);
+                //var mensagem = new Mensagem(emails);
+                var mensagem = new Mensagem(new List<string> { "victor.gimenez@sesims.com.br" });
+
+                mensagem.SetFaleConoscoSolicitado(obj, numeroProtocolo);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)
@@ -179,13 +185,37 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarNome(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
+            if (!ValidarStringNome(obj, resposta)) return false;
+            if (!ValidarTamanhoNome(obj, resposta)) return false;
+
+            return true;
+        }
+
+        #region Validações Internas Nome
+        private bool ValidarStringNome(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
             if (!ValidacaoUtil.ValidarString(obj.Nome))
             {
-                resposta.SetCampoVazio("nome");
+                resposta.SetCampoVazio("Nome");
                 return false;
             }
             return true;
         }
+
+
+        private bool ValidarTamanhoNome(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(obj.Nome, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Nome", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+
+        #endregion
 
         private bool ValidarEmailCorporativo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
@@ -201,7 +231,7 @@ namespace Ecossistema.Services.Services
         {
             if (!ValidacaoUtil.ValidarString(obj.EmailCorporativo))
             {
-                resposta.SetCampoVazio("emailCorporativo");
+                resposta.SetCampoVazio("Email Corporativo");
                 return false;
             }
             return true;
@@ -209,10 +239,10 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarTamanhoEmailCorporativo(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            var tamanhoCampo = 250;
+            var tamanhoCampo = 100;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.EmailCorporativo, tamanhoCampo))
             {
-                resposta.SetCampoInvalido("emailCorporativo", "O tamanho do e-mail não pode ser mais de 250 caracteres.");
+                resposta.SetCampoInvalido("Email Corporativo", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
                 return false;
             }
             return true;
@@ -222,7 +252,7 @@ namespace Ecossistema.Services.Services
         {
             if (!ValidacaoUtil.ValidaEMail(obj.EmailCorporativo))
             {
-                resposta.SetCampoInvalido("emailCorporativo", "O e-mail não está em um formato válido.");
+                resposta.SetCampoInvalido("Email Corporativo", "O e-mail não está em um formato válido.");
                 return false;
             }
             return true;
@@ -242,7 +272,7 @@ namespace Ecossistema.Services.Services
         {
             if (!ValidacaoUtil.ValidarString(obj.Telefone))
             {
-                resposta.SetCampoVazio("telefone");
+                resposta.SetCampoVazio("Telefone");
                 return false;
             }
             return true;
@@ -253,7 +283,7 @@ namespace Ecossistema.Services.Services
             var tamanhoCampo = 12;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.Telefone, tamanhoCampo))
             {
-                resposta.SetCampoInvalido("telefone", "O número de telefone não pode conter mais do que 12 caracteres");
+                resposta.SetCampoInvalido("Telefone", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres");
                 return false;
             }
             return true;
@@ -262,23 +292,69 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarEmpresa(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
+            if (!ValidarStringEmpresa(obj, resposta)) return false;
+            if (!ValidarTamanhoEmpresa(obj, resposta)) return false;
+
+            return true;
+        }
+
+        #region Validações Internas Empresa
+        private bool ValidarStringEmpresa(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
             if (!ValidacaoUtil.ValidarString(obj.Empresa))
             {
-                resposta.SetCampoVazio("empresa");
+                resposta.SetCampoVazio("Empresa");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarCargo(FaleConoscoDTO obj, RespostaPadrao resposta)
+
+        private bool ValidarTamanhoEmpresa(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidacaoUtil.ValidarString(obj.Cargo))
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(obj.Empresa, tamanhoCampo))
             {
-                resposta.SetCampoVazio("cargo");
+                resposta.SetCampoInvalido("Empresa", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
                 return false;
             }
             return true;
         }
+
+        #endregion
+
+        private bool ValidarCargo(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
+            if (!ValidarStringCargo(obj, resposta)) return false;
+            if (!ValidarTamanhoCargo(obj, resposta)) return false;
+
+            return true;
+        }
+
+        #region Validações Internas Cargo
+        private bool ValidarStringCargo(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(obj.Cargo))
+            {
+                resposta.SetCampoVazio("Cargo");
+                return false;
+            }
+            return true;
+        }
+
+
+        private bool ValidarTamanhoCargo(FaleConoscoDTO obj, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(obj.Cargo, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Cargo", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
 
         private async Task<bool> ValidarSetor(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
@@ -293,7 +369,7 @@ namespace Ecossistema.Services.Services
         {
             if (!ValidacaoUtil.ValidarInteiroValido(obj.SetorId))
             {
-                resposta.SetCampoInvalido("setor", "O setor não é válido.");
+                resposta.SetCampoInvalido("Setor", "O setor não é válido.");
                 return false;
             }
             return true;
@@ -324,7 +400,7 @@ namespace Ecossistema.Services.Services
         {
             if (!ValidacaoUtil.ValidarString(obj.Mensagem))
             {
-                resposta.SetCampoVazio("mensagem");
+                resposta.SetCampoVazio("Mensagem");
                 return false;
             }
             return true;
@@ -332,10 +408,10 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarTamanhoMensagem(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            var tamanhoCampo = 800;
+            var tamanhoCampo = 2000;
             if (!ValidacaoUtil.ValidarTamanhoString(obj.Mensagem, tamanhoCampo))
             {
-                resposta.SetCampoInvalido("mensagem", "A mensagem não pode ser maior do que 800 caracteres.");
+                resposta.SetCampoInvalido("Mensagem", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
                 return false;
             }
             return true;
