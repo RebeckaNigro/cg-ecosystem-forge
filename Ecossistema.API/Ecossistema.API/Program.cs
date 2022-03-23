@@ -17,6 +17,7 @@ builder.Services.AddSingleton(configuracaoEmail);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IFaleConoscoService, FaleConoscoService>();
+builder.Services.AddScoped<IFaleConoscoSetorService, FaleConoscoSetorService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
