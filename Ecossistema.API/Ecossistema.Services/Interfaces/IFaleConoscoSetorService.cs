@@ -4,6 +4,6 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IFaleConoscoSetorService
     {
-        Task<RespostaPadrao> ObterTodosFaleConosco();
+        Task<RespostaPadrao> ObterTodosFaleConoscoSetor();
     }
 }

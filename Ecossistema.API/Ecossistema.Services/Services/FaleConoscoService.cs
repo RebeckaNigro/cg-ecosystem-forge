@@ -84,20 +84,20 @@ namespace Ecossistema.Services.Services
                     return resposta;
                 }
 
-                string numeroProtocolo = DateTime.Now.Year.ToString() + sucessoGravar.ToString("D8");
+                string numeroSolicitacao = DateTime.Now.Year.ToString() + sucessoGravar.ToString("D8");
 
-                var emailsSetor = _unitOfWork.FaleConoscoSetoresContatos.FindAllAsync(x => x.FaleConoscoSetorId == obj.SetorId).Result;
+                var emailsSetor = await _unitOfWork.FaleConoscoSetoresContatos.FindAllAsync(x => x.FaleConoscoSetorId == obj.SetorId && x.Ativo == true);
 
-                await EnviarEmailFaleConoscoSolicitado(obj, emailsSetor, numeroProtocolo);
+                await EnviarEmailFaleConoscoSolicitado(obj, emailsSetor, numeroSolicitacao);
 
-                if (await EnviarEmailFaleConoscoSolicitante(obj, numeroProtocolo))
+                if (await EnviarEmailFaleConoscoSolicitante(obj, numeroSolicitacao))
                 {
-                    resposta.SetMensagem("Sua mensagem foi registrada com sucesso! O número do protocolo é " + numeroProtocolo.ToString());
+                    resposta.SetMensagem("Sua mensagem foi registrada com sucesso! O número da solicitação é " + numeroSolicitacao.ToString());
                     return resposta;
                 }
                 else
                 {
-                    resposta.SetMensagem("Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail. O número do protocolo é " + numeroProtocolo.ToString());
+                    resposta.SetMensagem("Sua mensagem foi registrada, mas ocorreu um problema no envio do e-mail. O número da solicitação é " + numeroSolicitacao.ToString());
                     return resposta;
                 }
             }
@@ -109,7 +109,7 @@ namespace Ecossistema.Services.Services
 
         }
 
-        private Task<int> GravarMensagem(FaleConoscoDTO obj)
+        private async Task<int> GravarMensagem(FaleConoscoDTO obj)
         {
             var faleConosco = new FaleConosco
             {
@@ -128,18 +128,18 @@ namespace Ecossistema.Services.Services
                 UsuarioOperacaoId = 1
             };
 
-            _unitOfWork.FaleConoscos.AddAsync(faleConosco);
+            await _unitOfWork.FaleConoscos.AddAsync(faleConosco);
             _unitOfWork.Complete();
 
-            return Task.FromResult(faleConosco.Id);
+            return faleConosco.Id;
         }
 
-        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroProtocolo)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao)
         {
             try
             {
                 var mensagem = new Mensagem(new List<string> { obj.EmailCorporativo });
-                mensagem.SetFaleConoscoSolicitante(obj, numeroProtocolo);
+                mensagem.SetFaleConoscoSolicitante(obj, numeroSolicitacao);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)
@@ -149,16 +149,15 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private async Task<bool> EnviarEmailFaleConoscoSolicitado(FaleConoscoDTO obj, IEnumerable<FaleConoscoSetorContato> lista, string numeroProtocolo)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitado(FaleConoscoDTO obj, IEnumerable<FaleConoscoSetorContato> lista, string numeroSolicitacao)
         {
             try
             {
                 var emails = new List<string>();
                 foreach (FaleConoscoSetorContato contato in lista) emails.Add(contato.Email);
-                //var mensagem = new Mensagem(emails);
-                var mensagem = new Mensagem(new List<string> { "victor.gimenez@sesims.com.br" });
+                var mensagem = new Mensagem(emails);
 
-                mensagem.SetFaleConoscoSolicitado(obj, numeroProtocolo);
+                mensagem.SetFaleConoscoSolicitado(obj, numeroSolicitacao);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)

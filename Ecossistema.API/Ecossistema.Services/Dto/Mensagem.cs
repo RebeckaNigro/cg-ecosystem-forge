@@ -17,13 +17,13 @@ namespace Ecossistema.Services.Dto
         }
 
         #region Fale Conosco
-        public void SetFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroProtocolo)
+        public void SetFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao)
         {
             Assunto += "Fale Conosco";
             Conteudo = TopHtml;
             Conteudo += $@"Caro(a) " + obj.Nome + "," +
                         "<br>" +
-                        "sua mensagem será respondida em breve! O protocolo da solicitação é " + numeroProtocolo + "." +
+                        "sua mensagem será respondida em breve! O número da solicitação é " + numeroSolicitacao + "." +
                         "<br>" +
                         "<br>" +
                         "<strong>Dados enviados:</strong>" +
@@ -43,13 +43,13 @@ namespace Ecossistema.Services.Dto
             Conteudo += BottomHtml;
         }
 
-        public void SetFaleConoscoSolicitado(FaleConoscoDTO obj, string numeroProtocolo)
+        public void SetFaleConoscoSolicitado(FaleConoscoDTO obj, string numeroSolicitacao)
         {
             Assunto += "Fale Conosco";
             Conteudo = TopHtml;
             Conteudo += $@"<div style='text-decoration: underline;'>Nova solicitação no Fale Conosco do Ecossistema</div>" +
                         "<br>" +
-                        "Protocolo da solicitação: " + numeroProtocolo + "." +
+                        "Número da solicitação: " + numeroSolicitacao + "." +
                         "<br>" +
                         "<br>" +
                         "<strong>Dados:</strong>" +
