@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Domain.Entities
 {
-    public class FaleConosco
+    public class Usuario
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public int PessoaId { get; set; }
+        public virtual Pessoa Pessoa { get; set; }
+        public int InstituicaoId { get; set; }
+        public virtual Instituicao Instituicao { get; set; }
+        public int PermissaoId { get; set; }
+        public virtual Permissao Permissao { get; set; }
         public string Email { get; set; }
-        public string Telefone { get; set; }
-        public string Empresa { get; set; }
+        public string SenhaHash { get; set; }
+        public string SenhaSalt { get; set; }
+        public string? Token { get; set; }
+        public DateTime? TokenExpiracao { get; set; }
+        public DateTime UltimoLogin { get; set; }
         public string Cargo { get; set; }
-        public int FaleConoscoSetorId { get; set; }
-        public virtual FaleConoscoSetor FaleConoscoSetor { get; set; }
-        public string Descricao { get; set; }
+        public int? AprovacaoId { get; set; }
+        public virtual Aprovacao Aprovacao { get; set; }
+        public bool Aprovado { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataCriacao { get; set; }
         public int UsuarioCriacaoId { get; set; }
