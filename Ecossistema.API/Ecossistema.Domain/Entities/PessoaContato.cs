@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Domain.Entities
 {
-    public class FaleConoscoSetorContato
+    public class PessoaContato
     {
         public int Id { get; set; }
-        public int FaleConoscoSetorId { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
+        public int PessoaId { get; set; }
+        public virtual Pessoa Pessoa { get; set; }
+        public int ContatoId { get; set; }
+        public virtual Contato Contato { get; set; }
+        public int TipoContatoId { get; set; }
+        public virtual TipoContato TipoContato { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataCriacao { get; set; }
         public int UsuarioCriacaoId { get; set; }

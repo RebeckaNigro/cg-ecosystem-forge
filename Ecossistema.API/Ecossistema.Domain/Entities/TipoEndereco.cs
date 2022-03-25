@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Domain.Entities
 {
-    public class FaleConoscoSetorContato
+    public class TipoEndereco
     {
+        public TipoEndereco()
+        {
+            PessoasEnderecos = new HashSet<PessoaEndereco>();
+        }
+
         public int Id { get; set; }
-        public int FaleConoscoSetorId { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
+        public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataCriacao { get; set; }
         public int UsuarioCriacaoId { get; set; }
@@ -20,5 +23,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<PessoaEndereco> PessoasEnderecos { get; set; }
+
     }
 }
