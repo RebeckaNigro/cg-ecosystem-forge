@@ -11,6 +11,7 @@ namespace Ecossistema.Domain.Entities
         public Usuario()
         {
             Aprovacoes = new HashSet<Aprovacao>();
+            HistoricoUsuarios = new HashSet<HistoricoUsuario>();
             UsuariosAprovacoes = new HashSet<Aprovacao>();
             UsuariosCriacoesAprovacoes = new HashSet<Aprovacao>();
             UsuariosOperacoesAprovacoes = new HashSet<Aprovacao>();
@@ -34,6 +35,16 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesFaleConoscoSetores = new HashSet<FaleConoscoSetor>();
             UsuariosCriacoesFaleConoscoSetoresContatos = new HashSet<FaleConoscoSetorContato>();
             UsuariosOperacoesFaleConoscoSetoresContatos = new HashSet<FaleConoscoSetorContato>();
+            UsuariosCriacoesHistoricoDocumentos = new HashSet<HistoricoDocumento>();
+            UsuariosOperacoesHistoricoDocumentos = new HashSet<HistoricoDocumento>();
+            UsuariosCriacoesHistoricoEventos = new HashSet<HistoricoEvento>();
+            UsuariosOperacoesHistoricoEventos = new HashSet<HistoricoEvento>();
+            UsuariosCriacoesHistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
+            UsuariosOperacoesHistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
+            UsuariosCriacoesHistoricoNoticias = new HashSet<HistoricoNoticia>();
+            UsuariosOperacoesHistoricoNoticias = new HashSet<HistoricoNoticia>();
+            UsuariosCriacoesHistoricoUsuarios = new HashSet<HistoricoUsuario>();
+            UsuariosOperacoesHistoricoUsuarios = new HashSet<HistoricoUsuario>();
             UsuariosCriacoesInstituicoesAreas = new HashSet<InstituicaoArea>();
             UsuariosOperacoesInstituicoesAreas = new HashSet<InstituicaoArea>();
             UsuariosCriacoesInstituicoesClassificacoes = new HashSet<InstituicaoClassificacao>();
@@ -76,17 +87,6 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesTiposSegmentos = new HashSet<TipoSegmento>();
             UsuariosCriacoesUsuarios = new HashSet<Usuario>();
             UsuariosOperacoesUsuarios = new HashSet<Usuario>();
-            UsuariosCriacoesHistoricoDocumentos = new HashSet<HistoricoDocumento>();
-            UsuariosOperacoesHistoricoDocumentos = new HashSet<HistoricoDocumento>();
-            UsuariosCriacoesHistoricoEventos = new HashSet<HistoricoEvento>();
-            UsuariosOperacoesHistoricoEventos = new HashSet<HistoricoEvento>();
-            UsuariosCriacoesHistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
-            UsuariosOperacoesHistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
-             UsuariosCriacoesHistoricoNoticias = new HashSet<HistoricoNoticia>();
-            UsuariosOperacoesHistoricoNoticias = new HashSet<HistoricoNoticia>();
-            HistoricoUsuarios = new HashSet<HistoricoUsuario>();
-             UsuariosCriacoesHistoricoUsuarios = new HashSet<HistoricoUsuario>();
-            UsuariosOperacoesHistoricoUsuarios = new HashSet<HistoricoUsuario>();
         }
 
         public int Id { get; set; }
@@ -186,10 +186,10 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<HistoricoEvento> UsuariosOperacoesHistoricoEventos { get; set; }
         public virtual ICollection<HistoricoInstituicao> UsuariosCriacoesHistoricoInstituicoes { get; set; }
         public virtual ICollection<HistoricoInstituicao> UsuariosOperacoesHistoricoInstituicoes { get; set; }
-        public virtual ICollection<HistoricoNoticia>  UsuariosCriacoesHistoricoNoticias { get; set; }
+        public virtual ICollection<HistoricoNoticia> UsuariosCriacoesHistoricoNoticias { get; set; }
         public virtual ICollection<HistoricoNoticia> UsuariosOperacoesHistoricoNoticias { get; set; }
         public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
-        public virtual ICollection<HistoricoUsuario>  UsuariosCriacoesHistoricoUsuarios { get; set; }
+        public virtual ICollection<HistoricoUsuario> UsuariosCriacoesHistoricoUsuarios { get; set; }
         public virtual ICollection<HistoricoUsuario> UsuariosOperacoesHistoricoUsuarios { get; set; }
 
     }

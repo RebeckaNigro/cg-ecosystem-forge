@@ -16,6 +16,25 @@ namespace Ecossistema.Data.Mapping
             builder.ToTable("TagItem", "dbo")
                      .HasKey(x => x.Id);
 
+            builder.HasOne(x => x.Origem)
+                .WithMany(x => x.TagsItens)
+                .HasForeignKey(y => y.OrigemId);
+
+            builder.HasOne(x => x.Documento)
+                .WithMany(x => x.TagsItens)
+                .HasForeignKey(y => y.DocumentoId)
+                .IsRequired(false);
+
+            builder.HasOne(x => x.Noticia)
+                .WithMany(x => x.TagsItens)
+                .HasForeignKey(y => y.NoticiaId)
+                .IsRequired(false);
+
+            builder.HasOne(x => x.Evento)
+                .WithMany(x => x.TagsItens)
+                .HasForeignKey(y => y.EventoId)
+                .IsRequired(false);
+
             builder.HasOne(x => x.UsuarioCriacao)
                 .WithMany(x => x.UsuariosCriacoesTagItens)
                 .HasForeignKey(y => y.UsuarioCriacaoId);

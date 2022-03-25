@@ -13,6 +13,7 @@ namespace Ecossistema.Domain.Entities
             Aprovacoes = new HashSet<Aprovacao>();
             ArquivosOrigens = new HashSet<ArquivoOrigem>();
             HistoricoDocumentos = new HashSet<HistoricoDocumento>();
+            TagsItens = new HashSet<TagItem>();
         }
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -38,5 +39,6 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
         public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
         public virtual ICollection<HistoricoDocumento> HistoricoDocumentos { get; set; }
+        public virtual ICollection<TagItem> TagsItens { get; set; }
     }
 }
