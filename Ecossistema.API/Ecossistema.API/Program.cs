@@ -17,6 +17,7 @@ builder.Services.AddSingleton(configuracaoEmail);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IFaleConoscoService, FaleConoscoService>();
+builder.Services.AddScoped<IFaleConoscoSetorService, FaleConoscoSetorService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -40,7 +41,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin()
+);
 
 app.UseAuthorization();
 
