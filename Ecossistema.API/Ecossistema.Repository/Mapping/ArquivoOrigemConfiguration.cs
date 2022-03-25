@@ -50,7 +50,7 @@ namespace Ecossistema.Data.Mapping
 
             builder.HasOne(x => x.Pagina)
                 .WithMany(x => x.ArquivosOrigens)
-                .HasForeignKey(y => y.DocumentoId)
+                .HasForeignKey(y => y.PaginaId)
                 .IsRequired(false);
 
             builder.HasOne(x => x.UsuarioCriacao)

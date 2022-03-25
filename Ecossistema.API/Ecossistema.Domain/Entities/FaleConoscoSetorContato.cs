@@ -10,6 +10,7 @@ namespace Ecossistema.Domain.Entities
     {
         public int Id { get; set; }
         public int FaleConoscoSetorId { get; set; }
+        public virtual FaleConoscoSetor FaleConoscoSetor { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public bool Ativo { get; set; } = true;

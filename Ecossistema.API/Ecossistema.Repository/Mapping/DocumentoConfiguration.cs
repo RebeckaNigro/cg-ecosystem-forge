@@ -26,11 +26,12 @@ namespace Ecossistema.Data.Mapping
 
             builder.HasOne(x => x.Instituicao)
                 .WithMany(x => x.Documentos)
-                .HasForeignKey(y => y.UsuarioCriacaoId);
+                .HasForeignKey(y => y.InstituicaoId);
 
             builder.HasOne(x => x.Aprovacao)
                 .WithMany(x => x.Documentos)
-                .HasForeignKey(y => y.AprovacaoId);
+                .HasForeignKey(y => y.AprovacaoId)
+                .IsRequired(false);
 
             builder.HasOne(x => x.UsuarioCriacao)
                 .WithMany(x => x.UsuariosCriacoesDocumentos)
