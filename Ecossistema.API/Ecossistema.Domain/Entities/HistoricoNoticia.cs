@@ -27,5 +27,6 @@ namespace Ecossistema.Domain.Entities
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
         public DateTime DataHistorico { get; set; }
+        
     }
 }

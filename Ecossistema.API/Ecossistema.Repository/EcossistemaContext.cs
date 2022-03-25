@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Ecossistema.Data
 {
@@ -155,212 +156,214 @@ namespace Ecossistema.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region ModelBuilders
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            #region A
+            //#region ModelBuilders
 
-            modelBuilder.Entity<Aprovacao>()
-                .ToTable("Aprovacao", "dbo");
+            //#region A
 
-            modelBuilder.Entity<Arquivo>()
-                .ToTable("Arquivo", "dbo");
+            //modelBuilder.Entity<Aprovacao>()
+            //    .ToTable("Aprovacao", "dbo");
 
-            modelBuilder.Entity<ArquivoOrigem>()
-                .ToTable("ArquivoOrigem", "dbo");
+            //modelBuilder.Entity<Arquivo>()
+            //    .ToTable("Arquivo", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<ArquivoOrigem>()
+            //    .ToTable("ArquivoOrigem", "dbo");
 
-            #region B
+            //#endregion
 
-            #endregion
+            //#region B
 
-            #region c
+            //#endregion
 
-            modelBuilder.Entity<Contato>()
-                .ToTable("Contato", "dbo");
+            //#region c
 
-            #endregion
+            //modelBuilder.Entity<Contato>()
+            //    .ToTable("Contato", "dbo");
 
-            #region D
+            //#endregion
 
-            modelBuilder.Entity<Documento>()
-                .ToTable("Documento", "dbo");
+            //#region D
 
-            modelBuilder.Entity<DocumentoArea>()
-                .ToTable("DocumentoArea", "dbo");
+            //modelBuilder.Entity<Documento>()
+            //    .ToTable("Documento", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<DocumentoArea>()
+            //    .ToTable("DocumentoArea", "dbo");
 
-            #region E
+            //#endregion
 
-            modelBuilder.Entity<Endereco>()
-                .ToTable("Endereco", "dbo");
+            //#region E
 
-            modelBuilder.Entity<Evento>()
-                .ToTable("Evento", "dbo");
+            //modelBuilder.Entity<Endereco>()
+            //    .ToTable("Endereco", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<Evento>()
+            //    .ToTable("Evento", "dbo");
 
-            #region F
+            //#endregion
 
-            modelBuilder.Entity<FaleConosco>()
-                .ToTable("FaleConosco", "dbo");
+            //#region F
 
-            modelBuilder.Entity<FaleConoscoSetor>()
-                .ToTable("FaleConoscoSetor", "dbo");
+            //modelBuilder.Entity<FaleConosco>()
+            //    .ToTable("FaleConosco", "dbo");
 
-            modelBuilder.Entity<FaleConoscoSetorContato>()
-                .ToTable("FaleConoscoSetorContato", "dbo");
+            //modelBuilder.Entity<FaleConoscoSetor>()
+            //    .ToTable("FaleConoscoSetor", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<FaleConoscoSetorContato>()
+            //    .ToTable("FaleConoscoSetorContato", "dbo");
 
-            #region G
+            //#endregion
 
-            #endregion
+            //#region G
 
-            #region H
+            //#endregion
 
-            modelBuilder.Entity<HistoricoDocumento>()
-                .ToTable("HistoricoDocumento", "dbo");
+            //#region H
 
-            modelBuilder.Entity<HistoricoEvento>()
-                .ToTable("HistoricoEvento", "dbo");
+            //modelBuilder.Entity<HistoricoDocumento>()
+            //    .ToTable("HistoricoDocumento", "dbo");
 
-            modelBuilder.Entity<HistoricoInstituicao>()
-                .ToTable("HistoricoInstituicao", "dbo");
+            //modelBuilder.Entity<HistoricoEvento>()
+            //    .ToTable("HistoricoEvento", "dbo");
 
-            modelBuilder.Entity<HistoricoNoticia>()
-                .ToTable("HistoricoNoticia", "dbo");
+            //modelBuilder.Entity<HistoricoInstituicao>()
+            //    .ToTable("HistoricoInstituicao", "dbo");
 
-            modelBuilder.Entity<HistoricoUsuario>()
-                .ToTable("HistoricoUsuario", "dbo");
+            //modelBuilder.Entity<HistoricoNoticia>()
+            //    .ToTable("HistoricoNoticia", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<HistoricoUsuario>()
+            //    .ToTable("HistoricoUsuario", "dbo");
 
-            #region I
+            //#endregion
 
-            modelBuilder.Entity<Instituicao>()
-                .ToTable("Instituicao", "dbo");
+            //#region I
 
-            modelBuilder.Entity<InstituicaoArea>()
-                .ToTable("InstituicaoArea", "dbo");
+            //modelBuilder.Entity<Instituicao>()
+            //    .ToTable("Instituicao", "dbo");
 
-            modelBuilder.Entity<InstituicaoClassificacao>()
-                .ToTable("InstituicaoClassificacao", "dbo");
+            //modelBuilder.Entity<InstituicaoArea>()
+            //    .ToTable("InstituicaoArea", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<InstituicaoClassificacao>()
+            //    .ToTable("InstituicaoClassificacao", "dbo");
 
-            #region J
+            //#endregion
 
-            #endregion
+            //#region J
 
-            #region L
+            //#endregion
 
-            #endregion
+            //#region L
 
-            #region M
+            //#endregion
 
-            #endregion
+            //#region M
 
-            #region N
+            //#endregion
 
-            modelBuilder.Entity<Noticia>()
-                .ToTable("Noticia", "dbo");
+            //#region N
 
-            #endregion
+            //modelBuilder.Entity<Noticia>()
+            //    .ToTable("Noticia", "dbo");
 
-            #region O
+            //#endregion
 
-            modelBuilder.Entity<Origem>()
-                .ToTable("Origem", "dbo");
+            //#region O
 
-            #endregion
+            //modelBuilder.Entity<Origem>()
+            //    .ToTable("Origem", "dbo");
 
-            #region P
+            //#endregion
 
-            modelBuilder.Entity<Pagina>()
-                .ToTable("Pagina", "dbo");
+            //#region P
 
-            modelBuilder.Entity<PaginaSegmento>()
-                .ToTable("PaginaSegmento", "dbo");
+            //modelBuilder.Entity<Pagina>()
+            //    .ToTable("Pagina", "dbo");
 
-            modelBuilder.Entity<Permissao>()
-                 .ToTable("Permissao", "dbo");
+            //modelBuilder.Entity<PaginaSegmento>()
+            //    .ToTable("PaginaSegmento", "dbo");
 
-            modelBuilder.Entity<Pessoa>()
-                .ToTable("Pessoa", "dbo");
+            //modelBuilder.Entity<Permissao>()
+            //     .ToTable("Permissao", "dbo");
 
-            modelBuilder.Entity<PessoaContato>()
-                .ToTable("PessoaContato", "dbo");
+            //modelBuilder.Entity<Pessoa>()
+            //    .ToTable("Pessoa", "dbo");
 
-            modelBuilder.Entity<PessoaEndereco>()
-                .ToTable("PessoaEndereco", "dbo");
+            //modelBuilder.Entity<PessoaContato>()
+            //    .ToTable("PessoaContato", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<PessoaEndereco>()
+            //    .ToTable("PessoaEndereco", "dbo");
 
-            #region Q
+            //#endregion
 
-            #endregion
+            //#region Q
 
-            #region R
+            //#endregion
 
-            #endregion
+            //#region R
 
-            #region S
+            //#endregion
 
-            modelBuilder.Entity<SituacaoAprovacao>()
-                .ToTable("SituacaoAprovacao", "dbo");
+            //#region S
 
-            #endregion
+            //modelBuilder.Entity<SituacaoAprovacao>()
+            //    .ToTable("SituacaoAprovacao", "dbo");
 
-            #region T
+            //#endregion
 
-            modelBuilder.Entity<Tag>()
-                .ToTable("Tag", "dbo");
+            //#region T
 
-            modelBuilder.Entity<TagItem>()
-                .ToTable("TagItem", "dbo");
+            //modelBuilder.Entity<Tag>()
+            //    .ToTable("Tag", "dbo");
 
-            modelBuilder.Entity<TipoContato>()
-                .ToTable("TipoContato", "dbo");
+            //modelBuilder.Entity<TagItem>()
+            //    .ToTable("TagItem", "dbo");
 
-            modelBuilder.Entity<TipoDocumento>()
-                .ToTable("TipoDocumento", "dbo");
+            //modelBuilder.Entity<TipoContato>()
+            //    .ToTable("TipoContato", "dbo");
 
-            modelBuilder.Entity<TipoEndereco>()
-                .ToTable("TipoEndereco", "dbo");
+            //modelBuilder.Entity<TipoDocumento>()
+            //    .ToTable("TipoDocumento", "dbo");
 
-            modelBuilder.Entity<TipoEvento>()
-                .ToTable("TipoEvento", "dbo");
+            //modelBuilder.Entity<TipoEndereco>()
+            //    .ToTable("TipoEndereco", "dbo");
 
-            modelBuilder.Entity<TipoInstituicao>()
-                .ToTable("TipoInstituicao", "dbo");
+            //modelBuilder.Entity<TipoEvento>()
+            //    .ToTable("TipoEvento", "dbo");
 
-            modelBuilder.Entity<TipoSegmento>()
-                .ToTable("TipoSegmento", "dbo");
+            //modelBuilder.Entity<TipoInstituicao>()
+            //    .ToTable("TipoInstituicao", "dbo");
 
-            #endregion
+            //modelBuilder.Entity<TipoSegmento>()
+            //    .ToTable("TipoSegmento", "dbo");
 
-            #region U
+            //#endregion
 
-            modelBuilder.Entity<Usuario>()
-                .ToTable("Usuario", "dbo");
+            //#region U
 
-            #endregion
+            //modelBuilder.Entity<Usuario>()
+            //    .ToTable("Usuario", "dbo");
 
-            #region V
+            //#endregion
 
-            #endregion
+            //#region V
 
-            #region X
+            //#endregion
 
-            #endregion
+            //#region X
 
-            #region Z
+            //#endregion
 
-            #endregion
+            //#region Z
 
-            #endregion
+            //#endregion
+
+            //#endregion
         }
     }
 }

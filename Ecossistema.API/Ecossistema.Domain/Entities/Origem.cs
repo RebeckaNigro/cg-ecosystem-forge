@@ -8,6 +8,12 @@ namespace Ecossistema.Domain.Entities
 {
     public class Origem
     {
+        public Origem()
+        {
+            Aprovacoes = new HashSet<Aprovacao>();
+            ArquivosOrigens = new HashSet<ArquivoOrigem>();
+        }
+
         public int Id { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
@@ -18,5 +24,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
+        public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
     }
 }

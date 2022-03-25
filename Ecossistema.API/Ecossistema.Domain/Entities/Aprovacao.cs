@@ -8,6 +8,20 @@ namespace Ecossistema.Domain.Entities
 {
     public class Aprovacao
     {
+        public Aprovacao()
+        {
+            Documentos = new HashSet<Documento>();
+            Eventos = new HashSet<Evento>();
+            Insituicoes = new HashSet<Instituicao>();
+            Noticias = new HashSet<Noticia>();
+            Usuarios = new HashSet<Usuario>();
+            HistoricoDocumentos = new HashSet<HistoricoDocumento>();
+            HistoricoEventos = new HashSet<HistoricoEvento>();
+            HistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
+            HistoricoNoticias = new HashSet<HistoricoNoticia>();
+            HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+        }
+
         public int Id { get; set; }
         public int OrigemId { get; set; }
         public virtual Origem Origem { get; set; }  
@@ -15,7 +29,7 @@ namespace Ecossistema.Domain.Entities
         public int? UsuarioAprovacaoId { get; set; }
         public virtual Usuario UsuarioAprovacao { get; set; }
         public string? Motivo { get; set; }
-        public int? InsituicaoId { get; set; }
+        public int? InstituicaoId { get; set; }
         public virtual Instituicao Insituicao { get; set; }
         public int? UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }
@@ -35,5 +49,15 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Documento> Documentos { get; set; }
+        public virtual ICollection<Evento> Eventos { get; set; }
+        public virtual ICollection<Instituicao> Insituicoes { get; set; }
+        public virtual ICollection<Noticia> Noticias { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<HistoricoDocumento> HistoricoDocumentos { get; set; }
+        public virtual ICollection<HistoricoEvento> HistoricoEventos { get; set; }
+        public virtual ICollection<HistoricoInstituicao> HistoricoInstituicoes { get; set; }
+        public virtual ICollection<HistoricoNoticia> HistoricoNoticias { get; set; }
+        public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
     }
 }

@@ -8,6 +8,12 @@ namespace Ecossistema.Domain.Entities
 {
     public class InstituicaoClassificacao
     {
+        public InstituicaoClassificacao()
+        {
+            Insituicoes = new HashSet<Instituicao>();
+            HistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
+        }
+
         public int Id { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
@@ -18,5 +24,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Instituicao> Insituicoes { get; set; }
+        public virtual ICollection<HistoricoInstituicao> HistoricoInstituicoes { get; set; }
     }
 }

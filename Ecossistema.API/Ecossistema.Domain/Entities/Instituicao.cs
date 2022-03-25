@@ -8,6 +8,18 @@ namespace Ecossistema.Domain.Entities
 {
     public class Instituicao
     {
+        public Instituicao()
+        {
+            ArquivosOrigens = new HashSet<ArquivoOrigem>();
+            Documentos = new HashSet<Documento>();
+            Eventos = new HashSet<Evento>();
+            Usuarios = new HashSet<Usuario>();
+            HistoricoDocumentos = new HashSet<HistoricoDocumento>();
+            HistoricoEventos = new HashSet<HistoricoEvento>();
+            HistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
+            HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+        }
+
         public int Id { get; set; }
         public string RazaoSocial { get; set; }
         public string Cnpj { get; set; }
@@ -33,5 +45,14 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
+        public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
+        public virtual ICollection<Documento> Documentos { get; set; }
+        public virtual ICollection<Evento> Eventos { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<HistoricoDocumento> HistoricoDocumentos { get; set; }
+        public virtual ICollection<HistoricoEvento> HistoricoEventos { get; set; }
+        public virtual ICollection<HistoricoInstituicao> HistoricoInstituicoes { get; set; }
+        public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
     }
 }

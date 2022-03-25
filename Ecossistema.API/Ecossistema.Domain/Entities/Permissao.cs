@@ -8,6 +8,12 @@ namespace Ecossistema.Domain.Entities
 {
     public class Permissao
     {
+        public Permissao()
+        {
+            Usuarios = new HashSet<Usuario>();
+            HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+        }
+
         public int Id { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
@@ -18,5 +24,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
     }
 }

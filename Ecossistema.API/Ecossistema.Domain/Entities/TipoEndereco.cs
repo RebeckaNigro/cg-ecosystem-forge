@@ -8,6 +8,11 @@ namespace Ecossistema.Domain.Entities
 {
     public class TipoEndereco
     {
+        public TipoEndereco()
+        {
+            PessoasEnderecos = new HashSet<PessoaEndereco>();
+        }
+
         public int Id { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
@@ -18,5 +23,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<PessoaEndereco> PessoasEnderecos { get; set; }
+
     }
 }

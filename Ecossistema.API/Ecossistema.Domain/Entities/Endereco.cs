@@ -8,6 +8,13 @@ namespace Ecossistema.Domain.Entities
 {
     public class Endereco
     {
+        public Endereco()
+        {
+            Eventos = new HashSet<Evento>();
+            PessoasEnderecos = new HashSet<PessoaEndereco>();
+            HistoricoEventos = new HashSet<HistoricoEvento>();
+        }
+
         public int Id { get; set; }
         public string Cep { get; set; }
         public string Logradouro { get; set; }
@@ -25,5 +32,8 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Evento> Eventos { get; set; }
+        public virtual ICollection<PessoaEndereco> PessoasEnderecos { get; set; }
+        public virtual ICollection<HistoricoEvento> HistoricoEventos { get; set; }
     }
 }

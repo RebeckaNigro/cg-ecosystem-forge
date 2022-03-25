@@ -8,6 +8,12 @@ namespace Ecossistema.Domain.Entities
 {
     public class TipoSegmento
     {
+        public TipoSegmento()
+        {
+            ArquivosOrigens = new HashSet<ArquivoOrigem>();
+            PaginasSegmentos = new HashSet<PaginaSegmento>();
+        }
+
         public int Id { get; set; }
         public string Descricao { get; set; }
         public bool Ativo { get; set; } = true;
@@ -18,5 +24,7 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
+        public virtual ICollection<PaginaSegmento> PaginasSegmentos { get; set; }
     }
 }

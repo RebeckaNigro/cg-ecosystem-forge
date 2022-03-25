@@ -8,6 +8,13 @@ namespace Ecossistema.Domain.Entities
 {
     public class Noticia
     {
+        public Noticia()
+        {
+            Aprovacoes = new HashSet<Aprovacao>();
+            ArquivosOrigens = new HashSet<ArquivoOrigem>();
+            HistoricoNoticias = new HashSet<HistoricoNoticia>();
+        }
+
         public int Id { get; set; }
         public string Titulo { get; set; }
         public string Descricao { get; set; }
@@ -24,5 +31,8 @@ namespace Ecossistema.Domain.Entities
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
+        public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
+        public virtual ICollection<HistoricoNoticia> HistoricoNoticias { get; set; }
     }
 }

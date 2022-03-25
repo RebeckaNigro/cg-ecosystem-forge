@@ -4,7 +4,9 @@
     {
         public FaleConoscoSetor()
         {
-            FaleConoscoSetoresContatos = new HashSet<FaleConoscoSetorContato>();
+            FaleConoscos = new HashSet<FaleConosco>();
+            FaleConoscoSetoresContatos = new HashSet<FaleConoscoSetorContato>();            
+            
         }
         public int Id { get; set; }
         public string Descricao { get; set; }        
@@ -16,6 +18,7 @@
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
+        public virtual ICollection<FaleConosco> FaleConoscos { get; set; }
         public virtual ICollection<FaleConoscoSetorContato> FaleConoscoSetoresContatos { get; set; }
     }
 }
