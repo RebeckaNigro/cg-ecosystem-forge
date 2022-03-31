@@ -90,7 +90,7 @@ namespace Ecossistema.Services.Services
 
                 await EnviarEmailFaleConoscoSolicitado(obj, emailsSetor, numeroSolicitacao);
 
-                if (await EnviarEmailFaleConoscoSolicitante(obj, numeroSolicitacao))
+                if (await EnviarEmailFaleConoscoSolicitante(obj, numeroSolicitacao, emailsSetor.FirstOrDefault().FaleConoscoSetor.Descricao))
                 {
                     resposta.SetMensagem("Sua mensagem foi registrada com sucesso! O número da solicitação é " + numeroSolicitacao.ToString());
                     return resposta;
@@ -134,12 +134,12 @@ namespace Ecossistema.Services.Services
             return faleConosco.Id;
         }
 
-        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao)
+        private async Task<bool> EnviarEmailFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao, string setor)
         {
             try
             {
                 var mensagem = new Mensagem(new List<string> { obj.EmailCorporativo });
-                mensagem.SetFaleConoscoSolicitante(obj, numeroSolicitacao);
+                mensagem.SetFaleConoscoSolicitante(obj, numeroSolicitacao, setor);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)
@@ -157,7 +157,7 @@ namespace Ecossistema.Services.Services
                 foreach (FaleConoscoSetorContato contato in lista) emails.Add(contato.Email);
                 var mensagem = new Mensagem(emails);
 
-                mensagem.SetFaleConoscoSolicitado(obj, numeroSolicitacao);
+                mensagem.SetFaleConoscoSolicitado(obj, numeroSolicitacao, lista.FirstOrDefault().FaleConoscoSetor.Descricao);
                 await _emailService.EnviarEmail(mensagem);
             }
             catch (Exception e)
