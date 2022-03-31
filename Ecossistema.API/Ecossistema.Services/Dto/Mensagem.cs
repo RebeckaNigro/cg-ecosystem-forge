@@ -17,7 +17,7 @@ namespace Ecossistema.Services.Dto
         }
 
         #region Fale Conosco
-        public void SetFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao)
+        public void SetFaleConoscoSolicitante(FaleConoscoDTO obj, string numeroSolicitacao, string setor)
         {
             Assunto += "Fale Conosco";
             Conteudo = TopHtml;
@@ -38,18 +38,22 @@ namespace Ecossistema.Services.Dto
                         "<br>" +
                         "Cargo: " + obj.Cargo +
                         "<br>" +
+                        "Setor solicitado: " + setor +
+                        "<br>" +
                         "Mensagem: " + obj.Mensagem +
                         "<br><br>Obrigado pelo contato!";
             Conteudo += BottomHtml;
         }
 
-        public void SetFaleConoscoSolicitado(FaleConoscoDTO obj, string numeroSolicitacao)
+        public void SetFaleConoscoSolicitado(FaleConoscoDTO obj, string numeroSolicitacao, string setor)
         {
             Assunto += "Fale Conosco";
             Conteudo = TopHtml;
             Conteudo += $@"<div style='text-decoration: underline;'>Nova solicitação no Fale Conosco do Ecossistema</div>" +
                         "<br>" +
                         "Número da solicitação: " + numeroSolicitacao + "." +
+                        "<br>" +
+                        "Setor solicitado: " + setor + "." +
                         "<br>" +
                         "<br>" +
                         "<strong>Dados:</strong>" +
