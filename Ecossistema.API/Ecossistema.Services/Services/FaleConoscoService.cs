@@ -377,9 +377,9 @@ namespace Ecossistema.Services.Services
         private async Task<bool> ValidarSetorExistente(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
             var setor = await _unitOfWork.FaleConoscoSetores.GetByIdAsync((int)obj.SetorId);
-            if (setor == null)
+            if (setor == null && setor.Ativo)
             {
-                resposta.SetNaoEncontrado("O setor selecionado não existe.");
+                resposta.SetNaoEncontrado("O setor selecionado não existe ou está inativo.");
                 return false;
             }
             return true;
