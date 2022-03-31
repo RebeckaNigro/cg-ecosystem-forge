@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecossistema.API", "Ecossistema.API\Ecossistema.API.csproj", "{F561122F-B412-4F69-BC1D-1A0CFAA33402}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecossistema.API", "Ecossistema.API\Ecossistema.API.csproj", "{F561122F-B412-4F69-BC1D-1A0CFAA33402}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecossistema.Util", "Ecossistema.Util\Ecossistema.Util.csproj", "{92B743AD-AC52-4F55-A2CF-3CE8CC2619EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecossistema.Data", "Ecossistema.Repository\Ecossistema.Data.csproj", "{70B5CC4C-6CA6-44CC-9810-C9E087159EF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecossistema.Domain", "Ecossistema.Domain\Ecossistema.Domain.csproj", "{AE631C76-97EF-4342-AB43-AABAE742C069}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecossistema.Services", "Ecossistema.Services\Ecossistema.Services.csproj", "{00BA9641-C2F5-4750-A17C-CBE6E49431D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{F561122F-B412-4F69-BC1D-1A0CFAA33402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F561122F-B412-4F69-BC1D-1A0CFAA33402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F561122F-B412-4F69-BC1D-1A0CFAA33402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B743AD-AC52-4F55-A2CF-3CE8CC2619EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B743AD-AC52-4F55-A2CF-3CE8CC2619EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B743AD-AC52-4F55-A2CF-3CE8CC2619EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B743AD-AC52-4F55-A2CF-3CE8CC2619EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B5CC4C-6CA6-44CC-9810-C9E087159EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B5CC4C-6CA6-44CC-9810-C9E087159EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B5CC4C-6CA6-44CC-9810-C9E087159EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B5CC4C-6CA6-44CC-9810-C9E087159EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE631C76-97EF-4342-AB43-AABAE742C069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE631C76-97EF-4342-AB43-AABAE742C069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE631C76-97EF-4342-AB43-AABAE742C069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE631C76-97EF-4342-AB43-AABAE742C069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00BA9641-C2F5-4750-A17C-CBE6E49431D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00BA9641-C2F5-4750-A17C-CBE6E49431D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00BA9641-C2F5-4750-A17C-CBE6E49431D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00BA9641-C2F5-4750-A17C-CBE6E49431D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
