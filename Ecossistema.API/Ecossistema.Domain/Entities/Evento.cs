@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,37 @@ namespace Ecossistema.Domain.Entities
             ArquivosOrigens = new HashSet<ArquivoOrigem>();
             HistoricoEventos = new HashSet<HistoricoEvento>();
             TagsItens = new HashSet<TagItem>();
+        }
+
+        public Evento(int instituicaoId,
+                      int tipoEventoId,
+                      string titulo,
+                      string descricao,
+                      DateTime dataInicio,
+                      DateTime dataTermino,
+                      string? local,
+                      int? enderecoId,
+                      string? linkExterno,
+                      bool exibirMaps,
+                      string responsavel,
+                      int usuarioId,
+                      DateTime dataAtual)
+        {
+            InstituicaoId = instituicaoId;
+            TipoEventoId = tipoEventoId;
+            Titulo = titulo;
+            Descricao = descricao;
+            DataInicio = dataInicio;
+            DataTermino = dataTermino;
+            Local = local;
+            EnderecoId = enderecoId;
+            LinkExterno = linkExterno;
+            ExibirMaps = exibirMaps;
+            Responsavel = responsavel;
+            Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Documento, usuarioId, dataAtual) };
+            Aprovado = false;
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
         }
 
         public int Id { get; set; }

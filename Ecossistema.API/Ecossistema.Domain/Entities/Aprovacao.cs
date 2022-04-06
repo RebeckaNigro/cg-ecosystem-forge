@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +24,40 @@ namespace Ecossistema.Domain.Entities
             HistoricoUsuarios = new HashSet<HistoricoUsuario>();
         }
 
+        public Aprovacao(EOrigem origem, int usuarioId, DateTime data, int? id = null)
+        {
+            OrigemId = origem.Int32Val();
+
+            if (id != null)
+            {
+                switch (origem)
+                {
+                    case EOrigem.Parceiro:
+                        InstituicaoId = id;
+                        break;
+                    case EOrigem.Documento:
+                        DocumentoId = id;
+                        break;
+                    case EOrigem.Noticia:
+                        NoticiaId = id;
+                        break;
+                    case EOrigem.Evento:
+                        EventoId = id;
+                        break;
+                    default:
+                        UsuarioId = id;
+                        break;
+                }
+            }
+
+            SituacaoAprovacaoId = ESituacaoAprovacao.Pendente.Int32Val();
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, data);
+        }
+
         public int Id { get; set; }
         public int OrigemId { get; set; }
-        public virtual Origem Origem { get; set; }  
+        public virtual Origem Origem { get; set; }
         public DateTime? DataAprovacao { get; set; }
         public int? UsuarioAprovacaoId { get; set; }
         public virtual Usuario UsuarioAprovacao { get; set; }

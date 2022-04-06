@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +12,7 @@ namespace Ecossistema.Domain.Entities
     {
         public Instituicao()
         {
+            Aprovacoes = new HashSet<Aprovacao>();
             ArquivosOrigens = new HashSet<ArquivoOrigem>();
             Documentos = new HashSet<Documento>();
             Eventos = new HashSet<Evento>();
@@ -18,6 +21,35 @@ namespace Ecossistema.Domain.Entities
             HistoricoEventos = new HashSet<HistoricoEvento>();
             HistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
             HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+        }
+
+        public Instituicao(string razaoSocial,
+            string cnpj,
+            string responsável,
+            int instituicaoAreaId,
+            int instituicaoClassificacaoId,
+            int tipoInstituicaoId,
+            string? descricao,
+            string? missao,
+            string? visao,
+            string? valores,
+            int usuarioId,
+            DateTime data)
+        {
+            RazaoSocial = razaoSocial;
+            Cnpj = cnpj;
+            Responsável = responsável;
+            InstituicaoAreaId = instituicaoAreaId;
+            InstituicaoClassificacaoId = instituicaoClassificacaoId;
+            Descricao = descricao;
+            Missao = missao;
+            Visao = visao;
+            Valores = valores;
+            TipoInstituicaoId = tipoInstituicaoId;
+            Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Parceiro, usuarioId, data) };
+            Aprovado = false;
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, data);
         }
 
         public int Id { get; set; }
