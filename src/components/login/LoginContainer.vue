@@ -11,7 +11,7 @@
         <input type="text" id="email" placeholder="E-mail" required>
         <label for="password">Senha</label>
         <input type="password" id="password" placeholder="*****" required>
-        <button type="submit">Entrar</button>
+        <button type="submit" @click="$router.push({ name: 'UserHome'})">Entrar</button>
       </form>     
     </main>
   </section>
