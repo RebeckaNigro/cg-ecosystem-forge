@@ -10,6 +10,7 @@ import Noticias from '../views/noticias/Noticias.vue';
 import NoticiaExpandida from '../views/noticias/expandida/NoticiaExpandida.vue';
 import Documentos from '../views/documentos/Documentos.vue';
 import DocumentosPesquisa from '../views/documentos/pesquisa/DocumentosPesquisa.vue'
+import Login from '../views/login/Login.vue'
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -66,6 +67,11 @@ const routes: RouteRecordRaw[] = [
     path: '/documentos/:tipoDocumento',
     name: 'DocumentosPesquisa',
     component: DocumentosPesquisa
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   }
 ];
 
