@@ -7,6 +7,7 @@
       <section class="container-links dark-title">
         <router-link :to="link.path" v-for="link in maisInfos" class="navbar-text">{{ link.title }}</router-link> 
       </section>
+      <button type="button" class="light-title" id="login" @click="$router.push({ name: 'Login'})">LOGIN</button>
       <div class="dropdown dropstart">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="menuInfos" data-bs-toggle="dropdown" aria-expanded="false">
           <div v-for="hamburguer in 3" class="hamburguer" />
@@ -112,7 +113,16 @@ a {
   height: 40px;
   justify-content: space-between;
   padding: 0;
-  margin-right: 30px;
+  /* margin-right: 30px; */
+}
+button#login {
+  background-color: #ba5366;
+  color: #fff;
+  width: 120px;
+  height: 40px;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  border: 0;
 }
 @media (max-width: 991px) {
   .navbar-text {
@@ -131,6 +141,11 @@ a {
       font-size: 0.7rem;
     }
   }
+  button#login {
+    font-size: 0.6rem;
+    width: 100px;
+    height: 30px;
+  }
 }
 @media (max-width: 485px) {
   .container-links {
@@ -146,6 +161,11 @@ a {
   }
   .container-fluid {
     justify-content: space-between;
+  }
+  button#login {
+    font-size: 0.5rem;
+    width: 80px;
+    height: 25px;
   }
 }
 </style>
