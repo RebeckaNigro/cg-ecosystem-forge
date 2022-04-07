@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Ecossistema.Data
 {
-    public class EcossistemaContext : IdentityDbContext<IdentityUser>
+    public class EcossistemaContext : IdentityDbContext<IdentityUser>//Antes era DbContext
     {
         public EcossistemaContext(DbContextOptions<EcossistemaContext> options) : base(options) { }
 
