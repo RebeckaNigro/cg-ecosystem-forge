@@ -12,6 +12,7 @@ import Documentos from '../views/documentos/Documentos.vue';
 import DocumentosPesquisa from '../views/documentos/pesquisa/DocumentosPesquisa.vue'
 import Login from '../views/login/Login.vue'
 import UserHome from '../views/user/UserHome.vue'
+import GerenciaNoticia from '../views/user/noticias/GerenciaNoticia.vue'
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -78,6 +79,11 @@ const routes: RouteRecordRaw[] = [
     path: '/user/Home',
     name: 'UserHome',
     component: UserHome
+  },
+  {
+    path: '/user/noticias',
+    name: 'GerenciaNoticia',
+    component: GerenciaNoticia
   }
 ];
 
