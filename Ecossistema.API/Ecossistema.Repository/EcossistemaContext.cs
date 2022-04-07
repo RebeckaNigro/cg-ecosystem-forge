@@ -1,10 +1,12 @@
 ﻿using Ecossistema.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Ecossistema.Data
 {
-    public class EcossistemaContext : DbContext
+    public class EcossistemaContext : IdentityDbContext<IdentityUser>//Antes era DbContext
     {
         public EcossistemaContext(DbContextOptions<EcossistemaContext> options) : base(options) { }
 
@@ -157,6 +159,7 @@ namespace Ecossistema.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -1,9 +1,4 @@
-using Ecossistema.Data;
-using Ecossistema.Data.Interfaces;
-using Ecossistema.Data.Repositories;
-using Ecossistema.Services.Dto;
-using Ecossistema.Services.Interfaces;
-using Ecossistema.Services.Services;
+using Ecossistema;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,36 +6,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-ConfigurationManager configuration = builder.Configuration; //identity
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 
-var configuracaoEmail = builder.Configuration.GetSection("ConfiguracaoEmail")
-    .Get<ConfiguracaoEmail>();
-
-builder.Services.AddSingleton(configuracaoEmail);
-builder.Services.AddControllers();
-
-builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();
-builder.Services.AddScoped<IDocumentoService, DocumentoService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IEventoService, EventoService>();
-builder.Services.AddScoped<IFaleConoscoService, FaleConoscoService>();
-builder.Services.AddScoped<IFaleConoscoSetorService, FaleConoscoSetorService>();
-builder.Services.AddScoped<IInstituicaoService, InstituicaoService>();
-builder.Services.AddScoped<INoticiaService, NoticiaService>();
-
-builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddDbContext<EcossistemaContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+// For Entity Framework
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ConnStr")));
 
 // For Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<EcossistemaContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 // Adding Authentication
@@ -66,8 +41,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();  //identity
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -80,14 +55,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-app.UseCors(x => x
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowAnyOrigin()
-);
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
