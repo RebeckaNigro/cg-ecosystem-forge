@@ -1,4 +1,4 @@
-export interface UserToAuth {
-  email: string,
-  password: string
+export interface ILoggedUser {
+  email: string | null,
+  token: string | null
 }
