@@ -23,16 +23,19 @@ namespace Ecossistema.API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
 
         public AutenticacaoController(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
+            SignInManager<IdentityUser> signInManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -42,7 +45,7 @@ namespace Ecossistema.API.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var userRoles = await _userManager.GetRolesAsync(user);
+                var userRoles = await _userManager.GetRolesAsync(user); 
 
                 var authClaims = new List<Claim>
                 {
@@ -59,13 +62,36 @@ namespace Ecossistema.API.Controllers
 
                 return Ok(new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    id = user.Id,
+                    email = user.Email,
+                    token = new JwtSecurityTokenHandler().WriteToken(token)
+                    //expiration = token.ValidTo
                 });
             }
             return Unauthorized();
         }
-        
+
+        /*[HttpPost]
+        [Route("logout")]
+        public IActionResult Logout()
+        {
+            var logout =  _signInManager.SignOutAsync();
+            if (logout.IsCompletedSuccessfully)
+                return Ok(new Response { Status = "Success", Message = "Logout realizado com sucesso!" });
+            else { return BadRequest(logout); }    
+
+        }*/
+        [HttpGet]
+        [Route("token")]
+        public IActionResult teste()
+        {
+           
+          var logout = HttpContext.Request.Headers["Authorization"];
+            return Ok(new Response { Status = "Success", Message = "teste realizado com sucesso!" });
+
+        }
+
+
         [HttpPost]
         [Route("register-admin-parceiro")]
         public async Task<IActionResult> RegisterAdminParceiro([FromBody] RegisterModel model)
