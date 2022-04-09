@@ -26,7 +26,7 @@ namespace Ecossistema.Services.Services
                     descricao = x.Descricao
                 });
 
-                resposta.Dado = result;
+                resposta.Retorno = result;
                 return resposta;
             }
             catch (Exception ex)

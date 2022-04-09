@@ -4,6 +4,7 @@ using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
+using Ecossistema.Util.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,5 +150,277 @@ namespace Ecossistema.Services.Services
 
             return resposta;
         }
+
+        #region Validações
+
+        private async Task<bool> ValidarIncluir(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidarNomeInformado(dado, resposta)
+                || !ValidarNomeTamanho(dado, resposta)
+                || !ValidarDescricaoInformada(dado, resposta)
+                || !ValidarDescricaoTamanho(dado, resposta)
+                || !ValidarTipoDocumentoIdValido(dado, resposta)
+                || !await ValidarTipoDocumentoIdCadastrado(dado, resposta)
+                || !ValidarDocumentoAreaIdValido(dado, resposta)
+                || !await ValidarDocumentoAreaIdCadastrado(dado, resposta)
+                || !ValidarInstituicaoIdValida(dado, resposta)
+                || !await ValidarInstituicaoIdCadastrada(dado, resposta)
+                || !ValidarDataInformada(dado, resposta)
+                || !ValidarDataValida(dado, resposta))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarEditar(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidarIdInformado(dado, resposta)
+                || !ValidarIdValido(dado, resposta)
+                || !await ValidarIdCadastrado(dado, resposta)
+                || !ValidarNomeInformado(dado, resposta)
+                || !ValidarNomeTamanho(dado, resposta)
+                || !ValidarDescricaoInformada(dado, resposta)
+                || !ValidarDescricaoTamanho(dado, resposta)
+                || !ValidarTipoDocumentoIdValido(dado, resposta)
+                || !await ValidarTipoDocumentoIdCadastrado(dado, resposta)
+                || !ValidarDocumentoAreaIdValido(dado, resposta)
+                || !await ValidarDocumentoAreaIdCadastrado(dado, resposta)
+                || !ValidarInstituicaoIdValida(dado, resposta)
+                || !await ValidarInstituicaoIdCadastrada(dado, resposta)
+                || !ValidarDataInformada(dado, resposta)
+                || !ValidarDataValida(dado, resposta))
+            {
+                return false;
+            }
+            return true;
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarExcluir(int id, RespostaPadrao resposta)
+        {
+            if (!ValidarIdInformado(id, resposta)
+                || !ValidarIdValido(id, resposta)
+                || !await ValidarIdCadastrado(id, resposta))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarIdInformado(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return ValidarIdInformado(dado.Id, resposta);
+        }
+
+        private bool ValidarIdInformado(int? id, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiro(id))
+            {
+                resposta.SetCampoVazio("Id");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarIdValido(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return ValidarIdValido(dado.Id, resposta);
+        }
+
+        private bool ValidarIdValido(int? id, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(id))
+            {
+                resposta.SetCampoInvalido("Id");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarIdCadastrado(int? id, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == (int)id
+                                                                && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Registro não encontrado.");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarIdCadastrado(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return await ValidarIdCadastrado(dado.Id, resposta);
+        }
+
+        private bool ValidarNomeInformado(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.Nome))
+            {
+                resposta.SetCampoVazio("Nome");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarNomeTamanho(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Nome, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Nome", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDescricaoInformada(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.Descricao))
+            {
+                resposta.SetCampoVazio("Descrição");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDescricaoTamanho(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 8000;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Descricao, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Descrição", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarTipoDocumentoIdValido(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return ValidarTipoDocumentoIdValido(dado.TipoDocumentoId, resposta);
+        }
+
+        private bool ValidarTipoDocumentoIdValido(int? tipoDocumentoId, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(tipoDocumentoId))
+            {
+                resposta.SetCampoInvalido("TipoDocumentoId");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarTipoDocumentoIdCadastrado(int? tipoDocumentoId, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.TiposDocumentos.FindAllAsync(x => x.Id == (int)tipoDocumentoId
+                                                                        && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Registro não encontrado.");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarTipoDocumentoIdCadastrado(DocumentoDto dado, RespostaPadrao resposta)
+        {
+
+            return await ValidarTipoDocumentoIdCadastrado(dado.TipoDocumentoId, resposta);
+        }
+
+        private bool ValidarDocumentoAreaIdValido(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return ValidarDocumentoAreaIdValido(dado.DocumentoAreaId, resposta);
+        }
+
+        private bool ValidarDocumentoAreaIdValido(int? documentoAreaId, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(documentoAreaId))
+            {
+                resposta.SetCampoInvalido("DocumentoAreaId");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarDocumentoAreaIdCadastrado(int? documentoAreaId, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.DocumentosAreas.FindAllAsync(x => x.Id == (int)documentoAreaId
+                                                                && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Registro não encontrado.");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarDocumentoAreaIdCadastrado(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return await ValidarDocumentoAreaIdCadastrado(dado.DocumentoAreaId, resposta);
+        }
+
+        private bool ValidarInstituicaoIdValida(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return ValidarInstituicaoIdValida(dado.InstituicaoId, resposta);
+        }
+
+        private bool ValidarInstituicaoIdValida(int? instituicaoId, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(instituicaoId))
+            {
+                resposta.SetCampoInvalido("InstituicaoId");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarInstituicaoIdCadastrada(int? instituicaoId, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Id == (int)instituicaoId
+                                                                && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Registro não encontrado.");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarInstituicaoIdCadastrada(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            return await ValidarInstituicaoIdCadastrada(dado.InstituicaoId, resposta);
+        }
+
+        private bool ValidarDataInformada(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (dado.Data == null)
+            {
+                resposta.SetCampoVazio("Data");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDataValida(DocumentoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarData(dado.Data))
+            {
+                resposta.SetCampoInvalido("Data");
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

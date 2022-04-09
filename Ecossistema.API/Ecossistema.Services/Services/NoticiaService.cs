@@ -4,6 +4,7 @@ using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
+using Ecossistema.Util.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!ValidarIncluir(dado, resposta)) return resposta;
 
             try
             {
@@ -40,7 +41,7 @@ namespace Ecossistema.Services.Services
 
                 await _unitOfWork.Noticias.AddAsync(obj);
 
-                _unitOfWork.Complete();
+                resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 #endregion
 
@@ -63,6 +64,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -73,7 +75,7 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!await ValidarEditar(dado, resposta)) return resposta;
 
             try
             {
@@ -89,7 +91,7 @@ namespace Ecossistema.Services.Services
 
                     await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     #endregion
 
@@ -110,6 +112,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -120,7 +123,7 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!await ValidarExcluir(id, resposta)) return resposta;
 
             try
             {
@@ -132,7 +135,7 @@ namespace Ecossistema.Services.Services
 
                     _unitOfWork.Noticias.Delete(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados excluídos com sucesso!");
                 }
@@ -140,10 +143,192 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
             return resposta;
         }
+
+        #region Validações
+
+        private bool ValidarIncluir(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidarTituloInformado(dado, resposta)
+                || !ValidarTituloTamanho(dado, resposta)
+                || !ValidarDescricaoInformada(dado, resposta)
+                || !ValidarDescricaoTamanho(dado, resposta)
+                || !ValidarSubTituloInformada(dado, resposta)
+                || !ValidarSubTituloTamanho(dado, resposta)
+                || !ValidarDataPublicacaoInformada(dado, resposta)
+                || !ValidarDataPublicacaoValida(dado, resposta))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarEditar(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidarIdInformado(dado, resposta)
+                || !ValidarIdValido(dado, resposta)
+                || !await ValidarNoticiaCadastrada(dado, resposta)
+                || !ValidarTituloInformado(dado, resposta)
+                || !ValidarTituloTamanho(dado, resposta)
+                || !ValidarDescricaoInformada(dado, resposta)
+                || !ValidarDescricaoTamanho(dado, resposta)
+                || !ValidarSubTituloInformada(dado, resposta)
+                || !ValidarSubTituloTamanho(dado, resposta)
+                || !ValidarDataPublicacaoInformada(dado, resposta)
+                || !ValidarDataPublicacaoValida(dado, resposta))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarExcluir(int id, RespostaPadrao resposta)
+        {
+            if (!ValidarIdInformado(id, resposta)
+                || !ValidarIdValido(id, resposta)
+                || !await ValidarNoticiaCadastrada(id, resposta))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarIdInformado(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            return ValidarIdInformado(dado.Id, resposta);
+        }
+
+        private bool ValidarIdInformado(int? id, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiro(id))
+            {
+                resposta.SetCampoVazio("Id");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarIdValido(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            return ValidarIdValido(dado.Id, resposta);
+        }
+
+        private bool ValidarIdValido(int? id, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(id))
+            {
+                resposta.SetCampoInvalido("Id");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarNoticiaCadastrada(int? id, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Id == (int)id
+                                                                && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Registro não encontrado.");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarNoticiaCadastrada(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            return await ValidarNoticiaCadastrada(dado.Id, resposta);
+        }
+
+        private bool ValidarTituloInformado(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.Titulo))
+            {
+                resposta.SetCampoVazio("Título");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarTituloTamanho(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Titulo, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Título", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDescricaoInformada(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.Descricao))
+            {
+                resposta.SetCampoVazio("Descrição");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDescricaoTamanho(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 8000;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Titulo, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Descrição", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarSubTituloInformada(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.SubTitulo))
+            {
+                resposta.SetCampoVazio("SubTitulo");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarSubTituloTamanho(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 300;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.SubTitulo, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("SubTitulo", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDataPublicacaoInformada(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (dado.DataPublicacao == null)
+            {
+                resposta.SetCampoVazio("Data da Publicação");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDataPublicacaoValida(NoticiaDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarData(dado.DataPublicacao))
+            {
+                resposta.SetCampoInvalido("Data da Publicação");
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }
