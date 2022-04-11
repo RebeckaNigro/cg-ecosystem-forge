@@ -6,12 +6,14 @@
       container-title="Últimas notícias enviadas"
       :last-contents="dummyContent"
     />
+    <ContainerUltimosEventos />
   </div>
   <FooterComponent />
 </template>
 
 <script setup lang="ts">
 import ContainerUltimosConteudos from '../../components/user/home/ContainerUltimosConteudos.vue'
+import ContainerUltimosEventos from '../../components/user/home/ContainerUltimosEventos.vue'
 
 interface lastContent {
   title: string,
