@@ -10,11 +10,10 @@ export const httpRequest: AxiosInstance = axios.create({
   },
 });
 
-// const userStore = useUserStore();
-
-// httpRequest.interceptors.request.use((config: any) => {
-//   if (userStore.loggedUser.token) config.headers.Authorization = `Bearer ${userStore.loggedUser.token}`
-//   return config
-// }, (error) => {
-//   return Promise.reject(error)
-// })
+httpRequest.interceptors.request.use((config: any) => {
+  const userStore = useUserStore();
+  if (userStore.loggedUser.token) config.headers.Authorization = `Bearer ${userStore.loggedUser.token}`
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})

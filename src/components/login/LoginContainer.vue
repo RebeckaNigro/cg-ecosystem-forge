@@ -42,7 +42,6 @@ const callStoreLogin = async (e: string, p: string) => {
     router.push({ name: 'UserHome'})
   } else {
     // push notification
-    console.log('raporras')
     const warning = document.createElement('span')
     warning.textContent = 'Por favor, verifique a senha e o e-mail.'
     warning.classList.add('m-auto')

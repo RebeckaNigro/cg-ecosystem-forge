@@ -6,6 +6,7 @@ import { httpRequest } from "../../utils/http";
 const loggedUser: ILoggedUser = {
   email: null,
   token: null,
+  id: null
 }
 
 export const useUserStore = defineStore('userStore', {
@@ -15,6 +16,7 @@ export const useUserStore = defineStore('userStore', {
       loggedUser,
     }
   },
+  persist: true,
   actions: {
     async login(email: string, password: string) {
       const body = {
@@ -23,10 +25,10 @@ export const useUserStore = defineStore('userStore', {
       }
       try {
         const response = await httpRequest.post('/api/autenticacao/login', body)
+        console.log(response)
         if (response.status === 200) {
           this.userResponse.putResponse(response.status, '', response.statusText);
-          this.loggedUser.email = email
-          this.loggedUser.token = response.data.token
+          [ this.loggedUser ] = [ response.data ]
         }
         else this.userResponse.putError(response.status, response.statusText); 
       } catch (error) {
@@ -34,5 +36,8 @@ export const useUserStore = defineStore('userStore', {
         console.error(error)
       }
     }
+  },
+  getters: {
+    getUserId: (state) => state.loggedUser.id
   }
 })

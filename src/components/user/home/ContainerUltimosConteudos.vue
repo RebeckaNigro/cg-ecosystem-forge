@@ -55,6 +55,7 @@ const props = defineProps<{
         width: 90%;
         white-space: nowrap;
         text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     footer {

@@ -10,24 +10,25 @@ import { useUserStore } from './stores/user/store'
 // Global components
 import NavBar from './components/general/NavBar.vue'
 import FooterComponent from './components/general/FooterComponent.vue'
-import { AxiosKey, RouterKey } from './utils/keys';
-import { httpRequest } from './utils/http';
+// import { AxiosKey, RouterKey } from './utils/keys';
+// import { httpRequest } from './utils/http';
 
 const pinia = createPinia()
-const providedUseRoute = useRoute()
+// const providedUseRoute = useRoute()
 pinia.use(piniaPluginPersistedstate)
 
 const ecossistema = createApp(App)
 
-ecossistema.component('NavBar', NavBar)
-ecossistema.component('FooterComponent', FooterComponent)
-ecossistema.provide(AxiosKey, httpRequest)
-ecossistema.provide(RouterKey, providedUseRoute)
-
 ecossistema.use(pinia)
 ecossistema.use(router)
 
+ecossistema.component('NavBar', NavBar)
+ecossistema.component('FooterComponent', FooterComponent)
+// ecossistema.provide(AxiosKey, httpRequest)
+// ecossistema.provide(RouterKey, providedUseRoute)
+
 const userStore = useUserStore()
+ecossistema.provide('userId', userStore.$state.loggedUser.id || '')
 // ecossistema.use(userStore)
 
 ecossistema.mount('#app')
