@@ -184,7 +184,7 @@ namespace Ecossistema.Services.Dto
         {
             Codigo = 200;
             Resposta = Resposta + ". " + mensagem;
-            Dado = dado;
+            Retorno = dado;
         }
     }
 }
