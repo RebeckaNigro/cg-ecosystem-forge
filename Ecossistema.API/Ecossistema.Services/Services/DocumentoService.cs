@@ -242,6 +242,46 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarTiposDocumentos()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.TiposDocumentos.FindAllAsync(x => x.Ativo);
+
+            var result = query.Select(x => new
+            {
+                tipoDocumentoId = x.Id,
+                tipoDocumento = x.Descricao
+            })
+            .Distinct()
+            .OrderBy(x => x.tipoDocumento)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarDocumentosAreas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.DocumentosAreas.FindAllAsync(x => x.Ativo);
+
+            var result = query.Select(x => new
+            {
+                documentoAreaId = x.Id,
+                documentoArea = x.Descricao
+            })
+            .Distinct()
+            .OrderBy(x => x.documentoArea)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
         #region Validações
 
         private async Task<bool> ValidarIncluir(DocumentoDto dado, RespostaPadrao resposta)

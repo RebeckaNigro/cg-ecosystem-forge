@@ -18,7 +18,8 @@ namespace Ecossistema.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEnderecoService _enderecoService;
 
-        public EventoService(IUnitOfWork unitOfWork, IEnderecoService enderecoService)
+        public EventoService(IUnitOfWork unitOfWork,
+            IEnderecoService enderecoService)
         {
             _unitOfWork = unitOfWork;
             _enderecoService = enderecoService;
@@ -32,13 +33,13 @@ namespace Ecossistema.Services.Services
 
             try
             {
+                var dataAtual = DateTime.Now;
+
                 #region Endereço
 
                 if (dado.EnderecoId == null)
                 {
-                    var endereco = dado.Endereco;
-
-                    dado.EnderecoId = await _enderecoService.Vincular(endereco, usuarioId, resposta);
+                    dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
 
                     if (dado.EnderecoId == 0) return resposta;
                 }
@@ -59,7 +60,7 @@ namespace Ecossistema.Services.Services
                                           (bool)dado.ExibirMaps,
                                           dado.Responsavel,
                                           usuarioId,
-                                          DateTime.Now);
+                                          dataAtual);
 
                 await _unitOfWork.Eventos.AddAsync(obj);
 
@@ -109,7 +110,7 @@ namespace Ecossistema.Services.Services
                 {
                     var endereco = dado.Endereco;
 
-                    dado.EnderecoId = await _enderecoService.Vincular(endereco, usuarioId, resposta);
+                    dado.EnderecoId = await _enderecoService.Vincular(endereco, dataAtual, usuarioId, resposta);
 
                     if (dado.EnderecoId == 0) return resposta;
                 }
@@ -295,6 +296,77 @@ namespace Ecossistema.Services.Services
             .Distinct();
 
             if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTiposEventos()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.TiposEventos.FindAllAsync(x => x.Ativo);
+
+            var result = query.Select(x => new
+            {
+                tipoEventoId = x.Id,
+                tipoEvento = x.Descricao
+            })
+            .Distinct()
+            .OrderBy(x => x.tipoEvento);
+
+            if (result.Any()) resposta.Retorno = result;
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarEnderecos(int instituicaoId)
+        {
+            var resposta = new RespostaPadrao();
+
+            var includes = new[] { "Endereco", "TipoEndereco" };
+
+            var query = await _unitOfWork.InstituicoesEnderecos.FindAllAsync(x => x.InstituicaoId == instituicaoId
+                                                                              && x.Ativo, includes);
+
+            var result = query.Select(x => new
+            {
+                enderecoId = x.EnderecoId,
+                tipoEndereco = x.TipoEndereco.Descricao,
+                cep = x.Endereco.Cep,
+                logradouro = x.Endereco.Logradouro,
+                numero = x.Endereco.Numero,
+                complemento = x.Endereco.Complemento,
+                pontoReferencia = x.Endereco.PontoReferencia,
+                bairro = x.Endereco.Bairro,
+                cidade = x.Endereco.Cidade,
+                uf = x.Endereco.Uf,
+            })
+            .Distinct()
+            .OrderBy(x => x.tipoEndereco);
+
+            if (result.Any()) resposta.Retorno = result;
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTiposEnderecos()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.TiposEnderecos.FindAllAsync(x => x.Ativo);
+
+            var result = query.Select(x => new
+            {
+                tipoEnderecoId = x.Id,
+                tipoEndereco = x.Descricao
+            })
+            .Distinct()
+            .OrderBy(x => x.tipoEndereco);
+
+            if (result.Any()) resposta.Retorno = result;
             else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
 
             return resposta;

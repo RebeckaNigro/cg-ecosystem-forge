@@ -7,7 +7,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Incluir(EnderecoDto dado, int usuarioId);
         Task<RespostaPadrao> Editar(EnderecoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
-        Task<int> Vincular(EnderecoDto dado, int usuarioId, RespostaPadrao resposta);
+        Task<int> Vincular(EnderecoDto dado, DateTime dataAtual, int usuarioId, RespostaPadrao resposta);
     }
 }
 

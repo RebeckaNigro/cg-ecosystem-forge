@@ -70,6 +70,7 @@ namespace Ecossistema.Data
         public IBaseRepository<Instituicao> Instituicoes { get; private set; }
         public IBaseRepository<InstituicaoArea> InstituicoesAreas { get; private set; }
         public IBaseRepository<InstituicaoClassificacao> InstituicoesClassificacoes { get; private set; }
+        public IBaseRepository<InstituicaoEndereco> InstituicoesEnderecos { get; private set; }
 
         #endregion
 
@@ -221,6 +222,7 @@ namespace Ecossistema.Data
             Instituicoes = new BaseRepository<Instituicao>(_context);
             InstituicoesAreas = new BaseRepository<InstituicaoArea>(_context);
             InstituicoesClassificacoes = new BaseRepository<InstituicaoClassificacao>(_context);
+            InstituicoesEnderecos = new BaseRepository<InstituicaoEndereco>(_context);
 
             #endregion
 
