@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Services.Dto
 {
-    public class LoginModel
+    public class LoginDto
     {
         [Required(ErrorMessage = "User Name is required")]
         public string? Email { get; set; }
