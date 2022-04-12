@@ -16,10 +16,12 @@ namespace Ecossistema.Services.Services
     public class EventoService : IEventoService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEnderecoService _enderecoService;
 
-        public EventoService(IUnitOfWork unitOfWork)
+        public EventoService(IUnitOfWork unitOfWork, IEnderecoService enderecoService)
         {
             _unitOfWork = unitOfWork;
+            _enderecoService = enderecoService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoDto dado, int usuarioId)
@@ -30,21 +32,34 @@ namespace Ecossistema.Services.Services
 
             try
             {
-                #region Instituição
+                #region Endereço
 
-                var obj = new Evento((int)dado.EventoId,
-                                    (int)dado.TipoEventoId,
-                                    dado.Titulo,
-                                    dado.Descricao,
-                                    (DateTime)dado.DataInicio,
-                                    (DateTime)dado.DataTermino,
-                                    dado.Local,
-                                    dado.EnderecoId,
-                                    dado.LinkExterno,
-                                    (bool)dado.ExibirMaps,
-                                    dado.Responsavel,
-                                    usuarioId,
-                                    DateTime.Now);
+                if (dado.EnderecoId == null)
+                {
+                    var endereco = dado.Endereco;
+
+                    dado.EnderecoId = await _enderecoService.Vincular(endereco, usuarioId, resposta);
+
+                    if (dado.EnderecoId == 0) return resposta;
+                }
+
+                #endregion
+
+                #region Evento
+
+                var obj = new Evento((int)dado.InstituicaoId,
+                                          (int)dado.TipoEventoId,
+                                          dado.Titulo,
+                                          dado.Descricao,
+                                          (DateTime)dado.DataInicio,
+                                          (DateTime)dado.DataTermino,
+                                          dado.Local,
+                                          dado.EnderecoId,
+                                          dado.LinkExterno,
+                                          (bool)dado.ExibirMaps,
+                                          dado.Responsavel,
+                                          usuarioId,
+                                          DateTime.Now);
 
                 await _unitOfWork.Eventos.AddAsync(obj);
 
@@ -63,7 +78,7 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(obj);
                 }
 
-                _unitOfWork.Complete();
+                resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 #endregion
 
@@ -71,6 +86,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -87,21 +103,41 @@ namespace Ecossistema.Services.Services
             {
                 var dataAtual = DateTime.Now;
 
-                var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == dado.Id);
+                #region Endereço
+
+                if (dado.EnderecoId == null)
+                {
+                    var endereco = dado.Endereco;
+
+                    dado.EnderecoId = await _enderecoService.Vincular(endereco, usuarioId, resposta);
+
+                    if (dado.EnderecoId == 0) return resposta;
+                }
+
+                #endregion
+
+                var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
                     #region Aprovação
 
-                    var aprovacao = new Aprovacao(EOrigem.Parceiro, usuarioId, dataAtual, objAlt.Id);
+                    var aprovacaoId = objAlt.AprovacaoId;
 
-                    await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+                    if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
+                    {
+                        var aprovacao = new Aprovacao(EOrigem.Parceiro, usuarioId, dataAtual, objAlt.Id);
 
-                    _unitOfWork.Complete();
+                        await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+
+                        _unitOfWork.Complete();
+
+                        aprovacaoId = aprovacao.Id;
+                    }
 
                     #endregion
 
-                    objAlt.EventoId = (int)dado.EventoId;
+                    objAlt.InstituicaoId = (int)dado.InstituicaoId;
                     objAlt.TipoEventoId = (int)dado.TipoEventoId;
                     objAlt.Titulo = (string)dado.Titulo;
                     objAlt.Descricao = (string)dado.Descricao;
@@ -112,12 +148,12 @@ namespace Ecossistema.Services.Services
                     objAlt.LinkExterno = dado.LinkExterno;
                     objAlt.ExibirMaps = (bool)dado.ExibirMaps;
                     objAlt.Responsavel = (string)dado.Responsavel;
-                    objAlt.AprovacaoId = aprovacao.Id;
+                    objAlt.AprovacaoId = aprovacaoId;
                     Recursos.Auditoria(objAlt, usuarioId, dataAtual);
 
                     _unitOfWork.Eventos.Update(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
@@ -125,6 +161,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -135,19 +172,27 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            if (!await ValidarExcluir(dado, resposta)) return resposta;
+            if (!await ValidarExcluir(id, resposta)) return resposta;
 
             try
             {
-                var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == id);
+                var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
-                    if (objAlt.Aprovacoes.Any()) _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                    #region Aprovação
+
+                    if (objAlt.Aprovacoes.Any())
+                    {
+                        _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                        _unitOfWork.Complete();
+                    }
+
+                    #endregion
 
                     _unitOfWork.Eventos.Delete(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados excluídos com sucesso!");
                 }
@@ -161,32 +206,129 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                titulo = x.Titulo,
+                dataInicio = x.DataInicio,
+                dataTermino = x.DataTermino,
+                local = x.Local
+            })
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .Take(3)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                titulo = x.Titulo,
+                dataInicio = x.DataInicio,
+                dataTermino = x.DataTermino,
+                local = x.Local
+            })
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco" });
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                instituicaoId = x.InstituicaoId,
+                instituicao = x.Instituicao != null ? x.Instituicao.Descricao : null,
+                tipoEventoId = x.TipoEventoId,
+                tipoEvento = x.TipoEvento != null ? x.Descricao : null,
+                titulo = x.Titulo,
+                descricao = x.Descricao,
+                dataInicio = x.DataInicio,
+                dataTermino = x.DataTermino,
+                local = x.Local,
+                enderecoId = x.EnderecoId,
+                endereco = x.Endereco != null
+                    ? new
+                    {
+                        cep = x.Endereco.Cep,
+                        logradouro = x.Endereco.Logradouro,
+                        numero = x.Endereco.Numero,
+                        complemento = x.Endereco.Complemento,
+                        pontoReferencia = x.Endereco.PontoReferencia,
+                        bairro = x.Endereco.Bairro,
+                        cidade = x.Endereco.Cidade,
+                        uf = x.Endereco.Uf
+                    }
+                    : null,
+                linkExterno = x.LinkExterno,
+                exibirMaps = x.ExibirMaps,
+                responsavel = x.Responsavel,
+                aprovado = x.Aprovacao
+            })
+            .Distinct();
+
+            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
         #region Validações
 
         private async Task<bool> ValidarIncluir(EventoDto dado, RespostaPadrao resposta)
         {
-            if (!ValidarTituloInformada(dado, resposta)
-                 || !ValidarTituloTamanho(dado, resposta)
-                 || !ValidarCnpjInformado(dado, resposta)
-                 || !ValidarCnpjTamanho(dado, resposta)
-                 || !ValidarCnpjValido(dado, resposta)
-                 || !ValidarDescricaoInformada(dado, resposta)
-                 || !ValidarDescricaoTamanho(dado, resposta)
-                 || !ValidarEventoAreaIdValida(dado, resposta)
-                 || !await ValidarEventoAreaIdCadastrada(dado, resposta)
-                 || !ValidarEventoClassificacaoIdValida(dado, resposta)
-                 || !await ValidarEventoClassificacaoIdCadastrado(dado, resposta)
-                 || !ValidarDescricaoInformada(dado, resposta)
-                 || !ValidarDescricaoTamanho(dado, resposta)
-                 || !ValidarMissaoInformada(dado, resposta)
-                 || !ValidarMissaoTamanho(dado, resposta)
-                 || !ValidarVisaoInformada(dado, resposta)
-                 || !ValidarVisaoTamanho(dado, resposta)
-                 || !ValidarValoresInformada(dado, resposta)
-                 || !ValidarValoresTamanho(dado, resposta)
-                 || !ValidarTipoEventoIdValida(dado, resposta)
-                 || !await ValidarTipoEventoIdCadastrada(dado, resposta))
+            if (!ValidarInstituicaoIdValida(dado, resposta)
+            || !await ValidarInstituicaoIdCadastrada(dado, resposta)
+            || !ValidarTipoEventoIdValida(dado, resposta)
+            || !await ValidarTipoEventoIdCadastrada(dado, resposta)
+            || !ValidarTituloInformada(dado, resposta)
+            || !ValidarTituloTamanho(dado, resposta)
+            || !ValidarDescricaoInformada(dado, resposta)
+            || !ValidarDescricaoTamanho(dado, resposta)
+            || !ValidarDataInicioInformada(dado, resposta)
+            || !ValidarDataInicioValida(dado, resposta)
+            || !ValidarDataTerminoInformada(dado, resposta)
+            || !ValidarDataTerminoValida(dado, resposta)
+            || !ValidarPeriodoValido(dado, resposta)
+            || !ValidarLocalInformada(dado, resposta)
+            || !ValidarLocalTamanho(dado, resposta)
+            || (dado.EnderecoId != null
+                && (!ValidarEnderecoIdValido(dado, resposta)
+                    || !await ValidarEnderecoIdCadastrada(dado, resposta)))
+            || !ValidarLinkExternoInformada(dado, resposta)
+            || !ValidarLinkExternoTamanho(dado, resposta)
+            || !ValidarExibirMapsInformada(dado, resposta)
+            || !ValidarResponsavelInformada(dado, resposta)
+            || !ValidarResponsavelTamanho(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -194,31 +336,31 @@ namespace Ecossistema.Services.Services
 
         private async Task<bool> ValidarEditar(EventoDto dado, RespostaPadrao resposta)
         {
-            if (!ValidarIdInformado(dado, resposta)
-                || !ValidarIdValido(dado, resposta)
-                || !await ValidarIdCadastrado(dado, resposta)
-                || !ValidarTituloInformada(dado, resposta)
-                || !ValidarTituloTamanho(dado, resposta)
-                || !ValidarCnpjInformado(dado, resposta)
-                || !ValidarCnpjTamanho(dado, resposta)
-                || !ValidarCnpjValido(dado, resposta)
-                || !ValidarDescricaoInformada(dado, resposta)
-                || !ValidarDescricaoTamanho(dado, resposta)
-                || !ValidarEventoAreaIdValida(dado, resposta)
-                || !await ValidarEventoAreaIdCadastrada(dado, resposta)
-                || !ValidarEventoClassificacaoIdValida(dado, resposta)
-                || !await ValidarEventoClassificacaoIdCadastrado(dado, resposta)
-                || !ValidarDescricaoInformada(dado, resposta)
-                || !ValidarDescricaoTamanho(dado, resposta)
-                || !ValidarMissaoInformada(dado, resposta)
-                || !ValidarMissaoTamanho(dado, resposta)
-                || !ValidarVisaoInformada(dado, resposta)
-                || !ValidarVisaoTamanho(dado, resposta)
-                || !ValidarValoresInformada(dado, resposta)
-                || !ValidarValoresTamanho(dado, resposta)
-                || !ValidarTipoEventoIdValida(dado, resposta)
-                || !await ValidarTipoEventoIdCadastrada(dado, resposta))
+            if (!ValidarInstituicaoIdValida(dado, resposta)
+               || !await ValidarInstituicaoIdCadastrada(dado, resposta)
+               || !ValidarTipoEventoIdValida(dado, resposta)
+               || !await ValidarTipoEventoIdCadastrada(dado, resposta)
+               || !ValidarTituloInformada(dado, resposta)
+               || !ValidarTituloTamanho(dado, resposta)
+               || !ValidarDescricaoInformada(dado, resposta)
+               || !ValidarDescricaoTamanho(dado, resposta)
+               || !ValidarDataInicioInformada(dado, resposta)
+               || !ValidarDataInicioValida(dado, resposta)
+               || !ValidarDataTerminoInformada(dado, resposta)
+               || !ValidarDataTerminoValida(dado, resposta)
+               || !ValidarPeriodoValido(dado, resposta)
+               || !ValidarLocalInformada(dado, resposta)
+               || !ValidarLocalTamanho(dado, resposta)
+               || (dado.EnderecoId != null
+                    && (!ValidarEnderecoIdValido(dado, resposta)
+                        || !await ValidarEnderecoIdCadastrada(dado, resposta)))
+               || !ValidarLinkExternoInformada(dado, resposta)
+               || !ValidarLinkExternoTamanho(dado, resposta)
+               || !ValidarExibirMapsInformada(dado, resposta)
+               || !ValidarResponsavelInformada(dado, resposta)
+               || !ValidarResponsavelTamanho(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -227,9 +369,10 @@ namespace Ecossistema.Services.Services
         private async Task<bool> ValidarExcluir(int id, RespostaPadrao resposta)
         {
             if (!ValidarIdInformado(id, resposta)
-                || !ValidarIdValido(id, resposta)
-                || !await ValidarIdCadastrado(id, resposta))
+            || !ValidarIdValido(id, resposta)
+            || !await ValidarIdCadastrado(id, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -285,12 +428,7 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarInstituicaoIdValida(EventoDto dado, RespostaPadrao resposta)
         {
-            return ValidarEventoAreaIdValida(dado.InstituicaoId, resposta);
-        }
-
-        private bool ValidarInstituicaoIdValida(int? EventoAreaId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(EventoAreaId))
+            if (!ValidacaoUtil.ValidarInteiroValido(dado.InstituicaoId))
             {
                 resposta.SetCampoInvalido("InstituicaoId");
                 return false;
@@ -298,9 +436,9 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private async Task<bool> ValidarInstituicaoIdCadastrada(int? instituicaoId, RespostaPadrao resposta)
+        private async Task<bool> ValidarInstituicaoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
         {
-            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Id == (int)instituicaoId
+            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Id == (int)dado.InstituicaoId
                                                                       && x.Ativo);
 
             if (!query.Any())
@@ -311,19 +449,9 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private async Task<bool> ValidarInstituicaoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
-        {
-            return await ValidarInstituicaoIdCadastrada(dado.InstituicaoId, resposta);
-        }
-
         private bool ValidarTipoEventoIdValida(EventoDto dado, RespostaPadrao resposta)
         {
-            return ValidarEventoAreaIdValida(dado.TipoEventoId, resposta);
-        }
-
-        private bool ValidarTipoEventoIdValida(int? tipoEventoId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(tipoEventoId))
+            if (!ValidacaoUtil.ValidarInteiroValido(dado.TipoEventoId))
             {
                 resposta.SetCampoInvalido("TipoEventoId");
                 return false;
@@ -331,9 +459,9 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private async Task<bool> ValidarTipoEventoIdCadastrada(int? tipoEventoId, RespostaPadrao resposta)
+        private async Task<bool> ValidarTipoEventoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
         {
-            var query = await _unitOfWork.TiposEventos.FindAllAsync(x => x.Id == (int)tipoEventoId
+            var query = await _unitOfWork.TiposEventos.FindAllAsync(x => x.Id == (int)dado.TipoEventoId
                                                                       && x.Ativo);
 
             if (!query.Any())
@@ -342,11 +470,6 @@ namespace Ecossistema.Services.Services
                 return false;
             }
             return true;
-        }
-
-        private async Task<bool> ValidarTipoEventoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
-        {
-            return await ValidarTipoEventoIdCadastrada(dado.TipoEventoId, resposta);
         }
 
         private bool ValidarTituloInformada(EventoDto dado, RespostaPadrao resposta)
@@ -391,191 +514,150 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-
-        //Data Ínicio
-
-        private bool ValidarEventoAreaIdValida(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarDataInicioInformada(EventoDto dado, RespostaPadrao resposta)
         {
-            return ValidarEventoAreaIdValida(dado.EventoAreaId, resposta);
-        }
-
-        private bool ValidarEventoAreaIdValida(int? EventoAreaId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(EventoAreaId))
+            if (dado.DataInicio == null)
             {
-                resposta.SetCampoInvalido("EventoAreaId");
+                resposta.SetCampoVazio("DataInicio");
                 return false;
             }
             return true;
         }
 
-        private async Task<bool> ValidarEventoAreaIdCadastrada(int? EventoAreaId, RespostaPadrao resposta)
+        private bool ValidarDataInicioValida(EventoDto dado, RespostaPadrao resposta)
         {
-            var query = await _unitOfWork.InstituicoesAreas.FindAllAsync(x => x.Id == (int)EventoAreaId
-                                                                && x.Ativo);
+            if (!ValidacaoUtil.ValidarData(dado.DataInicio))
+            {
+                resposta.SetCampoInvalido("DataInicio");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDataTerminoInformada(EventoDto dado, RespostaPadrao resposta)
+        {
+            if (dado.DataTermino == null)
+            {
+                resposta.SetCampoVazio("DataTermino");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarDataTerminoValida(EventoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarData(dado.DataTermino))
+            {
+                resposta.SetCampoInvalido("DataTermino");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarPeriodoValido(EventoDto dado, RespostaPadrao resposta)
+        {
+            if ((DateTime)dado.DataInicio > (DateTime)dado.DataInicio)
+            {
+                resposta.SetCampoInvalido("DataTermino", "A data de término deve ser posterior a data de início!");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarLocalInformada(EventoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarString(dado.Local))
+            {
+                resposta.SetCampoVazio("Local");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarLocalTamanho(EventoDto dado, RespostaPadrao resposta)
+        {
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Local, tamanhoCampo))
+            {
+                resposta.SetCampoInvalido("Local", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarEnderecoIdValido(EventoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(dado.EnderecoId))
+            {
+                resposta.SetCampoInvalido("EnderecoId");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarEnderecoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.Enderecos.FindAllAsync(x => x.Id == (int)dado.EnderecoId
+                                                                      && x.Ativo);
 
             if (!query.Any())
             {
-                resposta.SetNaoEncontrado("Não existe cadastro para a área informada!");
+                resposta.SetNaoEncontrado("Não existe cadastro para o endereço informado!");
                 return false;
             }
             return true;
         }
 
-        private async Task<bool> ValidarEventoAreaIdCadastrada(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarLinkExternoInformada(EventoDto dado, RespostaPadrao resposta)
         {
-            return await ValidarEventoAreaIdCadastrada(dado.EventoAreaId, resposta);
-        }
-
-        private bool ValidarEventoClassificacaoIdValida(EventoDto dado, RespostaPadrao resposta)
-        {
-            return ValidarEventoClassificacaoIdValido(dado.EventoClassificacaoId, resposta);
-        }
-
-        private bool ValidarEventoClassificacaoIdValido(int? EventoClassificacaoId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(EventoClassificacaoId))
+            if (!ValidacaoUtil.ValidarString(dado.LinkExterno))
             {
-                resposta.SetCampoInvalido("EventoClassificacaoId");
+                resposta.SetCampoVazio("LinkExterno");
                 return false;
             }
             return true;
         }
 
-        private async Task<bool> ValidarEventoClassificacaoIdCadastrado(int? EventoClassificacaoId, RespostaPadrao resposta)
-        {
-            var query = await _unitOfWork.InstituicoesClassificacoes.FindAllAsync(x => x.Id == (int)EventoClassificacaoId
-                                                                        && x.Ativo);
-
-            if (!query.Any())
-            {
-                resposta.SetNaoEncontrado("Não existe cadastro para a classificação informada!");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> ValidarEventoClassificacaoIdCadastrado(EventoDto dado, RespostaPadrao resposta)
-        {
-
-            return await ValidarEventoClassificacaoIdCadastrado(dado.EventoClassificacaoId, resposta);
-        }
-
-        private bool ValidarDescricaoInformada(EventoDto dado, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarString(dado.Descricao))
-            {
-                resposta.SetCampoVazio("Descricao");
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidarDescricaoTamanho(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarLinkExternoTamanho(EventoDto dado, RespostaPadrao resposta)
         {
             var tamanhoCampo = 8000;
-            if (!ValidacaoUtil.ValidarTamanhoString(dado.Descricao, tamanhoCampo))
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.LinkExterno, tamanhoCampo))
             {
-                resposta.SetCampoInvalido("Descricao", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                resposta.SetCampoInvalido("LinkExterno", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarMissaoInformada(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarExibirMapsInformada(EventoDto dado, RespostaPadrao resposta)
         {
-            if (!ValidacaoUtil.ValidarString(dado.Missao))
+            if (dado.ExibirMaps == null)
             {
-                resposta.SetCampoVazio("Missao");
+                resposta.SetCampoVazio("ExibirMaps");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarMissaoTamanho(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarResponsavelInformada(EventoDto dado, RespostaPadrao resposta)
         {
-            var tamanhoCampo = 8000;
-            if (!ValidacaoUtil.ValidarTamanhoString(dado.Missao, tamanhoCampo))
+            if (!ValidacaoUtil.ValidarString(dado.Responsavel))
             {
-                resposta.SetCampoInvalido("Missao", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
+                resposta.SetCampoVazio("Responsavel");
                 return false;
             }
             return true;
         }
 
-        private bool ValidarVisaoInformada(EventoDto dado, RespostaPadrao resposta)
+        private bool ValidarResponsavelTamanho(EventoDto dado, RespostaPadrao resposta)
         {
-            if (!ValidacaoUtil.ValidarString(dado.Visao))
+            var tamanhoCampo = 100;
+            if (!ValidacaoUtil.ValidarTamanhoString(dado.Responsavel, tamanhoCampo))
             {
-                resposta.SetCampoVazio("Visao");
+                resposta.SetCampoInvalido("Responsavel", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
                 return false;
             }
             return true;
-        }
-
-        private bool ValidarVisaoTamanho(EventoDto dado, RespostaPadrao resposta)
-        {
-            var tamanhoCampo = 8000;
-            if (!ValidacaoUtil.ValidarTamanhoString(dado.Visao, tamanhoCampo))
-            {
-                resposta.SetCampoInvalido("Visao", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidarValoresInformada(EventoDto dado, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarString(dado.Valores))
-            {
-                resposta.SetCampoVazio("Valores");
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidarValoresTamanho(EventoDto dado, RespostaPadrao resposta)
-        {
-            var tamanhoCampo = 8000;
-            if (!ValidacaoUtil.ValidarTamanhoString(dado.Valores, tamanhoCampo))
-            {
-                resposta.SetCampoInvalido("Valores", "O campo não pode conter mais que " + tamanhoCampo.ToString() + " caracteres.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidarTipoEventoIdValida(EventoDto dado, RespostaPadrao resposta)
-        {
-            return ValidarTipoEventoIdValida(dado.TipoEventoId, resposta);
-        }
-
-        private bool ValidarTipoEventoIdValida(int? tipoEventoId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(tipoEventoId))
-            {
-                resposta.SetCampoInvalido("TipoEventoId");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> ValidarTipoEventoIdCadastrada(int? tipoEventoId, RespostaPadrao resposta)
-        {
-            var query = await _unitOfWork.TiposInstituicoes.FindAllAsync(x => x.Id == (int)tipoEventoId
-                                                                         && x.Ativo);
-
-            if (!query.Any())
-            {
-                resposta.SetNaoEncontrado("Não existe cadastro para o tipo de instituição informada!");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> ValidarTipoEventoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
-        {
-            return await ValidarTipoEventoIdCadastrada(dado.TipoEventoId, resposta);
         }
 
         #endregion

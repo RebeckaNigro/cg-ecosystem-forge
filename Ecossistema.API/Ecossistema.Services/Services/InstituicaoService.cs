@@ -87,17 +87,24 @@ namespace Ecossistema.Services.Services
             {
                 var dataAtual = DateTime.Now;
 
-                var objAlt = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == dado.Id);
+                var objAlt = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
                     #region Aprovação
 
-                    var aprovacao = new Aprovacao(EOrigem.Parceiro, usuarioId, dataAtual, objAlt.Id);
+                    var aprovacaoId = objAlt.AprovacaoId;
 
-                    await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+                    if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
+                    {
+                        var aprovacao = new Aprovacao(EOrigem.Parceiro, usuarioId, dataAtual, objAlt.Id);
 
-                    _unitOfWork.Complete();
+                        await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+
+                        _unitOfWork.Complete();
+
+                        aprovacaoId = aprovacao.Id;
+                    }
 
                     #endregion
 
@@ -111,7 +118,7 @@ namespace Ecossistema.Services.Services
                     objAlt.Missao = dado.Missao;
                     objAlt.Visao = dado.Visao;
                     objAlt.Valores = dado.Valores;
-                    objAlt.AprovacaoId = aprovacao.Id;
+                    objAlt.AprovacaoId = aprovacaoId;
                     Recursos.Auditoria(objAlt, usuarioId, dataAtual);
 
                     _unitOfWork.Instituicoes.Update(objAlt);
@@ -139,11 +146,19 @@ namespace Ecossistema.Services.Services
 
             try
             {
-                var objAlt = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == id);
+                var objAlt = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
-                    if (objAlt.Aprovacoes.Any()) _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                    #region Aprovação
+
+                    if (objAlt.Aprovacoes.Any())
+                    {
+                        _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                        _unitOfWork.Complete();
+                    }
+
+                    #endregion
 
                     _unitOfWork.Instituicoes.Delete(objAlt);
 
@@ -188,6 +203,7 @@ namespace Ecossistema.Services.Services
                  || !ValidarTipoInstituicaoIdValida(dado, resposta)
                  || !await ValidarTipoInstituicaoIdCadastrada(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -220,6 +236,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarTipoInstituicaoIdValida(dado, resposta)
                 || !await ValidarTipoInstituicaoIdCadastrada(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -231,6 +248,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarIdValido(id, resposta)
                 || !await ValidarIdCadastrado(id, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;

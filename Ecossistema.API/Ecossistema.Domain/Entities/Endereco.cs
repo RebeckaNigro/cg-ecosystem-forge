@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,15 +16,38 @@ namespace Ecossistema.Domain.Entities
             HistoricoEventos = new HashSet<HistoricoEvento>();
         }
 
+        public Endereco(string? cep,
+            string? logradrouro,
+            string? numero,
+            string? complemento,
+            string? pontoreferencia,
+            string? bairro,
+            string? cidade,
+            string? uf,
+            int usuarioId,
+            DateTime dataAtual)
+        {
+            Cep = cep;
+            Logradouro = logradrouro;
+            Numero = numero;
+            Complemento = complemento;
+            PontoReferencia = pontoreferencia;
+            Bairro = bairro;
+            Cidade = cidade;
+            Uf = uf;
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
+        }
+
         public int Id { get; set; }
         public string Cep { get; set; }
         public string Logradouro { get; set; }
         public string Numero { get; set; }
-        public string Complemento { get; set; }
-        public string PontoReferencia { get; set; }
+        public string? Complemento { get; set; }
+        public string? PontoReferencia { get; set; }
         public string Bairro { get; set; }
         public string Cidade { get; set; }
-        public string UF { get; set; }
+        public string Uf { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataCriacao { get; set; }
         public int UsuarioCriacaoId { get; set; }

@@ -12,5 +12,8 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Incluir(DocumentoDto dado, int usuarioId);
         Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
+        Task<RespostaPadrao> ListarUltimas();
+        Task<RespostaPadrao> ListarTodas();
+        Task<RespostaPadrao> Detalhes(int id);
     }
 }

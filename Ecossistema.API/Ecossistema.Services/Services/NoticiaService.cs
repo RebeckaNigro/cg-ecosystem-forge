@@ -41,7 +41,7 @@ namespace Ecossistema.Services.Services
 
                 await _unitOfWork.Noticias.AddAsync(obj);
 
-                resposta.Retorno = _unitOfWork.Complete() > 0;
+                _unitOfWork.Complete();
 
                 #endregion
 
@@ -56,7 +56,7 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Noticias.Update(obj);
                 }
 
-                _unitOfWork.Complete();
+                resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 #endregion
 
@@ -81,17 +81,24 @@ namespace Ecossistema.Services.Services
             {
                 var dataAtual = DateTime.Now;
 
-                var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == dado.Id);
+                var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacao" });
 
                 if (objAlt != null)
                 {
                     #region Aprovação
 
-                    var aprovacao = new Aprovacao(EOrigem.Parceiro, usuarioId, dataAtual, objAlt.Id);
+                    var aprovacaoId = objAlt.AprovacaoId;
 
-                    await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+                    if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
+                    {
+                        var aprovacao = new Aprovacao(EOrigem.Noticia, usuarioId, dataAtual, objAlt.Id);
 
-                    resposta.Retorno = _unitOfWork.Complete() > 0;
+                        await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+
+                        _unitOfWork.Complete();
+
+                        aprovacaoId = aprovacao.Id;
+                    }
 
                     #endregion
 
@@ -99,12 +106,12 @@ namespace Ecossistema.Services.Services
                     objAlt.Descricao = dado.Descricao;
                     objAlt.SubTitulo = dado.SubTitulo;
                     objAlt.DataPublicacao = dado.DataPublicacao;
-                    objAlt.AprovacaoId = aprovacao.Id;
+                    objAlt.AprovacaoId = aprovacaoId;
                     Recursos.Auditoria(objAlt, usuarioId, dataAtual);
 
                     _unitOfWork.Noticias.Update(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
@@ -127,11 +134,19 @@ namespace Ecossistema.Services.Services
 
             try
             {
-                var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == id);
+                var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
-                    if (objAlt.Aprovacoes.Any()) _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                    #region Aprovação
+
+                    if (objAlt.Aprovacoes.Any())
+                    {
+                        _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                        _unitOfWork.Complete();
+                    }
+
+                    #endregion
 
                     _unitOfWork.Noticias.Delete(objAlt);
 
@@ -150,6 +165,74 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Titulo,
+                x.DataPublicacao
+            })
+            .Distinct()
+            .OrderByDescending(x => x.DataPublicacao)
+            .Take(3)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Titulo,
+                x.DataPublicacao
+            })
+            .Distinct()
+            .OrderByDescending(x => x.DataPublicacao)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Id == id, new[] { "Aprovacao" });
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Titulo,
+                x.Descricao,
+                x.SubTitulo,
+                x.DataPublicacao,
+                x.Aprovado
+            })
+            .Distinct();
+
+            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
         #region Validações
 
         private bool ValidarIncluir(NoticiaDto dado, RespostaPadrao resposta)
@@ -163,6 +246,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarDataPublicacaoInformada(dado, resposta)
                 || !ValidarDataPublicacaoValida(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -182,6 +266,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarDataPublicacaoInformada(dado, resposta)
                 || !ValidarDataPublicacaoValida(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -193,6 +278,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarIdValido(id, resposta)
                 || !await ValidarNoticiaCadastrada(id, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;

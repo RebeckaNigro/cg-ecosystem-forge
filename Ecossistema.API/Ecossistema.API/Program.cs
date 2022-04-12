@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IFaleConoscoService, FaleConoscoService>();
 builder.Services.AddScoped<IFaleConoscoSetorService, FaleConoscoSetorService>();

@@ -26,7 +26,7 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!await ValidarIncluir(dado, resposta)) return resposta;
 
             try
             {
@@ -58,7 +58,7 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Documentos.Update(obj);
                 }
 
-                _unitOfWork.Complete();
+                resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 #endregion
 
@@ -66,6 +66,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -76,23 +77,30 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!await ValidarEditar(dado, resposta)) return resposta;
 
             try
             {
                 var dataAtual = DateTime.Now;
 
-                var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == dado.Id);
+                var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
                     #region Aprovação
 
-                    var aprovacao = new Aprovacao(EOrigem.Documento, usuarioId, dataAtual, objAlt.Id);
+                    var aprovacaoId = objAlt.AprovacaoId;
 
-                    await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+                    if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
+                    {
+                        var aprovacao = new Aprovacao(EOrigem.Documento, usuarioId, dataAtual, objAlt.Id);
 
-                    _unitOfWork.Complete();
+                        await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
+
+                        _unitOfWork.Complete();
+
+                        aprovacaoId = aprovacao.Id;
+                    }
 
                     #endregion
 
@@ -102,12 +110,12 @@ namespace Ecossistema.Services.Services
                     objAlt.DocumentoAreaId = (int)dado.DocumentoAreaId;
                     objAlt.InstituicaoId = (int)dado.InstituicaoId;
                     objAlt.Data = (DateTime)dado.Data;
-                    objAlt.AprovacaoId = aprovacao.Id;
+                    objAlt.AprovacaoId = aprovacaoId;
                     Recursos.Auditoria(objAlt, usuarioId, dataAtual);
 
                     _unitOfWork.Documentos.Update(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
@@ -115,6 +123,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -125,19 +134,27 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            //if (!await Validar(obj, resposta)) return resposta;
+            if (!await ValidarExcluir(id, resposta)) return resposta;
 
             try
             {
-                var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == id);
+                var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
 
                 if (objAlt != null)
                 {
-                    if (objAlt.Aprovacoes.Any()) _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                    #region Aprovação
+
+                    if (objAlt.Aprovacoes.Any())
+                    {
+                        _unitOfWork.Aprovacoes.DeleteRange(objAlt.Aprovacoes.ToList());
+                        _unitOfWork.Complete();
+                    }
+
+                    #endregion
 
                     _unitOfWork.Documentos.Delete(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados excluídos com sucesso!");
                 }
@@ -145,8 +162,82 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
+                                                                   && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                nome = x.Nome,
+                data = x.Data
+            })
+            .Distinct()
+            .OrderByDescending(x => x.data)
+            .Take(3)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                nome = x.Nome,
+                data = x.Data
+            })
+            .Distinct()
+            .OrderByDescending(x => x.data)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == id, new[] { "Aprovacao", "TipoDocumento", "DocumentoArea", "Instituicao" });
+
+            var result = query.Select(x => new
+            {
+                id = x.Id,
+                nome = x.Nome,
+                descricao = x.Descricao,
+                tipoDocumentoId = x.TipoDocumentoId,
+                tipoDocumento = x.TipoDocumento != null ? x.TipoDocumento.Descricao : null,
+                documentoAreaid = x.DocumentoAreaId,
+                documentoArea = x.DocumentoArea != null ? x.DocumentoArea.Descricao : null,
+                instituicaoId = x.InstituicaoId,
+                instituicao = x.Instituicao != null ? x.Instituicao.Descricao : null,
+                data = x.Data,
+                x.Aprovado
+            })
+            .Distinct();
+
+            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
 
             return resposta;
         }
@@ -168,6 +259,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarDataInformada(dado, resposta)
                 || !ValidarDataValida(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -191,6 +283,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarDataInformada(dado, resposta)
                 || !ValidarDataValida(dado, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
@@ -206,6 +299,7 @@ namespace Ecossistema.Services.Services
                 || !ValidarIdValido(id, resposta)
                 || !await ValidarIdCadastrado(id, resposta))
             {
+                resposta.Retorno = false;
                 return false;
             }
             return true;
