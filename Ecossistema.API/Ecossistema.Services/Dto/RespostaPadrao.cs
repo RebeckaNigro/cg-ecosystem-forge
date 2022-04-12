@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,7 @@ namespace Ecossistema.Services.Dto
             Resposta = res;
             Dado = obj;
         }
+
 
         public void SetMensagem(string mensagem)
         {
@@ -174,6 +176,13 @@ namespace Ecossistema.Services.Dto
         public void SetQuaseSucesso(string mensagem, object dado)
         {
             Codigo = 222;
+            Resposta = Resposta + ". " + mensagem;
+            Dado = dado;
+        }
+
+        public void SetSucesso(string mensagem, object dado)
+        {
+            Codigo = 200;
             Resposta = Resposta + ". " + mensagem;
             Dado = dado;
         }
