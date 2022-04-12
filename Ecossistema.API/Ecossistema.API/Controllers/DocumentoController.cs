@@ -40,5 +40,23 @@ namespace Ecossistema.API.Controllers
         {
             return await _documentoService.Excluir(id);
         }
+
+        [HttpGet("listarUltimas")]
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            return await _documentoService.ListarUltimas();
+        }
+
+        [HttpGet("listarTodas")]
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            return await _documentoService.ListarTodas();
+        }
+
+        [HttpGet("detalhes")]
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            return await _documentoService.Detalhes(id);
+        }
     }
 }

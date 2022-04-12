@@ -17,6 +17,7 @@ namespace Ecossistema.Services.Dto
         public DateTime? DataTermino { get; set; }
         public string? Local { get; set; }
         public int? EnderecoId { get; set; }
+        public EnderecoDto? Endereco { get; set; }
         public string LinkExterno { get; set; }
         public bool? ExibirMaps { get; set; }
         public string? Responsavel { get; set; }

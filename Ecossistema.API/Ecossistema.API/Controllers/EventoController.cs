@@ -40,5 +40,23 @@ namespace Ecossistema.API.Controllers
         {
             return await _eventoService.Excluir(id);
         }
+
+        [HttpGet("listarUltimas")]
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            return await _eventoService.ListarUltimas();
+        }
+
+        [HttpGet("listarTodas")]
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            return await _eventoService.ListarTodas();
+        }
+
+        [HttpGet("detalhes")]
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            return await _eventoService.Detalhes(id);
+        }
     }
 }

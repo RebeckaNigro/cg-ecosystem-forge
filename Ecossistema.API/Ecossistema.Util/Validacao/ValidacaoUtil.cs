@@ -198,6 +198,7 @@ namespace Ecossistema.Util.Validacao
             if (!ValidarDouble(valor) || valor <= 0) return false;
             return true;
         }
+
         public static bool ValidarFloat(float? valor)
         {
             return valor != null;
@@ -212,6 +213,19 @@ namespace Ecossistema.Util.Validacao
         public static bool ValidarFloatMaiorIgualZero(float? valor)
         {
             if (!ValidarFloat(valor) || valor < 0) return false;
+            return true;
+        }
+
+        public static bool ValidarData(DateTime? valor)
+        {
+            try
+            {
+                var data = (DateTime)valor;
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
     }
