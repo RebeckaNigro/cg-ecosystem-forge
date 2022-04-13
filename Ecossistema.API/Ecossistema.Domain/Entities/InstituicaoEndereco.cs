@@ -9,6 +9,10 @@ namespace Ecossistema.Domain.Entities
 {
     public class InstituicaoEndereco
     {
+        public InstituicaoEndereco()
+        {
+        }
+
         public InstituicaoEndereco(int instituicaoId,
             int enderecoId,
             int tipoEnderecoId,
