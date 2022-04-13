@@ -2,7 +2,7 @@
 
 namespace Ecossistema.Services.Dto
 {
-    public class RegisterModel
+    public class ResgistrarLoginDto
     {
         [Required(ErrorMessage = "User Name is required")]
         public string? Username { get; set; }
