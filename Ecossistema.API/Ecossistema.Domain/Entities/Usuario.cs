@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -91,14 +93,22 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesInstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
         }
 
+        public Usuario(int pessoaId, int instituicaoId, string email, string aspNetUserId, string cargo)
+        {
+           
+        }
+
         public int Id { get; set; }
         public int PessoaId { get; set; }
         public virtual Pessoa Pessoa { get; set; }
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
+        public string AspNetUserId { get; set; }
+        public UserManager<IdentityUser> userManager { get; set; }
         public int PermissaoId { get; set; }
         public virtual Permissao Permissao { get; set; }
         public string Email { get; set; }
+        
         public string SenhaHash { get; set; }
         public string SenhaSalt { get; set; }
         public string? Token { get; set; }

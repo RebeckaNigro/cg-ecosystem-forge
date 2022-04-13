@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Services.Interfaces
 {
-    internal interface IUsuarioService
+    public interface IUsuarioService
     {
-        Task<RespostaPadrao> Incluir(UsuarioCriacaoDto dado, int usuarioId);
+        Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado);
         Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
     }
