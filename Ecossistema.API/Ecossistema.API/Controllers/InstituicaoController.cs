@@ -49,7 +49,7 @@ namespace Ecossistema.API.Controllers
             return await _instituicaoService.Excluir(id);
         }
 
-        [HttpPost("incluirEndereco")]
+        [HttpPost("vincularEndereco")]
         public async Task<RespostaPadrao> VincularEndereco([FromBody] EnderecoDto obj)
         {
             return await _instituicaoService.VincularEndereco(obj, InstituicaoId, UsuarioId);
