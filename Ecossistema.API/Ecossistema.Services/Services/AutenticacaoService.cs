@@ -22,6 +22,7 @@ namespace Ecossistema.Services.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        //private readonly UsuarioCriacaoDto _usuarioCriacaoDto;
 
         public AutenticacaoService(
             UserManager<IdentityUser> userManager,
@@ -33,6 +34,7 @@ namespace Ecossistema.Services.Services
             _roleManager = roleManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
 
         public async Task<RespostaPadrao> Login(LoginDto model)
@@ -201,7 +203,6 @@ namespace Ecossistema.Services.Services
                     resposta.SetErroInterno("Não foi possível criar o usuário, tente novamente mais tarde.");
                     return resposta;
                 }
-
                 if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminMaster))
                     await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminMaster));
                 if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminGeral))
@@ -218,6 +219,7 @@ namespace Ecossistema.Services.Services
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
                 }
+                //var teste = user.Id;
                 return resposta;
             }
             catch (Exception e)
