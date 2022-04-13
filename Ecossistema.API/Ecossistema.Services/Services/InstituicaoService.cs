@@ -207,7 +207,7 @@ namespace Ecossistema.Services.Services
                 if (query.Any())
                 {
                     obj = query.First();
-                    Recursos.Auditoria(obj.Id, usuarioId, dataAtual);
+                    Recursos.Auditoria(obj, usuarioId, dataAtual);
                     _unitOfWork.InstituicoesEnderecos.Update(obj);
                 }
                 else

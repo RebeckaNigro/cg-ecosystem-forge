@@ -128,7 +128,10 @@ namespace Ecossistema.Services.Services
 
         public async Task<int> Vincular(EnderecoDto dado, DateTime dataAtual, int usuarioId, RespostaPadrao resposta)
         {
-            if (dado.Id == null && dado.Id <= 0 && !await ValidarIncluir(dado, resposta)) return 0;
+            if ((dado.Id == null || dado.Id <= 0))
+            {
+                if (!await ValidarIncluir(dado, resposta)) return 0;
+            } 
             else if (!await ValidarEditar(dado, resposta)) return 0;
 
             try
