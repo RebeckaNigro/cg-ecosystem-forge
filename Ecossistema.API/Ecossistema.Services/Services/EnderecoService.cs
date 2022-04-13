@@ -126,24 +126,47 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<int> Vincular(EnderecoDto dado, int usuarioId, RespostaPadrao resposta)
+        public async Task<int> Vincular(EnderecoDto dado, DateTime dataAtual, int usuarioId, RespostaPadrao resposta)
         {
-            if (!await ValidarIncluir(dado, resposta)) return 0;
+            if (dado.Id == null && dado.Id <= 0 && !await ValidarIncluir(dado, resposta)) return 0;
+            else if (!await ValidarEditar(dado, resposta)) return 0;
 
             try
             {
-                var obj = new Endereco(dado.Cep,
-                                        dado.Logradouro,
-                                        dado.Numero,
-                                        dado.Complemento,
-                                        dado.PontoReferencia,
-                                        dado.Bairro,
-                                        dado.Cidade,
-                                        dado.Uf,
-                                        usuarioId,
-                                        DateTime.Now);
+                Endereco? obj = null;
 
-                await _unitOfWork.Enderecos.AddAsync(obj);
+                if (dado.Id > 0)
+                {
+                    obj = await _unitOfWork.Enderecos.FindAsync(x => x.Id == (int)dado.Id);
+
+                    obj.Cep = dado.Cep;
+                    obj.Logradouro = dado.Logradouro;
+                    obj.Numero = dado.Numero;
+                    obj.Complemento = dado.Complemento;
+                    obj.PontoReferencia = dado.PontoReferencia;
+                    obj.Bairro = dado.Bairro;
+                    obj.Cidade = dado.Cidade;
+                    obj.Uf = dado.Uf;
+
+                    Recursos.Auditoria(obj, usuarioId, dataAtual);
+
+                    _unitOfWork.Enderecos.Update(obj);
+                }
+                else
+                {
+                    obj = new Endereco(dado.Cep,
+                                         dado.Logradouro,
+                                         dado.Numero,
+                                         dado.Complemento,
+                                         dado.PontoReferencia,
+                                         dado.Bairro,
+                                         dado.Cidade,
+                                         dado.Uf,
+                                         usuarioId,
+                                         dataAtual);
+
+                    await _unitOfWork.Enderecos.AddAsync(obj);
+                }
 
                 if (_unitOfWork.Complete() > 0) return obj.Id;
             }

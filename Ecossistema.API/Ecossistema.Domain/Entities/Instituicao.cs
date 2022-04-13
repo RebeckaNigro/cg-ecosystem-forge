@@ -21,6 +21,7 @@ namespace Ecossistema.Domain.Entities
             HistoricoEventos = new HashSet<HistoricoEvento>();
             HistoricoInstituicoes = new HashSet<HistoricoInstituicao>();
             HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+            InstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
         }
 
         public Instituicao(string razaoSocial,
@@ -80,6 +81,7 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
         public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
         public virtual ICollection<Documento> Documentos { get; set; }
+        public virtual ICollection<InstituicaoEndereco> InstituicoesEnderecos { get; set; }
         public virtual ICollection<Evento> Eventos { get; set; }
         public virtual ICollection<Usuario> Usuarios { get; set; }
         public virtual ICollection<HistoricoDocumento> HistoricoDocumentos { get; set; }

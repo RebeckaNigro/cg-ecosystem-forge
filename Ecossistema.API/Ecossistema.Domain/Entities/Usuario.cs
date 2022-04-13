@@ -87,6 +87,8 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesTiposSegmentos = new HashSet<TipoSegmento>();
             UsuariosCriacoesUsuarios = new HashSet<Usuario>();
             UsuariosOperacoesUsuarios = new HashSet<Usuario>();
+            UsuariosCriacoesInstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
+            UsuariosOperacoesInstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
         }
 
         public int Id { get; set; }
@@ -191,6 +193,11 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
         public virtual ICollection<HistoricoUsuario> UsuariosCriacoesHistoricoUsuarios { get; set; }
         public virtual ICollection<HistoricoUsuario> UsuariosOperacoesHistoricoUsuarios { get; set; }
+        public virtual ICollection<InstituicaoEndereco> UsuariosCriacoesInstituicoesEnderecos { get; set; }
+        public virtual ICollection<InstituicaoEndereco> UsuariosOperacoesInstituicoesEnderecos { get; set; }
+
+
+
 
     }
 }

@@ -15,5 +15,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> ListarUltimas();
         Task<RespostaPadrao> ListarTodas();
         Task<RespostaPadrao> Detalhes(int id);
+        Task<RespostaPadrao> ListarTiposDocumentos();
+        Task<RespostaPadrao> ListarDocumentosAreas();
     }
 }

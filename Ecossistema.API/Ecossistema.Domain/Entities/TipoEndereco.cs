@@ -11,6 +11,8 @@ namespace Ecossistema.Domain.Entities
         public TipoEndereco()
         {
             PessoasEnderecos = new HashSet<PessoaEndereco>();
+            InstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
+            
         }
 
         public int Id { get; set; }
@@ -24,6 +26,6 @@ namespace Ecossistema.Domain.Entities
         public int UsuarioOperacaoId { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
         public virtual ICollection<PessoaEndereco> PessoasEnderecos { get; set; }
-
+        public virtual ICollection<InstituicaoEndereco> InstituicoesEnderecos { get; set; }       
     }
 }

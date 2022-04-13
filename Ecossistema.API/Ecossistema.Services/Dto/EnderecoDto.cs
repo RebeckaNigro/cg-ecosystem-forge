@@ -9,6 +9,7 @@ namespace Ecossistema.Services.Dto
     public class EnderecoDto
     {
         public int? Id { get; set; }
+        public int? TipoEnderecoId { get; set; }
         public string? Cep { get; set; }
         public string? Logradouro { get; set; }
         public string? Numero { get; set; }

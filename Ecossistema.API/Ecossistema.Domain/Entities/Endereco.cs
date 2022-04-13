@@ -14,6 +14,7 @@ namespace Ecossistema.Domain.Entities
             Eventos = new HashSet<Evento>();
             PessoasEnderecos = new HashSet<PessoaEndereco>();
             HistoricoEventos = new HashSet<HistoricoEvento>();
+            InstituicoesEnderecos = new HashSet<InstituicaoEndereco>();            
         }
 
         public Endereco(string? cep,
@@ -38,7 +39,6 @@ namespace Ecossistema.Domain.Entities
             Ativo = true;
             Recursos.Auditoria(this, usuarioId, dataAtual);
         }
-
         public int Id { get; set; }
         public string Cep { get; set; }
         public string Logradouro { get; set; }
@@ -59,5 +59,6 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<Evento> Eventos { get; set; }
         public virtual ICollection<PessoaEndereco> PessoasEnderecos { get; set; }
         public virtual ICollection<HistoricoEvento> HistoricoEventos { get; set; }
+        public virtual ICollection<InstituicaoEndereco> InstituicoesEnderecos { get; set; }
     }
 }

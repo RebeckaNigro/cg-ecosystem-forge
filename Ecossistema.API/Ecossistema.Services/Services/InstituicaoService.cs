@@ -16,10 +16,13 @@ namespace Ecossistema.Services.Services
     public class InstituicaoService : IInstituicaoService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEnderecoService _enderecoService;
 
-        public InstituicaoService(IUnitOfWork unitOfWork)
+        public InstituicaoService(IUnitOfWork unitOfWork,
+            IEnderecoService enderecoService)
         {
             _unitOfWork = unitOfWork;
+            _enderecoService = enderecoService;
         }
 
         public async Task<RespostaPadrao> Incluir(InstituicaoDto dado, int usuarioId)
@@ -167,6 +170,63 @@ namespace Ecossistema.Services.Services
                     resposta.SetMensagem("Dados excluídos com sucesso!");
                 }
                 else resposta.SetErroInterno();
+            }
+            catch (Exception ex)
+            {
+                resposta.Retorno = false;
+                resposta.SetErroInterno(ex.Message);
+            }
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> VincularEndereco(EnderecoDto dado, int instituicaoId, int usuarioId)
+        {
+            var resposta = new RespostaPadrao();
+
+            try
+            {
+                var dataAtual = DateTime.Now;
+
+                #region Endereço
+
+                var enderecoId = await _enderecoService.Vincular(dado, dataAtual, usuarioId, resposta);
+
+                if (enderecoId == 0) return resposta;
+
+                #endregion
+
+                #region Instituição / Endereço
+
+                InstituicaoEndereco? obj = null;
+
+                var query = await _unitOfWork.InstituicoesEnderecos.FindAllAsync(x => x.InstituicaoId == instituicaoId
+                                                                                  && x.EnderecoId == enderecoId
+                                                                                  && x.Ativo);
+
+                if (query.Any())
+                {
+                    obj = query.First();
+                    Recursos.Auditoria(obj.Id, usuarioId, dataAtual);
+                    _unitOfWork.InstituicoesEnderecos.Update(obj);
+                }
+                else
+                {
+                    obj = new InstituicaoEndereco(instituicaoId,
+                                          enderecoId,
+                                          (int)dado.TipoEnderecoId,
+                                          usuarioId,
+                                          dataAtual);
+
+                    await _unitOfWork.InstituicoesEnderecos.AddAsync(obj);
+                }
+
+
+                resposta.Retorno = _unitOfWork.Complete() > 0;
+
+                #endregion
+
+                resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
             {

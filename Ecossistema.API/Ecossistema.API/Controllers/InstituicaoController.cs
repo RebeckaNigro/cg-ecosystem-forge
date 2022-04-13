@@ -18,6 +18,14 @@ namespace Ecossistema.API.Controllers
             }
         }
 
+        private int InstituicaoId
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         public InstituicaoController(IInstituicaoService instituicaoService)
         {
             _instituicaoService = instituicaoService;
@@ -39,6 +47,12 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> Excluir(int id)
         {
             return await _instituicaoService.Excluir(id);
+        }
+
+        [HttpPost("incluirEndereco")]
+        public async Task<RespostaPadrao> VincularEndereco([FromBody] EnderecoDto obj)
+        {
+            return await _instituicaoService.VincularEndereco(obj, InstituicaoId, UsuarioId);
         }
     }
 }
