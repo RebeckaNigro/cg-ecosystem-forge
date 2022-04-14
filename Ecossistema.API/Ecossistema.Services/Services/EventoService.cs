@@ -321,19 +321,19 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarEnderecos(int instituicaoId)
+        public async Task<RespostaPadrao> ListarEnderecos(int instituicaoId, int tipoEnderecoId)
         {
             var resposta = new RespostaPadrao();
 
-            var includes = new[] { "Endereco", "TipoEndereco" };
+            var includes = new[] { "Endereco" };
 
             var query = await _unitOfWork.InstituicoesEnderecos.FindAllAsync(x => x.InstituicaoId == instituicaoId
+                                                                              && x.TipoEnderecoId == tipoEnderecoId
                                                                               && x.Ativo, includes);
 
             var result = query.Select(x => new
             {
                 enderecoId = x.EnderecoId,
-                tipoEndereco = x.TipoEndereco.Descricao,
                 cep = x.Endereco.Cep,
                 logradouro = x.Endereco.Logradouro,
                 numero = x.Endereco.Numero,
@@ -344,7 +344,7 @@ namespace Ecossistema.Services.Services
                 uf = x.Endereco.Uf,
             })
             .Distinct()
-            .OrderBy(x => x.tipoEndereco);
+            .OrderBy(x => x.logradouro);
 
             if (result.Any()) resposta.Retorno = result;
             else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
@@ -358,13 +358,17 @@ namespace Ecossistema.Services.Services
 
             var query = await _unitOfWork.TiposEnderecos.FindAllAsync(x => x.Ativo);
 
-            var result = query.Select(x => new
+            var queryDict = query.Distinct()
+                                 .OrderBy(x => x.Descricao)
+                                 .ToDictionary(x => x.Id, x => x.Descricao);
+
+            queryDict.Add(0, "Novo Endereço");
+
+            var result = queryDict.Select(x => new
             {
-                tipoEnderecoId = x.Id,
-                tipoEndereco = x.Descricao
-            })
-            .Distinct()
-            .OrderBy(x => x.tipoEndereco);
+                tipoEnderecoId = x.Key,
+                tipoEndereco = x.Value
+            });
 
             if (result.Any()) resposta.Retorno = result;
             else resposta.SetNaoEncontrado("Nenhum registro encontrado!");

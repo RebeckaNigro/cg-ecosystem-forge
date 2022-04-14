@@ -74,9 +74,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpGet("listarEnderecos")]
-        public async Task<RespostaPadrao> ListarEnderecos()
+        public async Task<RespostaPadrao> ListarEnderecos(int tipoEnderecoId)
         {
-            return await _eventoService.ListarEnderecos(InstituicaoId);
+            return await _eventoService.ListarEnderecos(InstituicaoId, tipoEnderecoId);
         }
 
         [HttpGet("listarTiposEnderecos")]
