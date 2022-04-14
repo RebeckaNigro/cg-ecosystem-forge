@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -61,9 +63,9 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesPaginas = new HashSet<Pagina>();
             UsuariosCriacoesPaginasSegmentos = new HashSet<PaginaSegmento>();
             UsuariosOperacoesPaginasSegmentos = new HashSet<PaginaSegmento>();
-            UsuariosCriacoesPermissoes = new HashSet<Permissao>();
-            UsuariosOperacoesPermissoes = new HashSet<Permissao>();
-            UsuariosCriacoesPessoas = new HashSet<Pessoa>();
+            //UsuariosCriacoesPermissoes = new HashSet<Permissao>();
+            //UsuariosOperacoesPermissoes = new HashSet<Permissao>();
+            //UsuariosCriacoesPessoas = new HashSet<Pessoa>();
             UsuariosOperacoesPessoas = new HashSet<Pessoa>();
             UsuariosCriacoesPessoasContatos = new HashSet<PessoaContato>();
             UsuariosOperacoesPessoasContatos = new HashSet<PessoaContato>();
@@ -91,26 +93,35 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesUsuarios = new HashSet<Usuario>();
         }
 
-        //public Usuario(int pessoaId, int instituicaoId, string email, string aspNetUserId, string cargo)
-        //{
-           
-        //}
+        public Usuario(int pessoaId, int instituicaoId , string aspNetUserId, DateTime ultimoLogin, 
+            string cargo, int usuarioId, DateTime dataAtual)
+        {
+           PessoaId = pessoaId;
+           InstituicaoId = instituicaoId;
+           AspNetUserId = aspNetUserId;
+            UltimoLogin = ultimoLogin;
+            Cargo = cargo;
+           Aprovado = false;
+            //Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Usuario, usuarioId, dataAtual) };
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
+        }
 
         public int Id { get; set; }
         public int PessoaId { get; set; }
         public virtual Pessoa Pessoa { get; set; }
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
-       // public string AspNetUserId { get; set; }
+        public string AspNetUserId { get; set; }
        // public UserManager<IdentityUser> AspNetUser { get; set; }
-        public int PermissaoId { get; set; }
-        public virtual Permissao Permissao { get; set; }
-        public string Email { get; set; }
+        //public int PermissaoId { get; set; }
+        //public virtual Permissao Permissao { get; set; }
+        //public string Email { get; set; }
         
-        public string SenhaHash { get; set; }
-        public string SenhaSalt { get; set; }
-        public string? Token { get; set; }
-        public DateTime? TokenExpiracao { get; set; }
+        //public string SenhaHash { get; set; }
+        //public string SenhaSalt { get; set; }
+        //public string? Token { get; set; }
+        //public DateTime? TokenExpiracao { get; set; }
         public DateTime UltimoLogin { get; set; }
         public string Cargo { get; set; }
         public int? AprovacaoId { get; set; }
@@ -162,8 +173,8 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<Pagina> UsuariosOperacoesPaginas { get; set; }
         public virtual ICollection<PaginaSegmento> UsuariosCriacoesPaginasSegmentos { get; set; }
         public virtual ICollection<PaginaSegmento> UsuariosOperacoesPaginasSegmentos { get; set; }
-        public virtual ICollection<Permissao> UsuariosCriacoesPermissoes { get; set; }
-        public virtual ICollection<Permissao> UsuariosOperacoesPermissoes { get; set; }
+        //public virtual ICollection<Permissao> UsuariosCriacoesPermissoes { get; set; }
+        //public virtual ICollection<Permissao> UsuariosOperacoesPermissoes { get; set; }
         public virtual ICollection<Pessoa> UsuariosCriacoesPessoas { get; set; }
         public virtual ICollection<Pessoa> UsuariosOperacoesPessoas { get; set; }
         public virtual ICollection<PessoaContato> UsuariosCriacoesPessoasContatos { get; set; }

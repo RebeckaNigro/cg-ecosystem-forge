@@ -101,7 +101,7 @@ namespace Ecossistema.Data
 
         public IBaseRepository<Pagina> Paginas { get; private set; }
         public IBaseRepository<PaginaSegmento> PaginasSegmentos { get; private set; }
-        public IBaseRepository<Permissao> Permissioes { get; private set; }
+        //public IBaseRepository<Permissao> Permissioes { get; private set; }
         public IBaseRepository<Pessoa> Pessoas { get; private set; }
         public IBaseRepository<PessoaContato> PessoasContatos { get; private set; }
         public IBaseRepository<PessoaEndereco> PessoasEnderecos { get; private set; }
@@ -252,7 +252,7 @@ namespace Ecossistema.Data
 
             Paginas = new BaseRepository<Pagina>(_context);
             PaginasSegmentos = new BaseRepository<PaginaSegmento>(_context);
-            Permissioes = new BaseRepository<Permissao>(_context);
+            //Permissioes = new BaseRepository<Permissao>(_context);
             Pessoas = new BaseRepository<Pessoa>(_context);
             PessoasContatos = new BaseRepository<PessoaContato>(_context);
             PessoasEnderecos = new BaseRepository<PessoaEndereco>(_context);

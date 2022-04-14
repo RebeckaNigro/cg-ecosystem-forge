@@ -8,10 +8,13 @@ namespace Ecossistema.Services.Dto
 {
     public class UsuarioCriacaoDto
     {
-        public string? UserName { get; set; }
-        public string? Email { get; set; }
-        public string? Senha { get; set; }
+        //public int PessoaId { get; set; }
+        //public int InstituicaoId { get; set; }
+        public int? Id { get; set; }
+        //public string? AspNetUserId { get; set; }
         public string? Cargo { get; set; }
+        //public int AprovacaoId { get; set; }
+        //public int Aprovado { get; set; }
 
     }
 }
