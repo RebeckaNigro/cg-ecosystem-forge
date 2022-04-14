@@ -16,7 +16,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> ListarTodas();
         Task<RespostaPadrao> Detalhes(int id);
         Task<RespostaPadrao> ListarTiposEventos();
-        Task<RespostaPadrao> ListarEnderecos(int instituicaoId);
+        Task<RespostaPadrao> ListarEnderecos(int instituicaoId, int tipoEnderecoId);
         Task<RespostaPadrao> ListarTiposEnderecos();
         
     }
