@@ -17,3 +17,12 @@ httpRequest.interceptors.request.use((config: any) => {
 }, (error) => {
   return Promise.reject(error)
 })
+
+export const getFromCEP = async (cep: string) => {
+  try {
+    const response = await (await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`)).json()
+    return response
+  } catch (error) {
+    return error
+  }
+}

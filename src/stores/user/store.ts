@@ -25,10 +25,9 @@ export const useUserStore = defineStore('userStore', {
       }
       try {
         const response = await httpRequest.post('/api/autenticacao/login', body)
-        console.log(response)
         if (response.status === 200) {
-          this.userResponse.putResponse(response.status, '', response.statusText);
-          [ this.loggedUser ] = [ response.data ]
+          this.userResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta);
+          [ this.loggedUser ] = [ response.data.retorno ]
         }
         else this.userResponse.putError(response.status, response.statusText); 
       } catch (error) {
