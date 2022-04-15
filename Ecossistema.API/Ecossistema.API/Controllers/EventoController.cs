@@ -1,6 +1,7 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Ecossistema.API.Controllers
 {
@@ -9,6 +10,7 @@ namespace Ecossistema.API.Controllers
     public class EventoController : ControllerBase
     {
         private readonly IEventoService _eventoService;
+
 
         private int UsuarioId
         {
@@ -32,13 +34,13 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromBody] EventoDto obj)
+        public async Task<RespostaPadrao> Incluir([FromForm] EventoArquivosDto obj)
         {
             return await _eventoService.Incluir(obj, UsuarioId);
         }
 
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromBody] EventoDto obj)
+        public async Task<RespostaPadrao> Editar([FromBody] EventoArquivosDto obj)
         {
             return await _eventoService.Editar(obj, UsuarioId);
         }
@@ -83,6 +85,6 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarTiposEnderecos()
         {
             return await _eventoService.ListarTiposEnderecos();
-        }        
+        }
     }
 }

@@ -53,4 +53,23 @@ namespace Ecossistema.Util.Const
         [StringValue("Não Aprovado")]
         NaoAprovado = 3,
     }
+
+    public enum ETipoSegmento
+    {
+        [Int32Value(1)]
+        [StringValue("Arquivo")]
+        Arquivo = 1,
+        [Int32Value(2)]
+        [StringValue("Topo")]
+        Topo = 2,
+        [Int32Value(3)]
+        [StringValue("Logo")]
+        Logo = 3,
+        [Int32Value(4)]
+        [StringValue("Conteúdo")]
+        Conteudo = 4,
+        [Int32Value(5)]
+        [StringValue("Carrossel")]
+        Carrossel = 5
+    }
 }

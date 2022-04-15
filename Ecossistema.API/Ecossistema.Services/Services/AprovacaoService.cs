@@ -143,5 +143,65 @@ namespace Ecossistema.Services.Services
 
             return resposta;
         }
+
+        public async Task<bool> Vincular(EOrigem origem, int id, RespostaPadrao resposta)
+        {
+            try
+            {
+                Aprovacao? aprovacao = null;
+
+                switch (origem)
+                {
+                    case EOrigem.Parceiro:
+                        aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.InstituicaoId == id);
+                        break;
+                    case EOrigem.Documento:
+                        aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.DocumentoId == id);
+                        break;
+                    case EOrigem.Noticia:
+                        aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.NoticiaId == id);
+                        break;
+                    case EOrigem.Evento:
+                        aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.EventoId == id);
+                        break;
+                    default:
+                        aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.UsuarioId == id);
+                        break;
+                }
+
+                if (aprovacao != null)
+                {
+                    switch (origem)
+                    {
+                        case EOrigem.Parceiro:
+                            var inst = aprovacao.Insituicao.AprovacaoId = aprovacao.Id;
+                            break;
+                        case EOrigem.Documento:
+                            var doc = aprovacao.Documento.AprovacaoId = aprovacao.Id;
+                            break;
+                        case EOrigem.Noticia:
+                            var not = aprovacao.Noticia.AprovacaoId = aprovacao.Id;
+                            break;
+                        case EOrigem.Evento:
+                            var eve = aprovacao.Evento.AprovacaoId = aprovacao.Id;
+                            break;
+                        default:
+                            var usu = aprovacao.Usuario.AprovacaoId = aprovacao.Id;
+                            break;
+                    }
+
+                    _unitOfWork.Aprovacoes.Update(aprovacao);
+                }
+
+                _unitOfWork.Complete();
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
