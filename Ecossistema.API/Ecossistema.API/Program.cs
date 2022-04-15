@@ -22,6 +22,7 @@ builder.Services.AddSingleton(configuracaoEmail);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();
+builder.Services.AddScoped<IArquivoService, ArquivoService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +10,54 @@ namespace Ecossistema.Domain.Entities
 {
     public class ArquivoOrigem
     {
+        public ArquivoOrigem()
+        {
+
+        }
+
+        public ArquivoOrigem(EOrigem origem, string titulo, int usuarioId, DateTime data, int? id = null)
+        {
+            OrigemId = origem.Int32Val();
+            Titulo = titulo;
+
+            if (origem != EOrigem.Pagina) TipoSegmentoId = ETipoSegmento.Arquivo.Int32Val();
+
+            if (id != null)
+            {
+                switch (origem)
+                {
+                    case EOrigem.Parceiro:
+                        if (id != null) InstituicaoId = id;
+                        break;
+                    case EOrigem.Documento:
+                        if (id != null) DocumentoId = id;
+                        break;
+                    case EOrigem.Noticia:
+                        if (id != null) NoticiaId = id;
+                        break;
+                    case EOrigem.Evento:
+                        if (id != null) EventoId = id;
+                        break;
+                    default:
+                        if (id != null) PaginaId = id;
+                        break;
+                }
+            }
+
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, data);
+        }
         public int Id { get; set; }
         public int OrigemId { get; set; }
-        public virtual  Origem Origem { get; set; }
+        public virtual Origem Origem { get; set; }
         public string? Titulo { get; set; }
         public string? Descricao { get; set; }
         public int TipoSegmentoId { get; set; }
         public virtual TipoSegmento TipoSegmento { get; set; }
         public int ArquivoId { get; set; }
         public virtual Arquivo Arquivo { get; set; }
-        public int? InsituicaoId { get; set; }
-        public virtual Instituicao Insituicao { get; set; }
+        public int? InstituicaoId { get; set; }
+        public virtual Instituicao Instituicao { get; set; }
         public int? NoticiaId { get; set; }
         public virtual Noticia Noticia { get; set; }
         public int? EventoId { get; set; }

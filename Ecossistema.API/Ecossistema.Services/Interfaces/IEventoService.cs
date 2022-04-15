@@ -9,8 +9,8 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IEventoService
     {
-        Task<RespostaPadrao> Incluir(EventoDto dado, int usuarioId);
-        Task<RespostaPadrao> Editar(EventoDto dado, int usuarioId);
+        Task<RespostaPadrao> Incluir(EventoArquivosDto dado, int usuarioId);
+        Task<RespostaPadrao> Editar(EventoArquivosDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> ListarUltimas();
         Task<RespostaPadrao> ListarTodas();

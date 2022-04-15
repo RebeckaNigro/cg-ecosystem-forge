@@ -5,6 +5,7 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +17,26 @@ namespace Ecossistema.Services.Services
     public class EventoService : IEventoService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEnderecoService _enderecoService;
+        private readonly IAprovacaoService _aprovacaoService;
+        private readonly IArquivoService _arquivoService;
+        private readonly IEnderecoService _enderecoService;      
 
         public EventoService(IUnitOfWork unitOfWork,
-            IEnderecoService enderecoService)
+            IEnderecoService enderecoService,
+            IArquivoService arquivoService,
+            IAprovacaoService aprovacaoService)
         {
             _unitOfWork = unitOfWork;
-            _enderecoService = enderecoService;
+            _aprovacaoService = aprovacaoService;
+            _arquivoService = arquivoService;
+            _enderecoService = enderecoService;           
         }
 
-        public async Task<RespostaPadrao> Incluir(EventoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, int usuarioId)
         {
             var resposta = new RespostaPadrao();
+
+            var dado = ConverterEvento(item);
 
             if (!await ValidarIncluir(dado, resposta)) return resposta;
 
@@ -68,22 +77,14 @@ namespace Ecossistema.Services.Services
 
                 #endregion
 
-                #region Aprovação
-
-                var aprovacao = await _unitOfWork.Aprovacoes.FindAsync(x => x.EventoId == obj.Id);
-
-                if (aprovacao != null)
+                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, dado.Arquivos, usuarioId, dataAtual, resposta)
+                    || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
-                    obj.AprovacaoId = aprovacao.Id;
-
-                    _unitOfWork.Eventos.Update(obj);
+                    return resposta;
                 }
 
-                resposta.Retorno = _unitOfWork.Complete() > 0;
-
-                #endregion
-
-                resposta.SetMensagem("Dados gravados com sucesso!");
+                resposta.Retorno = true;
+                resposta.SetMensagem("Dados gravados com sucesso!");                
             }
             catch (Exception ex)
             {
@@ -94,9 +95,11 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(EventoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Editar(EventoArquivosDto item, int usuarioId)
         {
             var resposta = new RespostaPadrao();
+
+            var dado = ConverterEvento(item);
 
             if (!await ValidarEditar(dado, resposta)) return resposta;
 
@@ -374,6 +377,18 @@ namespace Ecossistema.Services.Services
             else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
 
             return resposta;
+        }
+
+        private EventoDto ConverterEvento(EventoArquivosDto obj)
+        {
+            var evento = JsonConvert.DeserializeObject<EventoDto>(obj.Evento);
+
+            if (evento != null)
+            {
+                evento.Arquivos = obj.Arquivos;
+            }
+
+            return evento;
         }
 
         #region Validações

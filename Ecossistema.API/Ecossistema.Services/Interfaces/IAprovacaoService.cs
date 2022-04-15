@@ -1,4 +1,5 @@
 ﻿using Ecossistema.Services.Dto;
+using Ecossistema.Util.Const;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Incluir(AprovacaoDto dado, int usuarioId);
         Task<RespostaPadrao> Editar(AprovacaoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
+        Task<bool> Vincular(EOrigem origem, int id, RespostaPadrao resposta);
     }
 }
