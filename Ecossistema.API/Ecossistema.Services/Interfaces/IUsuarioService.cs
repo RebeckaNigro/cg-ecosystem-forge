@@ -9,7 +9,7 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IUsuarioService
     {
-        Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado);
+        Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado, int usuarioId);
         Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
     }

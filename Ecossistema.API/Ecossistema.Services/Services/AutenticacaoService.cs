@@ -185,10 +185,16 @@ namespace Ecossistema.Services.Services
             RespostaPadrao resposta = new RespostaPadrao("Usuário cadastrado com sucesso!");
             try
             {
-                var userExists = await _userManager.FindByEmailAsync(model.Email);
-                if (userExists != null)
+                var emailExists = await _userManager.FindByEmailAsync(model.Email);
+                var nameExists = await _userManager.FindByNameAsync(model.Username);
+                if (emailExists != null)
                 {
-                    resposta.SetErroInterno("Usuário já existente.");
+                    resposta.SetErroInterno("Email de usuário já cadastrado.");
+                    return resposta;
+                }
+                if (nameExists != null)
+                {
+                    resposta.SetErroInterno("Nome de usuário já cadastrado.");
                     return resposta;
                 }
                 IdentityUser user = new()
@@ -219,7 +225,7 @@ namespace Ecossistema.Services.Services
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
                 }
-                //var teste = user.Id;
+                var teste = user.Id;
                 return resposta;
             }
             catch (Exception e)

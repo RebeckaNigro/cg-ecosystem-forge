@@ -101,7 +101,7 @@ namespace Ecossistema.Data.Interfaces
 
         IBaseRepository<Pagina> Paginas { get; }
         IBaseRepository<PaginaSegmento> PaginasSegmentos { get; }
-        IBaseRepository<Permissao> Permissioes { get; }
+        //IBaseRepository<Permissao> Permissioes { get; }
         IBaseRepository<Pessoa> Pessoas { get; }
         IBaseRepository<PessoaContato> PessoasContatos { get; }
         IBaseRepository<PessoaEndereco> PessoasEnderecos { get; }
