@@ -78,7 +78,7 @@ namespace Ecossistema.Services.Services
                     login.Id = usuario.Id;
                     login.Email = user.Email;
                     login.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                    resposta.Dado = login;
+                    resposta.Retorno = login;
                 }
                 else
                 {
