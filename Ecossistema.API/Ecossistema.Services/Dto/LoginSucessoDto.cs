@@ -8,7 +8,7 @@ namespace Ecossistema.Services.Dto
 {
     public class LoginSucessoDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Token { get; set; }
     }
