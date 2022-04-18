@@ -103,7 +103,7 @@ namespace Ecossistema.Data
 
         public virtual DbSet<Pagina> Paginas { get; set; }
         public virtual DbSet<PaginaSegmento> PaginasSegmentos { get; set; }
-        public virtual DbSet<Permissao> Permissioes { get; set; }
+        //public virtual DbSet<Permissao> Permissioes { get; set; }
         public virtual DbSet<Pessoa> Pessoas { get; set; }
         public virtual DbSet<PessoaContato> PessoasContatos { get; set; }
         public virtual DbSet<PessoaEndereco> PessoasEnderecos { get; set; }

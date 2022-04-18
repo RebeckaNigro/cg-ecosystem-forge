@@ -18,17 +18,18 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado)
+        public async Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado, int usuarioId)
         {
-            /*var resposta = new RespostaPadrao();
+            var resposta = new RespostaPadrao();
 
             try
             {
 
 
-                var obj = new Usuario();
+                var obj = new Usuario(usuarioId,1, "b08f34f5-77c1-4a81-87fd-af0193c88fec", DateTime.Now, dado.Cargo, usuarioId, DateTime.Now);
+                
+                await _unitOfWork.Usuarios.AddAsync(obj);
 
-     
 
                 _unitOfWork.Complete();
 
@@ -37,11 +38,10 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
-                resposta.SetErroInterno(ex.Message);
+                resposta.SetErroInterno(ex.Message  +" / "+ ex.InnerException );
             }
 
-            return resposta;*/
-            throw new NotImplementedException();
+            return resposta;
         }
 
         public Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
