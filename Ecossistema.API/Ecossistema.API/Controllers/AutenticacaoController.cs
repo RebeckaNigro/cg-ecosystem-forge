@@ -115,10 +115,10 @@ namespace Ecossistema.API.Controllers
         }
         */
         [HttpPost]
-        [Route("registrar-admin-master")]
-        public async Task<RespostaPadrao> RegistrarAdminMaster([FromBody] ResgistrarLoginDto model)
+        [Route("registrar-admin")]
+        public async Task<RespostaPadrao> RegistrarAdmin([FromBody] ResgistrarLoginDto model)
         {
-            return await _autenticacaoService.RegistrarAdminMaster(model);
+            return await _autenticacaoService.RegistrarAdmin(model);
         }
         
     }
