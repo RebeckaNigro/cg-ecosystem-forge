@@ -72,7 +72,7 @@ namespace Ecossistema.Services.Services
                 login.Id = user.Id;
                 login.Email = user.Email;
                 login.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                resposta.Dado = login;
+                resposta.Retorno = login;
                 return resposta;
             }
             catch (Exception e)

@@ -71,6 +71,7 @@ namespace Ecossistema.Data
         public virtual DbSet<Instituicao> Instituicoes { get; set; }
         public virtual DbSet<InstituicaoArea> InstituicoesAreas { get; set; }
         public virtual DbSet<InstituicaoClassificacao> InstituicoesClassificacoes { get; set; }
+        public virtual DbSet<InstituicaoEndereco> InstituicoesEnderecos { get; set; }
 
         #endregion
 

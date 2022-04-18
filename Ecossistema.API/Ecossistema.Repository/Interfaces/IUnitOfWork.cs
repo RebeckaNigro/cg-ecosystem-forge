@@ -70,6 +70,7 @@ namespace Ecossistema.Data.Interfaces
         IBaseRepository<Instituicao> Instituicoes { get; }
         IBaseRepository<InstituicaoArea> InstituicoesAreas { get; }
         IBaseRepository<InstituicaoClassificacao> InstituicoesClassificacoes { get; }
+        IBaseRepository<InstituicaoEndereco> InstituicoesEnderecos { get; }
 
         #endregion
 

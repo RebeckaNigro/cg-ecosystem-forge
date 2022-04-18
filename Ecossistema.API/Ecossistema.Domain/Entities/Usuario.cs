@@ -1,6 +1,4 @@
-﻿using Ecossistema.Util;
-using Ecossistema.Util.Const;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -91,6 +89,8 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesTiposSegmentos = new HashSet<TipoSegmento>();
             UsuariosCriacoesUsuarios = new HashSet<Usuario>();
             UsuariosOperacoesUsuarios = new HashSet<Usuario>();
+            UsuariosCriacoesInstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
+            UsuariosOperacoesInstituicoesEnderecos = new HashSet<InstituicaoEndereco>();
         }
 
         public Usuario(int pessoaId, int instituicaoId , string aspNetUserId, DateTime ultimoLogin, 
@@ -212,6 +212,11 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<HistoricoUsuario> HistoricoUsuarios { get; set; }
         public virtual ICollection<HistoricoUsuario> UsuariosCriacoesHistoricoUsuarios { get; set; }
         public virtual ICollection<HistoricoUsuario> UsuariosOperacoesHistoricoUsuarios { get; set; }
+        public virtual ICollection<InstituicaoEndereco> UsuariosCriacoesInstituicoesEnderecos { get; set; }
+        public virtual ICollection<InstituicaoEndereco> UsuariosOperacoesInstituicoesEnderecos { get; set; }
+
+
+
 
     }
 }

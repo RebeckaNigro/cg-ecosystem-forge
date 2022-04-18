@@ -11,34 +11,34 @@ namespace Ecossistema.Services.Dto
     {
         public int Codigo { get; set; }
         public string Resposta { get; set; }
-        public object? Dado { get; set; }
+        public object? Retorno { get; set; }
 
         public RespostaPadrao()
         {
             Codigo = 200;
             Resposta = "Ok";
-            Dado = null;
+            Retorno = null;
         }
 
         public RespostaPadrao(string resposta)
         {
             Codigo = 200;
             Resposta = resposta;
-            Dado = null;
+            Retorno = null;
         }
 
         public RespostaPadrao(int cod, string res)
         {
             Codigo = cod;
             Resposta = res;
-            Dado = null;
+            Retorno = null;
         }
 
         public RespostaPadrao(int cod, string res, object obj)
         {
             Codigo = cod;
             Resposta = res;
-            Dado = obj;
+            Retorno = obj;
         }
 
 
@@ -50,7 +50,7 @@ namespace Ecossistema.Services.Dto
         public void SetMensagem(string mensagem, object data)
         {
             Resposta = mensagem;
-            Dado = data;
+            Retorno = data;
         }
 
         public void SetErroNoErede(string mensagem)
@@ -63,7 +63,7 @@ namespace Ecossistema.Services.Dto
         {
             Codigo = 400;
             Resposta = "Solicitação inválida";
-            Dado = modelState;
+            Retorno = modelState;
         }
 
         public void SetSemAcesso(string? mensagem = null)
@@ -170,21 +170,21 @@ namespace Ecossistema.Services.Dto
         {
             Codigo = 676;
             Resposta = "O Cliente está inadimplente";
-            Dado = dado;
+            Retorno = dado;
         }
 
         public void SetQuaseSucesso(string mensagem, object dado)
         {
             Codigo = 222;
             Resposta = Resposta + ". " + mensagem;
-            Dado = dado;
+            Retorno = dado;
         }
 
         public void SetSucesso(string mensagem, object dado)
         {
             Codigo = 200;
             Resposta = Resposta + ". " + mensagem;
-            Dado = dado;
+            Retorno = dado;
         }
     }
 }

@@ -57,12 +57,13 @@ namespace Ecossistema.Services.Services
 
                 await _unitOfWork.Aprovacoes.AddAsync(obj);
 
-                _unitOfWork.Complete();
+                resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -97,7 +98,7 @@ namespace Ecossistema.Services.Services
 
                     _unitOfWork.Aprovacoes.Update(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
@@ -105,6 +106,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 
@@ -127,7 +129,7 @@ namespace Ecossistema.Services.Services
 
                     _unitOfWork.Aprovacoes.Delete(objAlt);
 
-                    _unitOfWork.Complete();
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
 
                     resposta.SetMensagem("Dados excluídos com sucesso!");
                 }
@@ -135,6 +137,7 @@ namespace Ecossistema.Services.Services
             }
             catch (Exception ex)
             {
+                resposta.Retorno = false;
                 resposta.SetErroInterno(ex.Message);
             }
 

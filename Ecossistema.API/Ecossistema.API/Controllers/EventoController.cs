@@ -18,6 +18,14 @@ namespace Ecossistema.API.Controllers
             }
         }
 
+        private int InstituicaoId
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         public EventoController(IEventoService eventoService)
         {
             _eventoService = eventoService;
@@ -40,5 +48,41 @@ namespace Ecossistema.API.Controllers
         {
             return await _eventoService.Excluir(id);
         }
+
+        [HttpGet("listarUltimas")]
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            return await _eventoService.ListarUltimas();
+        }
+
+        [HttpGet("listarTodas")]
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            return await _eventoService.ListarTodas();
+        }
+
+        [HttpGet("detalhes")]
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            return await _eventoService.Detalhes(id);
+        }
+
+        [HttpGet("listarTiposEventos")]
+        public async Task<RespostaPadrao> ListarTiposEventos()
+        {
+            return await _eventoService.ListarTiposEventos();
+        }
+
+        [HttpGet("listarEnderecos")]
+        public async Task<RespostaPadrao> ListarEnderecos()
+        {
+            return await _eventoService.ListarEnderecos(InstituicaoId);
+        }
+
+        [HttpGet("listarTiposEnderecos")]
+        public async Task<RespostaPadrao> ListarTiposEnderecos()
+        {
+            return await _eventoService.ListarTiposEnderecos();
+        }        
     }
 }

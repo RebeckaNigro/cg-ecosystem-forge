@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Dto
         public int? Id { get; set; }
         public string? RazaoSocial { get; set; }
         public string? Cnpj { get; set; }
-        public string? Responsável { get; set; }
+        public string? Responsavel { get; set; }
         public int? InstituicaoAreaId { get; set; }
         public int? InstituicaoClassificacaoId { get; set; }
         public string? Descricao { get; set; }
