@@ -1,4 +1,4 @@
-﻿using Ecossistema.Services.Dto;
+﻿/*using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,3 +32,4 @@ namespace Ecossistema.API.Controllers
 
     }
 }
+*/

@@ -1,5 +1,7 @@
 ﻿
 
+using Ecossistema.Data.Interfaces;
+using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -22,18 +24,20 @@ namespace Ecossistema.Services.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IUnitOfWork _unitOfWork;
         //private readonly UsuarioCriacaoDto _usuarioCriacaoDto;
 
         public AutenticacaoService(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
             //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
 
@@ -68,11 +72,19 @@ namespace Ecossistema.Services.Services
                 }
 
                 var token = GetToken(authClaims);
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == user.Id);
+                if(usuario != null)
+                {
+                    login.Id = usuario.Id;
+                    login.Email = user.Email;
+                    login.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                    resposta.Dado = login;
+                }
+                else
+                {
+                    resposta.SetErroInterno("Usuário não tem mais acesso, favor solicitar um recadastramento");
+                }
 
-                login.Id = user.Id;
-                login.Email = user.Email;
-                login.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                resposta.Retorno = login;
                 return resposta;
             }
             catch (Exception e)
@@ -80,7 +92,6 @@ namespace Ecossistema.Services.Services
                 resposta.SetErroInterno(e.Message + ". " + e.InnerException);
                 return resposta;
             }
-
 
         }
 
@@ -225,7 +236,10 @@ namespace Ecossistema.Services.Services
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
                     await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
                 }
-                var teste = user.Id;
+                var obj = new Usuario(1, 1, user.Id, DateTime.Now, "teste", 1, DateTime.Now);
+                await _unitOfWork.Usuarios.AddAsync(obj);
+                _unitOfWork.Complete();
+                //resposta.SetMensagem("Dados gravados com sucesso!");
                 return resposta;
             }
             catch (Exception e)
