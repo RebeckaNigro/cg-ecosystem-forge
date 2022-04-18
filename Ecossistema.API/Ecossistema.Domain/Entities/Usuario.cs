@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ecossistema.Util;
 
 namespace Ecossistema.Domain.Entities
 {

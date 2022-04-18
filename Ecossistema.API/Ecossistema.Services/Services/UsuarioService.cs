@@ -18,7 +18,7 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Cadastrar(string cargo, int usuarioId, string loginId)
         {
             var resposta = new RespostaPadrao();
 
@@ -26,7 +26,7 @@ namespace Ecossistema.Services.Services
             {
 
 
-                var obj = new Usuario(usuarioId,1, "b08f34f5-77c1-4a81-87fd-af0193c88fec", DateTime.Now, dado.Cargo, usuarioId, DateTime.Now);
+                var obj = new Usuario(usuarioId,1, loginId, DateTime.Now, cargo, usuarioId, DateTime.Now);
                 
                 await _unitOfWork.Usuarios.AddAsync(obj);
 
