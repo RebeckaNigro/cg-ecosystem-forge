@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Interfaces
     public interface IAutenticacaoService
     {
          Task<RespostaPadrao> Login(LoginDto dado);
-         Task<RespostaPadrao> RegistrarAdminMaster(ResgistrarLoginDto dado);
+         Task<RespostaPadrao> RegistrarAdmin(ResgistrarLoginDto dado);
         //Task<IAsyncResult> Editar(DocumentoDto dado, int usuarioId);
         //Task<IAsyncResult> Excluir(int id);
     }
