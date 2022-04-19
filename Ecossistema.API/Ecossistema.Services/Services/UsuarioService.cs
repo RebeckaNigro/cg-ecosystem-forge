@@ -2,6 +2,7 @@
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,30 +19,40 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RespostaPadrao> Cadastrar(string cargo, int usuarioId, string loginId)
+        public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model)
         {
-            var resposta = new RespostaPadrao();
-
+            RespostaPadrao resposta = new RespostaPadrao("Ok");
             try
             {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == model.Id);
+                if (usuario != null)
+                {
+                    usuario.Ativo = !usuario.Ativo;
+                    _unitOfWork.Usuarios.Update(usuario);
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if (usuario.Ativo == false)
+                    {
+                        resposta.SetMensagem("Usuário desativado com sucesso!");
+                    }
+                    else
+                    {
+                        resposta.SetMensagem("Usuário ativado com sucesso!");
+                    }
+                }
+                else
+                {
+                    resposta.SetErroInterno("Usuario inexistente.");
+                }
 
 
-                var obj = new Usuario(usuarioId,1, loginId, DateTime.Now, cargo, usuarioId, DateTime.Now);
-                
-                await _unitOfWork.Usuarios.AddAsync(obj);
+                return resposta;
 
-
-                _unitOfWork.Complete();
-
-
-                resposta.SetMensagem("Dados gravados com sucesso!");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                resposta.SetErroInterno(ex.Message  +" / "+ ex.InnerException );
+                resposta.SetErroInterno(e.Message + ". " + e.InnerException);
+                return resposta;
             }
-
-            return resposta;
         }
 
         public Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
