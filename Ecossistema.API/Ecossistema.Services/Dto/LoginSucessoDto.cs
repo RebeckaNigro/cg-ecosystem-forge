@@ -10,6 +10,7 @@ namespace Ecossistema.Services.Dto
     {
         public int Id { get; set; }
         public string Email { get; set; }
+        public int InstituicaoId { get; set; }
         public string Token { get; set; }
     }
 }

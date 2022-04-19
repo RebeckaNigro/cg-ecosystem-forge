@@ -1,4 +1,4 @@
-﻿/*using Ecossistema.Services.Dto;
+﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,13 +23,12 @@ namespace Ecossistema.API.Controllers
             _usurioService = usuarioService;
         }
 
-        [HttpPost("cadastrar")]
-        public async Task<RespostaPadrao> Cadastrar([FromBody] UsuarioCriacaoDto obj)
+        [HttpPost]
+        [Route("desativar-ativar-usuario")]
+        public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model)
         {
-            return await _usurioService.Cadastrar(obj, UsuarioId);
+            return await _usurioService.DesativarAtivarUsuario(model);
         }
-
 
     }
 }
-*/
