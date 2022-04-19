@@ -1,6 +1,4 @@
-﻿
-
-using Ecossistema.Data.Interfaces;
+﻿using Ecossistema.Data.Interfaces;
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
@@ -77,6 +75,7 @@ namespace Ecossistema.Services.Services
                 {
                     login.Id = usuario.Id;
                     login.Email = user.Email;
+                    login.InstituicaoId = usuario.InstituicaoId;
                     login.Token = new JwtSecurityTokenHandler().WriteToken(token);
                     resposta.Retorno = login;
                 }
@@ -116,7 +115,6 @@ namespace Ecossistema.Services.Services
 
         }
         */
-        
 
         public async Task<RespostaPadrao> RegistrarAdmin([FromBody] ResgistrarLoginDto model)
         {
@@ -127,6 +125,12 @@ namespace Ecossistema.Services.Services
                 var nameExists = await _userManager.FindByNameAsync(model.Username);
                 var cargo = model.Cargo;
                 var role = model.Role; ;
+                var instituicao = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == model.InstituicaoId);
+                if(instituicao == null)
+                {
+                    resposta.SetErroInterno("Instituição inexistente.");
+                    return resposta;
+                }
                 if (emailExists != null)
                 {
                     resposta.SetErroInterno("Email de usuário já cadastrado.");
@@ -199,7 +203,7 @@ namespace Ecossistema.Services.Services
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
                     }
                 }
-                var obj = new Usuario(1, 1, user.Id, DateTime.Now, "teste", 1, DateTime.Now);
+                var obj = new Usuario(1, model.InstituicaoId, user.Id, DateTime.Now, model.Cargo, 1, DateTime.Now);
                 await _unitOfWork.Usuarios.AddAsync(obj);
                 _unitOfWork.Complete();
                 return resposta;

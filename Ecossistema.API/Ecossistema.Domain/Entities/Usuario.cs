@@ -100,12 +100,12 @@ namespace Ecossistema.Domain.Entities
            PessoaId = pessoaId;
            InstituicaoId = instituicaoId;
            AspNetUserId = aspNetUserId;
-            UltimoLogin = ultimoLogin;
-            Cargo = cargo;
-           Aprovado = false;
+           UltimoLogin = ultimoLogin;
+           Cargo = cargo;
+           Aprovado = true;
             //Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Usuario, usuarioId, dataAtual) };
-            Ativo = true;
-            Recursos.Auditoria(this, usuarioId, dataAtual);
+           Ativo = true;
+           Recursos.Auditoria(this, usuarioId, dataAtual);
         }
 
         public int Id { get; set; }

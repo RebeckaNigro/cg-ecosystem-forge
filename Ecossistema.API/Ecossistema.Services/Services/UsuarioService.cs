@@ -2,6 +2,8 @@
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Ecossistema.Util;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,36 +20,109 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RespostaPadrao> Cadastrar(string cargo, int usuarioId, string loginId)
+        public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model, int usuarioId)
         {
-            var resposta = new RespostaPadrao();
-
+            RespostaPadrao resposta = new RespostaPadrao("Ok");
             try
             {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == model.Id);
+                if (usuario != null)
+                {
+                    var dataAtual = DateTime.Now;
+                    usuario.Ativo = !usuario.Ativo;
+                    Recursos.Auditoria(usuario, usuarioId, dataAtual);
+                    _unitOfWork.Usuarios.Update(usuario);
+                    resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if (usuario.Ativo == false)
+                    {
+                        resposta.SetMensagem("Usuário desativado com sucesso!");
+                    }
+                    else
+                    {
+                        resposta.SetMensagem("Usuário ativado com sucesso!");
+                    }
+                }
+                else
+                {
+                    resposta.SetErroInterno("Usuario inexistente.");
+                }
 
 
-                var obj = new Usuario(usuarioId,1, loginId, DateTime.Now, cargo, usuarioId, DateTime.Now);
-                
-                await _unitOfWork.Usuarios.AddAsync(obj);
+                return resposta;
 
-
-                _unitOfWork.Complete();
-
-
-                resposta.SetMensagem("Dados gravados com sucesso!");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                resposta.SetErroInterno(ex.Message  +" / "+ ex.InnerException );
+                resposta.SetErroInterno(e.Message + ". " + e.InnerException);
+                return resposta;
             }
+        }
+
+        public async Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
+        {
+            RespostaPadrao resposta = new RespostaPadrao("Ok");
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == dado.Id);
+            if (usuario != null)
+            {
+                var dataAtual = DateTime.Now;
+                usuario.Cargo = dado.Cargo;
+                Recursos.Auditoria(usuario, usuarioId, dataAtual);
+                _unitOfWork.Usuarios.Update(usuario);
+                resposta.Retorno = _unitOfWork.Complete() > 0;
+                resposta.SetMensagem("Usuário atualizado com sucesso");
+            }
+            else
+            {
+                resposta.SetErroInterno("Usuario inexistente.");
+            }
+
 
             return resposta;
         }
 
-        public Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> ListarTodos()
         {
-            throw new NotImplementedException();
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Usuarios.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Cargo,
+                x.InstituicaoId
+            })
+            .Distinct()
+            .OrderBy(x => x.Id)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
         }
+
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Usuarios.FindAllAsync(x => x.Id == id && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Cargo,
+                x.Aprovado,
+                x.InstituicaoId
+            })
+            .Distinct();
+
+            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
 
         public Task<RespostaPadrao> Excluir(int id)
         {
