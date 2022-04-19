@@ -2,6 +2,7 @@
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Ecossistema.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model)
+        public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model, int usuarioId)
         {
             RespostaPadrao resposta = new RespostaPadrao("Ok");
             try
@@ -27,7 +28,9 @@ namespace Ecossistema.Services.Services
                 var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == model.Id);
                 if (usuario != null)
                 {
+                    var dataAtual = DateTime.Now;
                     usuario.Ativo = !usuario.Ativo;
+                    Recursos.Auditoria(usuario, usuarioId, dataAtual);
                     _unitOfWork.Usuarios.Update(usuario);
                     resposta.Retorno = _unitOfWork.Complete() > 0;
                     if (usuario.Ativo == false)
@@ -55,9 +58,26 @@ namespace Ecossistema.Services.Services
             }
         }
 
-        public Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId)
         {
-            throw new NotImplementedException();
+            RespostaPadrao resposta = new RespostaPadrao("Ok");
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == dado.Id);
+            if (usuario != null)
+            {
+                var dataAtual = DateTime.Now;
+                usuario.Cargo = dado.Cargo;
+                Recursos.Auditoria(usuario, usuarioId, dataAtual);
+                _unitOfWork.Usuarios.Update(usuario);
+                resposta.Retorno = _unitOfWork.Complete() > 0;
+                resposta.SetMensagem("Usuário atualizado com sucesso");
+            }
+            else
+            {
+                resposta.SetErroInterno("Usuario inexistente.");
+            }
+
+
+            return resposta;
         }
 
         public Task<RespostaPadrao> Excluir(int id)
