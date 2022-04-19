@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Interfaces
     {
         //Task<RespostaPadrao> Cadastrar(UsuarioCriacaoDto dado, int usuarioId, string loginId);
         Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId);
-        Task<RespostaPadrao> DesativarAtivarUsuario(AtivarDesativarUserDto dado);
+        Task<RespostaPadrao> DesativarAtivarUsuario(AtivarDesativarUserDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
     }
 }

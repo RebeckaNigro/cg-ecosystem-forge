@@ -27,7 +27,14 @@ namespace Ecossistema.API.Controllers
         [Route("desativar-ativar-usuario")]
         public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model)
         {
-            return await _usurioService.DesativarAtivarUsuario(model);
+            return await _usurioService.DesativarAtivarUsuario(model, UsuarioId);
+        }
+
+        [HttpPost]
+        [Route("editar-usuario")]
+        public async Task<RespostaPadrao> EditarUsuario([FromBody] UsuarioCriacaoDto model)
+        {
+            return await _usurioService.Editar(model, UsuarioId);
         }
 
     }
