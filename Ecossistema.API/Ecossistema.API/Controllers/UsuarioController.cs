@@ -37,5 +37,21 @@ namespace Ecossistema.API.Controllers
             return await _usurioService.Editar(model, UsuarioId);
         }
 
+        [HttpGet]
+        [Route("listar-todos")]
+        public async Task<RespostaPadrao> ListarTodos()
+        {
+            return await _usurioService.ListarTodos();
+        }
+
+        [HttpGet]
+        [Route("detalhes")]
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            return await _usurioService.Detalhes(id);
+        }
+
+
+
     }
 }

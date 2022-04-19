@@ -1,6 +1,4 @@
-﻿
-
-using Ecossistema.Data.Interfaces;
+﻿using Ecossistema.Data.Interfaces;
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;

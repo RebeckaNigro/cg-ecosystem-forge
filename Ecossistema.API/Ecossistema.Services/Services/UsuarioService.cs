@@ -80,6 +80,50 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarTodos()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Usuarios.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Cargo,
+                x.InstituicaoId
+            })
+            .Distinct()
+            .OrderBy(x => x.Id)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> Detalhes(int id)
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Usuarios.FindAllAsync(x => x.Id == id && x.Aprovado);
+
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.Cargo,
+                x.Aprovado,
+                x.InstituicaoId
+            })
+            .Distinct();
+
+            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
+
         public Task<RespostaPadrao> Excluir(int id)
         {
             throw new NotImplementedException();

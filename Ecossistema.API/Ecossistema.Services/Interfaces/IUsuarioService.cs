@@ -13,5 +13,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Editar(UsuarioCriacaoDto dado, int usuarioId);
         Task<RespostaPadrao> DesativarAtivarUsuario(AtivarDesativarUserDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
+        Task<RespostaPadrao> ListarTodos();
+        Task<RespostaPadrao> Detalhes(int id);
     }
 }
