@@ -28,7 +28,14 @@ namespace Ecossistema.API.Controllers
         {
             return await _autenticacaoService.Login(model);
         }
-     
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<RespostaPadrao> Logout([FromBody] LoginDto model)
+        {
+            return await _autenticacaoService.Logout();
+        }
+
         [HttpPost]
         [Route("registrar-admin")]
         public async Task<RespostaPadrao> RegistrarAdmin([FromBody] ResgistrarLoginDto model)

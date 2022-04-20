@@ -92,6 +92,8 @@ app.UseCors(x => x
     .AllowAnyOrigin()
 );
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

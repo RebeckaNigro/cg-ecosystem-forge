@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -23,6 +24,7 @@ namespace Ecossistema.API.Controllers
             _usurioService = usuarioService;
         }
 
+        
         [HttpPost]
         [Route("desativar-ativar-usuario")]
         public async Task<RespostaPadrao> DesativarAtivarUsuario([FromBody] AtivarDesativarUserDto model)
@@ -37,6 +39,7 @@ namespace Ecossistema.API.Controllers
             return await _usurioService.Editar(model, UsuarioId);
         }
 
+        [Authorize(Roles = UserRolesDto.AdminParceiro)]
         [HttpGet]
         [Route("listar-todos")]
         public async Task<RespostaPadrao> ListarTodos()
