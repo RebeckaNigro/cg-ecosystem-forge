@@ -116,9 +116,6 @@ namespace Ecossistema.Services.Services
                         .FirstOrDefault(usuario =>
                          usuario.NormalizedUserName == model.UserName.ToUpper());
                         var userRoles = await _userManager.GetRolesAsync(user);
-                        
-
-
                     
                    
                     var authClaims = new List<Claim>
@@ -162,8 +159,6 @@ namespace Ecossistema.Services.Services
 
         }
 
-        [HttpPost]
-        [Route("logout")]
         public async Task<RespostaPadrao> Logout()
         {
             var resposta = new RespostaPadrao("Logout efetuado com sucesso!");
