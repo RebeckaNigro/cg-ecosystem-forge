@@ -116,9 +116,6 @@ namespace Ecossistema.Services.Services
                         .FirstOrDefault(usuario =>
                          usuario.NormalizedUserName == model.UserName.ToUpper());
                         var userRoles = await _userManager.GetRolesAsync(user);
-                        
-
-
                     
                    
                     var authClaims = new List<Claim>

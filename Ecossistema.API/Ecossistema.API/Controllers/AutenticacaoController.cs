@@ -31,7 +31,7 @@ namespace Ecossistema.API.Controllers
 
         [HttpPost]
         [Route("logout")]
-        public async Task<RespostaPadrao> Logout([FromBody] LoginDto model)
+        public async Task<RespostaPadrao> Logout()
         {
             return await _autenticacaoService.Logout();
         }
