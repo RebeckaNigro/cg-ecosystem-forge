@@ -294,7 +294,7 @@ namespace Ecossistema.Services.Services
                 linkExterno = x.LinkExterno,
                 exibirMaps = x.ExibirMaps,
                 responsavel = x.Responsavel,
-                aprovado = x.Aprovacao
+                aprovado = x.Aprovado
             })
             .Distinct();
 
