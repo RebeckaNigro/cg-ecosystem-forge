@@ -159,8 +159,6 @@ namespace Ecossistema.Services.Services
 
         }
 
-        [HttpPost]
-        [Route("logout")]
         public async Task<RespostaPadrao> Logout()
         {
             var resposta = new RespostaPadrao("Logout efetuado com sucesso!");
