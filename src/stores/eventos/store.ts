@@ -1,6 +1,6 @@
-import { IEvento, EnderecoExistente } from "./types";
+import { IEvento, EnderecoExistente, IUltimoEvento } from "./types";
 import { defineStore } from "pinia";
-import { httpRequest } from "../../utils/http";
+import { httpRequest, getLastContent } from "../../utils/http";
 
 const novoEvento: IEvento = {
   instituicaoId: 0,
@@ -17,11 +17,13 @@ const novoEvento: IEvento = {
   responsavel: ""
 }
 const enderecosExistentes: Array<EnderecoExistente> = []
+const ultimosEventos: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
       novoEvento, // TODO: remove novoEvento
-      enderecosExistentes
+      enderecosExistentes,
+      ultimosEventos
     }
   },
   persist: true,
@@ -62,6 +64,15 @@ export const useEventoStore = defineStore('eventoStore', {
         }
       } catch (error) {
         
+      }
+    },
+    async getLastEvents() {
+      const response = await getLastContent('evento')
+      if (response.data.codigo === 200) {
+        this.ultimosEventos = []
+        for (const lastEvent of response.data.retorno) {
+          this.ultimosEventos.push(lastEvent)
+        }
       }
     }
   }

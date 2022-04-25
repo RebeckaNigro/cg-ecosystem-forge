@@ -1,5 +1,5 @@
 export interface ILoggedUser {
-  email: string | null,
+  username: string | null,
   token: string | null,
   id: string | null
 }

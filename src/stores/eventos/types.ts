@@ -36,3 +36,11 @@ export interface EnderecoExistente {
   cidade: string
   uf: string
 }
+
+export interface IUltimoEvento {
+  id: number,
+  titulo: string,
+  dataInicio: string,
+  dataTermino: string,
+  local: string
+}

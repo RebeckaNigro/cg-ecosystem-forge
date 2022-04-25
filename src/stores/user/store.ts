@@ -12,9 +12,9 @@ export const useUserStore = defineStore('userStore', {
   },
   persist: true,
   actions: {
-    async login(email: string, password: string) {
+    async login(username: string, password: string) {
       const body = {
-        email: email,
+        username: username,
         password: password
       }
       try {

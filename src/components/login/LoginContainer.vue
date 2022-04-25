@@ -6,9 +6,9 @@
       </h1>
     </header>
     <main>
-      <form id="login-form" @submit.prevent="callStoreLogin(user.email, user.password)">
-        <label for="email">E-mail</label>
-        <input type="text" id="email" placeholder="E-mail" v-model="user.email" required>
+      <form id="login-form" @submit.prevent="callStoreLogin(user.username, user.password)">
+        <label for="username">Nome de Usuário</label>
+        <input type="text" id="username" placeholder="Nome de Usuário" v-model="user.username" required>
         <label for="password">Senha</label>
         <input type="password" id="password" placeholder="*****" v-model="user.password" required>
         <button v-if="!waitingResponse" type="submit">Entrar</button>
@@ -30,7 +30,7 @@ const router = useRouter();
 const userStore = useUserStore()
 
 const user = reactive({
-  email: '',
+  username: '',
   password: ''
 })
 
@@ -43,7 +43,7 @@ const callStoreLogin = async (e: string, p: string) => {
   } else {
     // push notification
     const warning = document.createElement('span')
-    warning.textContent = 'Por favor, verifique a senha e o e-mail.'
+    warning.textContent = 'Por favor, verifique a senha e o nome de usuário.'
     warning.classList.add('m-auto')
     warning.style.color = 'red'
 

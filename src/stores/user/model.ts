@@ -1,11 +1,11 @@
 import { ILoggedUser } from "./type";
 
 export class LoggedUser implements ILoggedUser {
-  email: string | null;
+  username: string | null;
   token: string | null;
   id: string | null;
 
-  constructor(email: string | null, token: string | null, id: string | null) {
-    [ this.email, this.token, this.id ] = arguments
+  constructor(username: string | null, token: string | null, id: string | null) {
+    [ this.username, this.token, this.id ] = arguments
   }
 }

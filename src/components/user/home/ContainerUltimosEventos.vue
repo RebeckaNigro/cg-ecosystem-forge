@@ -3,13 +3,18 @@
     <header>
       <h1 class="dark-title">Últimos eventos enviados</h1>
     </header>
-    <main class="d-flex mt-3 mb-3">
-      <div class="card-ultimo-evento" v-for="(card, index) in dummyCards">
+    <main class="d-flex mt-3 mb-3" v-if="!isLoadingLastEvents">
+      <div class="card-ultimo-evento" v-for="(card, index) in useStore.ultimosEventos">
         <img src="..." alt="capa evento">
-        <div class="when">{{ card.when}}</div>
-        <div class="location">{{ card.location}}</div>
+        <span class="title">{{ card.titulo }}</span>
+        <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
+        <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
+        <div class="location">{{ card.local }}</div>
       </div>
     </main>
+    <div v-else class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
     <footer>
       <button type="button" class="btn btn-primary">Ver mais</button>
       <button type="button" class="btn btn-primary" @click="$router.push({ name: 'GerenciaEvento'})">Criar evento</button>
@@ -18,21 +23,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-  const dummyCards = reactive([
-    {
-      when: 'whenwhenwhen',
-      location: 'locationlocation'
-    },
-    {
-      when: 'whenwhenwhen',
-      location: 'locationlocation'
-    },
-    {
-      when: 'whenwhenwhen',
-      location: 'locationlocation'
-    }
-  ])
+import { onMounted, ref } from 'vue'
+import { useEventoStore } from '../../../stores/eventos/store';
+  const friendlyDateTime = (dateTimeString: string) => {
+    const date = new Date(dateTimeString).toLocaleDateString('pt-br')
+    const time = new Date(dateTimeString).toLocaleTimeString('pt-br')
+    return `${date} às ${time.slice(0, time.length - 3)}`
+  }
+  const isLoadingLastEvents = ref(true)
+  const useStore = useEventoStore()
+  onMounted(() => {
+    useStore.getLastEvents()
+    isLoadingLastEvents.value = false
+  })
 </script>
 
 <style scoped lang="scss">
@@ -67,12 +70,25 @@ import { reactive } from 'vue'
           background-size: contain;
           margin: 5px 0;
         }
+        .title, .when, .location {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .title {
+          font-weight: bold;
+        }
         .when {
           background-image: url('/eventos/calendar_icon.png');
         }
         .location {
           background-image: url('/eventos/pin_icon.png');
         }
+      }
+    }
+    footer {
+      button {
+        margin: 0 10px;
       }
     }
   }

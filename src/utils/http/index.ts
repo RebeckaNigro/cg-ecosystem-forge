@@ -26,3 +26,8 @@ export const getFromCEP = async (cep: string) => {
     return error
   }
 }
+
+export const getLastContent = async (contentType: string) => {
+  const response = await httpRequest.get(`/api/${contentType}/listarUltimas`)
+  return response
+}
