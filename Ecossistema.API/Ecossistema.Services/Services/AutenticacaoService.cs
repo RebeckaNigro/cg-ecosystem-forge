@@ -39,13 +39,13 @@ namespace Ecossistema.Services.Services
             //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
 
-        public async Task<RespostaPadrao> Login(LoginDto model)
+        /*public async Task<RespostaPadrao> Login(LoginDto model)
         {
             var resposta = new RespostaPadrao("Login efetuado com sucesso!");
             LoginSucessoDto login = new LoginSucessoDto();
             try
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                var user = await _userManager.FindByEmailAsync(model.UserName);
                 if (user == null)
                 {
                     resposta.SetErroInterno("Usuário não existe");
@@ -74,7 +74,7 @@ namespace Ecossistema.Services.Services
                 if(usuario != null)
                 {
                     login.Id = usuario.Id;
-                    login.Email = user.Email;
+                    login.UserName = user.UserName;
                     login.InstituicaoId = usuario.InstituicaoId;
                     login.Token = new JwtSecurityTokenHandler().WriteToken(token);
                     resposta.Retorno = login;
@@ -92,18 +92,84 @@ namespace Ecossistema.Services.Services
                 return resposta;
             }
 
+        }*/
+
+        public async Task<RespostaPadrao> Login(LoginDto model)
+        {
+            var resposta = new RespostaPadrao("Login efetuado com sucesso!");
+            LoginSucessoDto login = new LoginSucessoDto();
+            try
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    resposta.SetErroInterno("Usuário não existe");
+                    return resposta;
+                }
+                var resultadoIdentity = await _signInManager
+               .PasswordSignInAsync(model.UserName, model.Password, false, false);
+                if (resultadoIdentity.Succeeded)
+                {
+                    var identityUser = _signInManager
+                        .UserManager
+                        .Users
+                        .FirstOrDefault(usuario =>
+                         usuario.NormalizedUserName == model.UserName.ToUpper());
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                    
+                   
+                    var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+                    foreach (var userRole in userRoles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    }
+                     var token = CreateToken(authClaims);
+
+                    var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == user.Id);
+                    if (usuario != null)
+                    {
+                        login.Id = usuario.Id;
+                        login.UserName = user.UserName;
+                        login.InstituicaoId = usuario.InstituicaoId;
+                        login.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                        resposta.Retorno = login;
+                    }
+
+                    else
+                    {
+                        resposta.SetErroInterno("Usuário não tem mais acesso, favor solicitar um recadastramento");
+                    }
+                    //resposta.Retorno = token;
+                }
+                else
+                {
+                    resposta.SetErroInterno("Usuário ou senha incorreta");
+                }
+                return resposta;
+            }
+            catch (Exception e)
+            {
+                resposta.SetErroInterno(e.Message + ". " + e.InnerException);
+                return resposta;
+            }
+
         }
 
-        /*[HttpPost]
-        [Route("logout")]
-        public IActionResult Logout()
+        public async Task<RespostaPadrao> Logout()
         {
+            var resposta = new RespostaPadrao("Logout efetuado com sucesso!");
             var logout =  _signInManager.SignOutAsync();
             if (logout.IsCompletedSuccessfully)
-                return Ok(new Response { Status = "Success", Message = "Logout realizado com sucesso!" });
-            else { return BadRequest(logout); }    
-
-        }*/
+                return resposta;
+            else {
+                resposta.SetErroInterno("Logout falhou");
+                return resposta;
+            }    
+        }
         /*
         [HttpGet]
         [Route("token")]
@@ -214,19 +280,46 @@ namespace Ecossistema.Services.Services
                 return resposta;
             }
         }
-        
-        private JwtSecurityToken GetToken(List<Claim> authClaims)
+
+        /*private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
+                expires: DateTime.Now.AddHours(1),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 
+            return token;
+        }*/
+
+        public JwtSecurityToken CreateToken(List<Claim> authClaims)
+        {
+            
+            /*Claim[] direitosUsuario = new Claim[]
+            {
+                new Claim("username", usuario.UserName),
+                new Claim("id", usuario.Id.ToString()),
+            };
+
+            var chave = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn")
+                );*/
+            var credenciais = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.UtcNow.AddHours(1),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(credenciais, SecurityAlgorithms.HmacSha256)
+                
+                );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return token;
         }
     }
