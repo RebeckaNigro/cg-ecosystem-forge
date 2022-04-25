@@ -1,9 +1,8 @@
-import { IEvento } from "./types";
+import { IEvento, EnderecoExistente } from "./types";
 import { defineStore } from "pinia";
 import { httpRequest } from "../../utils/http";
 
 const novoEvento: IEvento = {
-  id: 1, // deschumbar quando retorno da api mudar
   instituicaoId: 0,
   tipoEventoId: 0,
   titulo: "",
@@ -17,18 +16,50 @@ const novoEvento: IEvento = {
   exibirMaps: false,
   responsavel: ""
 }
+const enderecosExistentes: Array<EnderecoExistente> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
-      novoEvento
+      novoEvento, // TODO: remove novoEvento
+      enderecosExistentes
     }
   },
   persist: true,
   actions: {
-    async putEvent() {
-      try {        
-        const response = await httpRequest.post('/api/evento/incluir', this.novoEvento)
-        console.log(response)
+    async putEvent(newEvent: IEvento, media?: HTMLInputElement) {
+
+      const formData = new FormData()
+      formData.append("evento", JSON.stringify(newEvent))
+
+      // TODO: find out how to sent file as string (create another index.html to find out)
+      if (media?.files) formData.append("arquivos", media.files[0])
+      
+      try {
+        const response = await httpRequest.post('/api/evento/incluir', formData, {
+          headers: {
+            "Content-type": "multipart/form-data",
+          }
+        })
+      } catch (error) {
+        
+      }
+    },
+    async getAddresses(tipoEvendoId: string) {
+      try {
+        const response = await httpRequest.get(`/api/evento/listarEnderecos?tipoEnderecoId=${tipoEvendoId}`)
+        if (response) {
+          if (response.data.codigo === 200) {
+            const extractExistingAddress = (data: any) => {
+                const address: EnderecoExistente = { ...data }
+                return address
+            }
+            this.enderecosExistentes = []
+            for (const addrr of response.data.retorno) {
+              this.enderecosExistentes.push(extractExistingAddress(addrr))
+            }
+          }
+          else if (response.data.codigo === 404) this.enderecosExistentes = []
+        }
       } catch (error) {
         
       }

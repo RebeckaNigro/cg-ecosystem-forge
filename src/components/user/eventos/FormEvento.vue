@@ -2,7 +2,8 @@
   <form class="boring-gray-border dark-body-text" id="form-evento">
     <label for="tipos-evento">Tipo de evento</label>
     <div class="tipo-evento mt-3" id="tipos-evento">
-      <select name="tipo-evento" id="tipo-evento" class="boring-gray-border" v-model="evento.tipoEventoId">
+      <select name="tipo-evento" id="tipo-evento" class="boring-gray-border" v-model="evento.tipoEventoId"
+        @change.prevent="buscarEnderecosPeloTipo()">
         <option :value="1">Presencial</option>
         <option :value="2">Online</option>
         <option :value="3">Palestra</option>
@@ -41,9 +42,13 @@
     </div>
     <div class="local-evento">
       <label for="local-evento">Local do evento *</label>
-      <select name="local" id="local-evento" class="boring-gray-border" v-model="evento.enderecoId">
-        <option :value="1" checked>Seleciona essa mesmo pra testar</option>
+      <select name="local" id="local-evento" class="boring-gray-border" v-model="evento.enderecoId"
+        @change="setAddressInputFields(evento.enderecoId)">
+        <option selected disabled value="0">Selecione ou cadastre um novo endereço</option>
         <option :value="null">Cadastrar novo endereço</option>
+        <option :value="address.enderecoId" v-for="(address, index) in existingAddresses" :key="address.enderecoId">{{
+          `${address.logradouro} ${address.numero}`
+        }}</option>
       </select>
     </div>
     <div id="novo-endereco" class="novo-endereco">
@@ -114,12 +119,15 @@
     </div>
   </form>
 </template>
-
+<!-- TODO: preencher outros campos quando usuário escolher endereço existente -->
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, reactive, computed } from 'vue';
 import { IEvento, INovoEndereco } from '../../../stores/eventos/types';
 import { useEventoStore } from '../../../stores/eventos/store'
 import { getFromCEP } from '../../../utils/http'
+
+const useStore = useEventoStore()
+
 const novoEndereco: INovoEndereco = reactive({
   cep: '',
   logradouro: '',
@@ -130,7 +138,6 @@ const novoEndereco: INovoEndereco = reactive({
   cidade: '',
   uf: ''
 })
-
 const evento: IEvento = reactive({
   id: 1,
   instituicaoId: 1, // id do parceiro que o usuário logado representa
@@ -146,14 +153,16 @@ const evento: IEvento = reactive({
   exibirMaps: false,
   responsavel: ''
 })
-
+const buscarEnderecosPeloTipo = async () => {
+  useStore.novoEvento.tipoEventoId = evento.tipoEventoId
+  await useStore.getAddresses(useStore.novoEvento.tipoEventoId.toString())
+}
 const handleAction = (action: string) => {
   if (evento.enderecoId) evento.endereco = null
-  else evento.endereco = {...novoEndereco}
+  else evento.endereco = { ...novoEndereco }
 
   if (action === 'publicar') {
     // TODO: validar inputs
-    const useStore = useEventoStore()
     useStore.$patch((state) => {
       state.novoEvento = { ...evento }
       state.novoEvento.dataInicio = new Date(state.novoEvento.dataInicio + ':00.000Z').toISOString()
@@ -161,7 +170,9 @@ const handleAction = (action: string) => {
     })
 
     async function publicarEvento() {
-      await useStore.putEvent()
+      const file: HTMLInputElement = document.querySelector('#imagem-input')!
+      if (file) await useStore.putEvent(evento, file)
+      else await useStore.putEvent(evento)
     }
 
     publicarEvento()
@@ -176,10 +187,38 @@ const handleCEPInput = async () => {
       novoEndereco.uf = data.state
       novoEndereco.bairro = data.neighborhood
       novoEndereco.logradouro = data.street
-      console.log(novoEndereco)
     }
   }
 }
+onMounted(async () => {
+  await useStore.getAddresses('1')
+})
+const setAddressInputFields = (enderecoId: number) => {
+  if (!enderecoId) {
+    novoEndereco.cep = ''
+    novoEndereco.logradouro = ''
+    novoEndereco.cidade = ''
+    novoEndereco.uf = ''
+    novoEndereco.numero = ''
+    novoEndereco.complemento = ''
+    novoEndereco.pontoReferencia = ''
+  } else {
+    for (const address of existingAddresses.value) {
+      if (address.enderecoId === enderecoId) {
+        novoEndereco.cep = address.cep
+        novoEndereco.logradouro = address.logradouro
+        novoEndereco.cidade = address.cidade
+        novoEndereco.uf = address.uf
+        novoEndereco.numero = address.numero
+        novoEndereco.complemento = address.complemento
+        novoEndereco.pontoReferencia = address.pontoReferencia
+      }
+    }
+  }
+}
+const existingAddresses = computed(() => {
+  return useStore.enderecosExistentes
+})
 </script>
 
 <style scoped lang="scss">

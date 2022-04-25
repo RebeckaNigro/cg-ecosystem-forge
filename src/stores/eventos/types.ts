@@ -1,5 +1,4 @@
 export interface IEvento {
-  id: number
   instituicaoId: number
   tipoEventoId: number
   titulo: string
@@ -16,6 +15,19 @@ export interface IEvento {
 
 export interface INovoEndereco {
   cep: string
+  logradouro: string
+  numero: string
+  complemento: string
+  pontoReferencia: string
+  bairro: string
+  cidade: string
+  uf: string
+}
+
+export interface EnderecoExistente {
+  cep: string
+  enderecoId: number
+  tipoEndereco: string
   logradouro: string
   numero: string
   complemento: string
