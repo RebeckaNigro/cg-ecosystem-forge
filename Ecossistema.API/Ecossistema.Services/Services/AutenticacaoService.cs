@@ -2,6 +2,7 @@
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Ecossistema.Util.Const;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -170,17 +171,6 @@ namespace Ecossistema.Services.Services
                 return resposta;
             }    
         }
-        /*
-        [HttpGet]
-        [Route("token")]
-        public IActionResult teste()
-        {
-           
-          var logout = HttpContext.Request.Headers["Authorization"];
-            return Ok(new Response { Status = "Success", Message = "teste realizado com sucesso!" });
-
-        }
-        */
 
         public async Task<RespostaPadrao> RegistrarAdmin([FromBody] ResgistrarLoginDto model)
         {
@@ -321,6 +311,105 @@ namespace Ecossistema.Services.Services
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return token;
+        }
+
+        public async Task<RespostaPadrao> GerarCodigoRedefinirSenha(string email)
+        {
+
+            var resposta = new RespostaPadrao("Token criado com sucesso!");
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                {
+                    resposta.SetErroInterno("Campo email não pode ser vazio");
+                    return resposta;
+                }
+
+                // Get Identity User details user user manager
+                var aspUser = await _userManager.FindByEmailAsync(email);
+                if(aspUser == null)
+                {
+                    resposta.SetErroInterno("Email não econtrado");
+                    return resposta;
+                }
+                var a = aspUser.Id;
+               
+
+                var user = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == a);
+
+
+                // Generate password reset token
+                var token = await _userManager.GeneratePasswordResetTokenAsync(aspUser);
+
+                // Generate OTP
+                int otp = RandomNumberGeneartor.Generate(100000, 999999);
+
+                user.OTP = otp.ToString();
+                user.Token = token;
+                user.DataCriacaoOTP = DateTime.UtcNow;
+                _unitOfWork.Usuarios.Update(user);
+                _unitOfWork.Complete();
+                // Save data into db with OTP
+
+                // to do: Send token in email
+                /*await EmailSender.SendEmailAsync(email, "Reset Password OTP", "Hello "
+                    + email + "<br><br>Please find the reset password token below<br><br><b>"
+                    + otp + "<b><br><br>Thanks<br>oktests.com");*/
+                return resposta;
+            }
+
+
+            catch (Exception e)
+            {
+                resposta.SetErroInterno(e.Message + ". " + e.InnerException);
+                return resposta;
+            }
+        }
+
+        public async Task<RespostaPadrao> RedefinirSenha([FromBody] RedefinirSenhaDto model)
+        {
+            var resposta = new RespostaPadrao("Senha redefinida com sucesso!");
+            try
+            {
+                if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.NovaSenha))
+                {
+                    resposta.SetErroInterno("Email e senha não podem ser vazios");
+                    return resposta;
+                }
+
+                // Get Identity User details user  manager
+                var userLogin = await _userManager.FindByEmailAsync(model.Email);
+
+                var user = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == userLogin.Id);
+
+                if(user.OTP != model.OTP)
+                {
+                    resposta.SetErroInterno("OTP inválido ou incorreto, preencha novamente");
+                    return resposta;
+                }
+
+            
+                DateTime dataOTP = user.DataCriacaoOTP.Value;
+                var expirationDateTimeUtc = dataOTP.AddMinutes(5);
+
+
+                if (expirationDateTimeUtc < DateTime.UtcNow)
+                {
+                    resposta.SetErroInterno("OTP expirado, solicite a redefinição de senha novamente");
+                    return resposta;
+                }
+
+                var res = await _userManager.ResetPasswordAsync(userLogin
+                    , user.Token, model.NovaSenha);
+
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message + ". " + ex.InnerException);
+                return resposta;
+            }
+
         }
     }
 }

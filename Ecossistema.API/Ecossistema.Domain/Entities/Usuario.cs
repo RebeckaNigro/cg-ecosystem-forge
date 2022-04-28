@@ -105,7 +105,7 @@ namespace Ecossistema.Domain.Entities
            Aprovado = true;
             //Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Usuario, usuarioId, dataAtual) };
            Ativo = true;
-           Recursos.Auditoria(this, usuarioId, dataAtual);
+            Recursos.Auditoria(this, usuarioId, dataAtual);
         }
 
         public int Id { get; set; }
@@ -114,11 +114,11 @@ namespace Ecossistema.Domain.Entities
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
         public string AspNetUserId { get; set; }
-       // public UserManager<IdentityUser> AspNetUser { get; set; }
+        // public UserManager<IdentityUser> AspNetUser { get; set; }
         //public int PermissaoId { get; set; }
         //public virtual Permissao Permissao { get; set; }
         //public string Email { get; set; }
-        
+
         //public string SenhaHash { get; set; }
         //public string SenhaSalt { get; set; }
         //public string? Token { get; set; }
@@ -135,6 +135,9 @@ namespace Ecossistema.Domain.Entities
         public string NaturezaOperacao { get; set; }
         public DateTime DataOperacao { get; set; }
         public int UsuarioOperacaoId { get; set; }
+        public string? Token { get; set; }
+        public string? OTP { get; set; }
+        public  DateTime? DataCriacaoOTP { get; set; }
         public virtual Usuario UsuarioOperacao { get; set; }
         public virtual ICollection<Aprovacao> Aprovacoes { get; set; }
         public virtual ICollection<Aprovacao> UsuariosAprovacoes { get; set; }
