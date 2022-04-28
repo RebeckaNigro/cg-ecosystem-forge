@@ -19,5 +19,7 @@ namespace Ecossistema.Services.Dto
 
         [Required(ErrorMessage = "Senha é obrigatória")]
         public string? Password { get; set; }
+        [Required(ErrorMessage = "Confirmação de senha é obrigatória")]
+        public string? ConfirmPassword { get; set; }
     }
 }
