@@ -11,6 +11,7 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IArquivoService
     {
-        Task<bool> Vincular(EOrigem origem, int id, List<IFormFile> arquivos, int usuarioId, DateTime dataAtual, RespostaPadrao resposta);
+        Task<bool> Vincular(EOrigem origem, int id, List<IFormFile>? arquivos, int usuarioId, DateTime dataAtual, RespostaPadrao resposta);
+        Task<List<ArquivoDto>> ObterArquivos(EOrigem origem, int id, RespostaPadrao resposta);
     }
 }

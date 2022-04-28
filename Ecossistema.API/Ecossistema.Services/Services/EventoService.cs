@@ -5,6 +5,7 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Ecossistema.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAprovacaoService _aprovacaoService;
         private readonly IArquivoService _arquivoService;
-        private readonly IEnderecoService _enderecoService;      
+        private readonly IEnderecoService _enderecoService;
 
         public EventoService(IUnitOfWork unitOfWork,
             IEnderecoService enderecoService,
@@ -29,7 +30,7 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
             _aprovacaoService = aprovacaoService;
             _arquivoService = arquivoService;
-            _enderecoService = enderecoService;           
+            _enderecoService = enderecoService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, int usuarioId)
@@ -38,7 +39,7 @@ namespace Ecossistema.Services.Services
 
             var dado = ConverterEvento(item);
 
-            if (!await ValidarIncluir(dado, resposta)) return resposta;
+            if (!await ValidarIncluir(dado, item.Arquivos, resposta)) return resposta;
 
             try
             {
@@ -77,14 +78,14 @@ namespace Ecossistema.Services.Services
 
                 #endregion
 
-                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, dado.Arquivos, usuarioId, dataAtual, resposta)
+                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, item.Arquivos, usuarioId, dataAtual, resposta)
                     || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
                     return resposta;
                 }
 
                 resposta.Retorno = true;
-                resposta.SetMensagem("Dados gravados com sucesso!");                
+                resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
             {
@@ -263,13 +264,17 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco" });
+            var arquivos = await _arquivoService.ObterArquivos(EOrigem.Evento, id, resposta);
+
+            var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco" };
+
+            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, includes);
 
             var result = query.Select(x => new
             {
                 id = x.Id,
                 instituicaoId = x.InstituicaoId,
-                instituicao = x.Instituicao != null ? x.Instituicao.Descricao : null,
+                instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
                 tipoEventoId = x.TipoEventoId,
                 tipoEvento = x.TipoEvento != null ? x.Descricao : null,
                 titulo = x.Titulo,
@@ -294,7 +299,8 @@ namespace Ecossistema.Services.Services
                 linkExterno = x.LinkExterno,
                 exibirMaps = x.ExibirMaps,
                 responsavel = x.Responsavel,
-                aprovado = x.Aprovado
+                aprovado = x.Aprovado,
+                arquivos = arquivos
             })
             .Distinct();
 
@@ -379,21 +385,16 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        private EventoDto ConverterEvento(EventoArquivosDto obj)
+        private EventoDto? ConverterEvento(EventoArquivosDto obj)
         {
             var evento = JsonConvert.DeserializeObject<EventoDto>(obj.Evento);
 
-            if (evento != null)
-            {
-                evento.Arquivos = obj.Arquivos;
-            }
-
-            return evento;
+            return evento != null ? evento : null;
         }
 
         #region Validações
 
-        private async Task<bool> ValidarIncluir(EventoDto dado, RespostaPadrao resposta)
+        private async Task<bool> ValidarIncluir(EventoDto dado, List<IFormFile>? arquivos, RespostaPadrao resposta)
         {
             if (!ValidarInstituicaoIdValida(dado, resposta)
             || !await ValidarInstituicaoIdCadastrada(dado, resposta)
