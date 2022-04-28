@@ -26,7 +26,7 @@ namespace Ecossistema.Services.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<bool> Vincular(EOrigem origem, int id, List<IFormFile> arquivos, int usuarioId, DateTime dataAtual, RespostaPadrao resposta)
+        public async Task<bool> Vincular(EOrigem origem, int id, List<IFormFile>? arquivos, int usuarioId, DateTime dataAtual, RespostaPadrao resposta)
         {
             if (arquivos == null || arquivos.Count == 0) return true;
 
@@ -57,12 +57,66 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
+        public async Task<List<ArquivoDto>> ObterArquivos(EOrigem origem, int id, RespostaPadrao resposta)
+        {
+            int? instituicaoId = null;
+            int? noticiaId = null;
+            int? eventoId = null;
+            int? documentoId = null;
+            int? paginaId = null;
+
+            switch (origem)
+            {
+                case EOrigem.Parceiro:
+                    instituicaoId = id;
+                    break;
+                case EOrigem.Documento:
+                    documentoId = id;
+                    break;
+                case EOrigem.Noticia:
+                    noticiaId = id;
+                    break;
+                case EOrigem.Evento:
+                    eventoId = id;
+                    break;
+                case EOrigem.Pagina:
+                    paginaId = id;
+                    break;
+                default:
+                    break;
+            }
+
+            var includes = new[] { "Arquivo" };
+
+            var query = await _unitOfWork.ArquivosOrigens.FindAllAsync(x => x.Ativo
+                                                                        && x.InstituicaoId == instituicaoId
+                                                                        && x.NoticiaId == noticiaId
+                                                                        && x.EventoId == eventoId
+                                                                        && x.DocumentoId == documentoId
+                                                                        && x.PaginaId == paginaId, includes);
+
+            var result = query.Select(x => new ArquivoDto
+            {
+                Id = x.Id,
+                NomeOriginal = x.Arquivo.NomeOriginal,
+                Extensao = x.Arquivo.Extensao,
+                Arquivo = null
+            }).ToList();
+
+            foreach (var item in result)
+            {
+                item.Arquivo = ObterArquivoBinario(item.Id);
+            }
+
+            return result;
+        }
+
         private bool SalvarArquivo(int id, IFormFile file)
         {
             try
             {
                 if (file == null) return false;
-                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString()+".ecs"), FileMode.Create))
+                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + ".ecs"), FileMode.Create))
                 {
                     file.CopyTo(fs);
                     fs.Flush();
@@ -78,6 +132,23 @@ namespace Ecossistema.Services.Services
         private bool ExcluirArquivos(List<int> arquivos)
         {
             return true;
+        }
+
+        private byte[] ObterArquivoBinario(int id)
+        {
+            byte[] arquivoBin = null;
+
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + ".ecs");
+
+            using (var fs = File.OpenRead(path))
+            using (var ms = new MemoryStream())
+            {
+                fs.CopyTo(ms);
+                fs.Flush();
+                arquivoBin = ms.ToArray();
+            }
+
+            return arquivoBin;
         }
     }
 }

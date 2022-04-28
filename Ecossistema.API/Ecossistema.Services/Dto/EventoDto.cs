@@ -22,6 +22,5 @@ namespace Ecossistema.Services.Dto
         public string LinkExterno { get; set; }
         public bool? ExibirMaps { get; set; }
         public string? Responsavel { get; set; }
-        public List<IFormFile> Arquivos { get; set; }
     }
 }
