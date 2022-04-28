@@ -42,6 +42,20 @@ namespace Ecossistema.API.Controllers
         {
             return await _autenticacaoService.RegistrarAdmin(model);
         }
-        
+
+        [HttpPost]
+        [Route("gerarCodigoRefinirSenha")]
+        public async Task<RespostaPadrao> GerarCodigoRedefinirSenha([FromBody] string email)
+        {
+            return await _autenticacaoService.GerarCodigoRedefinirSenha(email);
+        }
+
+        [HttpPost]
+        [Route("refinir-senha")]
+        public async Task<RespostaPadrao> RedefinirSenha([FromBody] RedefinirSenhaDto model)
+        {
+            return await _autenticacaoService.RedefinirSenha(model);    
+        }
+
     }
 }

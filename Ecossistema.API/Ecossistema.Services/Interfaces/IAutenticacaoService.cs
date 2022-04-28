@@ -10,9 +10,11 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IAutenticacaoService
     {
-         Task<RespostaPadrao> Login(LoginDto dado);
+        Task<RespostaPadrao> Login(LoginDto dado);
         Task<RespostaPadrao> Logout();
         Task<RespostaPadrao> RegistrarAdmin(ResgistrarLoginDto dado);
+        Task<RespostaPadrao> GerarCodigoRedefinirSenha(string dado);
+        Task<RespostaPadrao> RedefinirSenha(RedefinirSenhaDto dado);
         //Task<IAsyncResult> Editar(DocumentoDto dado, int usuarioId);
         //Task<IAsyncResult> Excluir(int id);
     }
