@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -24,19 +26,22 @@ namespace Ecossistema.Services.Services
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailService _emailService;
         //private readonly UsuarioCriacaoDto _usuarioCriacaoDto;
 
         public AutenticacaoService(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration, IUnitOfWork unitOfWork)
+            IConfiguration configuration, IUnitOfWork unitOfWork, IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _signInManager = signInManager;
             _unitOfWork = unitOfWork;
+            _emailService = emailService;
+
             //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
 
@@ -202,6 +207,11 @@ namespace Ecossistema.Services.Services
                     resposta.SetErroInterno("Nível de administrador deve ser de 1 a 3");
                     return resposta;
                 }
+                if(model.Password != model.ConfirmPassword)
+                {
+                    resposta.SetErroInterno("Senha e confirmação estão diferentes, digite novamente");
+                    return resposta;
+                }
                 IdentityUser user = new()
                 {
                     Email = model.Email,
@@ -303,7 +313,7 @@ namespace Ecossistema.Services.Services
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddHours(3),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(credenciais, SecurityAlgorithms.HmacSha256)
                 
@@ -352,9 +362,12 @@ namespace Ecossistema.Services.Services
                 // Save data into db with OTP
 
                 // to do: Send token in email
-                /*await EmailSender.SendEmailAsync(email, "Reset Password OTP", "Hello "
-                    + email + "<br><br>Please find the reset password token below<br><br><b>"
-                    + otp + "<b><br><br>Thanks<br>oktests.com");*/
+                var enviar = new List<string>();
+                enviar.Add(email);
+                var mensagem = new Mensagem(enviar);
+                mensagem.SetEmailRedefinirSenha(email, aspUser.UserName, user.OTP);
+                await _emailService.EnviarEmail(mensagem);
+
                 return resposta;
             }
 
@@ -387,8 +400,13 @@ namespace Ecossistema.Services.Services
                     resposta.SetErroInterno("OTP inválido ou incorreto, preencha novamente");
                     return resposta;
                 }
+                if (model.NovaSenha != model.ConfirmaSenha)
+                {
+                    resposta.SetErroInterno("Os campos de senha e confirmação estão diferentes, digite novamente.");
+                    return resposta;
+                }
 
-            
+
                 DateTime dataOTP = user.DataCriacaoOTP.Value;
                 var expirationDateTimeUtc = dataOTP.AddMinutes(5);
 
@@ -411,5 +429,6 @@ namespace Ecossistema.Services.Services
             }
 
         }
+
     }
 }

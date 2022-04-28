@@ -11,5 +11,6 @@ namespace Ecossistema.Services.Dto
         public string Email { get; set; }
         public string OTP { get; set; }
         public string NovaSenha { get; set; }
+        public string ConfirmaSenha { get; set; }   
     }
 }
