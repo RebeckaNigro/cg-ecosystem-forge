@@ -114,7 +114,7 @@ namespace Ecossistema.Domain.Entities
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
         public string AspNetUserId { get; set; }
-        // public UserManager<IdentityUser> AspNetUser { get; set; }
+        //public UserManager<IdentityUser>? AspNetUser { get; set; }
         //public int PermissaoId { get; set; }
         //public virtual Permissao Permissao { get; set; }
         //public string Email { get; set; }
