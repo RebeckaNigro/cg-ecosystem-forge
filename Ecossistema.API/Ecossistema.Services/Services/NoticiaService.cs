@@ -52,7 +52,8 @@ namespace Ecossistema.Services.Services
                 if (aprovacao != null)
                 {
                     obj.AprovacaoId = aprovacao.Id;
-
+                    /****** IMPORTANTE: Essa linha abaixo ficará aqui até os perfis de usuários responsáveis para aprovação estiver pronto***********/
+                    obj.Aprovado = true; // Remover em breve
                     _unitOfWork.Noticias.Update(obj);
                 }
 
