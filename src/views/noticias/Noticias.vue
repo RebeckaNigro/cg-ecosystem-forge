@@ -16,31 +16,7 @@
 				</div>
 			</Banner>
 
-			<div class="noticias-content ghp">
-				<h1 class="dark-title">ÚLTIMAS NOTICIAS</h1>
-
-				<div class="card-noticia-container dark-body-text"> 
-          <!-- FIXME: criar componente container e automatizar geração de cards -->
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 1 }})"/>
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 2 }})"/>
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 3 }})"/>
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 4 }})"/>
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 5 }})"/>
-					<CardNoticia 
-            :is-relacionada="false"
-            @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: 6 }})"/>
-				</div>
-			</div>
+			<ContainerCardsNoticia/>
 		</main>
 	</section>
 	<FooterComponent />
@@ -48,40 +24,13 @@
 
 <script setup lang="ts">
 import Banner from '../../components/general/Banner.vue';
-import CardNoticia from '../../components/noticias/CardNoticia.vue';
+import ContainerCardsNoticia from '../../components/noticias/ContainerCardsNoticia.vue';
 </script>
 
 <style scoped lang="scss">
 section.container-fluid {
 	padding: 0;
-}
-
-.noticias-content {
-	width: 100%;
-	margin: 0 auto;
-	margin-top: 48px;
-
-	> h1 {
-		font-weight: bold;
-		font-size: 2rem;
-	}
-}
-
-.card-noticia-container {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 48px 32px;
-
-	@media (max-width: 820px) {
-		max-width: 520px;
-		grid-template-columns: 1fr 1fr;
-	}
-
-	@media (max-width: 580px) {
-		max-width: 280px;
-		grid-template-columns: 1fr;
-	}
+	margin-bottom: 40px;
 }
 
 .banner-noticia-content {
