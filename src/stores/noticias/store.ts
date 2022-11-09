@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Noticia } from "./types";
+import { INoticia, Noticia } from "./types";
 import { httpRequest } from "../../utils/http";
 import { validateNoticiaInput } from "../../utils/noticias/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
@@ -7,18 +7,18 @@ import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 export const useNoticiaStore = defineStore('noticiaStore', {
   state: () => {
     return {
-      novaNoticia: new Noticia("","","","",""),
 	  novaNoticiaResponse: new GeneralResponseHandler(0, 'none', 'no request made yet')
     }
   },
   persist: true,
   actions: {
-    async putNews() {
+    async putNews(novaNoticia: INoticia) {
+	  // TODO salvar capa da noticia no banco
       try {
-		const noticiaInput = validateNoticiaInput({id: "", titulo: this.novaNoticia.titulo, descricao: this.novaNoticia.descricao, subTitulo: this.novaNoticia.subTitulo, dataPublicacao: this.novaNoticia.dataPublicacao})
+		const noticiaInput = validateNoticiaInput({...novaNoticia})
 
 		if(noticiaInput instanceof Noticia){
-			const response = await httpRequest.post('/api/noticia/incluir', this.novaNoticia)
+			const response = await httpRequest.post('/api/noticia/incluir', novaNoticia)
 			this.novaNoticiaResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
 		}else{
 			this.novaNoticiaResponse.putError(223, noticiaInput.message)
