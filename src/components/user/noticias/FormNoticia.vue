@@ -2,12 +2,12 @@
 	<form class="form-noticia boring-gray-border" @submit.prevent="handleSubmit()">
 		<div class="group column-direction">
 			<label for="title">Título</label>
-			<input type="text" id="title" class="w-100 boring-gray-border" v-model="noticiaStore.novaNoticia.titulo">
+			<input type="text" id="title" class="w-100 boring-gray-border" v-model="noticia.titulo">
 		</div>
 		<div class="group column-direction">
 			<label for="title">Subtítulo</label>
 			<input type="text" id="subtitle" class="w-100 boring-gray-border"
-				v-model="noticiaStore.novaNoticia.subTitulo">
+				v-model="noticia.subTitulo">
 		</div>
 		<div class="labels-date">Publicado em</div>
 		<div class="group row-direction align-center">
@@ -26,13 +26,17 @@
 		<div class="group column-direction">
 			<label for="main-text">Corpo do texto</label>
 			<textarea name="main-text" id="main-text" cols="30" rows="10" class="w-100"
-				v-model="noticiaStore.novaNoticia.descricao" />
+				v-model="noticia.descricao" />
 		</div>
 		<input type="file" name="news-cover" id="news-cover" placeholder="Capa da Notícia">
 		<div class="btn-container">
 			<button type="submit" class="btn-primary btn">Salvar rascunho</button>
 			<button type="submit" class="btn-primary btn">Pré-visualizar</button>
-			<button type="button" class="btn-primary btn" @click.prevent="handleSubmit()">Enviar</button>
+			<button v-if="!sendingNews" type="button" class="btn-primary btn" @click.prevent="handleSubmit()">Enviar</button>
+			<div v-else class="spinner-border text-success ml-auto mt-2" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+
 		</div>
 	</form>
 	<ModalComponent
@@ -48,21 +52,31 @@ import { Modal } from 'bootstrap';
 import ModalComponent from '../../../components/general/ModalComponent.vue'
 import { inject, reactive, ref } from 'vue';
 import { useNoticiaStore } from '../../../stores/noticias/store';
+import { INoticia } from '../../../stores/noticias/types';
 
 const autoSetDate = ref(true)
 const userChosedDate = ref('')
-// TODO sendingNews ref
+const sendingNews = ref(false)
 const noticiaStore = useNoticiaStore();
 const userId = inject('userId', '')
-noticiaStore.novaNoticia.id = userId
+//noticiaStore.novaNoticia.id = userId
+
+const noticia: INoticia = reactive({
+	id: '1', // provisório até mudar tipo do id no banco de number para string
+	titulo: '',
+	descricao: '',
+	subTitulo: '',
+	dataPublicacao: ''
+})
 
 const handleSubmit = async () => {
+	sendingNews.value = true
 	//const file: HTMLInputElement = document.querySelector('#news-cover')!;
 
-	if (autoSetDate.value) noticiaStore.novaNoticia.dataPublicacao = new Date().toISOString()
-	else noticiaStore.novaNoticia.dataPublicacao = new Date(userChosedDate.value + ':00.000Z').toISOString()
-	noticiaStore.novaNoticia.id = '1' // provisório até mudar tipo do id no banco de number para string
-	await noticiaStore.putNews()
+	if (autoSetDate.value) noticia.dataPublicacao = new Date().toISOString()
+	else noticia.dataPublicacao = new Date(userChosedDate.value + ':00.000Z').toISOString()
+
+	sendingNews.value = await noticiaStore.putNews(noticia)
 
 	const res = noticiaStore.novaNoticiaResponse.getResponse()
 	if(res.code === 200){
