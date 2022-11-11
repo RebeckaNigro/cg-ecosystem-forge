@@ -116,7 +116,7 @@
     <div class="btn-group d-flex justify-content-around">
       <button class="btn-btn-primary">Salvar rascunho</button>
       <button class="btn-btn-primary">Pré-visualizar</button>
-      <button v-if="!sendingEvent" class="btn-btn-primary" @click.prevent="handleAction('publicar')">Publicar evento</button>
+      <button class="btn-btn-primary" @click.prevent="handleAction('publicar')">Publicar evento</button>
     </div>
   </form>
 
