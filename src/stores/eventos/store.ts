@@ -20,13 +20,15 @@ const novoEvento: IEvento = {
 }
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
+const eventos: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
       novoEvento, // TODO: remove novoEvento
       enderecosExistentes,
       ultimosEventos,
-	  novoEventoResponse: new GeneralResponseHandler(0, 'none', 'no request made yet')
+	  novoEventoResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
+	  eventos
     }
   },
   persist: true,
@@ -92,6 +94,23 @@ export const useEventoStore = defineStore('eventoStore', {
           this.ultimosEventos.push(lastEvent)
         }
       }
-    }
+    },
+	async getAllEvents(){
+		try{
+			const response = await httpRequest.get('/api/evento/listarTodas')
+			if(response.data.codigo === 200){
+				this.eventos = []
+			
+				console.log(this.eventos);
+				for(const evento of response.data.retorno){	
+					this.eventos.push(evento)
+				}
+			}
+		}catch(error){
+			console.error(error);
+			
+		}
+
+	}
   }
 })

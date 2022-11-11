@@ -7,12 +7,12 @@
     </div>
     <div class="carousel-inner">
       <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
-        <img :src="data.img" class="d-block w-100" alt="destaques-carousel">
+        <img src="../../../public/eventos/event_img.png" class="d-block w-100" alt="destaques-carousel">
         <section class="d-flex infos mt-2">
           <main>
-            <h1 id="event-name" class="dark-title">{{ data.eventName }}</h1>
-            <time class="dark-body-text calendar-icon">{{ data.eventDate }}</time>
-            <address class="dark-body-text pin-icon">{{ data.eventLocation }}</address>
+            <h1 id="event-name" class="dark-title">{{ data.titulo }}</h1>
+            <time class="dark-body-text calendar-icon">{{ friendlyDateTime(data.dataInicio) }}</time>
+            <address class="dark-body-text pin-icon">{{ data.local }}</address>
           </main>
           <GeneralBtn
             btnText="VER DETALHES"
@@ -22,7 +22,7 @@
             width="150px"
             textColor="#fff"
             height="40px"
-            :id="'ver-mais' + data.eventId"
+            :id="'ver-mais' + data.id"
             class="details"
           />
         </section>
@@ -42,16 +42,11 @@
 </template>
 
 <script setup lang="ts">
+import { IUltimoEvento } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
+import {friendlyDateTime} from '../../utils/formatacao/datetime'
   const props = defineProps<{
-    carouselData: {
-      img: string
-      eventName: string
-      eventDate: string
-      eventLocation: string
-      detailLink: string
-      eventId: number
-    }[]
+    carouselData: IUltimoEvento[]
   }>()
 </script>
 
