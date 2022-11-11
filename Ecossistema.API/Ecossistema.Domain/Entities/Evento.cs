@@ -44,7 +44,9 @@ namespace Ecossistema.Domain.Entities
             ExibirMaps = exibirMaps;
             Responsavel = responsavel;
             Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Documento, usuarioId, dataAtual) };
-            Aprovado = false;
+            //Aprovado = false;
+            /****** IMPORTANTE: Aprovado = true; até os perfis de usuários responsáveis para aprovação estiver pronto,***********/
+            Aprovado = true;
             Ativo = true;
             Recursos.Auditoria(this, usuarioId, dataAtual);
         }

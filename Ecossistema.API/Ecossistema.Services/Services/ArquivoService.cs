@@ -116,7 +116,9 @@ namespace Ecossistema.Services.Services
             try
             {
                 if (file == null) return false;
-                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + ".ecs"), FileMode.Create))
+                var mimeType = file.ContentType;
+                var fileExtension = mimeType.Split('/').Last();
+                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + "." + fileExtension), FileMode.Create))
                 {
                     file.CopyTo(fs);
                     fs.Flush();
