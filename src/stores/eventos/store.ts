@@ -111,6 +111,18 @@ export const useEventoStore = defineStore('eventoStore', {
 			
 		}
 
+	},
+
+	async deleteEvent(eventId: string){
+		try{
+			const response = await httpRequest.delete(`/api/noticia/excluir?id=${eventId}`)
+			if(response.data.codigo === 200){
+				console.log('deu bom');
+			}
+		}catch(error){
+			console.error(error);
+			
+		}
 	}
   }
 })
