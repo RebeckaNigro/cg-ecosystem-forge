@@ -17,3 +17,9 @@ export class Noticia implements INoticia {
 		[this.id, this.titulo, this.descricao, this.subTitulo, this.dataPublicacao] = arguments;
 	}
 }
+
+export interface IUltimaNoticia{
+	id: number
+	titulo: string
+	dataPublicacao: string
+}
