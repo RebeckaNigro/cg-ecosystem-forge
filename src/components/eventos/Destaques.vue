@@ -5,44 +5,21 @@
     </header>
     <main>
       <DestaquesCarousel
-        :carousel-data="dummyCarouselData"
+        :carousel-data="eventoStore.ultimosEventos"
       />
     </main>
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
+import { useEventoStore } from '../../stores/eventos/store';
 import DestaquesCarousel from './DestaquesCarousel.vue';
+const eventoStore = useEventoStore()
 
-const dummyCarouselData = reactive([
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 1
-  },
-  
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO 2',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 2
-  },
-  
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO 3',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 3
-  }
-])
+onMounted(() => {
+	eventoStore.getLastEvents()
+})
 </script>
 
 <style scoped lang="scss">

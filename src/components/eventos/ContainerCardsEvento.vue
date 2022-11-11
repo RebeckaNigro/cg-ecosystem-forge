@@ -57,83 +57,15 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
+import { useEventoStore } from '../../stores/eventos/store';
 
+const eventoStore = useEventoStore()
 const selectedPage = ref(0)
 const indicators = ref(3)
-const dummyCardsPages = reactive([
-  [
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Quadrado das Sungas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Losango das Regatas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento abc",
-      dataEvento: "27/11/2023",
-      enderecoEvento: "Triângulo das Bermudas, WTF",
-    }
-  ],
-  [
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Macacos me mordam",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Quadrado das Sungas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Losango das Regatas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento abc",
-      dataEvento: "27/11/2023",
-      enderecoEvento: "Triângulo das Bermudas, WTF",
-    }
-  ],
-  [
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Quadrado das Sungas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Losango das Regatas, WTF",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Treinamento do cão",
-      dataEvento: "27/11/2023",
-      enderecoEvento: "Triângulo das Bermudas, WTF",
-    }
-  ]
-])
+
 const dummyContainer = reactive([
   [
     {
@@ -197,6 +129,10 @@ const addEventsToView = () => {
     }
   ])
 }
+
+onMounted(() => {
+	eventoStore.getAllEvents()
+})
 </script>
 
 <style scoped lang="scss">
