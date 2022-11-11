@@ -25,18 +25,19 @@
     </div>
     <div class="datas-inicio-fim d-flex">
       <div class="inicio mt-0">
-        <label for="data-inicio">Data e hora de início</label>
+        <label for="data-inicio">Data e hora de início *</label>
         <input type="datetime-local" name="data-inicio" id="data-inicio" class="boring-gray-border"
-          v-model="evento.dataInicio">
+        v-model="evento.dataInicio"
+		  >
       </div>
       <div class="fim mt-0">
-        <label for="data-termino">Data e hora de término</label>
+        <label for="data-termino">Data e hora de término *</label>
         <input type="datetime-local" name="data-termino" id="data-termino" class="boring-gray-border"
           v-model="evento.dataTermino">
       </div>
     </div>
     <div class="descricao-evento">
-      <label for="descricao">Descrição do evento</label>
+      <label for="descricao">Descrição do evento *</label>
       <textarea name="descricao" id="descricao" cols="30" rows="10" class="boring-gray-border"
         v-model="evento.descricao" />
     </div>
@@ -74,12 +75,12 @@
           v-model="novoEndereco.numero">
       </div>
       <div class="complemento">
-        <label for="complemento">Complemento</label>
+        <label for="complemento">Complemento *</label>
         <input type="text" name="complemento" id="complemento" class="boring-gray-border"
           :disabled="evento.enderecoId !== null" v-model="novoEndereco.pontoReferencia">
       </div>
       <div class="ponto-referencia">
-        <label for="ponto-referencia">Ponto de referência</label>
+        <label for="ponto-referencia">Ponto de referência *</label>
         <input type="text" name="ponto-referencia" id="ponto-referencia" class="boring-gray-border"
           :disabled="evento.enderecoId !== null" v-model="novoEndereco.complemento">
       </div>
@@ -101,7 +102,7 @@
       <label for="exibir-maps">Exibir endereço no Google Maps</label>
     </div>
     <div class="link-ingressos">
-      <label for="ingressos">Link para obtenção de ingressos</label>
+      <label for="ingressos">Link para obtenção de ingressos *</label>
       <input type="text" name="ingressos" id="ingressos" class="boring-gray-border" v-model="evento.linkExterno">
     </div>
     <div class="produtor">
@@ -115,18 +116,28 @@
     <div class="btn-group d-flex justify-content-around">
       <button class="btn-btn-primary">Salvar rascunho</button>
       <button class="btn-btn-primary">Pré-visualizar</button>
-      <button class="btn-btn-primary" @click.prevent="handleAction('publicar')">Publicar evento</button>
+      <button v-if="!sendingEvent" class="btn-btn-primary" @click.prevent="handleAction('publicar')">Publicar evento</button>
     </div>
   </form>
+
+  <ModalComponent
+		:title="modalSettings.title"
+		:message="modalSettings.message"
+		:status="modalSettings.status"
+		:modal-id="modalSettings.id"
+	/>
 </template>
 <!-- TODO: preencher outros campos quando usuário escolher endereço existente -->
 <script setup lang="ts">
-import { onMounted, reactive, computed } from 'vue';
+import { onMounted, reactive, computed, ref } from 'vue';
 import { IEvento, INovoEndereco } from '../../../stores/eventos/types';
 import { useEventoStore } from '../../../stores/eventos/store'
 import { getFromCEP } from '../../../utils/http'
+import ModalComponent from '../../../components/general/ModalComponent.vue'
+import { Modal } from 'bootstrap';
 
 const useStore = useEventoStore()
+const sendingEvent = ref(false)
 
 const novoEndereco: INovoEndereco = reactive({
   cep: '',
@@ -162,17 +173,19 @@ const handleAction = (action: string) => {
   else evento.endereco = { ...novoEndereco }
 
   if (action === 'publicar') {
-    // TODO: validar inputs
-    useStore.$patch((state) => {
-      state.novoEvento = { ...evento }
-      state.novoEvento.dataInicio = new Date(state.novoEvento.dataInicio + ':00.000Z').toISOString()
-      state.novoEvento.dataTermino = new Date(state.novoEvento.dataTermino + ':00.000Z').toISOString()
-    })
-
+    
     async function publicarEvento() {
+		sendingEvent.value = true
       const file: HTMLInputElement = document.querySelector('#imagem-input')!
       if (file) await useStore.putEvent(evento, file)
       else await useStore.putEvent(evento)
+	  const res = useStore.novoEventoResponse.getResponse()
+	  if(res.code === 200){
+		openModal('novoEventoRes', 'Sucesso', res.message, 'success')
+	  }else{
+		openModal('novoEventoRes', 'Falha', res.message, 'warning')
+	  }
+	  sendingEvent.value = false
     }
 
     publicarEvento()
@@ -190,10 +203,27 @@ const handleCEPInput = async () => {
     }
   }
 }
+
+const modalSettings = reactive({
+    title: '',
+    message: '',
+    status: '',
+    id: 'novoEventoRes'
+  })
+  const openModal = (modalId: string, mt: string, mm: string, ms: string) => {
+    modalSettings.id = modalId
+    modalSettings.title = mt
+    modalSettings.message = mm
+    modalSettings.status = ms
+    const modalDOM: any = document.querySelector('#' + modalId)
+    const bsModal = Modal.getOrCreateInstance(modalDOM)!
+    bsModal.show()
+  }
 onMounted(async () => {
   await useStore.getAddresses('1')
+  
 })
-const setAddressInputFields = (enderecoId: number) => {
+const setAddressInputFields = (enderecoId: number | null) => {
   if (!enderecoId) {
     novoEndereco.cep = ''
     novoEndereco.logradouro = ''
@@ -231,7 +261,7 @@ const existingAddresses = computed(() => {
   flex-direction: column;
   align-items: flex-start;
   max-width: 1000px;
-  margin: auto;
+  margin: 0 auto;
   padding: 2rem;
 
   select[name="tipo-evento"] {

@@ -1,6 +1,8 @@
-import { IEvento, EnderecoExistente, IUltimoEvento } from "./types";
+import { IEvento, EnderecoExistente, IUltimoEvento, Evento } from "./types";
 import { defineStore } from "pinia";
 import { httpRequest, getLastContent } from "../../utils/http";
+import { validateEventoInput } from "../../utils/eventos/validation";
+import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 
 const novoEvento: IEvento = {
   instituicaoId: 0,
@@ -23,28 +25,44 @@ export const useEventoStore = defineStore('eventoStore', {
     return {
       novoEvento, // TODO: remove novoEvento
       enderecosExistentes,
-      ultimosEventos
+      ultimosEventos,
+	  novoEventoResponse: new GeneralResponseHandler(0, 'none', 'no request made yet')
     }
   },
   persist: true,
   actions: {
     async putEvent(newEvent: IEvento, media?: HTMLInputElement) {
+		try {
+		  const evento = validateEventoInput(newEvent)
+		  if(evento instanceof Evento){
+			  const formData = new FormData()
+			  formData.append("evento", JSON.stringify(newEvent))
 
-      const formData = new FormData()
-      formData.append("evento", JSON.stringify(newEvent))
+			  // TODO: find out how to sent file as string (create another index.html to find out)
+			  if (media?.files) formData.append("arquivos", media.files[0])
+			  
+			  const response = await httpRequest.post('/api/evento/incluir', formData, {
+				  headers: {
+				  "Content-type": "multipart/form-data",
+				  }
+			  })
 
-      // TODO: find out how to sent file as string (create another index.html to find out)
-      if (media?.files) formData.append("arquivos", media.files[0])
+			  this.novoEventoResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
+		  }else{
+			  this.novoEventoResponse.putError(223, evento.message)
+		  } 
+		}catch (error) {
+		  if(error instanceof TypeError){
+			  this.novoEventoResponse.putError(222, error.message)
+		  }else{
+			console.error(error);
+			
+		  }
+
+	  }
+	  
       
-      try {
-        const response = await httpRequest.post('/api/evento/incluir', formData, {
-          headers: {
-            "Content-type": "multipart/form-data",
-          }
-        })
-      } catch (error) {
-        
-      }
+
     },
     async getAddresses(tipoEvendoId: string) {
       try {
