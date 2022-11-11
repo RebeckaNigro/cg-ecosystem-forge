@@ -5,11 +5,13 @@ import { validateNoticiaInput } from "../../utils/noticias/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 
 const lastNews: Array<IUltimaNoticia> = []
+const allNews: Array<IUltimaNoticia> = []
 export const useNoticiaStore = defineStore('noticiaStore', {
   state: () => {
     return {
 	  novaNoticiaResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
-	  lastNews
+	  lastNews,
+	  allNews
     }
   },
   persist: true,
@@ -46,6 +48,22 @@ export const useNoticiaStore = defineStore('noticiaStore', {
 			for(const news of response.data.retorno){
 				this.lastNews.push(news)
 			}
+		}
+	},
+
+	async getAllNews(){
+		try{
+			const response = await httpRequest.get('api/noticia/listarTodas')
+			if(response.data.codigo === 200){
+				this.novaNoticiaResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
+				this.allNews = []
+				for(const news of response.data.retorno){
+					this.allNews.push(news)
+				}
+			}
+		}catch(error){
+			console.error(error);
+			
 		}
 	}
   },
