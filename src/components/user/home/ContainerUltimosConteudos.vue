@@ -5,16 +5,19 @@
         {{ containerTitle }}
       </h1>
     </header>
-    <main>
-      <div v-for="(content, index) in  lastContents" :key="index" class="d-flex w-100 m-3">
+    <main v-if="!loadingNews">
+      <div v-for="(content, index) in  noticiaStore.lastNews" :key="index" class="d-flex w-100 m-3">
         <div class="title-box boring-gray-border">
-          {{ content.title }}
+          {{ content.titulo }}
         </div>
         <button type="button" :id="'edit-content-btn' + content.id" class="edit-btn">
           <img src="/pen-icon.svg" alt="pen_icon">
         </button>
       </div>
     </main>
+	<div v-else class="spinner-border text-dark align-self-center mt-4 mb-4" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
     <footer>
       <button type="button" id="see-more" class="btn-primary light-title">Ver mais</button>
       <button type="button" id="create-new" class="green-btn light-title" @click="$router.push({ path: contentType })">Criar {{ contentType }}</button>
@@ -22,19 +25,21 @@
   </section>
 </template>
 
-<script setup lang="ts">
-
-interface lastContent {
-  title: string,
-  path: string,
-  id: number
-}
+<script setup lang="ts">import { onMounted, ref } from 'vue';
+import { useNoticiaStore } from '../../../stores/noticias/store';
 
 const props = defineProps<{
   contentType: string
   containerTitle: string
-  lastContents: Array<lastContent>
 }>()
+
+const noticiaStore = useNoticiaStore()
+const loadingNews = ref(true)
+
+onMounted(() => {
+	noticiaStore.getLastNews()
+	loadingNews.value = false
+})
 </script>
 
 <style scoped lang="scss">

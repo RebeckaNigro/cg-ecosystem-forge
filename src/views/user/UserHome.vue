@@ -4,7 +4,6 @@
     <ContainerUltimosConteudos
       content-type="noticias"
       container-title="Últimas notícias enviadas"
-      :last-contents="dummyContent"
     />
     <ContainerUltimosEventos />
   </div>
@@ -14,29 +13,6 @@
 <script setup lang="ts">
 import ContainerUltimosConteudos from '../../components/user/home/ContainerUltimosConteudos.vue'
 import ContainerUltimosEventos from '../../components/user/home/ContainerUltimosEventos.vue'
-
-interface lastContent {
-  title: string,
-  path: string,
-  id: number
-}
-
-const dummyContent: Array<lastContent> = [
-  {
-    title: 'testando home testando home',
-    path: '...',
-    id: 1
-  },
-  {
-    title: 'testando home testando home',
-    path: '...',
-    id: 2
-  },
-  {
-    title: 'testando home testando home',
-    path: '...',
-    id: 3
-  }]
 
 </script>
 

@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
-import { INoticia, Noticia } from "./types";
-import { httpRequest } from "../../utils/http";
+import { INoticia, IUltimaNoticia, Noticia } from "./types";
+import { getLastContent, httpRequest } from "../../utils/http";
 import { validateNoticiaInput } from "../../utils/noticias/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 
+const lastNews: Array<IUltimaNoticia> = []
 export const useNoticiaStore = defineStore('noticiaStore', {
   state: () => {
     return {
-	  novaNoticiaResponse: new GeneralResponseHandler(0, 'none', 'no request made yet')
+	  novaNoticiaResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
+	  lastNews
     }
   },
   persist: true,
@@ -35,7 +37,17 @@ export const useNoticiaStore = defineStore('noticiaStore', {
       }
 
 	  return false
-    }
+    },
+
+	async getLastNews(){
+		const response = await getLastContent("noticia")
+		if(response.data.codigo === 200){
+			this.lastNews = []
+			for(const news of response.data.retorno){
+				this.lastNews.push(news)
+			}
+		}
+	}
   },
   getters: {
   }

@@ -2,46 +2,36 @@
 	<div class="noticias-content ghp ">
 		<h1 class="dark-title">ÚLTIMAS NOTICIAS</h1>
 
-		<div class="card-noticia-container dark-body-text"> 
-			<nav v-for="(container, containerIndex) in dummyContainer" :key="containerIndex">
+		<div v-if="!loadingNews" class="card-noticia-container dark-body-text"> 
+			<nav v-for="(container, containerIndex) in noticiaStore.lastNews" :key="containerIndex">
 				<CardNoticia 
-		:is-relacionada="container.isRelacionada"
-		@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: containerIndex }})"/>
+				:is-relacionada="false"
+				:noticia="container"
+				@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: containerIndex }})"/>
 			</nav>
-	
+			
 		</div>
+		<Spinner
+			v-else
+			:spinner-color-class="'text-dark'"
+		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useNoticiaStore } from '../../stores/noticias/store';
 import CardNoticia from './CardNoticia.vue';
+import Spinner from '../../components/general/Spinner.vue'
 
-const dummyContainer = reactive([
-  
-    {
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-	{
-      isRelacionada: false,
-    },
-  
-])
+const noticiaStore = useNoticiaStore()
+const loadingNews = ref(true)
+
+onMounted(() => {
+	noticiaStore.getLastNews()
+	loadingNews.value = false
+})
+
 </script>
 
 

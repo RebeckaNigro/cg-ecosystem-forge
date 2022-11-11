@@ -1,16 +1,15 @@
 <template>
 	<div class="card-noticia-content" :class="[isRelacionada ? 'is-relacionada' : 'not-relacionada']">
 		<div class="card-noticia-image"></div>
-		<p v-if="!isRelacionada">Titulo da notícia</p>
-		<span>
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-			doloremque sint aut mollitia consectetur voluptate eos.
-		</span>
+		<p v-if="!isRelacionada">{{noticia.titulo}}</p>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { IUltimaNoticia } from '../../stores/noticias/types';
+
   const props = defineProps<{
+	noticia: IUltimaNoticia
     isRelacionada: boolean
   }>()
 </script>
