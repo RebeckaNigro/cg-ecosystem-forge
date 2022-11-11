@@ -36,7 +36,7 @@ const props = defineProps<{
 const noticiaStore = useNoticiaStore()
 const loadingNews = ref(true)
 
-onMounted(async () => {
+onMounted(() => {
 	noticiaStore.getLastNews()
 	loadingNews.value = false
 })
