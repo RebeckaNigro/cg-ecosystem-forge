@@ -1,5 +1,5 @@
 <template>
-  <section id="container-cards-evento" class="ghp pt-5">
+  <section id="eventos-content" class="ghp pt-5">
     <header>
       <h1 class="dark-title">TÍTULO DA SEÇÃO</h1>
     </header>
@@ -19,22 +19,18 @@
         </div>
       </div>
     </nav> -->
-    <nav v-for="(container, containerIndex) in dummyContainer" :key="containerIndex">
-      <div class="container-fluid h-100">
-        <div class="row">
-          <div class="col-12 col-md-6 col-xl-4" v-for="(card, index) in container" :key="index">
-            <CardEvento
-              :hasImage="card.hasImage"
-              :image="card.image"
-              :nomeEvento="card.nomeEvento"
-              :dataEvento="card.dataEvento"
-              :enderecoEvento="card.enderecoEvento"
-              :class="setSelfMargin(index)"
-            />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <div class="card-evento-container">
+		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
+			<CardEvento
+			:hasImage="false"
+			:image="''"
+			:nomeEvento="container.titulo"
+			:dataEvento="container.dataInicio"
+			:enderecoEvento="container.local"
+			/>
+		</nav>
+	</div>
+	
     <footer>
       <!-- <button type="button" @click.prevent="setSelectedPage(selectedPage - 1)" class="carousel-control-prev-icon"/>
       <div class="box">
@@ -51,6 +47,7 @@
         height="40px"
         id="know_more"
         @click="addEventsToView()"
+		:class="{'d-none': lastIndex > eventoStore.eventos.length }"
       />
     </footer>
   </section>
@@ -61,10 +58,14 @@ import { onMounted, reactive, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { useEventoStore } from '../../stores/eventos/store';
+import { IUltimoEvento } from '../../stores/eventos/types';
 
 const eventoStore = useEventoStore()
 const selectedPage = ref(0)
 const indicators = ref(3)
+
+const lastIndex = ref(3)
+let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
 
 const dummyContainer = reactive([
   [
@@ -105,49 +106,23 @@ const setSelectedPage = (page: number) => {
   }
 }
 const addEventsToView = () => {
-  dummyContainer.push([
-    {
-      hasImage: true,
-      image: '/home/carousel/embrapa.png',
-      nomeEvento: "Evento adicionado",
-      dataEvento: "05/07/2024",
-      enderecoEvento: "Campo Grande, MS",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Dourados, MS",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento abc",
-      dataEvento: "27/11/2023",
-      enderecoEvento: "Três Lagos, MS",
-    }
-  ])
+	lastIndex.value += 3
+	
+	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
 }
 
 onMounted(() => {
 	eventoStore.getAllEvents()
+	console.log(eventoStore.eventos)
 })
 </script>
 
 <style scoped lang="scss">
-  #container-cards-evento {
+  #eventos-content {
     header {
       h1 {
         font-size: 1.5rem;
         margin-bottom: 3rem;
-      }
-    }
-    nav {
-      .container-fluid {
-        padding: 0;
-        height: 500px;
-        margin-bottom: 2rem;
       }
     }
     footer {
@@ -190,8 +165,26 @@ onMounted(() => {
       }
     }
   }
+
+  .card-evento-container{
+		width: 100%;
+		display: grid;
+		margin: 0 auto;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 48px 32px;
+
+		@media (max-width: 820px) {
+			max-width: 520px;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@media (max-width: 580px) {
+			max-width: 280px;
+			grid-template-columns: 1fr;
+		}
+	}
   @media (max-width: 991px) {
-    section#container-cards-evento {
+    section#eventos-content {
       header {
         h1.dark-title {
           font-size: 1.2rem;
