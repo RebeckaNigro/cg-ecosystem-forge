@@ -7,7 +7,7 @@
       <section class="container-links dark-title">
         <router-link :to="link.path" v-for="link in maisInfos" class="navbar-text">{{ link.title }}</router-link> 
       </section>
-      <button type="button" class="light-title" id="login" @click="$router.push({ name: 'Login'})">LOGIN</button>
+      <button type="button" class="light-title" id="login" @click="$router.push({ name: 'Login'})" :class="{'d-none': userStore.loggedUser.token}">LOGIN</button>
       <div class="dropdown dropstart">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="menuInfos" data-bs-toggle="dropdown" aria-expanded="false">
           <div v-for="hamburguer in 3" class="hamburguer" />
@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
+import { useUserStore } from '../../stores/user/store';
 
 defineProps<{
   isTransparent: Boolean
@@ -55,6 +56,8 @@ const maisInfos = reactive([
     path: '/fale-conosco'
   }
 ])
+
+const userStore = useUserStore()
 
 onMounted(() => {
   // TODO: terminar centralização relativa
