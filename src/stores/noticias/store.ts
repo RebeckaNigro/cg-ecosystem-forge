@@ -16,7 +16,7 @@ export const useNoticiaStore = defineStore('noticiaStore', {
   },
   persist: true,
   actions: {
-    async putNews(novaNoticia: INoticia) {
+    async postNews(novaNoticia: INoticia) {
 	  // TODO salvar capa da noticia no banco
       try {
 		const noticiaInput = validateNoticiaInput({...novaNoticia})

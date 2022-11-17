@@ -76,7 +76,7 @@ const handleSubmit = async () => {
 	if (autoSetDate.value) noticia.dataPublicacao = new Date().toISOString()
 	else noticia.dataPublicacao = new Date(userChosedDate.value + ':00.000Z').toISOString()
 
-	sendingNews.value = await noticiaStore.putNews(noticia)
+	sendingNews.value = await noticiaStore.postNews(noticia)
 
 	const res = noticiaStore.novaNoticiaResponse.getResponse()
 	if(res.code === 200){
