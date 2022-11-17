@@ -243,20 +243,40 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var result = query.Select(x => new
+            List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
+            evento.Add(new EventoGetImagenDto());
+            foreach (var item in query)
+            {
+                //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                //var temp = arquivoDto[cont].Arquivo;
+                //item.Arquivo = temp;
+                evento[evento.Count -1].Id = item.Id;
+                evento[evento.Count - 1].Titulo = item.Titulo;
+                evento[evento.Count - 1].DataInicio = item.DataInicio;
+                evento[evento.Count - 1].DataTermino = item.DataTermino;
+                evento[evento.Count - 1].Local = item.Local;
+                var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                if (temp.Count > 0)
+                    evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
+                else
+                    evento[evento.Count - 1].Arquivo = null;
+                evento.Add(new EventoGetImagenDto());
+            }
+
+            var result = evento.Select(x => new
             {
                 id = x.Id,
                 titulo = x.Titulo,
                 dataInicio = x.DataInicio,
                 dataTermino = x.DataTermino,
-                local = x.Local
+                local = x.Local,
+                arquivo = x.Arquivo
+
             })
             .Distinct()
             .OrderByDescending(x => x.dataInicio)
             .ToList();
-
             resposta.Retorno = result;
-
             return resposta;
         }
 

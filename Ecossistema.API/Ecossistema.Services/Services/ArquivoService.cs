@@ -103,6 +103,11 @@ namespace Ecossistema.Services.Services
                 Arquivo = null
             }).ToList();
 
+            /*if (origem.Equals("Evento"))
+            {
+                result[result.Count - 1].Arquivo = ObterArquivoBinario(result[result.Count - 1].Id);
+                return result;
+            }*/
             foreach (var item in result)
             {
                 item.Arquivo = ObterArquivoBinario(item.Id);
@@ -140,9 +145,12 @@ namespace Ecossistema.Services.Services
         {
             byte[] arquivoBin = null;
 
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + ".ecs");
-
-            using (var fs = File.OpenRead(path))
+            //var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Path.GetFileName(id.ToString()));
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
+            string result = Directory.GetFiles(path, Path.GetFileName(id.ToString()) + ".*").FirstOrDefault();
+            if(result == null)
+                return null;
+            using (var fs = File.OpenRead(result))
             using (var ms = new MemoryStream())
             {
                 fs.CopyTo(ms);
