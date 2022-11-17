@@ -67,7 +67,7 @@ export const useNoticiaStore = defineStore('noticiaStore', {
 		}
 	},
 	
-	async deleteNews(noticiaId: string){
+	async deleteNews(noticiaId: number){
 		try{
 			const response = await httpRequest.delete(`/api/noticia/excluir?id=${noticiaId}`)
 			if(response.data.codigo === 200){
