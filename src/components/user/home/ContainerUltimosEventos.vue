@@ -1,15 +1,18 @@
 <template>
   <section id="ultimos-eventos">
     <header>
-      <h1 class="dark-title">Últimos eventos enviados</h1>
+      <h1 class="dark-title p-4">Últimos eventos enviados</h1>
     </header>
     <main class="d-flex mt-3 mb-3" v-if="!isLoadingLastEvents">
       <div class="card-ultimo-evento" v-for="(card, index) in useStore.ultimosEventos">
-        <img src="..." alt="capa evento">
+        <img class="capa-evento" src="..." alt="capa evento">
         <span class="title">{{ card.titulo }}</span>
         <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
         <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
         <div class="location">{{ card.local }}</div>
+		<button class="edit-btn">
+			<img src="/pen-icon.svg" alt="pen_icon">
+		</button>
       </div>
     </main>
     <div v-else class="spinner-border text-dark" role="status">
@@ -41,7 +44,7 @@ import { useEventoStore } from '../../../stores/eventos/store';
 <style scoped lang="scss">
   section#ultimos-eventos {
     background-color: #e6e6e6;
-    height: 350px;
+    height: 450px;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -59,7 +62,7 @@ import { useEventoStore } from '../../../stores/eventos/store';
         min-height: 150px;
         border: 1px solid black;
         padding: 1rem;
-        img {
+        img.capa-evento {
           min-height: 80px;
           min-width: 200px;
           border: 1px solid black;
@@ -84,6 +87,16 @@ import { useEventoStore } from '../../../stores/eventos/store';
         .location {
           background-image: url('/eventos/pin_icon.png');
         }
+
+		.edit-btn{
+			background-color: unset;
+   			border: 0;
+			float: right;
+			img{
+				max-width: 25px;
+			}
+			
+		}
       }
     }
     footer {
