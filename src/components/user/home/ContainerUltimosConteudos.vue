@@ -46,7 +46,7 @@ onMounted(() => {
   .ultimos-conteudos {
     max-width: 500px;
     width: 100%;
-    max-height: 350px;
+    max-height: 450px;
     justify-content: center;
     flex-direction: column;
     
