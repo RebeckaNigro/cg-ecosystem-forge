@@ -76,9 +76,9 @@ const handleSubmit = async () => {
 	if (autoSetDate.value) noticia.dataPublicacao = new Date().toISOString()
 	else noticia.dataPublicacao = new Date(userChosedDate.value + ':00.000Z').toISOString()
 
-	sendingNews.value = await noticiaStore.putNews(noticia)
+	sendingNews.value = await noticiaStore.postNews(noticia)
 
-	const res = noticiaStore.novaNoticiaResponse.getResponse()
+	const res = noticiaStore.response.getResponse()
 	if(res.code === 200){
 		openModal('novaNoticiaRes', 'Sucesso', res.message, 'success')
 	}else if( res.code === 661){

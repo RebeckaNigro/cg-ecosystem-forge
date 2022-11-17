@@ -9,30 +9,30 @@ const allNews: Array<IUltimaNoticia> = []
 export const useNoticiaStore = defineStore('noticiaStore', {
   state: () => {
     return {
-	  novaNoticiaResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
+	  response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
 	  lastNews,
 	  allNews
     }
   },
   persist: true,
   actions: {
-    async putNews(novaNoticia: INoticia) {
+    async postNews(novaNoticia: INoticia) {
 	  // TODO salvar capa da noticia no banco
       try {
 		const noticiaInput = validateNoticiaInput({...novaNoticia})
 
 		if(noticiaInput instanceof Noticia){
 			const response = await httpRequest.post('/api/noticia/incluir', novaNoticia)
-			this.novaNoticiaResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
+			this.response.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
 		}else{
-			this.novaNoticiaResponse.putError(223, noticiaInput.message)
+			this.response.putError(223, noticiaInput.message)
 		}
         
       } catch (error) {
 		if(error instanceof TypeError){
-			this.novaNoticiaResponse.putError(222, error.message)
+			this.response.putError(222, error.message)
 		}else{
-			this.novaNoticiaResponse.putError(661, 'Entre em contato com a Startup do SESI')
+			this.response.putError(661, 'Entre em contato com a Startup do SESI')
 			console.error(error)
 		}
         
@@ -55,7 +55,7 @@ export const useNoticiaStore = defineStore('noticiaStore', {
 		try{
 			const response = await httpRequest.get('api/noticia/listarTodas')
 			if(response.data.codigo === 200){
-				this.novaNoticiaResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
+				this.response.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
 				this.allNews = []
 				for(const news of response.data.retorno){
 					this.allNews.push(news)
@@ -77,6 +77,31 @@ export const useNoticiaStore = defineStore('noticiaStore', {
 			console.error(error);
 			
 		}
+	},
+
+	async putNews(noticia: INoticia){
+		// TODO editar capa da noticia
+		try{
+			const noticiaInput = validateNoticiaInput({...noticia})
+			if(noticiaInput instanceof Noticia){
+				const res = await httpRequest.put('/api/noticia/editar', noticia)
+				this.response.putResponse(res.data.codigo, res.data.dado, res.data.resposta)
+			}else{
+				this.response.putError(223, noticiaInput.message)
+			}
+        
+		}catch (error) {
+			if(error instanceof TypeError){
+				this.response.putError(222, error.message)
+			}else{
+				this.response.putError(661, 'Entre em contato com a Startup do SESI')
+				console.error(error)
+			}
+			
+		}
+
+	  	return false
+
 	}
   },
   getters: {
