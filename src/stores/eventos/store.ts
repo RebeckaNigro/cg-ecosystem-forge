@@ -33,7 +33,7 @@ export const useEventoStore = defineStore('eventoStore', {
   },
   persist: true,
   actions: {
-    async putEvent(newEvent: IEvento, media?: HTMLInputElement) {
+    async postEvent(newEvent: IEvento, media?: HTMLInputElement) {
 		try {
 		  const evento = validateEventoInput(newEvent)
 		  if(evento instanceof Evento){

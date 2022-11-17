@@ -177,8 +177,8 @@ const handleAction = (action: string) => {
     async function publicarEvento() {
 		sendingEvent.value = true
       const file: HTMLInputElement = document.querySelector('#imagem-input')!
-      if (file) await useStore.putEvent(evento, file)
-      else await useStore.putEvent(evento)
+      if (file) await useStore.postEvent(evento, file)
+      else await useStore.postEvent(evento)
 	  const res = useStore.novoEventoResponse.getResponse()
 	  if(res.code === 200){
 		openModal('novoEventoRes', 'Sucesso', res.message, 'success')
