@@ -18,10 +18,13 @@
       <label for="nome-evento">Nome do evento *</label>
       <input type="text" class="form-control boring-gray-border w-100" id="nome-evento" v-model="evento.titulo">
     </div>
-    <div class="imagem-divulgacao">
-      <label for="imagem-input-mask">Imagem de divulgação (opicional)</label>
-      <label for="imagem-input" />
-      <input type="file" name="imagem-input" id="imagem-input">
+    <div class="imagem-divulgacao d-flex">
+		<div>
+			<label for="imagem-input-mask">Imagem de divulgação (opicional)</label>
+			<label for="imagem-input" />
+			<input type="file" name="imagem-input" accept="image/*" id="imagem-input" @change="e => handleFileInputChange(e)">
+		</div>
+	  	<span id="nome-imagem">{{fileName}}</span>
     </div>
     <div class="datas-inicio-fim d-flex">
       <div class="inicio mt-0">
@@ -138,6 +141,7 @@ import { Modal } from 'bootstrap';
 
 const useStore = useEventoStore()
 const sendingEvent = ref(false)
+const fileName = ref('')
 
 const novoEndereco: INovoEndereco = reactive({
   cep: '',
@@ -202,6 +206,13 @@ const handleCEPInput = async () => {
       novoEndereco.logradouro = data.street
     }
   }
+}
+
+const handleFileInputChange = (e: Event) => {
+	const input: HTMLInputElement = document.querySelector("#imagem-input")!
+	if(input.files){
+		fileName.value = input.files[0].name
+	}
 }
 
 const modalSettings = reactive({
@@ -291,7 +302,19 @@ const existingAddresses = computed(() => {
     input#imagem-input {
       height: 0;
     }
-  }
+
+	span#nome-imagem{
+		align-self: center;
+		text-align: center;
+	}
+
+}
+	.imagem-divulgacao{
+		div{
+
+			width: fit-content;
+		}
+	}
 
   .tipo-evento {
     display: flex;
