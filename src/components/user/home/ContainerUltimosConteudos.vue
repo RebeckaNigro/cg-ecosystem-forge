@@ -10,9 +10,15 @@
         <div class="title-box boring-gray-border">
           {{ content.titulo }}
         </div>
-        <button type="button" :id="'edit-content-btn' + content.id" class="edit-btn">
-          <img src="/pen-icon.svg" alt="pen_icon">
-        </button>
+		<div class="actions-container">
+
+			<button type="button" :id="'edit-content-btn' + content.id">
+			  <img src="/pen-icon.svg" alt="pen_icon">
+			</button>
+			<button type="button" :id="'delete-content-btn' + content.id" @click="handleDeleteNews(content.id)">
+			  <img src="/delete-icon.png" alt="delete_icon">
+			</button>
+		</div>
       </div>
     </main>
 	<div v-else class="spinner-border text-dark align-self-center mt-4 mb-4" role="status">
@@ -36,6 +42,10 @@ const props = defineProps<{
 const noticiaStore = useNoticiaStore()
 const loadingNews = ref(true)
 
+const handleDeleteNews = async (noticiaId: number) => {
+	//await noticiaStore.deleteNews(noticiaId) // TODO tirar comentario quando metodo no backend estiver funcionando
+}
+
 onMounted(() => {
 	noticiaStore.getLastNews()
 	loadingNews.value = false
@@ -57,7 +67,7 @@ onMounted(() => {
       justify-content: space-between;
 
       .title-box {
-        width: 90%;
+        width: 75%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -72,9 +82,12 @@ onMounted(() => {
       }
     }
   }
-  .edit-btn {
-    background-color: unset;
-    border: 0;
+  .actions-container{
+	flex-direction: row;
+	button{
+		background-color: unset;
+		border: 0;
+	}
     img {
       max-width: 25px;
     }
