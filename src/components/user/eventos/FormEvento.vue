@@ -179,7 +179,7 @@ const handleAction = (action: string) => {
       const file: HTMLInputElement = document.querySelector('#imagem-input')!
       if (file) await useStore.postEvent(evento, file)
       else await useStore.postEvent(evento)
-	  const res = useStore.novoEventoResponse.getResponse()
+	  const res = useStore.eventResponse.getResponse()
 	  if(res.code === 200){
 		openModal('novoEventoRes', 'Sucesso', res.message, 'success')
 	  }else{

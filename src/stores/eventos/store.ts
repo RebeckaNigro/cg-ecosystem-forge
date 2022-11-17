@@ -27,7 +27,7 @@ export const useEventoStore = defineStore('eventoStore', {
       novoEvento, // TODO: remove novoEvento
       enderecosExistentes,
       ultimosEventos,
-	  novoEventoResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
+	  eventResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
 	  eventos
     }
   },
@@ -49,13 +49,13 @@ export const useEventoStore = defineStore('eventoStore', {
 				  }
 			  })
 
-			  this.novoEventoResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
+			  this.eventResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta)
 		  }else{
-			  this.novoEventoResponse.putError(223, evento.message)
+			  this.eventResponse.putError(223, evento.message)
 		  } 
 		}catch (error) {
 		  if(error instanceof TypeError){
-			  this.novoEventoResponse.putError(222, error.message)
+			  this.eventResponse.putError(222, error.message)
 		  }else{
 			console.error(error);
 			
@@ -101,7 +101,7 @@ export const useEventoStore = defineStore('eventoStore', {
 			if(response.data.codigo === 200){
 				this.eventos = []
 			
-				console.log(this.eventos);
+				//console.log(this.eventos);
 				for(const evento of response.data.retorno){	
 					this.eventos.push(evento)
 				}
@@ -122,6 +122,37 @@ export const useEventoStore = defineStore('eventoStore', {
 		}catch(error){
 			console.error(error);
 			
+		}
+	},
+
+	async putEvent(evento: IEvento, media: HTMLInputElement){
+		try {
+			const eventoValidado = validateEventoInput(evento)
+			if(eventoValidado instanceof Evento){
+				const formData = new FormData()
+				formData.append("evento", JSON.stringify(evento))
+  
+				// TODO: find out how to sent file as string (create another index.html to find out)
+				if (media?.files) formData.append("arquivos", media.files[0])
+				
+				const res = await httpRequest.put('/api/evento/editar', formData, {
+					headers: {
+					"Content-type": "multipart/form-data",
+					}
+				})
+  
+				this.eventResponse.putResponse(res.data.codigo, res.data.dado, res.data.resposta)
+			}else{
+				this.eventResponse.putError(223, eventoValidado.message)
+			} 
+		  }catch (error) {
+			if(error instanceof TypeError){
+				this.eventResponse.putError(222, error.message)
+			}else{
+			  console.error(error);
+			  
+			}
+  
 		}
 	}
   }
