@@ -42,6 +42,18 @@ builder.Services.AddDbContext<EcossistemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy",
+        builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        );
+    }
+);
+
+
 // For Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<EcossistemaContext>()
@@ -91,6 +103,10 @@ app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyOrigin()
 );
+
+app.UseRouting();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
