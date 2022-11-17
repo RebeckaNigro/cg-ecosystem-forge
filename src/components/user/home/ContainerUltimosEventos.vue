@@ -10,9 +10,14 @@
         <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
         <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
         <div class="location">{{ card.local }}</div>
-		<button class="edit-btn">
-			<img src="/pen-icon.svg" alt="pen_icon">
-		</button>
+		<div class="actions-container">
+			<button>
+				<img src="/pen-icon.svg" alt="pen_icon">
+			</button>
+			<button @click="handleDeleteEvent(card.id)">
+				<img src="/delete-icon.png" alt="delete_icon">
+			</button>
+		</div>
       </div>
     </main>
     <div v-else class="spinner-border text-dark" role="status">
@@ -35,6 +40,11 @@ import { useEventoStore } from '../../../stores/eventos/store';
   }
   const isLoadingLastEvents = ref(true)
   const useStore = useEventoStore()
+
+  const handleDeleteEvent = async (eventoId: number) => {
+	//await useStore.deleteEvent(eventoId) // TODO tirar comentario quando metodo no backend estiver funcionando
+  }
+
   onMounted(() => {
     useStore.getLastEvents()
     isLoadingLastEvents.value = false
@@ -88,10 +98,13 @@ import { useEventoStore } from '../../../stores/eventos/store';
           background-image: url('/eventos/pin_icon.png');
         }
 
-		.edit-btn{
-			background-color: unset;
-   			border: 0;
+		.actions-container{
+			
 			float: right;
+			button{
+				background-color: unset;
+   				border: 0;
+			}
 			img{
 				max-width: 25px;
 			}
