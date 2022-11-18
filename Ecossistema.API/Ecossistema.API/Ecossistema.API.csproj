@@ -19,7 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Ecossistema.Services\Ecossistema.Services.csproj" />
   </ItemGroup>
-
+    
+	
   <ItemGroup>
     <Folder Include="wwwroot\RepositoryFiles\" />
   </ItemGroup>

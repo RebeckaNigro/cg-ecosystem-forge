@@ -522,7 +522,7 @@ namespace Ecossistema.Services.Services
 
         private async Task<bool> ValidarIdCadastrado(int? id, RespostaPadrao resposta)
         {
-            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Id == (int)id
+            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == (int)id
                                                                       && x.Ativo);
 
             if (!query.Any())
