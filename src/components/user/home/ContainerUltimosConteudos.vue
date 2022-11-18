@@ -43,7 +43,8 @@ const noticiaStore = useNoticiaStore()
 const loadingNews = ref(true)
 
 const handleDeleteNews = async (noticiaId: number) => {
-	//await noticiaStore.deleteNews(noticiaId) // TODO tirar comentario quando metodo no backend estiver funcionando
+	await noticiaStore.deleteNews(noticiaId) 
+	window.location.reload()
 }
 
 onMounted(() => {
