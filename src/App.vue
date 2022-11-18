@@ -9,22 +9,30 @@ import Cookies from './components/general/Cookies.vue'
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat-Regular', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 @font-face {
-  font-family: 'Gotham-Book';
-  src: url(/fonts/Gotham\ Book.otf);
+  font-family: 'Montserrat-Bold';
+  src: url(/fonts/Montserrat-Bold.ttf);
 }
 @font-face {
-  font-family: 'Lulu-Bold';
-  src: url(/fonts/FontsFree-Net-Lulo-Clean-W01-One-Bold.ttf);
+  font-family: 'Montserrat-Regular';
+  src: url(/fonts/Montserrat-Regular.ttf);
+}
+@font-face {
+  font-family: 'Montserrat-SemiBold';
+  src: url(/fonts/Montserrat-SemiBold.ttf);
+}
+@font-face {
+  font-family: 'Montserrat-Medium';
+  src: url(/fonts/Montserrat-Medium.ttf);
 }
 .dark-title, .light-title {
-  font-family: 'Lulu-Bold';
+  font-family: 'Montserrat-Bold';
   font-size: 1.5rem;
 }
 .light-title {
@@ -34,18 +42,19 @@ import Cookies from './components/general/Cookies.vue'
   color: #000;
 }
 .dark-body-text, .light-body-text {
-  font-family: 'Gotham-Book';
   font-size: 0.6rem;
 }
 .dark-body-text {
+  font-family: 'Montserrat-SemiBold';
   color: #000;
 }
 .light-body-text {
+  font-family: 'Montserrat-Regular';
   color: #fff;
 }
 .green-btn {
   border: none;
-  font-family: 'Lulu-Bold';
+  font-family: 'Montserrat-Bold';
   background-color: #49907f;
 }
 .green-btn:hover {
@@ -54,9 +63,15 @@ import Cookies from './components/general/Cookies.vue'
 .ghp { // general horizontal padding
   padding: 0 150px !important;
 }
+.form-box{
+	background-color: #fff;
+	border-radius: 20px;
+	border: 1px solid #9C9B9B;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
 .boring-gray-border {
-  border-radius: 0 !important;
-  border: 3px solid lightgray !important;
+  border-radius: 10px!important ;
+  border: 1px solid #6B6A64 !important;
 }
 .ml-auto {
   margin-left: auto
