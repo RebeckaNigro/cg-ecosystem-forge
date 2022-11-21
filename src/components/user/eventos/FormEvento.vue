@@ -40,8 +40,8 @@
 			</div>
 		</div>
 		<div class="tags-evento">
-			<label for="tags">Tags</label>
-			<input type="text" class="form-control boring-gray-border w-100" id="tags">
+			<label>Tags</label>
+			<TagInput/>
 		</div>
 		<div class="descricao-evento">
 			<label for="descricao">Descrição do evento*</label>
@@ -128,6 +128,7 @@ import { useEventoStore } from '../../../stores/eventos/store'
 import { getFromCEP } from '../../../utils/http'
 import ModalComponent from '../../../components/general/ModalComponent.vue'
 import { Modal } from 'bootstrap';
+import TagInput from '../../general/TagInput.vue';
 
 const useStore = useEventoStore()
 const sendingEvent = ref(false)
