@@ -42,7 +42,8 @@ import { useEventoStore } from '../../../stores/eventos/store';
   const useStore = useEventoStore()
 
   const handleDeleteEvent = async (eventoId: number) => {
-	//await useStore.deleteEvent(eventoId) // TODO tirar comentario quando metodo no backend estiver funcionando
+	await useStore.deleteEvent(eventoId)
+	window.location.reload()
   }
 
   onMounted(() => {
