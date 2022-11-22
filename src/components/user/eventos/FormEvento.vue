@@ -257,6 +257,7 @@ const existingAddresses = computed(() => {
 <style scoped lang="scss">
 .dark-body-text {
 	font-size: 1.2rem;
+	color: #1E1E1E;
 }
 
 #form-evento {

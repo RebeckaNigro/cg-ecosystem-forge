@@ -3,7 +3,7 @@
 		<NavBar 
 		:is-transparent="false"
 		/>
-		<h1 class="mt-5 mb-5 dark-title m-auto title">Crie seu evento!</h1>
+		<h1 class="mt-5 mb-5 dark-title m-auto fs-2">Crie seu evento!</h1>
 		<FormEvento/>
 	</div>
 	<FooterComponent />
@@ -23,7 +23,4 @@ import FormEvento from '../../../components/user/eventos/FormEvento.vue'
 	background-size: cover;
 	width: 100%;
 }
-.title{
-		font-size: 32px;
-	}
 </style>
