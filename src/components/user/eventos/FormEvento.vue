@@ -32,7 +32,7 @@
 				<label for="data-inicio">Data de início*</label>
 				<!--<input type="datetime-local" name="data-inicio" id="data-inicio" class="boring-gray-border"
 					v-model="evento.dataInicio">-->
-				<div class="d-flex align-items-center m-0">	
+				<div class="d-flex align-items-center m-0 flex-wrap">	
 					<input type="date" name="calendar" id="chosen-date" class="boring-gray-border me-3" v-model="dataInicio">
 					<span>às</span>
 					<input type="time" name="chosen-time" id="chosen-time" class="boring-gray-border ms-3" v-model="horaInicio">
@@ -40,7 +40,7 @@
 			</div>
 			<div class="fim mt-0">
 				<label for="data-termino">Data de término*</label>
-				<div class="d-flex align-items-center m-0">	
+				<div class="d-flex align-items-center m-0 flex-wrap">	
 					<input type="date" name="calendar" id="chosen-date" class="boring-gray-border me-3" v-model="dataTermino">
 					<span>às</span>
 					<input type="time" name="chosen-time" id="chosen-time" class="boring-gray-border ms-3" v-model="horaTermino">
@@ -366,6 +366,13 @@ const existingAddresses = computed(() => {
 	.fim {
 		input {
 			padding: 10px;
+		}
+
+		@media(max-width: 450px){
+
+			input#chosen-date{
+				margin-bottom: 1.3rem;
+			}
 		}
 	}
 

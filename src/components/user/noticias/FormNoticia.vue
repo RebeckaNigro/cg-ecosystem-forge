@@ -22,19 +22,22 @@
 				<label for="auto-date" class="ms-3">Automático</label>
 			</div>
 			<div class="group row-direction align-center">
-				<input type="radio" id="confirm-chosen-date" class="boring-gray-border" name="data-publicacao"
-					v-model="autoSetDate" :value="false">
-			<div class="date">
-				<input type="date" name="data-publicacao" id="data-publicacao" class="boring-gray-border"
-					v-model="dataPublicacao" :disabled="autoSetDate">
-			</div>
-			<span>às</span>
-			<div class="time">
-				<input type="time" name="hora-publicacao" id="hora-publicacao" class="boring-gray-border"
-					v-model="horaPublicacao" :disabled="autoSetDate" required>
+				<div class="d-flex flex-wrap">
+					<input type="radio" id="confirm-chosen-date" class="boring-gray-border" name="data-publicacao"
+						v-model="autoSetDate" :value="false">
+
+					<div class="date ms-3 me-3">
+						<input type="date" name="data-publicacao" id="data-publicacao" class="boring-gray-border"
+							v-model="dataPublicacao" :disabled="autoSetDate">
+					</div>
+					<span>às</span>
+					<div class="time ms-3">
+						<input type="time" name="hora-publicacao" id="hora-publicacao" class="boring-gray-border"
+							v-model="horaPublicacao" :disabled="autoSetDate" required>
+					</div>
+				</div>
 			</div>
 			
-		</div>
 			<!-- <input type="date" name="calendar" id="chosen-date" class="boring-gray-border" v-model="userChosedDate">
       <input type="time" name="chosen-time" id="chosen-time"> -->
 			
@@ -148,6 +151,16 @@ form.form-noticia {
 
 	input{
 		padding: 10px;
+	}
+
+	.dates{
+		font-family: 'Montserrat-Medium';
+
+		@media(max-width: 450px){
+			.date{
+				margin-bottom: 1.3rem;
+			}
+		}
 	}
 
 	.group {
