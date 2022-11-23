@@ -5,9 +5,11 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util.Const;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,7 @@ namespace Ecossistema.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string RepositorioArquivo = "RepositoryFiles";
+        private readonly string Documents = "Documents";
 
         public ArquivoService(IUnitOfWork unitOfWork,
             IWebHostEnvironment webHostEnvironment)
@@ -121,8 +124,8 @@ namespace Ecossistema.Services.Services
             try
             {
                 if (file == null) return false;
-                var mimeType = file.ContentType;
-                var fileExtension = mimeType.Split('/').Last();
+                //var mimeType = file.ContentType;
+                var fileExtension = file.FileName.Split('.').Last();
                 using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + "." + fileExtension), FileMode.Create))
                 {
                     file.CopyTo(fs);
@@ -160,5 +163,37 @@ namespace Ecossistema.Services.Services
 
             return arquivoBin;
         }
+
+        public async Task<FileContentResult> DownloadArquivo(int id, string nome)
+        {
+            
+            var arquivoId = await EncontraArquivoId(id);
+            if (arquivoId == 0) {
+                //resposta.SetNaoEncontrado("Documento não existe");
+                return null;
+            }
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
+            string dir = Directory.GetFiles(path, Path.GetFileName(arquivoId.ToString()) + ".*").FirstOrDefault();
+            string fileExtension = dir.Split('.').Last();
+            var data = System.IO.File.ReadAllBytes(dir);
+            var result = new FileContentResult(data, "applicatiom/octet-stream")
+            {
+                FileDownloadName = nome + "." + fileExtension
+            };
+            return result;
+        }
+
+        private async Task<int> EncontraArquivoId(int id)
+        {
+            var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+            if (busca == null)
+            {
+                return 0;
+            }
+            return busca.Id;
+        }
+
+
+    
     }
 }

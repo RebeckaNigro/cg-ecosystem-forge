@@ -27,7 +27,9 @@ namespace Ecossistema.Domain.Entities
             InstituicaoId = instituicaoId;
             Data = data;
             Aprovacoes = new List<Aprovacao> { new Aprovacao(EOrigem.Documento, usuarioId, dataAtual) };
-            Aprovado = false;
+            //Importante: Mudar para Aprovado = false quando existir os perfis de aprovação criados
+            //Aprovado = false;
+            Aprovado = true;
             Ativo = true;
             Recursos.Auditoria(this, usuarioId, data);
         }

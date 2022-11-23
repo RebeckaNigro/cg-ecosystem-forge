@@ -5,6 +5,7 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace Ecossistema.Services.Services
     public class DocumentoService : IDocumentoService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IArquivoService _arquivoService;
 
-        public DocumentoService(IUnitOfWork unitOfWork)
+        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
         {
             _unitOfWork = unitOfWork;
+            _arquivoService = arquivoService;
         }
 
         public async Task<RespostaPadrao> Incluir(DocumentoDto dado, int usuarioId)
@@ -30,6 +33,7 @@ namespace Ecossistema.Services.Services
 
             try
             {
+                var dataAtual = DateTime.Now;
                 #region Instituição
 
                 var obj = new Documento(dado.Nome,
@@ -46,6 +50,13 @@ namespace Ecossistema.Services.Services
                 _unitOfWork.Complete();
 
                 #endregion
+                List<IFormFile> arquivo = new List<IFormFile>();
+                arquivo.Add(dado.Arquivo);
+
+                if (!await _arquivoService.Vincular(EOrigem.Documento, obj.Id, arquivo, usuarioId, dataAtual, resposta))
+                {
+                    return resposta;
+                }
 
                 #region Aprovação
 
@@ -556,5 +567,6 @@ namespace Ecossistema.Services.Services
         }
 
         #endregion
+
     }
 }

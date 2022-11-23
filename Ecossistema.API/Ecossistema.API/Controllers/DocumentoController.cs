@@ -9,6 +9,7 @@ namespace Ecossistema.API.Controllers
     public class DocumentoController : ControllerBase
     {
         private readonly IDocumentoService _documentoService;
+        private readonly IArquivoService _arquivoService;
 
         private int UsuarioId
         {
@@ -18,13 +19,14 @@ namespace Ecossistema.API.Controllers
             }
         }
 
-        public DocumentoController(IDocumentoService documentoService)
+        public DocumentoController(IDocumentoService documentoService, IArquivoService arquivoService)
         {
             _documentoService = documentoService;
+            _arquivoService = arquivoService;
         }
 
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromBody] DocumentoDto obj)
+        public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj)
         {
             return await _documentoService.Incluir(obj, UsuarioId);
         }
@@ -63,6 +65,18 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarTiposDocumentos()
         {
             return await _documentoService.ListarTiposDocumentos();
+        }
+
+        [HttpGet("downloadDocumento")]
+
+        public async Task<IActionResult> DownloadDocumento(int id, string nome)
+        {
+            var result = await _arquivoService.DownloadArquivo(id, nome);
+            if(result == null)
+            {
+                return NotFound();
+            }
+            return result;
         }
     }
 }
