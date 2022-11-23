@@ -24,8 +24,16 @@
 			<div class="group row-direction align-center">
 				<input type="radio" id="confirm-chosen-date" class="boring-gray-border" name="data-publicacao"
 					v-model="autoSetDate" :value="false">
-				<input type="datetime-local" name="chosen-date" id="chosen-date" class="boring-gray-border ms-3"
-			v-model="userChosedDate" :disabled="autoSetDate">
+			<div class="date">
+				<input type="date" name="data-publicacao" id="data-publicacao" class="boring-gray-border"
+					v-model="dataPublicacao" :disabled="autoSetDate">
+			</div>
+			<span>às</span>
+			<div class="time">
+				<input type="time" name="hora-publicacao" id="hora-publicacao" class="boring-gray-border"
+					v-model="horaPublicacao" :disabled="autoSetDate" required>
+			</div>
+			
 		</div>
 			<!-- <input type="date" name="calendar" id="chosen-date" class="boring-gray-border" v-model="userChosedDate">
       <input type="time" name="chosen-time" id="chosen-time"> -->
@@ -78,12 +86,15 @@ const noticia: INoticia = reactive({
 	dataPublicacao: ''
 })
 
+const dataPublicacao = ref('')
+const horaPublicacao = ref('')
+
 const handleSubmit = async () => {
 	sendingNews.value = true
 	//const file: HTMLInputElement = document.querySelector('#news-cover')!;
 
 	if (autoSetDate.value) noticia.dataPublicacao = new Date().toISOString()
-	else noticia.dataPublicacao = new Date(userChosedDate.value + ':00.000Z').toISOString()
+	else noticia.dataPublicacao = new Date(dataPublicacao.value.concat('T', horaPublicacao.value) + ':00.000Z').toISOString()
 
 	sendingNews.value = await noticiaStore.postNews(noticia)
 
