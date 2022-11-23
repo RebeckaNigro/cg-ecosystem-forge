@@ -92,7 +92,7 @@
 			<div class="complemento">
 				<label for="complemento">Complemento</label>
 				<input type="text" name="complemento" id="complemento" class="boring-gray-border"
-				 v-model="novoEndereco.pontoReferencia">
+				 v-model="novoEndereco.complemento">
 			</div>
 			<div class="cidade-estado d-flex justify-content-between">
 				<div id="cidade">
@@ -139,8 +139,10 @@ import { getFromCEP } from '../../../utils/http'
 import ModalComponent from '../../../components/general/ModalComponent.vue'
 import { Modal } from 'bootstrap';
 import TagInput from '../../general/TagInput.vue';
+import { useUserStore } from '../../../stores/user/store';
 
 const useStore = useEventoStore()
+const userStore = useUserStore()
 const sendingEvent = ref(false)
 const fileName = ref('')
 
@@ -169,7 +171,7 @@ const evento: IEvento = reactive({
 	dataInicio: '',
 	dataTermino: '',
 	local: '',
-	enderecoId: 1,
+	enderecoId: null,
 	endereco: novoEndereco,
 	linkExterno: '',
 	exibirMaps: false,
@@ -181,8 +183,8 @@ const buscarEnderecosPeloTipo = async () => {
 }
 const handleAction = (action: string) => {
 	
-	if (evento.enderecoId) evento.endereco = null
-	else evento.endereco = { ...novoEndereco }
+	//if (evento.enderecoId) evento.endereco = null
+	//else evento.endereco = { ...novoEndereco }
 
 	evento.dataInicio = dataInicio.value.concat('T', horaInicio.value)
 	evento.dataTermino = dataTermino.value.concat('T', horaTermino.value)
@@ -190,6 +192,9 @@ const handleAction = (action: string) => {
 	if (action === 'publicar') {
 
 		async function publicarEvento() {
+			if(userStore.getUserName) {
+				evento.responsavel = userStore.getUserName
+			}
 			sendingEvent.value = true
 			const file: HTMLInputElement = document.querySelector('#imagem-input')!
 			if (file) await useStore.postEvent(evento, file)
@@ -216,6 +221,7 @@ const handleCEPInput = async () => {
 			novoEndereco.uf = data.state
 			novoEndereco.bairro = data.neighborhood
 			novoEndereco.logradouro = data.street
+			novoEndereco.pontoReferencia = 'oi'
 		}
 	}
 }
