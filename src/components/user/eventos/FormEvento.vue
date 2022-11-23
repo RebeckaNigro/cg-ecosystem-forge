@@ -29,14 +29,24 @@
 		</div>
 		<div class="datas-inicio-fim d-flex">
 			<div class="inicio mt-0">
-				<label for="data-inicio">Data e hora de início*</label>
-				<input type="datetime-local" name="data-inicio" id="data-inicio" class="boring-gray-border"
-					v-model="evento.dataInicio">
+				<label for="data-inicio">Data de início*</label>
+				<!--<input type="datetime-local" name="data-inicio" id="data-inicio" class="boring-gray-border"
+					v-model="evento.dataInicio">-->
+				<div class="d-flex align-items-center m-0">	
+					<input type="date" name="calendar" id="chosen-date" class="boring-gray-border me-3" v-model="dataInicio">
+					<span>às</span>
+					<input type="time" name="chosen-time" id="chosen-time" class="boring-gray-border ms-3" v-model="horaInicio">
+				</div>
 			</div>
 			<div class="fim mt-0">
-				<label for="data-termino">Data e hora de término*</label>
-				<input type="datetime-local" name="data-termino" id="data-termino" class="boring-gray-border"
-					v-model="evento.dataTermino">
+				<label for="data-termino">Data de término*</label>
+				<div class="d-flex align-items-center m-0">	
+					<input type="date" name="calendar" id="chosen-date" class="boring-gray-border me-3" v-model="dataTermino">
+					<span>às</span>
+					<input type="time" name="chosen-time" id="chosen-time" class="boring-gray-border ms-3" v-model="horaTermino">
+				</div>
+				<!--<input type="datetime-local" name="data-termino" id="data-termino" class="boring-gray-border"
+					v-model="evento.dataTermino">-->
 			</div>
 		</div>
 		<div class="tags-evento">
@@ -134,6 +144,12 @@ const useStore = useEventoStore()
 const sendingEvent = ref(false)
 const fileName = ref('')
 
+const dataInicio = ref('')
+const dataTermino = ref('')
+
+const horaInicio = ref('')
+const horaTermino = ref('')
+
 const novoEndereco: INovoEndereco = reactive({
 	cep: '',
 	logradouro: '',
@@ -164,9 +180,13 @@ const buscarEnderecosPeloTipo = async () => {
 	await useStore.getAddresses(useStore.novoEvento.tipoEventoId.toString())
 }
 const handleAction = (action: string) => {
+	
 	if (evento.enderecoId) evento.endereco = null
 	else evento.endereco = { ...novoEndereco }
 
+	evento.dataInicio = dataInicio.value.concat('T', horaInicio.value)
+	evento.dataTermino = dataTermino.value.concat('T', horaTermino.value)
+	
 	if (action === 'publicar') {
 
 		async function publicarEvento() {
