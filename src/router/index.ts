@@ -15,6 +15,7 @@ import Login from '../views/login/Login.vue'
 import UserHome from '../views/user/UserHome.vue'
 import GerenciaNoticia from '../views/user/noticias/GerenciaNoticia.vue'
 import GerenciaEvento from '../views/user/eventos/GerenciaEvento.vue'
+import NoticiasCriadas from '../views/user/noticias/NoticiasCriadas.vue';
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -127,6 +128,11 @@ const routes: RouteRecordRaw[] = [
     path: '/user/eventos',
     name: 'GerenciaEvento',
     component: GerenciaEvento
+  },
+  {
+	path: '/user/noticias-criadas',
+	name: 'NoticiasCriadas',
+	component: NoticiasCriadas
   }
 ];
 
