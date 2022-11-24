@@ -25,7 +25,7 @@
       <span class="visually-hidden">Loading...</span>
     </div>
     <footer>
-      <button type="button" id="see-more" class="btn-primary light-title">Ver mais</button>
+      <button type="button" id="see-more" class="btn-primary light-title" @click="$router.push({ name: 'NoticiasCriadas'})">Ver mais</button>
       <button type="button" id="create-new" class="green-btn light-title" @click="$router.push({ path: contentType })">Criar {{ contentType }}</button>
     </footer>
   </section>

@@ -1,5 +1,5 @@
 <template>
-	<form class="dark-body-text form-box" id="form-evento">
+	<form class="dark-body-text box" id="form-evento">
 		<label for="tipos-evento">Tipo de evento</label>
 		<div class="tipo-evento mt-3" id="tipos-evento">
 			<!--<select name="tipo-evento" id="tipo-evento" class="boring-gray-border" v-model="evento.tipoEventoId"
