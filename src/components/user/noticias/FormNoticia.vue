@@ -1,5 +1,5 @@
 <template>
-	<form class="form-noticia form-box dark-body-text">
+	<form class="form-noticia box dark-body-text">
 		<div class="group column-direction">
 			<label for="title">Título</label>
 			<input type="text" id="title" class="w-100 boring-gray-border form-control" v-model="noticia.titulo">

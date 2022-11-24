@@ -63,11 +63,11 @@ import Cookies from './components/general/Cookies.vue'
 .ghp { // general horizontal padding
   padding: 0 150px !important;
 }
-.form-box{
-	background-color: #fff;
+.box{
+	background-color: #FBFBFB;
 	border-radius: 20px;
-	border: 1px solid #9C9B9B;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+	border: 1px solid #505050;
+	box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.25);
 }
 .boring-gray-border {
   border-radius: 10px!important ;
