@@ -20,9 +20,14 @@
 
 			<div v-for="(evento, index) in eventos" :key="index">
 
-				<CardEventoCriado :has-image="false" image="" :nome-evento="evento.titulo"
+				<CardEventoCriado 
+					:has-image="false" 
+					image="" 
+					:nome-evento="evento.titulo"
 					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino"
-					:endereco-evento="evento.local" />
+					:endereco-evento="evento.local"
+					:evento-id="evento.id"
+					/>
 			</div>
 		</div>
 

@@ -14,13 +14,13 @@
 				</div>
 	
 				<div class="d-flex acoes-container col">
-					<button class="visualizar">
+					<button class="visualizar" @click="$router.push({name: 'EventoExpandido', params: {eventoId}})">
 						<img src="../../../../../public/view_icon.svg" alt="">
 					</button>
 					<button class="editar">
 						<img src="../../../../../public/edit_icon.svg" alt="">
 					</button>
-					<button class="deletar">
+					<button class="deletar" @click="handleDeleteEvent(eventoId)">
 						<img src="../../../../../public/delete_icon.svg" alt="">
 					</button>
 				</div>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import { useEventoStore } from '../../../../stores/eventos/store';
 import { friendlyDateTime } from '../../../../utils/formatacao/datetime';
 
 
@@ -53,7 +54,19 @@ const props = defineProps<{
     dataInicio: string
 	dataTermino: string
     enderecoEvento: string
+	eventoId: number
 }>()
+
+const eventoStore = useEventoStore()
+
+const handleDeleteEvent = async (eventoId: number) => {
+	console.log("askdhakd")
+	await eventoStore.deleteEvent(eventoId)
+	window.location.reload()
+  }
+
+
+
 </script>
 
 <style lang="scss">
