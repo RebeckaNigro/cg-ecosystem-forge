@@ -13,44 +13,7 @@
 			</nav>
 		</div>
 
-		<div class="eventos-container box">
-	
-			<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Eventos criados</h1>
-	
-			<button class="btn-criar-evento" @click="$router.push({name: 'GerenciaEvento'})">+ Criar novo evento</button>
-	
-			<div class="row justify-content-between w-100 align-items-end mb-5">
-	
-				<div class="filtrar-data col">
-					<FilterComponent :content-type="'data'" :datas="[]" />
-				</div>
-	
-				<div class="pesquisar col d-flex justify-content-end">
-					<SearchComponent />
-				</div>
-			</div>
-	
-			<div class="cards-container">
-	
-				<div v-for="(evento, index) in eventos" :key="index" >
-		
-					<CardEventoCriado
-					:has-image="false"
-					image=""
-					:nome-evento="evento.titulo"
-					:data-inicio="evento.dataInicio"
-					:data-termino="evento.dataTermino"
-					:endereco-evento="evento.local"
-					/>
-				</div>
-			</div>
-	
-			<div class="botoes-container w-100 d-flex justify-content-around mt-5">
-				<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
-				<button class="btn-ver-mais w-100 ms-3" @click="addEventsToView">Ver mais</button>
-			</div>
-	
-		</div>
+		<ContainerCardsEventosCriados/>
 	</div>
 
 	<FooterComponent/>
@@ -64,6 +27,7 @@ import FooterComponent from '../../../components/general/FooterComponent.vue';
 import NavBar from '../../../components/general/NavBar.vue';
 import SearchComponent from '../../../components/general/SearchComponent.vue'
 import CardEventoCriado from '../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
+import ContainerCardsEventosCriados from '../../../components/user/eventos/eventosCriados/ContainerCardsEventosCriados.vue';
 import { useEventoStore } from '../../../stores/eventos/store';
 import { IUltimoEvento } from '../../../stores/eventos/types';
 
