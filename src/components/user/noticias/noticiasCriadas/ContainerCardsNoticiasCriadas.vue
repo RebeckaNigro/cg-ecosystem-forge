@@ -18,27 +18,44 @@
 
 	<div class="cards-container">
 
-		<div v-for="(card, index) in dummyContainer" :key="index" >
+		<div v-for="(noticia, index) in noticias" :key="index" >
 
-			<CardNoticiaCriada />
+			<CardNoticiaCriada
+			:has-image="false"
+			:titulo-noticia="noticia.titulo"
+			image=""
+			/>
 		</div>
 	</div>
 
 	<div class="botoes-container w-100 d-flex justify-content-around mt-5">
 		<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
-		<button class="btn-ver-mais w-100 ms-3">Ver mais</button>
+		<button class="btn-ver-mais w-100 ms-3" @click="addNewsToView">Ver mais</button>
 	</div>
 
 </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import FilterComponent from '../../../../components/general/FilterComponent.vue';
-import FooterComponent from '../../../components/general/FooterComponent.vue';
-import NavBar from '../../../components/general/NavBar.vue';
 import SearchComponent from '../../../../components/general/SearchComponent.vue'
 import CardNoticiaCriada from '../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue';
+import { useNoticiaStore } from '../../../../stores/noticias/store';
+import { IUltimaNoticia } from '../../../../stores/noticias/types';
+
+const noticiaStore = useNoticiaStore()
+const lastIndex = ref(6)
+let noticias = ref<Array<IUltimaNoticia>>(noticiaStore.allNews.slice(0, lastIndex.value))
+
+const addNewsToView = () => {
+	lastIndex.value += 3
+	noticias.value = noticiaStore.allNews.slice(0, lastIndex.value)
+}
+
+onMounted(() => {
+	noticiaStore.getAllNews()
+})
 
 
 const dummyContainer = reactive([
