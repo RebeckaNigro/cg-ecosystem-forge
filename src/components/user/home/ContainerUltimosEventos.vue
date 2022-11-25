@@ -24,7 +24,7 @@
       <span class="visually-hidden">Loading...</span>
     </div>
     <footer>
-      <button type="button" class="btn btn-primary">Ver mais</button>
+      <button type="button" class="btn btn-primary" @click="$router.push({ name: 'EventosCriados'})">Ver mais</button>
       <button type="button" class="btn btn-primary" @click="$router.push({ name: 'GerenciaEvento'})">Criar evento</button>
     </footer>
   </section>
