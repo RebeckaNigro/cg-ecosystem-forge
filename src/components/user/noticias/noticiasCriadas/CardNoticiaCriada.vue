@@ -1,6 +1,9 @@
 <template>
 	<div class="card-container box mt-4 p-3 d-flex flex-column align-items-start">
-		<img src="../../../../../public/noticias/noticia-expandida/cover.png" alt="Noticia" />
+		<div class="img-container">
+			<img :src="image" alt="event-image" v-if="hasImage">
+      		<span v-else class="dark-body-text fs-6">{{ tituloNoticia }}</span>
+		</div>
 
 		<div class="container">
 
@@ -24,8 +27,7 @@
 			</div>
 		</div>
 
-		<p class="titulo mt-2">Título da notícia - Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in
-			nunc at aliquam</p>
+		<p class="titulo mt-2">{{tituloNoticia}}</p>
 
 		<span class="atualizado-em">Atualizado em: 01/01/2000 às 12:00</span>
 
@@ -34,6 +36,11 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps<{
+	hasImage: boolean
+    image: string
+    tituloNoticia: string
+}>()
 </script>
 
 <style lang="scss">
@@ -54,12 +61,18 @@
 		width: 300px;
 	}
 
-	img {
-
-		width: 100%;
-		height: 200px;
-
-	}
+	.img-container {
+      height: 200px;
+	  min-height: 200px;
+	  width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+	  
+      img {
+        width: -webkit-fill-available;
+      }
+    }
 
 	.tags {
 		color: #505050;

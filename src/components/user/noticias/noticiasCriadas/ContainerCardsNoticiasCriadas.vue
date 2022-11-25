@@ -1,35 +1,62 @@
 <template>
-	<NavBar
-	:is-transparent="false"
-	/>
-	<div class="background pb-5 pt-5">
+<div class="noticias-container box">
+	
+	<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Notícias criadas</h1>
 
-		<div class="noticias-breadcrumb">
+	<button class="btn-criar-noticia" @click="$router.push({name: 'GerenciaNoticia'})">+ Criar nova notícia</button>
 
-			<nav style="--bs-breadcrumb-divider:'>';" aria-label="breadcrumb">
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item unactive" @click="$router.push({name: 'Noticias'})">Notícias</li>
-					<li class="breadcrumb-item active" aria-current="page">Notícias criadas</li>
-				</ol>
-			</nav>
+	<div class="row justify-content-between w-100 align-items-end mb-5">
+
+		<div class="filtrar-data col">
+			<FilterComponent :content-type="'data'" :datas="[]" />
 		</div>
 
-		<ContainerCardsNoticiasCriadas/>
+		<div class="pesquisar col d-flex justify-content-end">
+			<SearchComponent />
+		</div>
 	</div>
 
-	<FooterComponent/>
+	<div class="cards-container">
 
+		<div v-for="(noticia, index) in noticias" :key="index" >
+
+			<CardNoticiaCriada
+			:has-image="false"
+			:titulo-noticia="noticia.titulo"
+			image=""
+			/>
+		</div>
+	</div>
+
+	<div class="botoes-container w-100 d-flex justify-content-around mt-5">
+		<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
+		<button class="btn-ver-mais w-100 ms-3" @click="addNewsToView">Ver mais</button>
+	</div>
+
+</div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
-import FilterComponent from '../../../components/general/FilterComponent.vue';
-import FooterComponent from '../../../components/general/FooterComponent.vue';
-import NavBar from '../../../components/general/NavBar.vue';
-import SearchComponent from '../../../components/general/SearchComponent.vue'
-import ContainerCardsNoticia from '../../../components/noticias/ContainerCardsNoticia.vue';
-import CardNoticiaCriada from '../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue';
-import ContainerCardsNoticiasCriadas from '../../../components/user/noticias/noticiasCriadas/ContainerCardsNoticiasCriadas.vue'
+import { onMounted, reactive, ref } from 'vue';
+import FilterComponent from '../../../../components/general/FilterComponent.vue';
+import SearchComponent from '../../../../components/general/SearchComponent.vue'
+import CardNoticiaCriada from '../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue';
+import { useNoticiaStore } from '../../../../stores/noticias/store';
+import { IUltimaNoticia } from '../../../../stores/noticias/types';
+
+const noticiaStore = useNoticiaStore()
+const lastIndex = ref(6)
+let noticias = ref<Array<IUltimaNoticia>>(noticiaStore.allNews.slice(0, lastIndex.value))
+
+const addNewsToView = () => {
+	lastIndex.value += 3
+	noticias.value = noticiaStore.allNews.slice(0, lastIndex.value)
+}
+
+onMounted(() => {
+	noticiaStore.getAllNews()
+})
+
 
 const dummyContainer = reactive([
 	{
@@ -78,32 +105,6 @@ const dummyContainer = reactive([
 </script>
 
 <style scoped lang="scss">
-.background{
-	background-image: url('../../../../public/user/background.svg');
-	background-repeat: no-repeat;
-	background-size: cover;
-	width: 100%;
-
-	.noticias-breadcrumb{
-		display: flex;
-		width: fit-content;
-		margin-left:15%;
-		font-size: 20px;
-
-		.active{
-			font-family: 'Montserrat-Medium', sans-serif;
-		}
-
-		.unactive{
-			cursor: pointer;
-			font-family: 'Montserrat-Light', sans-serif;
-		}
-
-		@media(max-width: 920px){
-			font-size: 17px;
-		}
-	}
-}
 .noticias-container {
 	display: flex;
 	flex-direction: column;
