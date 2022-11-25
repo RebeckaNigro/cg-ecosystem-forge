@@ -2,22 +2,25 @@
 	<div class="card-container box mt-4 p-3 d-flex flex-column align-items-start">
 		<img src="../../../../../public/noticias/noticia-expandida/cover.png" alt="Noticia" />
 
-		<div class="row mt-2">
-			<div class="tags col">
-				<span class="me-2">#Pesquisas</span>
-				<span>#Doutorado</span>
-			</div>
+		<div class="container">
 
-			<div class="d-flex acoes-container col">
-				<button class="visualizar">
-					<img src="../../../../../public/view_icon.svg" alt="">
-				</button>
-				<button class="editar">
-					<img src="../../../../../public/edit_icon.svg" alt="">
-				</button>
-				<button class="deletar">
-					<img src="../../../../../public/delete_icon.svg" alt="">
-				</button>
+			<div class="row mt-2">
+				<div class="tags col">
+					<span class="me-2">#Pesquisas</span>
+					<span>#Doutorado</span>
+				</div>
+	
+				<div class="d-flex acoes-container col">
+					<button class="visualizar">
+						<img src="../../../../../public/view_icon.svg" alt="">
+					</button>
+					<button class="editar">
+						<img src="../../../../../public/edit_icon.svg" alt="">
+					</button>
+					<button class="deletar">
+						<img src="../../../../../public/delete_icon.svg" alt="">
+					</button>
+				</div>
 			</div>
 		</div>
 
@@ -63,13 +66,15 @@
 		font-size: 14px;
 		display: flex;
 		flex-direction: row;
-
+		padding-left: 0;
 	}
 
 	.acoes-container {
 		flex-wrap: wrap;
 		flex-direction: row;
-
+		width: 100%;
+		justify-content: flex-end;
+		margin-right: 0;
 		button {
 			background-color: transparent;
 			border: unset;

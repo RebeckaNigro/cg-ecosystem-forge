@@ -4,6 +4,16 @@
 	/>
 	<div class="background pb-5 pt-5">
 
+		<div class="noticias-breadcrumb">
+
+			<nav style="--bs-breadcrumb-divider:'>';" aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item unactive" @click="$router.push({name: 'Noticias'})">Notícias</li>
+					<li class="breadcrumb-item active" aria-current="page">Notícias criadas</li>
+				</ol>
+			</nav>
+		</div>
+
 		<div class="noticias-container box">
 	
 			<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Notícias criadas</h1>
@@ -102,13 +112,33 @@ const dummyContainer = reactive([
 	background-repeat: no-repeat;
 	background-size: cover;
 	width: 100%;
+
+	.noticias-breadcrumb{
+		display: flex;
+		width: fit-content;
+		margin-left:15%;
+		font-size: 20px;
+
+		.active{
+			font-family: 'Montserrat-Medium', sans-serif;
+		}
+
+		.unactive{
+			cursor: pointer;
+			font-family: 'Montserrat-Light', sans-serif;
+		}
+
+		@media(max-width: 920px){
+			font-size: 17px;
+		}
+	}
 }
 .noticias-container {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	margin: 1.4rem auto;
-	max-width: 1200px;
+	max-width: 1300px;
 	padding: 3rem;
 	border-radius: 10px;
 	flex-wrap: wrap;
@@ -123,7 +153,7 @@ const dummyContainer = reactive([
 		text-transform: uppercase;
 		position: absolute;
 		right: 18rem;
-		top: 11rem;
+		top: 13.4rem;
 	}
 
 	.btn-criar-noticia:hover{
