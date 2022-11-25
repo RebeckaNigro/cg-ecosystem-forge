@@ -43,7 +43,7 @@ namespace Ecossistema.Services.Services
 
                     await _unitOfWork.Arquivos.AddAsync(item);
 
-                    if (_unitOfWork.Complete() > 0 && SalvarArquivo(item.Id, arquivo)) ids.Add(item.Id);
+                    if (_unitOfWork.Complete() > 0 && SalvarArquivo(item.Id, arquivo, origem)) ids.Add(item.Id);
                     else
                     {
                         ExcluirArquivos(ids);
@@ -119,18 +119,32 @@ namespace Ecossistema.Services.Services
             return result;
         }
 
-        private bool SalvarArquivo(int id, IFormFile file)
+        private bool SalvarArquivo(int id, IFormFile file, EOrigem origem)
         {
             try
             {
                 if (file == null) return false;
                 //var mimeType = file.ContentType;
+                var convertOrigem = origem.ToString();
+
                 var fileExtension = file.FileName.Split('.').Last();
-                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + "." + fileExtension), FileMode.Create))
+                if (convertOrigem.Equals("Documento"))
+                {
+                    using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents, id.ToString() + "." + fileExtension), FileMode.Create))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                else
+                {
+                    using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + "." + fileExtension), FileMode.Create))
                 {
                     file.CopyTo(fs);
                     fs.Flush();
                 }
+                }
+                
             }
             catch
             {
