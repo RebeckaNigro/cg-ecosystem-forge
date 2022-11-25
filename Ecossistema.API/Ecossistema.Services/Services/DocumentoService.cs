@@ -5,6 +5,8 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -23,9 +25,10 @@ namespace Ecossistema.Services.Services
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
+
         }
 
-        public async Task<RespostaPadrao> Incluir(DocumentoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, int usuarioId)
         {
             var resposta = new RespostaPadrao();
 
@@ -51,7 +54,7 @@ namespace Ecossistema.Services.Services
 
                 #endregion
                 List<IFormFile> arquivo = new List<IFormFile>();
-                arquivo.Add(dado.Arquivo);
+                arquivo.Add(doc);
 
                 if (!await _arquivoService.Vincular(EOrigem.Documento, obj.Id, arquivo, usuarioId, dataAtual, resposta))
                 {
@@ -209,11 +212,14 @@ namespace Ecossistema.Services.Services
 
             var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
+            var user = await _unitOfWork.Usuarios.GetAllAsync();
 
+            
             var result = query.Select(x => new
             {
                 id = x.Id,
                 nome = x.Nome,
+                descricao = x.Descricao,
                 data = x.Data
             })
             .Distinct()

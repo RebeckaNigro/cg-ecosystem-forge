@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Services.Dto
 {
-    public class DocumentoDto
+    public class DocumentoEditDto
     {
         public int? Id { get; set; }
         public string? Nome { get; set; }
@@ -16,6 +16,5 @@ namespace Ecossistema.Services.Dto
         public int? DocumentoAreaId { get; set; }
         public int? InstituicaoId { get; set; }
         public DateTime? Data { get; set; }
-        //public IFormFile Arquivo { get; set; }
     }
 }

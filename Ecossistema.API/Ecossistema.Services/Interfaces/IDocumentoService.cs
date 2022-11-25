@@ -1,4 +1,5 @@
 ﻿using Ecossistema.Services.Dto;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IDocumentoService
     {
-        Task<RespostaPadrao> Incluir(DocumentoDto dado, int usuarioId);
+        Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile arquivo, int usuarioId);
         Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> ListarUltimas();

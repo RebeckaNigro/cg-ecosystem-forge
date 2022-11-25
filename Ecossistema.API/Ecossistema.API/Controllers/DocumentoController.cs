@@ -26,9 +26,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj)
+        public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
-            return await _documentoService.Incluir(obj, UsuarioId);
+            return await _documentoService.Incluir(obj, arquivo ,UsuarioId);
         }
 
         [HttpPut("editar")]
