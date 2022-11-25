@@ -31,6 +31,11 @@ import Cookies from './components/general/Cookies.vue'
   font-family: 'Montserrat-Medium';
   src: url(/fonts/Montserrat-Medium.ttf);
 }
+
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url(/fonts/Montserrat-Light.ttf);
+}
 .dark-title, .light-title {
   font-family: 'Montserrat-Bold';
   font-size: 1.5rem;
