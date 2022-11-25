@@ -1,10 +1,12 @@
 ﻿using Ecossistema.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Ecossistema.Data
 {
-    public class EcossistemaContext : DbContext
+    public class EcossistemaContext : IdentityDbContext<IdentityUser>//Antes era DbContext
     {
         public EcossistemaContext(DbContextOptions<EcossistemaContext> options) : base(options) { }
 
@@ -69,6 +71,7 @@ namespace Ecossistema.Data
         public virtual DbSet<Instituicao> Instituicoes { get; set; }
         public virtual DbSet<InstituicaoArea> InstituicoesAreas { get; set; }
         public virtual DbSet<InstituicaoClassificacao> InstituicoesClassificacoes { get; set; }
+        public virtual DbSet<InstituicaoEndereco> InstituicoesEnderecos { get; set; }
 
         #endregion
 
@@ -100,7 +103,7 @@ namespace Ecossistema.Data
 
         public virtual DbSet<Pagina> Paginas { get; set; }
         public virtual DbSet<PaginaSegmento> PaginasSegmentos { get; set; }
-        public virtual DbSet<Permissao> Permissioes { get; set; }
+        //public virtual DbSet<Permissao> Permissioes { get; set; }
         public virtual DbSet<Pessoa> Pessoas { get; set; }
         public virtual DbSet<PessoaContato> PessoasContatos { get; set; }
         public virtual DbSet<PessoaEndereco> PessoasEnderecos { get; set; }
@@ -157,6 +160,7 @@ namespace Ecossistema.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -70,6 +70,7 @@ namespace Ecossistema.Data
         public IBaseRepository<Instituicao> Instituicoes { get; private set; }
         public IBaseRepository<InstituicaoArea> InstituicoesAreas { get; private set; }
         public IBaseRepository<InstituicaoClassificacao> InstituicoesClassificacoes { get; private set; }
+        public IBaseRepository<InstituicaoEndereco> InstituicoesEnderecos { get; private set; }
 
         #endregion
 
@@ -101,7 +102,7 @@ namespace Ecossistema.Data
 
         public IBaseRepository<Pagina> Paginas { get; private set; }
         public IBaseRepository<PaginaSegmento> PaginasSegmentos { get; private set; }
-        public IBaseRepository<Permissao> Permissioes { get; private set; }
+        //public IBaseRepository<Permissao> Permissioes { get; private set; }
         public IBaseRepository<Pessoa> Pessoas { get; private set; }
         public IBaseRepository<PessoaContato> PessoasContatos { get; private set; }
         public IBaseRepository<PessoaEndereco> PessoasEnderecos { get; private set; }
@@ -221,6 +222,7 @@ namespace Ecossistema.Data
             Instituicoes = new BaseRepository<Instituicao>(_context);
             InstituicoesAreas = new BaseRepository<InstituicaoArea>(_context);
             InstituicoesClassificacoes = new BaseRepository<InstituicaoClassificacao>(_context);
+            InstituicoesEnderecos = new BaseRepository<InstituicaoEndereco>(_context);
 
             #endregion
 
@@ -252,7 +254,7 @@ namespace Ecossistema.Data
 
             Paginas = new BaseRepository<Pagina>(_context);
             PaginasSegmentos = new BaseRepository<PaginaSegmento>(_context);
-            Permissioes = new BaseRepository<Permissao>(_context);
+            //Permissioes = new BaseRepository<Permissao>(_context);
             Pessoas = new BaseRepository<Pessoa>(_context);
             PessoasContatos = new BaseRepository<PessoaContato>(_context);
             PessoasEnderecos = new BaseRepository<PessoaEndereco>(_context);

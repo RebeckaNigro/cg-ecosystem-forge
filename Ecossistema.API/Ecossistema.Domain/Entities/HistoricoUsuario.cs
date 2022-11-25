@@ -15,13 +15,14 @@ namespace Ecossistema.Domain.Entities
         public virtual Pessoa Pessoa { get; set; }
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
-        public int PermissaoId { get; set; }
-        public virtual Permissao Permissao { get; set; }
-        public string Email { get; set; }
-        public string SenhaHash { get; set; }
-        public string SenhaSalt { get; set; }
-        public string? Token { get; set; }
-        public DateTime? TokenExpiracao { get; set; }
+        public string AspNetUserId { get; set; }
+        //public int PermissaoId { get; set; }
+        //public virtual Permissao Permissao { get; set; }
+        //public string Email { get; set; }
+        //public string SenhaHash { get; set; }
+        //public string SenhaSalt { get; set; }
+        //public string? Token { get; set; }
+        //public DateTime? TokenExpiracao { get; set; }
         public DateTime UltimoLogin { get; set; }
         public string Cargo { get; set; }
         public int? AprovacaoId { get; set; }

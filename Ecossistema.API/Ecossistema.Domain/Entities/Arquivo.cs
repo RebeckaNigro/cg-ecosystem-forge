@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +15,21 @@ namespace Ecossistema.Domain.Entities
             ArquivosOrigens = new HashSet<ArquivoOrigem>();
         }
 
+        public Arquivo(EOrigem origem, string nomeOriginal, int usuarioId, DateTime dataAtual, int? id = null)
+        {
+            Extensao = nomeOriginal.Substring(nomeOriginal.LastIndexOf(".") + 1, nomeOriginal.Length - nomeOriginal.LastIndexOf(".") - 1);
+            NomeOriginal = nomeOriginal.Replace("." + Extensao, "");
+            Extensao = Extensao.ToLower();
+            ArquivosOrigens = new List<ArquivoOrigem>
+            {
+                new ArquivoOrigem(origem, NomeOriginal, usuarioId, dataAtual, id)
+            };
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
+        }
+
         public int Id { get; set; }
-        public string Caminho { get; set; }
+        public string NomeOriginal { get; set; }
         public string Extensao { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataCriacao { get; set; }

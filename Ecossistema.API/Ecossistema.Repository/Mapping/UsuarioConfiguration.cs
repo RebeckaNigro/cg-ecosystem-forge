@@ -24,9 +24,9 @@ namespace Ecossistema.Data.Mapping
                 .WithMany(x => x.Usuarios)
                 .HasForeignKey(y => y.InstituicaoId);
 
-            builder.HasOne(x => x.Permissao)
+            /*builder.HasOne(x => x.Permissao)
                 .WithMany(x => x.Usuarios)
-                .HasForeignKey(y => y.PermissaoId);
+                .HasForeignKey(y => y.PermissaoId);*/
 
             builder.HasOne(x => x.Aprovacao)
                 .WithMany(x => x.Usuarios)

@@ -28,9 +28,9 @@ namespace Ecossistema.Data.Mapping
                 .WithMany(x => x.ArquivosOrigens)
                 .HasForeignKey(y => y.ArquivoId);                
 
-            builder.HasOne(x => x.Insituicao)
+            builder.HasOne(x => x.Instituicao)
                 .WithMany(x => x.ArquivosOrigens)
-                .HasForeignKey(y => y.InsituicaoId)
+                .HasForeignKey(y => y.InstituicaoId)
                 .IsRequired(false);
 
             builder.HasOne(x => x.Noticia)
