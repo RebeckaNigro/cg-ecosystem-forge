@@ -13,37 +13,7 @@
 			</nav>
 		</div>
 
-		<div class="eventos-container box">
-	
-			<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Eventos criados</h1>
-	
-			<button class="btn-criar-evento" @click="$router.push({name: 'GerenciaEvento'})">+ Criar novo evento</button>
-	
-			<div class="row justify-content-between w-100 align-items-end mb-5">
-	
-				<div class="filtrar-data col">
-					<FilterComponent :content-type="'data'" :datas="[]" />
-				</div>
-	
-				<div class="pesquisar col d-flex justify-content-end">
-					<SearchComponent />
-				</div>
-			</div>
-	
-			<div class="cards-container">
-	
-				<div v-for="(card, index) in dummyContainer" :key="index" >
-		
-					<CardEventoCriado />
-				</div>
-			</div>
-	
-			<div class="botoes-container w-100 d-flex justify-content-around mt-5">
-				<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
-				<button class="btn-ver-mais w-100 ms-3">Ver mais</button>
-			</div>
-	
-		</div>
+		<ContainerCardsEventosCriados/>
 	</div>
 
 	<FooterComponent/>
@@ -51,52 +21,29 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import FilterComponent from '../../../components/general/FilterComponent.vue';
 import FooterComponent from '../../../components/general/FooterComponent.vue';
 import NavBar from '../../../components/general/NavBar.vue';
 import SearchComponent from '../../../components/general/SearchComponent.vue'
 import CardEventoCriado from '../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
+import ContainerCardsEventosCriados from '../../../components/user/eventos/eventosCriados/ContainerCardsEventosCriados.vue';
+import { useEventoStore } from '../../../stores/eventos/store';
+import { IUltimoEvento } from '../../../stores/eventos/types';
 
+const eventoStore = useEventoStore()
+const lastIndex = ref(6)
+let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
 
-const dummyContainer = reactive([
-	{
-		tags: ['Pesquisas', 'Doutorado'],
-		nome: 'Confra no Hub',
-		dataInicio: '01/11/2022',
-		dataTermino: '01/01/2022',
-		endereco: 'Startup Fiems',
-		dataAtualizacao: '24/11/2022',
-		horaAtualizacao: '11:20'
-	},
-	{
-		tags: ['Pesquisas', 'Doutorado'],
-		nome: 'Confra no Hub',
-		dataInicio: '01/11/2022',
-		dataTermino: '01/01/2022',
-		endereco: 'Startup Fiems',
-		dataAtualizacao: '24/11/2022',
-		horaAtualizacao: '11:20'
-	},
-	{
-		tags: ['Pesquisas', 'Doutorado'],
-		nome: 'Confra no Hub',
-		dataInicio: '01/11/2022',
-		dataTermino: '01/01/2022',
-		endereco: 'Startup Fiems',
-		dataAtualizacao: '24/11/2022',
-		horaAtualizacao: '11:20'
-	},
-	{
-		tags: ['Pesquisas', 'Doutorado'],
-		nome: 'Confra no Hub',
-		dataInicio: '01/11/2022',
-		dataTermino: '01/01/2022',
-		endereco: 'Startup Fiems',
-		dataAtualizacao: '24/11/2022',
-		horaAtualizacao: '11:20'
-	}
-])
+const addEventsToView = () => {
+	lastIndex.value += 3
+	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
+}
+
+onMounted(() => {
+	eventoStore.getAllEvents()
+})
+
 </script>
 
 <style scoped lang="scss">

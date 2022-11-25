@@ -1,6 +1,9 @@
 <template>
 	<div class="card-container box p-3 d-flex flex-column align-items-start">
-		<img src="../../../../../public/noticias/noticia-expandida/cover.png" alt="Noticia" />
+		<div class="img-container">
+			<img :src="image" alt="event-image" v-if="hasImage">
+      		<span v-else class="dark-body-text fs-6">{{ nomeEvento }}</span>
+		</div>
 
 		<div class="container">
 
@@ -26,11 +29,11 @@
 
 		<div class="infos-container">
 
-			<div class="titulo mt-2 mb-1">Nome do evento</div>
+			<div class="titulo mt-2 mb-1">{{nomeEvento}}</div>
 	
-			<div class="data-evento">01/01/2020 - 02/01/2020</div>
+			<div class="data-evento">{{friendlyDateTime(dataInicio)}} - {{friendlyDateTime(dataTermino)}}</div>
 	
-			<div class="endereco-evento">Galpão de eventos - Campo Grande, MS</div>
+			<div class="endereco-evento">{{enderecoEvento}}</div>
 		</div>
 
 		<span class="atualizado-em mt-2">Atualizado em: 01/01/2000 às 12:00</span>
@@ -40,6 +43,17 @@
 </template>
 
 <script setup lang="ts">
+import { friendlyDateTime } from '../../../../utils/formatacao/datetime';
+
+
+const props = defineProps<{
+	hasImage: boolean
+    image: string
+    nomeEvento: string
+    dataInicio: string
+	dataTermino: string
+    enderecoEvento: string
+}>()
 </script>
 
 <style lang="scss">
@@ -56,12 +70,18 @@
 	padding: 10px;
 	width: 95%;
 
-	img {
-
-		width: 100%;
-		height: 200px;
-
-	}
+	.img-container {
+      height: 200px;
+	  min-height: 200px;
+	  width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+	  
+      img {
+        width: -webkit-fill-available;
+      }
+    }
 
 	.tags {
 		color: #505050;
