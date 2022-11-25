@@ -12,7 +12,10 @@
 			</div>
 
 			<div class="pesquisar col d-flex justify-content-end">
-				<SearchComponent />
+				<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
+				<button class="btn" id="btn-pesquisar" @click="handleSearch">
+					<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
+				</button>
 			</div>
 		</div>
 
@@ -21,8 +24,8 @@
 			<div v-for="(evento, index) in eventos" :key="index">
 
 				<CardEventoCriado :has-image="false" image="" :nome-evento="evento.titulo"
-					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino"
-					:endereco-evento="evento.local" />
+					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
+					:evento-id="evento.id" />
 			</div>
 		</div>
 
@@ -37,7 +40,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import FilterComponent from '../../../../components/general/FilterComponent.vue';
-import SearchComponent from '../../../../components/general/SearchComponent.vue'
 import CardEventoCriado from '../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
 import { useEventoStore } from '../../../../stores/eventos/store';
 import { IUltimoEvento } from '../../../../stores/eventos/types';
@@ -46,9 +48,25 @@ const eventoStore = useEventoStore()
 const lastIndex = ref(6)
 let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
 
+const searchInputText = ref('')
+
 const addEventsToView = () => {
 	lastIndex.value += 3
 	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
+}
+
+const handleSearch = () => {
+	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
+	
+	eventos.value = eventoStore.eventos.filter((evento) => {
+		if(evento.titulo){
+			const tituloLowerCase = evento.titulo.toLowerCase()
+			return tituloLowerCase.includes(inputTextLowerCase)
+		}
+		return false
+		
+	})
+	
 }
 
 onMounted(() => {
@@ -112,6 +130,31 @@ onMounted(() => {
 		@media (max-width: 580px) {
 			margin-top: 1.5rem;
 		}
+	}
+
+	#pesquisar {
+		border-radius: 40px 0px 0px 40px;
+		border: 1px solid #6B6A64;
+		border-right: unset;
+		padding: .5rem .7rem;
+		width: 300px;
+	}
+
+	#btn-pesquisar {
+		border: 1px solid #6B6A64;
+		border-left: unset;
+		border-radius: 0 40px 40px 0;
+		background-color: #fff;
+
+		img {
+			max-width: 26px;
+		}
+	}
+
+	#pesquisar:focus {
+		border-color: #86b7fe;
+		outline: 0;
+		box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
 	}
 
 	.botoes-container {
