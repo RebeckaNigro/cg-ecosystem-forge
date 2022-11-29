@@ -18,33 +18,36 @@
 	
 		</Banner>
 	
+		<!--<div class="container">
 
-		<div class="filters row justify-content-around align-items-end mb-3 mt-5">
-			<div class="filtrar-area col">
-				<FilterComponent 
-					content-type="área"
-					:datas="[]"
-					class="mx-4"
-				/>
-			</div>
-	
-			<div class="filtrar-organizador col">
-				<FilterComponent
-					content-type="organizador"
-					:datas="[]"
-					class="mx-4"
+			<div class="filters row justify-content-between align-items-end mb-3 mt-5">
+				<div class="filtrar-area col">
+					<FilterComponent 
+						content-type="área"
+						:datas="[]"
+						class="mx-4"
+					/>
+				</div>
+		
+				<div class="filtrar-organizador col">
+					<FilterComponent
+						content-type="organizador"
+						:datas="[]"
+						class="mx-4"
+						
+					/>
+		
+				</div>
+				<div class="pesquisar col">
 					
-				/>
-	
+					<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
+					<button class="btn" id="btn-pesquisar" @click="handleSearch">
+						<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
+					</button>
+				</div>
 			</div>
-			<div class="pesquisar col d-flex">
-				
-				<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
-				<button class="btn" id="btn-pesquisar" @click="handleSearch">
-					<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
-				</button>
-			</div>
-		</div>
+		</div>-->
+
 	
 		<Destaques />
 		<ContainerEventos />
@@ -124,8 +127,7 @@ const handleSearch = () => {
 	  }
 	
 		.pesquisar{
-			max-width: 30%;
-			
+	
 			#pesquisar {
 				border-radius: 40px 0px 0px 40px;
 				border: 1px solid #6B6A64;
