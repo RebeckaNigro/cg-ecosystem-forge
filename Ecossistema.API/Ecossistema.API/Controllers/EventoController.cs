@@ -40,7 +40,7 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromBody] EventoArquivosDto obj)
+        public async Task<RespostaPadrao> Editar([FromForm] EventoArquivosDto obj)
         {
             return await _eventoService.Editar(obj, UsuarioId);
         }

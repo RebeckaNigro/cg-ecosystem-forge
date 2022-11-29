@@ -157,6 +157,45 @@ namespace Ecossistema.Services.Services
         {
             return true;
         }
+        public async Task<RespostaPadrao> ExcluirArquivo(int id, string tipo)
+        {
+            RespostaPadrao resposta = new RespostaPadrao();
+            try
+            {
+                var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
+                var idArquivo = 0;
+                if (tipo == "documento")
+                {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
+                    var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+                    idArquivo = busca.Id;
+                }
+                else if(tipo == "evento")
+                {
+                    var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    idArquivo = busca.Id;
+                }
+                string result = Directory.GetFiles(path, Path.GetFileName(idArquivo.ToString()) + ".*").FirstOrDefault();
+                if (result == null)
+                {
+                    resposta.SetNaoEncontrado("Arquivo não existe");
+                    return resposta;
+                }
+                File.Delete(result);
+                var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.Id == idArquivo);
+                var arquivo = await _unitOfWork.Arquivos.FindAsync(x => x.Id == idArquivo);
+                _unitOfWork.ArquivosOrigens.Delete(origem);
+                _unitOfWork.Arquivos.Delete(arquivo);
+                _unitOfWork.Complete();
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+                return resposta;
+            }
+        }
+
 
         private byte[] ObterArquivoBinario(int id)
         {
@@ -178,10 +217,10 @@ namespace Ecossistema.Services.Services
             return arquivoBin;
         }
 
-        public async Task<FileContentResult> DownloadArquivo(int id, string nome)
+        public async Task<FileContentResult> DownloadArquivo(int id, string nome, EOrigem origem)
         {
             
-            var arquivoId = await EncontraArquivoId(id);
+            var arquivoId = await EncontraArquivoId(id, origem);
             if (arquivoId == 0) {
                 //resposta.SetNaoEncontrado("Documento não existe");
                 return null;
@@ -197,9 +236,20 @@ namespace Ecossistema.Services.Services
             return result;
         }
 
-        private async Task<int> EncontraArquivoId(int id)
+        private async Task<int> EncontraArquivoId(int id, EOrigem origem)
         {
-            var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+            var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+            switch (origem)
+            {
+                case EOrigem.Documento:
+                    busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+                    break;
+                case EOrigem.Evento:
+                    busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    break;
+                default:
+                    break;
+            }
             if (busca == null)
             {
                 return 0;

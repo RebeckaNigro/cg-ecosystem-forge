@@ -49,6 +49,7 @@ namespace Ecossistema.Services.Services
 
                 if (dado.EnderecoId == null)
                 {
+                    
                     dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
 
                     if (dado.EnderecoId == 0) return resposta;
