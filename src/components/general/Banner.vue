@@ -1,9 +1,9 @@
 <template>
-  <figure class="banner">
-    <img :src="path" :alt="imgAlt">
-    <slot />
-    <figcaption class="d-none">{{ figcaption }}</figcaption>
-  </figure>
+	<figure class="banner">
+		<img :src="path" :alt="imgAlt" :class="{'overlay': imgOverlay}">
+		<slot />
+		<figcaption class="d-none">{{ figcaption }}</figcaption>
+	</figure>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +13,7 @@ import { onMounted } from 'vue';
     path: String,
     figcaption: String,
     imgAlt: String,
+	imgOverlay: Boolean,
     maxHeight: {
       type: String,
       required: false,
@@ -27,13 +28,19 @@ import { onMounted } from 'vue';
 </script>
 
 <style scoped lang="scss">
+.overlay{
+	background: #fff;
+	opacity: 0.4;
+  }
 
   figure.banner {
     position: relative;
     margin: 0;
+	
     img {
       width: -webkit-fill-available;
-      height: -webkit-fill-available
+      height: -webkit-fill-available;
+	  z-index: 1;
     }
   }
 </style>
