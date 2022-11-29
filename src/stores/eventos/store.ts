@@ -5,6 +5,7 @@ import { validateEventoInput } from "../../utils/eventos/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 
 const novoEvento: IEvento = {
+  id: 0,
   instituicaoId: 0,
   tipoEventoId: 0,
   titulo: "",
@@ -16,11 +17,12 @@ const novoEvento: IEvento = {
   endereco: null,
   linkExterno: "",
   exibirMaps: false,
-  responsavel: ""
+  responsavel: "",
+  imagem: null
 }
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
-const eventos: Array<IUltimoEvento> = []
+const eventos: Array<IEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
