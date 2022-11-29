@@ -1,13 +1,15 @@
 <template>
-  <div class="card-evento boring-gray-border">
+  <div class="card-evento">
     <div class="img-container">
       <img :src="image" alt="event-image" v-if="hasImage">
       <span v-else class="dark-body-text">{{ nomeEvento }}</span>
     </div>
     <div class="infos-container">
       <h1 class="dark-title">{{ nomeEvento }}</h1>
-      <time class="dark-body-text">{{ dataEvento }}</time>
-      <address class="dark-body-text">{{ enderecoEvento }}</address>
+      <time class="data-evento">{{ dataEvento }}</time>
+      <address class="endereco-evento">{{ enderecoEvento }}</address>
+
+	  <a href="#" class="ver-detalhes">Ver detalhes</a>
     </div>
   </div>
 </template>
@@ -28,6 +30,8 @@
     flex-direction: column;
     width: 300px;
     height: 400px;
+	border-radius: 10px;
+	background-color: #fff;
     .dark-body-text {
       font-size: 1rem;
     }
@@ -46,7 +50,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      height: 35%;
+      height: 50%;
       padding: 10px;
 
       h1 {
@@ -55,7 +59,25 @@
         text-overflow: ellipsis;
         width: 100%;
         text-align: start;
+		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-size: 1.2rem;
       }
+
+	  .data-evento{
+		font-family: 'Montserrat-Medium', sans-serif;
+	  }
+
+	  .endereco-evento{
+		font-family: 'Montserrat-Regular', sans-serif;
+	  }
+
+	  .ver-detalhes{
+		color: #1E1E1E;
+		font-family: 'Montserrat-Medium', sans-serif;
+		font-size: 0.8rem;
+		align-self: center;
+		margin: 0.3rem;
+	  }
 
       time, address {
         background-repeat: no-repeat;
@@ -65,10 +87,10 @@
         margin: 5px 0;
       }
       time {
-        background-image: url('/eventos/calendar_icon.png')
+        background-image: url('/public/calendar_icon.svg')
       }
       address {
-        background-image: url('/eventos/pin_icon.png')
+        background-image: url('/public/location_icon.svg')
       }
     }
   }

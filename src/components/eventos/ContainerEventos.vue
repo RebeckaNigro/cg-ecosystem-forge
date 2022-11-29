@@ -1,25 +1,11 @@
 <template>
   <section id="eventos-content" class="ghp pt-5">
     <header>
-      <h1 class="dark-title">TÍTULO DA SEÇÃO</h1>
+      <h1 class="dark-title">EVENTOS</h1>
     </header>
-    <!-- <nav v-for="(cardPage, index) in dummyCardsPages">
-      <div class="container-fluid h-100" v-if="index === selectedPage">
-        <div class="row">
-          <div class="col-12 col-md-6 col-xl-4" v-for="(card, index) in cardPage" :key="index">
-            <CardEvento
-              :hasImage="card.hasImage"
-              :image="card.image"
-              :nomeEvento="card.nomeEvento"
-              :dataEvento="card.dataEvento"
-              :enderecoEvento="card.enderecoEvento"
-              :class="setSelfMargin(index)"
-            />
-          </div>
-        </div>
-      </div>
-    </nav> -->
-    <div class="card-evento-container">
+
+	
+	<div class="card-evento-container mb-5">
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
 			:hasImage="false"
@@ -41,15 +27,19 @@
         btnText="VER MAIS"
         :isExternalLink="false"
         link="#"
-        bgColor="#e78f38"
-        width="100px"
+        bgColor="#639280"
+        width="200px"
         textColor="#fff"
         height="40px"
         id="know_more"
         @click="addEventsToView()"
+		class="mb-4"
 		:class="{'d-none': lastIndex > eventoStore.eventos.length }"
       />
     </footer>
+		
+  
+
   </section>
 </template>
 
@@ -119,54 +109,19 @@ onMounted(() => {
 
 <style scoped lang="scss">
   #eventos-content {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), #F8F9FA;
+
     header {
       h1 {
-        font-size: 1.5rem;
+        font-size: 2rem;
+		font-family: 'Montserrat-SemiBold', sans-serif;
         margin-bottom: 3rem;
       }
-    }
-    footer {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 2rem;
-      margin-top: 2rem;
-      .box {
-        margin-left: 15px;
-        margin-right: 15px;
-      }
-      .indicator {
-        box-sizing: content-box;
-        flex: 0 1 auto;
-        width: 15px;
-        height: 15px;
-        padding: 0;
-        margin-right: 3px;
-        margin-left: 3px;
-        text-indent: -999px;
-        cursor: pointer;
-        background-color: #000;
-        background-clip: padding-box;
-        border: 0;
-        opacity: .5;
-        transition: opacity .6s ease;
-        border-radius: 15px;
-      }
-      .carousel-control-prev-icon, .carousel-control-next-icon {
-        border: 0;
-        background-color: unset;
-        filter: invert(1) grayscale(100);
-      }
-      .active {
-        opacity: 1 !important;
-        height: 17px !important;
-        width: 17px !important;
-      }
-    }
-  }
+	
+    } 
 
-  .card-evento-container{
+
+	.card-evento-container{
 		width: 100%;
 		display: grid;
 		margin: 0 auto;
@@ -192,4 +147,7 @@ onMounted(() => {
       }
     }
   }
+
+  }
+
 </style>
