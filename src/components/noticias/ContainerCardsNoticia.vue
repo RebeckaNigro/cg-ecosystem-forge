@@ -7,7 +7,7 @@
 					<CardNoticia 
 					:is-relacionada="false"
 					:noticia="container"
-					@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: containerIndex }})"/>
+					@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: container.id }})"/>
 				</div> 
 			</nav>
 			
@@ -22,7 +22,7 @@
         :isExternalLink="false"
         link="#"
         bgColor="#639280"
-        width="100px"
+        width="200px"
         textColor="#fff"
         height="40px"
         id="know_more"
@@ -69,7 +69,7 @@ onMounted(() => {
 .card-noticia-container {
 	width: 100%;
 	display: grid;
-	margin: 0 auto;
+	margin: 1rem auto;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: 48px 32px;
 
@@ -77,7 +77,7 @@ onMounted(() => {
 		width: 200px;
 	}
 
-	@media (max-width: 820px) {
+	@media (max-width: 1300px) {
 		max-width: 520px;
 		grid-template-columns: 1fr 1fr;
 	}
