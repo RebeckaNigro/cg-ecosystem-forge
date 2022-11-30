@@ -10,6 +10,7 @@ namespace Ecossistema.API.Controllers
     public class EventoController : ControllerBase
     {
         private readonly IEventoService _eventoService;
+        private readonly IArquivoService _arquivoService;
 
 
         private int UsuarioId
@@ -28,9 +29,10 @@ namespace Ecossistema.API.Controllers
             }
         }
 
-        public EventoController(IEventoService eventoService)
+        public EventoController(IEventoService eventoService, IArquivoService arquivoService)
         {
             _eventoService = eventoService;
+            _arquivoService = arquivoService;
         }
 
         [HttpPost("incluir")]
@@ -48,6 +50,7 @@ namespace Ecossistema.API.Controllers
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
+            await _arquivoService.ExcluirArquivo(id, "evento");
             return await _eventoService.Excluir(id);
         }
 
