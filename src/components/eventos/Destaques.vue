@@ -1,7 +1,7 @@
 <template>
   <section class="destaques ghp">
     <header>
-      <h1 class="dark-title">DESTAQUES</h1>
+      <h1 class="dark-title my-4">DESTAQUES</h1>
     </header>
     <main>
       <DestaquesCarousel
@@ -24,9 +24,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
   section.destaques {
-    background-color: #f6f6f6;
+    
     h1 {
-      font-size: 1.5rem;
+	  font-family: 'Montserrat-SemiBold', sans-serif;
+      font-size: 2rem;
     }
     padding-top: 50px !important;
     padding-bottom: 50px !important;

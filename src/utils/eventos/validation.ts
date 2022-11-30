@@ -47,5 +47,8 @@ export const validateEventoInput = (evento: IEvento) : TypeError | Evento => {
 	if(!eventDescriptionIsValid(evento.descricao)) return TypeError('Insira uma descrição válida')
 	if(!ticketLinkIsValid(evento.linkExterno)) return TypeError('Insira um link para inscrição')
 
-	return new Evento(evento.instituicaoId, evento.tipoEventoId,evento.titulo, evento.descricao, evento.dataInicio, evento.dataTermino, evento.local, evento.enderecoId, evento.endereco, evento.linkExterno, evento.exibirMaps, evento.responsavel )
+	return new Evento(evento.id,evento.instituicaoId, 
+		evento.tipoEventoId,evento.titulo, evento.descricao, 
+		evento.dataInicio, evento.dataTermino, evento.local, evento.enderecoId, 
+		evento.endereco, evento.linkExterno, evento.exibirMaps, evento.responsavel, null )
 }

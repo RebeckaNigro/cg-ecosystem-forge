@@ -1,4 +1,5 @@
 export interface IEvento {
+  id: number
   instituicaoId: number
   tipoEventoId: number
   titulo: string
@@ -11,9 +12,11 @@ export interface IEvento {
   linkExterno: string
   exibirMaps: boolean
   responsavel: string
+  imagem: string | null
 }
 
 export class Evento implements IEvento {
+	id!: number
 	instituicaoId!: number
 	tipoEventoId!: number
 	titulo!: string
@@ -26,8 +29,11 @@ export class Evento implements IEvento {
 	linkExterno!: string
 	exibirMaps!: boolean
 	responsavel!: string
+	imagem!: string
 
-	constructor(instituicaoId: number,
+	constructor(
+		id: number,
+		instituicaoId: number,
 		tipoEventoId: number,
 		titulo: string,
 		descricao: string,
@@ -38,9 +44,11 @@ export class Evento implements IEvento {
 		endereco: INovoEndereco | null,
 		linkExterno: string,
 		exibirMaps: boolean,
-		responsavel: string){
+		responsavel: string,
+		imagem: string | null
+		){
 			
-		[this.instituicaoId, this.tipoEventoId, this.titulo, this.descricao, this.dataInicio, this.dataTermino, this.local, this.enderecoId, this.endereco, this.linkExterno, this.exibirMaps,this.responsavel] = arguments
+		[this.instituicaoId, this.tipoEventoId, this.titulo, this.descricao, this.dataInicio, this.dataTermino, this.local, this.enderecoId, this.endereco, this.linkExterno, this.exibirMaps,this.responsavel, this.imagem] = arguments
 		}
 }
 

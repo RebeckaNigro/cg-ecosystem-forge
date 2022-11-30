@@ -175,7 +175,8 @@ const evento: IEvento = reactive({
 	endereco: novoEndereco,
 	linkExterno: '',
 	exibirMaps: false,
-	responsavel: ''
+	responsavel: '',
+	imagem: ''
 })
 const buscarEnderecosPeloTipo = async () => {
 	useStore.novoEvento.tipoEventoId = evento.tipoEventoId

@@ -8,7 +8,7 @@
 <script setup lang="ts">
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #pesquisar {
 	border-radius: 40px 0px 0px 40px;
 	border: 1px solid #6B6A64;

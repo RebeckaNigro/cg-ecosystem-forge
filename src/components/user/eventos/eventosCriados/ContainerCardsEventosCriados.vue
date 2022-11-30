@@ -23,7 +23,7 @@
 
 			<div v-for="(evento, index) in eventos" :key="index">
 
-				<CardEventoCriado :has-image="false" image="" :nome-evento="evento.titulo"
+				<CardEventoCriado :has-image="evento.imagem == null" :image="evento.imagem!" :nome-evento="evento.titulo"
 					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
 					:evento-id="evento.id" />
 			</div>
@@ -42,11 +42,11 @@ import { onMounted, reactive, ref } from 'vue';
 import FilterComponent from '../../../../components/general/FilterComponent.vue';
 import CardEventoCriado from '../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
 import { useEventoStore } from '../../../../stores/eventos/store';
-import { IUltimoEvento } from '../../../../stores/eventos/types';
+import { IEvento, IUltimoEvento } from '../../../../stores/eventos/types';
 
 const eventoStore = useEventoStore()
 const lastIndex = ref(6)
-let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
+let eventos = ref<Array<IEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
 
 const searchInputText = ref('')
 
@@ -75,7 +75,7 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .eventos-container {
 	display: flex;
 	flex-direction: column;
