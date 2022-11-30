@@ -156,6 +156,17 @@ export const useEventoStore = defineStore('eventoStore', {
 			}
   
 		}
+	},
+	async getEventById(eventoId: number){
+		try{
+			const response = await httpRequest.get(`/api/evento/detalhes?Id=${eventoId}`)
+			if(response.data.codigo === 200){
+				this.eventResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
+			}
+		}catch(error){
+			console.error(error);
+			
+		}
 	}
   }
 })
