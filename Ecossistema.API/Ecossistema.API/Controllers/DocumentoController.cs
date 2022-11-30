@@ -71,9 +71,9 @@ namespace Ecossistema.API.Controllers
 
         [HttpGet("downloadDocumento")]
 
-        public async Task<IActionResult> DownloadDocumento(int id, string nome)
+        public async Task<IActionResult> DownloadDocumento(int id, string nome, EOrigem origem)
         {
-            var result = await _arquivoService.DownloadArquivo(id, nome, EOrigem.Documento);
+            var result = await _arquivoService.DownloadArquivo(id, nome, origem);
             if(result == null)
             {
                 return NotFound();

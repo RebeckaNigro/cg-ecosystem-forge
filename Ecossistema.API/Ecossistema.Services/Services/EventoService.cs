@@ -276,7 +276,16 @@ namespace Ecossistema.Services.Services
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 evento[evento.Count - 1].DataOperacao = item.DataOperacao;
                 if (temp.Count > 0)
+                {
                     evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
+                    if(evento[evento.Count - 1].Arquivo != null)
+                    {
+                        var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
+                        evento[evento.Count - 1].LinkImagem = aux.ToString();
+                    }
+                        
+                    //
+                }
                 else
                     evento[evento.Count - 1].Arquivo = null;
                 evento.Add(new EventoGetImagenDto());
@@ -291,6 +300,7 @@ namespace Ecossistema.Services.Services
                     dataTermino = x.DataTermino,
                     local = x.Local,
                     arquivo = x.Arquivo,
+                    link = x.LinkImagem,
                     utimaAtualizacao = x.DataOperacao
 
                 })

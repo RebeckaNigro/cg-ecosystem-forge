@@ -17,5 +17,7 @@ namespace Ecossistema.Services.Dto
 
         public Byte[]? Arquivo { get; set; }
         public DateTime? DataOperacao { get; set; }
+
+        public string? LinkImagem { get; set; }
     }
 }

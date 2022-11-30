@@ -225,7 +225,11 @@ namespace Ecossistema.Services.Services
                 //resposta.SetNaoEncontrado("Documento não existe");
                 return null;
             }
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
+            if (origem == EOrigem.Documento)
+            {
+                path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
+            }
             string dir = Directory.GetFiles(path, Path.GetFileName(arquivoId.ToString()) + ".*").FirstOrDefault();
             string fileExtension = dir.Split('.').Last();
             var data = System.IO.File.ReadAllBytes(dir);
