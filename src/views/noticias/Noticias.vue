@@ -14,23 +14,36 @@
 
 			<div class="container mt-5">
 
-				<div class="filters row justify-content-between align-items-end ">
-					<div class="filtrar-area col">
+				<div class="filters row justify-content-end align-items-end ">
+					<!--<div class="filtrar-area col">
 						<FilterComponent content-type="área" :datas="[]" class="mx-4" />
 					</div>
 
 					<div class="filtrar-organizador col">
 						<FilterComponent content-type="organizador" :datas="[]" class="mx-4" />
 
-					</div>
+					</div>-->
 					<div class="pesquisar col">
 
-						<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar">
-						<button class="btn" id="btn-pesquisar">
+						<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
+						<button class="btn" id="btn-pesquisar" @click="handleSearch">
 							<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
 						</button>
 					</div>
 				</div>
+			</div>
+
+			<div class="search-results-container dark-body-text">
+				
+				<nav v-for="(container, containerIndex) in searchResults" :key="containerIndex">
+					
+						<CardNoticia 
+						:is-relacionada="false"
+						:noticia="container"
+						@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: container.id }})"/>
+					
+				</nav>
+				
 			</div>
 
 
@@ -42,16 +55,44 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import Banner from '../../components/general/Banner.vue';
-import FilterComponent from '../../components/general/FilterComponent.vue';
 import ContainerCardsNoticia from '../../components/noticias/ContainerCardsNoticia.vue';
 import ContainerUltimasNoticias from '../../components/noticias/ContainerUltimasNoticias.vue';
+import { useNoticiaStore } from '../../stores/noticias/store';
+import { IUltimaNoticia } from '../../stores/noticias/types';
+import CardNoticia from '../../components/noticias/CardNoticia.vue';
+
+const noticiaStore = useNoticiaStore()
+let searchResults = ref<Array<IUltimaNoticia>>()
+const searchInputText = ref('')
+
+const handleSearch = () => {
+	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
+	if(inputTextLowerCase !== '' ){
+		
+		searchResults.value = noticiaStore.allNews.filter((noticia) => {
+			if(noticia.titulo){
+				const tituloLowerCase = noticia.titulo.toLowerCase()
+				return tituloLowerCase.includes(inputTextLowerCase)
+			}
+			return false
+			
+		})
+	
+		console.log(searchResults.value);
+	}else{
+		searchResults.value = []
+	}
+	
+}
 </script>
 
 <style scoped lang="scss">
 section.container-fluid {
 	padding: 0;
 	margin-bottom: 40px;
+	overflow: hidden;
 
 	.filtrar-area,
 	.filtrar-organizador {
@@ -72,7 +113,9 @@ section.container-fluid {
 			padding: .35rem .7rem .52rem .7rem;
 			width: 300px;
 
-
+			@media (max-width: 1000px) {
+				width: 200px;
+			}
 		}
 
 		#btn-pesquisar {
@@ -92,10 +135,31 @@ section.container-fluid {
 			outline: 0;
 			box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
 		}
-
+		@media (max-width: 1000px) {
+			margin: 0 auto;
+		}
 		@media (max-width: 580px) {
 			margin-top: 1.5rem;
 		}
+	}
+
+	.search-results-container{
+		width: 100%;
+		display: grid;
+		margin: 1.5rem 2rem;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 48px 28px;
+	
+		@media (max-width: 820px) {
+			max-width: 520px;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@media (max-width: 580px) {
+			max-width: 280px;
+			grid-template-columns: 1fr;
+		}
+
 	}
 }
 
