@@ -33,7 +33,7 @@
 				</div>
 			</div>
 
-			<div class="search-results-container dark-body-text">
+			<div class="search-results-container dark-body-text" v-if="isResultsVisible">
 				
 				<nav v-for="(container, containerIndex) in searchResults" :key="containerIndex">
 					
@@ -46,9 +46,10 @@
 				
 			</div>
 
-
-			<ContainerUltimasNoticias />
-			<ContainerCardsNoticia />
+			<div v-else>
+				<ContainerUltimasNoticias />
+				<ContainerCardsNoticia/>
+			</div>
 		</main>
 	</section>
 	<FooterComponent />
@@ -64,8 +65,9 @@ import { IUltimaNoticia } from '../../stores/noticias/types';
 import CardNoticia from '../../components/noticias/CardNoticia.vue';
 
 const noticiaStore = useNoticiaStore()
-let searchResults = ref<Array<IUltimaNoticia>>()
+const searchResults = ref<Array<IUltimaNoticia>>()
 const searchInputText = ref('')
+const isResultsVisible = ref(false)
 
 const handleSearch = () => {
 	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
@@ -79,10 +81,11 @@ const handleSearch = () => {
 			return false
 			
 		})
+		isResultsVisible.value = true
 	
-		console.log(searchResults.value);
 	}else{
 		searchResults.value = []
+		isResultsVisible.value = false
 	}
 	
 }
