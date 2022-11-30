@@ -75,7 +75,7 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss">
+<style setup lang="scss">
 .eventos-container {
 	display: flex;
 	flex-direction: column;
