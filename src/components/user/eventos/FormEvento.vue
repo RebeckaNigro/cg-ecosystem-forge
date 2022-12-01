@@ -18,7 +18,7 @@
 			<label for="nome-evento">Nome do evento*</label>
 			<input type="text" class="form-control boring-gray-border w-100" id="nome-evento" v-model="evento.titulo">
 		</div>
-		<div class="imagem-divulgacao d-flex">
+		<!--<div class="imagem-divulgacao d-flex">
 			<div>
 				<label for="imagem-input-mask">Imagem de divulgação (opicional)</label>
 				<label for="imagem-input" class="boring-gray-border" />
@@ -26,7 +26,7 @@
 					@change="e => handleFileInputChange(e)">
 			</div>
 			<span id="nome-imagem">{{ fileName }}</span>
-		</div>
+		</div>-->
 		<div class="datas-inicio-fim d-flex">
 			<div class="inicio mt-0">
 				<label for="data-inicio">Data de início*</label>
@@ -49,10 +49,10 @@
 					v-model="evento.dataTermino">-->
 			</div>
 		</div>
-		<div class="tags-evento">
+		<!--<div class="tags-evento">
 			<label>Tags</label>
 			<TagInput/>
-		</div>
+		</div>-->
 		<div class="descricao-evento">
 			<label for="descricao">Descrição do evento*</label>
 			<textarea name="descricao" id="descricao" cols="30" rows="10" class="boring-gray-border"
@@ -90,7 +90,7 @@
 			</div>
 			
 			<div class="complemento">
-				<label for="complemento">Complemento</label>
+				<label for="complemento">Complemento *</label>
 				<input type="text" name="complemento" id="complemento" class="boring-gray-border"
 				 v-model="novoEndereco.complemento">
 			</div>
@@ -107,22 +107,22 @@
 				</div>
 			</div>
 		</div>
-		<div class="exibir-maps d-flex">
+		<!--<div class="exibir-maps d-flex">
 			<input type="checkbox" name="exibir-maps" id="exibir-maps" v-model="evento.exibirMaps">
 			<label for="exibir-maps">Exibir endereço no Google Maps</label>
-		</div>
+		</div>-->
 		<div class="link-ingressos">
 			<label for="ingressos">Link para obtenção de ingressos *</label>
 			<input type="text" name="ingressos" id="ingressos" class="boring-gray-border" v-model="evento.linkExterno">
 		</div>
-		<div class="exibir-maps d-flex">
+		<!--<div class="exibir-maps d-flex">
 			<input type="checkbox" name="exibir-maps" id="exibir-maps" v-model="evento.exibirMaps">
 			<label for="exibir-maps">Lorem ipsum dolor sit amet consectetur. Morbi rhoncus ut vulputate mus augue.</label>
-		</div>
+		</div>-->
 	
 		<div class="d-flex justify-content-around acoes-container">
-			<button class="btn-salvar-rascunho">Salvar rascunho</button>
-			<button class="btn-pre-visualizar">Pré-visualizar</button>
+			<!--<button class="btn-salvar-rascunho">Salvar rascunho</button>
+			<button class="btn-pre-visualizar">Pré-visualizar</button>-->
 			<button class="btn-enviar" @click.prevent="handleAction('publicar')">Enviar</button>
 		</div>
 	</form>
@@ -313,7 +313,7 @@ const existingAddresses = computed(() => {
 	div {
 		width: 100%;
 		text-align: start;
-		margin-top: 2rem;
+		margin-top: 2.8rem;
 		display: grid;
 
 		label[for="imagem-input"] {
