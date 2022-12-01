@@ -3,7 +3,7 @@
 		
 		<img src="/public/noticias/noticia.png" alt="" class="card-noticia-image">
 		<span class="tags">#tecnologia #inovação</span>
-		<p v-if="!isRelacionada">{{noticia.titulo}}</p>
+		<p v-if="!isRelacionada">{{noticia?.titulo}}</p>
 	</div>
 </template>
 
@@ -11,7 +11,7 @@
 import { IUltimaNoticia } from '../../stores/noticias/types';
 
   const props = defineProps<{
-	noticia: IUltimaNoticia
+	noticia: IUltimaNoticia | null
     isRelacionada: boolean
   }>()
 </script>

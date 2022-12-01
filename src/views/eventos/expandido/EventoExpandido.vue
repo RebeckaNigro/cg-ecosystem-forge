@@ -8,7 +8,6 @@
     figcaption="ilustração de evento"
   >
   <div class="d-flex h-100 position-absolute top-0 ghp">
-    <img src="/eventos/banner_icon.png" alt="icon">
     <h1 class="dark-title">EVENTOS
       <p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
     </h1>

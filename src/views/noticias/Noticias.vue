@@ -27,7 +27,7 @@
 
 						<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
 						<button class="btn" id="btn-pesquisar" @click="handleSearch">
-							<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
+							<img src="/public/search_icon.svg" alt="Pesquisar">
 						</button>
 					</div>
 				</div>

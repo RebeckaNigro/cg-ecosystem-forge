@@ -5,7 +5,7 @@
     </header>
     <main class="d-flex mt-3 mb-3" v-if="!isLoadingLastEvents">
       <div class="card-ultimo-evento" v-for="(card, index) in useStore.ultimosEventos">
-        <img class="capa-evento" src="..." alt="capa evento">
+        <img class="capa-evento" src="" alt="capa evento">
         <span class="title">{{ card.titulo }}</span>
         <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
         <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
