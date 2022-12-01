@@ -15,13 +15,13 @@
 	
 				<div class="d-flex acoes-container col">
 					<button class="visualizar" @click="$router.push({name: 'EventoExpandido', params: {eventoId}})">
-						<img src="../../../../../public/view_icon.svg" alt="">
+						<img src="../../../../../public/view_icon.svg" alt="Visualizar evento">
 					</button>
-					<button class="editar">
-						<img src="../../../../../public/edit_icon.svg" alt="">
+					<button class="editar" @click="$router.push({name: 'GerenciaEvento', params: {eventoId: eventoId}})">
+						<img src="../../../../../public/edit_icon.svg" alt="Editar evento">
 					</button>
 					<button class="deletar" @click="handleDeleteEvent(eventoId)">
-						<img src="../../../../../public/delete_icon.svg" alt="">
+						<img src="../../../../../public/delete_icon.svg" alt="Excluir evento">
 					</button>
 				</div>
 			</div>
@@ -115,6 +115,10 @@ const handleDeleteEvent = async (eventoId: number) => {
 		button {
 			background-color: transparent;
 			border: unset;
+		}
+
+		button:hover{
+			box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.20);
 		}
 
 		img {
