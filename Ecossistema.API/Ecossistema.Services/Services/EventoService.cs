@@ -49,6 +49,7 @@ namespace Ecossistema.Services.Services
 
                 if (dado.EnderecoId == null)
                 {
+                    
                     dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
 
                     if (dado.EnderecoId == 0) return resposta;
@@ -211,32 +212,49 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas()
+        /*public async Task<RespostaPadrao> ListarUltimas()
         {
             var resposta = new RespostaPadrao();
 
             var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
-
-            var result = query.Select(x => new
+            List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
+            evento.Add(new EventoGetImagenDto());
+            foreach (var item in query)
+            {
+                evento[evento.Count - 1].Id = item.Id;
+                evento[evento.Count - 1].Titulo = item.Titulo;
+                evento[evento.Count - 1].DataInicio = item.DataInicio;
+                evento[evento.Count - 1].DataTermino = item.DataTermino;
+                evento[evento.Count - 1].Local = item.Local;
+                var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                evento[evento.Count - 1].DataOperacao = item.DataOperacao;
+                if (temp.Count > 0)
+                    evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
+                else
+                    evento[evento.Count - 1].Arquivo = null;
+                evento.Add(new EventoGetImagenDto());
+            }
+            var result = evento.Select(x => new
             {
                 id = x.Id,
                 titulo = x.Titulo,
                 dataInicio = x.DataInicio,
                 dataTermino = x.DataTermino,
-                local = x.Local
+                local = x.Local,
+                arquivo = x.Arquivo,
+                utimaAtualizacao = x.DataOperacao
+
             })
             .Distinct()
             .OrderByDescending(x => x.dataInicio)
             .Take(3)
             .ToList();
-
             resposta.Retorno = result;
-
             return resposta;
-        }
+        }*/
 
-        public async Task<RespostaPadrao> ListarTodas()
+        public async Task<RespostaPadrao> ListarEventos(int listagem)
         {
             var resposta = new RespostaPadrao();
 
@@ -256,27 +274,60 @@ namespace Ecossistema.Services.Services
                 evento[evento.Count - 1].DataTermino = item.DataTermino;
                 evento[evento.Count - 1].Local = item.Local;
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                evento[evento.Count - 1].DataOperacao = item.DataOperacao;
                 if (temp.Count > 0)
+                {
                     evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
+                    if(evento[evento.Count - 1].Arquivo != null)
+                    {
+                        var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
+                        evento[evento.Count - 1].LinkImagem = aux.ToString();
+                    }
+                        
+                    //
+                }
                 else
                     evento[evento.Count - 1].Arquivo = null;
                 evento.Add(new EventoGetImagenDto());
             }
-
-            var result = evento.Select(x => new
+            if(listagem == 1)
             {
-                id = x.Id,
-                titulo = x.Titulo,
-                dataInicio = x.DataInicio,
-                dataTermino = x.DataTermino,
-                local = x.Local,
-                arquivo = x.Arquivo
+                var result = evento.Select(x => new
+                {
+                    id = x.Id,
+                    titulo = x.Titulo,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    arquivo = x.Arquivo,
+                    link = x.LinkImagem,
+                    utimaAtualizacao = x.DataOperacao
 
-            })
+                })
             .Distinct()
             .OrderByDescending(x => x.dataInicio)
             .ToList();
-            resposta.Retorno = result;
+                resposta.Retorno = result;
+            }
+            else if(listagem == 2)
+            {
+                var result = evento.Select(x => new
+                {
+                    id = x.Id,
+                    titulo = x.Titulo,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    arquivo = x.Arquivo,
+                    utimaAtualizacao = x.DataOperacao
+
+                })
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .Take(3)
+            .ToList();
+                resposta.Retorno = result;
+            }
             return resposta;
         }
 

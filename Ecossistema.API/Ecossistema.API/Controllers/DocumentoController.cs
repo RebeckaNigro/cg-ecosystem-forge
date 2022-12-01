@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Ecossistema.Util.Const;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -40,6 +41,7 @@ namespace Ecossistema.API.Controllers
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
+            await _arquivoService.ExcluirArquivo(id, "documento");
             return await _documentoService.Excluir(id);
         }
 
@@ -69,9 +71,9 @@ namespace Ecossistema.API.Controllers
 
         [HttpGet("downloadDocumento")]
 
-        public async Task<IActionResult> DownloadDocumento(int id, string nome)
+        public async Task<IActionResult> DownloadDocumento(int id, string nome, EOrigem origem)
         {
-            var result = await _arquivoService.DownloadArquivo(id, nome);
+            var result = await _arquivoService.DownloadArquivo(id, nome, origem);
             if(result == null)
             {
                 return NotFound();

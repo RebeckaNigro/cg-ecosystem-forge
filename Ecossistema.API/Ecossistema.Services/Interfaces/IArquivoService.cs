@@ -15,7 +15,8 @@ namespace Ecossistema.Services.Interfaces
         Task<bool> Vincular(EOrigem origem, int id, List<IFormFile>? arquivos, int usuarioId, DateTime dataAtual, RespostaPadrao resposta);
         //Task<bool> Vincular(EOrigem origem, int id, IFormFile? arquivo, int usuarioId, DateTime dataAtual, RespostaPadrao resposta);
         Task<List<ArquivoDto>> ObterArquivos(EOrigem origem, int id, RespostaPadrao resposta);
-        Task<FileContentResult> DownloadArquivo(int id, string nome);
+        Task<FileContentResult> DownloadArquivo(int id, string nome, EOrigem origem);
+        Task<RespostaPadrao> ExcluirArquivo(int id, string tipo);
         //Task<RespostaPadrao> EncontraArquivoId(int id);
     }
 }
