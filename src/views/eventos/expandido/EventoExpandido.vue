@@ -4,30 +4,41 @@
   />
   <ContainerInformacoes
     :data="{
-      eventDate: '22/12/22',
-      eventId: 'kk',
-      eventLocation: 'acapulco',
-      eventName: 'Challenge',
-      img: '/eventos/event_img.png'
+      eventDate: evento?.dataInicio!,
+      eventId: evento?.id!,
+      eventLocation: evento?.local!,
+      eventName: evento?.titulo!,
+      img: null
     }"
   />
-  <ContainerDescricao />
-  <ContainerOrganizador />
+  <ContainerDescricao 
+ 	:descricaoEvento="evento?.descricao!"
+	:linkEvento="evento?.linkExterno!" 
+  />
+  <!--<ContainerOrganizador />-->
   <FooterComponent />
 </template>
 
 <script setup lang="ts">
 import NavBar from '../../../components/general/NavBar.vue'
-import Banner from '../../../components/general/Banner.vue';
 import ContainerInformacoes from '../../../components/eventos/expandido/ContainerInformacoes.vue';
 import ContainerDescricao from '../../../components/eventos/expandido/ContainerDescricao.vue';
 import ContainerOrganizador from '../../../components/eventos/expandido/ContainerOrganizador.vue';
 import FooterComponent from '../../../components/general/FooterComponent.vue';
-import { IUltimoEvento } from '../../../stores/eventos/types';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useEventoStore } from '../../../stores/eventos/store';
+import router from '../../../router';
+import { IEvento, IUltimoEvento } from '../../../stores/eventos/types';
 
 const eventoStore = useEventoStore()
+const evento = ref<IEvento>()
+
+onMounted(async () => {
+	await eventoStore.getEventById(parseInt(router.currentRoute.value.params.eventoId.toString()))
+	evento.value = eventoStore.eventResponse.dado;
+	console.log(evento.value);
+	
+})
 
 </script>
 
