@@ -2,18 +2,6 @@
   <NavBar 
     :is-transparent="false"
   />
-  <Banner
-    path="/eventos/banner.png"
-    img-alt="evento do hub"
-    figcaption="ilustração de evento"
-  >
-  <div class="d-flex h-100 position-absolute top-0 ghp">
-    <img src="/eventos/banner_icon.png" alt="icon">
-    <h1 class="dark-title">EVENTOS
-      <p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
-    </h1>
-  </div>
-  </Banner>
   <ContainerInformacoes
     :data="{
       eventDate: '22/12/22',
@@ -35,6 +23,11 @@ import ContainerInformacoes from '../../../components/eventos/expandido/Containe
 import ContainerDescricao from '../../../components/eventos/expandido/ContainerDescricao.vue';
 import ContainerOrganizador from '../../../components/eventos/expandido/ContainerOrganizador.vue';
 import FooterComponent from '../../../components/general/FooterComponent.vue';
+import { IUltimoEvento } from '../../../stores/eventos/types';
+import { ref } from 'vue';
+import { useEventoStore } from '../../../stores/eventos/store';
+
+const eventoStore = useEventoStore()
 
 </script>
 

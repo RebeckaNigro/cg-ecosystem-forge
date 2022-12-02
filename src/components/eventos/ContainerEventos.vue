@@ -14,6 +14,7 @@
 			:dataInicio="container.dataInicio"
 			:dataTermino="container.dataTermino"
 			:enderecoEvento="container.local"
+			:eventoId="container.id"
 			/>
 		</nav>
 	</div>

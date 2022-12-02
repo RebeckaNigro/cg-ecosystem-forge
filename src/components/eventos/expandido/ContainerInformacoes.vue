@@ -4,7 +4,6 @@
       <img :src="data.img" class="d-block w-100" alt="destaques-carousel">
     </header>
     <main class="ghp mb-5">
-      <img src="" alt="logo" class="company-logo">
       <div>
         <h1 id="event-name" class="dark-title">{{ data.eventName }}</h1>
         <time class="dark-body-text calendar-icon">{{ data.eventDate }}</time>

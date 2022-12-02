@@ -24,6 +24,7 @@
             height="40px"
             :id="'ver-mais' + data.id"
             class="details"
+			@click="$router.push({name: 'EventoExpandido', params: {eventoId: data.id}})"
           />
         </section>
       </div>
@@ -44,7 +45,7 @@
 <script setup lang="ts">
 import { IUltimoEvento } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
-import {brDateString, friendlyDateTime} from '../../utils/formatacao/datetime'
+import {brDateString} from '../../utils/formatacao/datetime'
   const props = defineProps<{
     carouselData: IUltimoEvento[]
   }>()

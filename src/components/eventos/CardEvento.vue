@@ -9,7 +9,7 @@
       <time class="data-evento">{{ brDateString(dataInicio) }} - {{ brDateString(dataTermino) }}</time>
       <address class="endereco-evento">{{ enderecoEvento }}</address>
 
-	  <a href="#" class="ver-detalhes">Ver detalhes</a>
+	  <a href="#" class="ver-detalhes" @click="$router.push({name: 'EventoExpandido', params: {eventoId: eventoId}})">Ver detalhes</a>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ import { brDateString, friendlyDateTime } from '../../utils/formatacao/datetime'
     dataInicio: string
 	dataTermino: string
     enderecoEvento: string
+	eventoId: number
   }>()
 </script>
 
