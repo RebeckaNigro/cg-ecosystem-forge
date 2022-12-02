@@ -4,7 +4,10 @@
       <h1 class="dark-title">EVENTOS</h1>
     </header>
 
-	
+	<Spinner
+		spinner-color-class="text-dark"
+		v-if="loadingContent"
+	/>
 	<div class="card-evento-container mb-5">
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
@@ -51,10 +54,12 @@ import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { useEventoStore } from '../../stores/eventos/store';
 import { IUltimoEvento } from '../../stores/eventos/types';
+import Spinner from '../general/Spinner.vue';
 
 const eventoStore = useEventoStore()
 const selectedPage = ref(0)
 const indicators = ref(3)
+const loadingContent = ref(false)
 
 const lastIndex = ref(3)
 let eventos = ref<Array<IUltimoEvento>>()
@@ -104,8 +109,10 @@ const addEventsToView = () => {
 }
 
 onMounted(async () => {
+	loadingContent.value = true
 	await eventoStore.getAllEvents()
 	eventos.value = eventoStore.eventos.slice(0, 3)
+	loadingContent.value = false
 })
 </script>
 

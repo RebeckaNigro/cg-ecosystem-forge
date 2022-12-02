@@ -48,7 +48,7 @@
 			<nav v-for="(container, containerIndex) in searchResults" :key="containerIndex">
 				<CardEvento :hasImage="false" :image="''" :nomeEvento="container.titulo"
 				:dataInicio="container.dataInicio"
-			:dataTermino="container.dataTermino" :enderecoEvento="container.local" />
+			:dataTermino="container.dataTermino" :enderecoEvento="container.local" :eventoId="container.id" />
 			</nav>
 		</div>
 

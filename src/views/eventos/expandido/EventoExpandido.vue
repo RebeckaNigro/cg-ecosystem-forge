@@ -2,9 +2,12 @@
   <NavBar 
     :is-transparent="false"
   />
+
+  <Spinner spinnerColorClass="text-dark" v-if="loadingContent"
+  />
   <ContainerInformacoes
-    :data="{
-      eventDate: evento?.dataInicio!,
+  :data="{
+	  eventDate: evento?.dataInicio!,
       eventId: evento?.id!,
       eventLocation: evento?.local!,
       eventName: evento?.titulo!,
@@ -29,15 +32,18 @@ import { onMounted, ref } from 'vue';
 import { useEventoStore } from '../../../stores/eventos/store';
 import router from '../../../router';
 import { IEvento, IUltimoEvento } from '../../../stores/eventos/types';
+import Spinner from '../../../components/general/Spinner.vue';
 
 const eventoStore = useEventoStore()
 const evento = ref<IEvento>()
+const loadingContent = ref(false)
 
 onMounted(async () => {
+	loadingContent.value = true
 	await eventoStore.getEventById(parseInt(router.currentRoute.value.params.eventoId.toString()))
 	evento.value = eventoStore.eventResponse.dado;
-	console.log(evento.value);
-	
+	loadingContent.value = false
+
 })
 
 </script>
