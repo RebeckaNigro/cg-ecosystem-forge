@@ -17,9 +17,9 @@
 					<button class="visualizar">
 						<img src="../../../../../public/view_icon.svg" alt="">
 					</button>
-					<button class="editar">
+					<!--<button class="editar">
 						<img src="../../../../../public/edit_icon.svg" alt="">
-					</button>
+					</button>-->
 					<button class="deletar">
 						<img src="../../../../../public/delete_icon.svg" alt="">
 					</button>

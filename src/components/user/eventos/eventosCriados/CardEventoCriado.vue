@@ -17,9 +17,9 @@
 					<button class="visualizar" @click="$router.push({name: 'EventoExpandido', params: {eventoId}})">
 						<img src="../../../../../public/view_icon.svg" alt="Visualizar evento">
 					</button>
-					<button class="editar" @click="$router.push({name: 'GerenciaEvento', params: {eventoId: eventoId}})">
+					<!---<button class="editar" @click="$router.push({name: 'GerenciaEvento', params: {eventoId: eventoId}})">
 						<img src="../../../../../public/edit_icon.svg" alt="Editar evento">
-					</button>
+					</button>-->
 					<button class="deletar" @click="handleDeleteEvent(eventoId)">
 						<img src="../../../../../public/delete_icon.svg" alt="Excluir evento">
 					</button>
