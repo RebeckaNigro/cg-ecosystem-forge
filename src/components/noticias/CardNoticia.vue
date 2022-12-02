@@ -1,7 +1,9 @@
 <template>
 	<div class="card-noticia-content" :class="[isRelacionada ? 'is-relacionada' : 'not-relacionada']">
-		<div class="card-noticia-image"></div>
-		<p v-if="!isRelacionada">{{noticia.titulo}}</p>
+		
+		<img src="/public/noticias/noticia.png" alt="" class="card-noticia-image">
+		<span class="tags">#tecnologia #inovação</span>
+		<p v-if="!isRelacionada">{{noticia?.titulo}}</p>
 	</div>
 </template>
 
@@ -9,7 +11,7 @@
 import { IUltimaNoticia } from '../../stores/noticias/types';
 
   const props = defineProps<{
-	noticia: IUltimaNoticia
+	noticia: IUltimaNoticia | null
     isRelacionada: boolean
   }>()
 </script>
@@ -26,30 +28,36 @@ import { IUltimaNoticia } from '../../stores/noticias/types';
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-  max-height: 315px;
-  padding: 10px;
-  min-width: 260px;
+	max-height: 400px;
+	padding: 10px;
+	font-family: 'Montserrat-Medium', sans-serif;
+	min-width: 260px;
 
 	> p {
-		font-size: 24px;
-		font-weight: 600;
+		font-size: 1rem;
+		overflow: hidden;
 		text-transform: uppercase;
 		margin-bottom: 2px;
+		text-overflow: ellipsis;
+		text-align: start;
 	}
 
 	> span {
 		text-align: start;
+		text-transform: uppercase;
+		font-size: .75rem;
 		line-height: 20px;
 	}
 }
 .card-noticia-content:hover {
   cursor: pointer;
-  box-shadow: 0 0 30px 5px gray;
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;	
 }
 .card-noticia-image {
 	width: 100%;
 	height: 220px;
-	border: 1px solid black;
+
 	margin-bottom: 16px;
 }
 </style>

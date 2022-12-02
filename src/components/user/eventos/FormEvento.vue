@@ -141,6 +141,10 @@ import { Modal } from 'bootstrap';
 import TagInput from '../../general/TagInput.vue';
 import { useUserStore } from '../../../stores/user/store';
 
+const props = defineProps<{
+	eventoId: number | null
+}>()
+
 const useStore = useEventoStore()
 const userStore = useUserStore()
 const sendingEvent = ref(false)
@@ -162,7 +166,7 @@ const novoEndereco: INovoEndereco = reactive({
 	cidade: '',
 	uf: ''
 })
-const evento: IEvento = reactive({
+let evento: IEvento = reactive({
 	id: 1,
 	instituicaoId: 1, // id do parceiro que o usuário logado representa
 	tipoEventoId: 1,
@@ -252,6 +256,9 @@ const openModal = (modalId: string, mt: string, mm: string, ms: string) => {
 }
 onMounted(async () => {
 	await useStore.getAddresses('1')
+	if(props.eventoId){
+		console.log(props.eventoId)
+	}
 
 })
 const setAddressInputFields = (enderecoId: number | null) => {

@@ -5,13 +5,13 @@
     </header>
     <main class="d-flex mt-3 mb-3" v-if="!isLoadingLastEvents">
       <div class="card-ultimo-evento" v-for="(card, index) in useStore.ultimosEventos">
-        <img class="capa-evento" src="..." alt="capa evento">
+        <img class="capa-evento" src="" alt="capa evento">
         <span class="title">{{ card.titulo }}</span>
         <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
         <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
         <div class="location">{{ card.local }}</div>
 		<div class="actions-container">
-			<button>
+			<button @click="$router.push({name: 'GerenciaEvento', params: {eventoId: card.id}})">
 				<img src="/pen-icon.svg" alt="pen_icon">
 			</button>
 			<button @click="handleDeleteEvent(card.id)">
@@ -25,7 +25,7 @@
     </div>
     <footer>
       <button type="button" class="btn btn-primary" @click="$router.push({ name: 'EventosCriados'})">Ver mais</button>
-      <button type="button" class="btn btn-primary" @click="$router.push({ name: 'GerenciaEvento'})">Criar evento</button>
+      <button type="button" class="btn btn-primary" @click="$router.push({ name: 'GerenciaEvento', params: {eventoId: 0}})">Criar evento</button>
     </footer>
   </section>
 </template>

@@ -4,9 +4,11 @@
     <main class="d-flex">
       <CardNoticia 
         :is-relacionada="true"
+		:noticia="null"
       />
       <CardNoticia 
         :is-relacionada="true"
+		:noticia="null"
       />
     </main>
   </section>

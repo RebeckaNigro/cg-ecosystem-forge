@@ -3,13 +3,13 @@
 
 		<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Eventos criados</h1>
 
-		<button class="btn-criar-evento" @click="$router.push({ name: 'GerenciaEvento' })">+ Criar novo evento</button>
+		<button class="btn-criar-evento" @click="$router.push({ name: 'GerenciaEvento', params: { eventoId: 0 } })">+ Criar novo evento</button>
 
 		<div class="row justify-content-between w-100 align-items-end mb-5">
 
-			<div class="filtrar-data col">
+			<!--<div class="filtrar-data col">
 				<FilterComponent :content-type="'data'" :datas="[]" />
-			</div>
+			</div>-->
 
 			<div class="pesquisar col d-flex justify-content-end">
 				<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
@@ -31,7 +31,7 @@
 
 		<div class="botoes-container w-100 d-flex justify-content-around mt-5">
 			<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
-			<button class="btn-ver-mais w-100 ms-3" @click="addEventsToView">Ver mais</button>
+			<button class="btn-ver-mais w-100 ms-3" @click="addEventsToView" v-if="!isSearchResultsVisible">Ver mais</button>
 		</div>
 	</div>
 
@@ -48,6 +48,7 @@ const eventoStore = useEventoStore()
 const lastIndex = ref(6)
 let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
 
+const isSearchResultsVisible = ref(false)
 const searchInputText = ref('')
 
 const addEventsToView = () => {
@@ -58,14 +59,22 @@ const addEventsToView = () => {
 const handleSearch = () => {
 	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
 	
-	eventos.value = eventoStore.eventos.filter((evento) => {
-		if(evento.titulo){
-			const tituloLowerCase = evento.titulo.toLowerCase()
-			return tituloLowerCase.includes(inputTextLowerCase)
-		}
-		return false
-		
-	})
+	if(inputTextLowerCase !== ''){
+		eventos.value = eventoStore.eventos.filter((evento) => {
+			if(evento.titulo){
+				const tituloLowerCase = evento.titulo.toLowerCase()
+				return tituloLowerCase.includes(inputTextLowerCase)
+			}
+			return false
+			
+		})
+
+		isSearchResultsVisible.value = true
+	}else{
+		isSearchResultsVisible.value = false
+	}
+
+	console.log(isSearchResultsVisible.value);
 	
 }
 
