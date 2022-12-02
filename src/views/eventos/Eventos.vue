@@ -47,7 +47,8 @@
 		<div class="search-results-container" v-if="isSearchResultsVisible">
 			<nav v-for="(container, containerIndex) in searchResults" :key="containerIndex">
 				<CardEvento :hasImage="false" :image="''" :nomeEvento="container.titulo"
-					:dataEvento="container.dataInicio" :enderecoEvento="container.local" />
+				:dataInicio="container.dataInicio"
+			:dataTermino="container.dataTermino" :enderecoEvento="container.local" />
 			</nav>
 		</div>
 
@@ -68,13 +69,13 @@ import Destaques from '../../components/eventos/Destaques.vue';
 import ContainerEventos from '../../components/eventos/ContainerEventos.vue';
 import FooterComponent from '../../components/general/FooterComponent.vue';
 import { ref } from 'vue';
-import { IEvento } from '../../stores/eventos/types';
+import { IEvento, IUltimoEvento } from '../../stores/eventos/types';
 import { useEventoStore } from '../../stores/eventos/store';
 import CardEvento from '../../components/eventos/CardEvento.vue';
 
 const searchInputText = ref('')
 const eventoStore = useEventoStore()
-const searchResults = ref<Array<IEvento>>([])
+const searchResults = ref<Array<IUltimoEvento>>([])
 const isSearchResultsVisible = ref(false)
 
 const handleSearch = () => {

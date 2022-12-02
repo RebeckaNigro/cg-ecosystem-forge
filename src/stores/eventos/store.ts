@@ -22,7 +22,7 @@ const novoEvento: IEvento = {
 }
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
-const eventos: Array<IEvento> = []
+const eventos: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {

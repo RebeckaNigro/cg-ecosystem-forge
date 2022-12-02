@@ -9,9 +9,10 @@
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
 			:hasImage="false"
-			:image="''"
+			:image="container.arquivo"
 			:nomeEvento="container.titulo"
-			:dataEvento="container.dataInicio"
+			:dataInicio="container.dataInicio"
+			:dataTermino="container.dataTermino"
 			:enderecoEvento="container.local"
 			/>
 		</nav>
@@ -55,7 +56,7 @@ const selectedPage = ref(0)
 const indicators = ref(3)
 
 const lastIndex = ref(3)
-let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
+let eventos = ref<Array<IUltimoEvento>>()
 
 const dummyContainer = reactive([
   [
@@ -101,9 +102,9 @@ const addEventsToView = () => {
 	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
 }
 
-onMounted(() => {
-	eventoStore.getAllEvents()
-	console.log(eventoStore.eventos)
+onMounted(async () => {
+	await eventoStore.getAllEvents()
+	eventos.value = eventoStore.eventos.slice(0, 3)
 })
 </script>
 

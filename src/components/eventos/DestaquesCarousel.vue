@@ -11,7 +11,7 @@
         <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
           <main>
             <h1 id="event-name" class="dark-title">{{ data.titulo }}</h1>
-            <time class="light-body-text calendar-icon">{{ friendlyDateTime(data.dataInicio) }}</time>
+            <time class="light-body-text calendar-icon">{{ brDateString(data.dataInicio) }}</time>
             <address class="light-body-text pin-icon">{{ data.local }}</address>
           </main>
           <GeneralBtn
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { IUltimoEvento } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
-import {friendlyDateTime} from '../../utils/formatacao/datetime'
+import {brDateString, friendlyDateTime} from '../../utils/formatacao/datetime'
   const props = defineProps<{
     carouselData: IUltimoEvento[]
   }>()
