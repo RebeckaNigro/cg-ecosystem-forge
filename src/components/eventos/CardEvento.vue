@@ -1,26 +1,30 @@
 <template>
   <div class="card-evento">
     <div class="img-container">
-      <img :src="image" alt="event-image" v-if="hasImage">
-      <span v-else class="dark-body-text">{{ nomeEvento }}</span>
+      <img :src="image!" alt="event-image" v-if="hasImage">
+      <span v-else>Imagem do evento</span>
     </div>
     <div class="infos-container">
       <h1 class="dark-title">{{ nomeEvento }}</h1>
-      <time class="data-evento">{{ dataEvento }}</time>
+      <time class="data-evento">{{ brDateString(dataInicio) }} - {{ brDateString(dataTermino) }}</time>
       <address class="endereco-evento">{{ enderecoEvento }}</address>
 
-	  <a href="#" class="ver-detalhes">Ver detalhes</a>
+	  <a href="#" class="ver-detalhes" @click="$router.push({name: 'EventoExpandido', params: {eventoId: eventoId}})">Ver detalhes</a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { brDateString, friendlyDateTime } from '../../utils/formatacao/datetime';
+
   const props = defineProps<{
     hasImage: boolean
-    image: string
+    image: string | null
     nomeEvento: string
-    dataEvento: string
+    dataInicio: string
+	dataTermino: string
     enderecoEvento: string
+	eventoId: number
   }>()
 </script>
 

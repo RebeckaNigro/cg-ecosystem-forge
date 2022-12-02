@@ -23,7 +23,7 @@
 
 			<div v-for="(evento, index) in eventos" :key="index">
 
-				<CardEventoCriado :has-image="evento.imagem == null" :image="evento.imagem!" :nome-evento="evento.titulo"
+				<CardEventoCriado :has-image="evento.arquivo == null" :image="evento.arquivo!" :nome-evento="evento.titulo"
 					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
 					:evento-id="evento.id" />
 			</div>
@@ -46,7 +46,8 @@ import { IEvento, IUltimoEvento } from '../../../../stores/eventos/types';
 
 const eventoStore = useEventoStore()
 const lastIndex = ref(6)
-let eventos = ref<Array<IEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
+let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
+
 const isSearchResultsVisible = ref(false)
 const searchInputText = ref('')
 

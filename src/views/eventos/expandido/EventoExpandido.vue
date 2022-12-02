@@ -2,38 +2,49 @@
   <NavBar 
     :is-transparent="false"
   />
-  <Banner
-    path="/eventos/banner.png"
-    img-alt="evento do hub"
-    figcaption="ilustração de evento"
-  >
-  <div class="d-flex h-100 position-absolute top-0 ghp">
-    <h1 class="dark-title">EVENTOS
-      <p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
-    </h1>
-  </div>
-  </Banner>
+
+  <Spinner spinnerColorClass="text-dark" v-if="loadingContent"
+  />
   <ContainerInformacoes
-    :data="{
-      eventDate: '22/12/22',
-      eventId: 'kk',
-      eventLocation: 'acapulco',
-      eventName: 'Challenge',
-      img: '/eventos/event_img.png'
+  :data="{
+	  eventDate: evento?.dataInicio!,
+      eventId: evento?.id!,
+      eventLocation: evento?.local!,
+      eventName: evento?.titulo!,
+      img: null
     }"
   />
-  <ContainerDescricao />
-  <ContainerOrganizador />
+  <ContainerDescricao 
+ 	:descricaoEvento="evento?.descricao!"
+	:linkEvento="evento?.linkExterno!" 
+  />
+  <!--<ContainerOrganizador />-->
   <FooterComponent />
 </template>
 
 <script setup lang="ts">
 import NavBar from '../../../components/general/NavBar.vue'
-import Banner from '../../../components/general/Banner.vue';
 import ContainerInformacoes from '../../../components/eventos/expandido/ContainerInformacoes.vue';
 import ContainerDescricao from '../../../components/eventos/expandido/ContainerDescricao.vue';
 import ContainerOrganizador from '../../../components/eventos/expandido/ContainerOrganizador.vue';
 import FooterComponent from '../../../components/general/FooterComponent.vue';
+import { onMounted, ref } from 'vue';
+import { useEventoStore } from '../../../stores/eventos/store';
+import router from '../../../router';
+import { IEvento, IUltimoEvento } from '../../../stores/eventos/types';
+import Spinner from '../../../components/general/Spinner.vue';
+
+const eventoStore = useEventoStore()
+const evento = ref<IEvento>()
+const loadingContent = ref(false)
+
+onMounted(async () => {
+	loadingContent.value = true
+	await eventoStore.getEventById(parseInt(router.currentRoute.value.params.eventoId.toString()))
+	evento.value = eventoStore.eventResponse.dado;
+	loadingContent.value = false
+
+})
 
 </script>
 

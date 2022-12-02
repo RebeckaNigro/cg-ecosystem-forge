@@ -81,5 +81,7 @@ export interface IUltimoEvento {
   titulo: string,
   dataInicio: string,
   dataTermino: string,
-  local: string
+  local: string,
+  arquivo: string | null,
+  ultimaAtualizacao: string
 }

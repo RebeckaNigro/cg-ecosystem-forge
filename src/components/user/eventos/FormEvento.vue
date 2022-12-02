@@ -200,6 +200,7 @@ const handleAction = (action: string) => {
 			if(userStore.getUserName) {
 				evento.responsavel = userStore.getUserName
 			}
+			evento.local = evento.local.concat(', ', novoEndereco.numero)
 			sendingEvent.value = true
 			const file: HTMLInputElement = document.querySelector('#imagem-input')!
 			if (file) await useStore.postEvent(evento, file)
