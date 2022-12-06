@@ -1,12 +1,14 @@
 <template> <!-- este é o componente que vai na tela home, o carrosel de empresas parceiras -->
   <section class="container-fluid partners-container ghp">
-    <h1 class="dark-title">EMPRESAS PARCEIRAS</h1>
+    <h1 class="dark-title fs-2">EMPRESAS PARCEIRAS</h1>
     <main>
       <div id="partnersCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" pause="true">
         <div class="carousel-inner" pause="true">
-          <div v-for="(logo, index) in logosUrlArray" :key="index" class="carousel-item" :class="{'active': index === 0}">
-            <img :src="logo" class="d-block" alt="logo parceiro">
-          </div>
+		 
+			<div class="carousel-item" v-for="(logo, index) in logosUrlArray" :key="index" :class="{'active': index === 0}">
+				<img :src="logo" class="d-block" alt="logo parceiro" >
+			</div>
+        
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#partnersCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -26,6 +28,8 @@
  const props = defineProps<{
    logosUrlArray: string[]
  }>()
+
+ 
 </script>
 
 <style scoped lang="scss">
