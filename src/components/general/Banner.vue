@@ -30,7 +30,7 @@ import { onMounted } from 'vue';
 <style scoped lang="scss">
 .overlay{
 	background: #fff;
-	opacity: 0.4;
+	opacity: 0.5;
   }
 
   figure.banner {

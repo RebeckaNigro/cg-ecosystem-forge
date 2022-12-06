@@ -1,7 +1,8 @@
 <!-- este componente é um container de prósito geral segmentado por colunas que recebe título, imagem (ou não) e textos. -->
 <template>
   <section class="container-fluid general-container ghp" :id="id">
-    <h1 :class="[ darkTitle ? 'dark-title' : 'light-title' ]" class="mb-5">{{ title }}</h1>
+	<div id="top-border" class="circle-top-border" v-if="hasCircleTopBorder"></div>
+    <h1 :class="[ darkTitle ? 'dark-title' : 'light-title' ]" class="mb-5 fs-2">{{ title }}</h1>
     <main class="d-flex">
       <div v-for="(content, index) in contentArray" :key="index" :class="isUrl(content) ? 'is-img' : 'is-article'">
         <img v-if="isUrl(content)" :src="content" alt="ilustrative-image">
@@ -11,16 +12,30 @@
             btnText="SAIBA MAIS"
             :isExternalLink="false"
             link="/quem-somos"
-            bgColor="#629282"
-            width="150px"
-            textColor="#fff"
-            height="30px"
+            bgColor="#fff"
+            width="200px"
+            textColor="#639280"
+            height="40px"
             id="home-saiba-mais"
+          />
+
+		  <GeneralBtn v-if="hasContactBtn"
+            btnText="FALE CONOSCO"
+            :isExternalLink="false"
+            link="/fale-conosco"
+            bgColor="#fff"
+            width="200px"
+            textColor="#639280"
+            height="40px"
+            id="home-fale-conosco"
+			class="m-0 mt-4"
           />
         </article>
       </div>
+
     </main>
-  </section>
+	<div id="bottom-border" class="circle-bottom-border" v-if="!hasCircleTopBorder"></div>
+</section>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +49,10 @@ import GeneralBtn from '../buttons/GeneralBtn.vue';
     contentArray: string[]
     bgColor: string
     id: string
+	fontSize: string
+	fontFamily: string
+	hasContactBtn: boolean
+	hasCircleTopBorder: boolean
   }>()
 
 const isUrl = (text: string) => {
@@ -45,19 +64,62 @@ const isUrl = (text: string) => {
 }
 onMounted(() => {
   const container: HTMLElement = document.querySelector('#' + props.id)!
-  container.style.backgroundColor = props.bgColor
+  container.style.background = props.bgColor
+
+  const article: HTMLElement = container.getElementsByTagName('article')[0]
+  article.style.fontFamily = props.fontFamily
+  article.style.fontSize = props.fontSize
+
+  if(props.hasCircleTopBorder){
+	  const divTopBorder: HTMLElement = container.querySelector('.circle-top-border')!
+	  divTopBorder.style.backgroundColor = '#fff'
+  }else{
+	  const divBottomBorder: HTMLElement = container.querySelector('.circle-bottom-border')!
+	  divBottomBorder.style.background = '#81A798'
+  }
+  
+ 
+  
 })
 </script>
 
 <style scoped lang="scss">
   section.general-container {
     padding-top: 40px !important;
-    padding-bottom: 40px !important; 
+    padding-bottom: 40px !important;
+	z-index: 2;
+	
+	.circle-bottom-border, .circle-top-border{
+		position: relative;
+		height: 25px;
+		width: 50px;
+		border-bottom-left-radius: 8rem;
+		border-bottom-right-radius: 8rem;
+		z-index: 1;
+		margin: 0 auto;
+	
+	}
+
+	.circle-bottom-border{
+		top: 4rem;
+	}
+
+	.circle-top-border{
+		bottom: 2.5rem;
+	
+	}
+
+	article{
+		font-family: 'Montserrat-SemiBold', sans-serif;
+		text-align: start;
+	}
   }
   main.d-flex > div {
     flex: 1 1 0;
+	justify-content: center;
     img {
-      width: 100%;
+      max-width: 100%;
+	  border-radius: 10px;
     }
   }
   main.d-flex > div {
