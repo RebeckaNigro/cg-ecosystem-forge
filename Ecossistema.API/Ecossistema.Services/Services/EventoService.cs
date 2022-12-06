@@ -102,6 +102,7 @@ namespace Ecossistema.Services.Services
             var resposta = new RespostaPadrao();
 
             var dado = ConverterEvento(item);
+            int idEvento = (int)dado.Id;
 
             if (!await ValidarEditar(dado, resposta)) return resposta;
 
@@ -160,6 +161,26 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if (item.Arquivos.Count > 0)
+                    {
+                        var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
+                        if (encontra == 0)
+                        {
+                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivos, usuarioId, dataAtual, resposta);
+                        }
+                        else
+                        {
+                            IFormFile arquivo = item.Arquivos[item.Arquivos.Count - 1];
+                            ArquivoDto arquivoDto = new ArquivoDto();
+                            arquivoDto.Id = encontra;
+                            arquivoDto.NomeOriginal = arquivo.FileName;
+                            arquivoDto.Extensao = arquivo.ContentType;
+                            await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
+                            _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
+                            resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
+                        }
+
+                    }
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }

@@ -80,5 +80,12 @@ namespace Ecossistema.API.Controllers
             }
             return result;
         }
+
+        [HttpPut("atualizaDocumento")]
+        public async Task<IActionResult> AtualizaDocumento([FromForm] ArquivoDto obj)
+        {
+            var result = await _arquivoService.Atualizar(obj, EOrigem.Documento, UsuarioId);
+            return Ok(result);
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace Ecossistema.Services.Dto
         public int Id { get; set; }
         public string NomeOriginal { get; set; }
         public string Extensao { get; set; }
-        public byte[] Arquivo { get; set; }
+        public byte[]? Arquivo { get; set; }
     }
 }
