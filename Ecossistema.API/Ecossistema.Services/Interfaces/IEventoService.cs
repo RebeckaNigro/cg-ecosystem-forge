@@ -9,7 +9,7 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IEventoService
     {
-        Task<RespostaPadrao> Incluir(EventoArquivosDto dado, int usuarioId);
+        Task<RespostaPadrao> Incluir(EventoArquivosDto dado, string token);
         Task<RespostaPadrao> Editar(EventoArquivosDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         //Task<RespostaPadrao> ListarUltimas();

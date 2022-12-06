@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,10 +34,14 @@ namespace Ecossistema.Services.Services
             _enderecoService = enderecoService;
         }
 
-        public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
         {
             var resposta = new RespostaPadrao();
-
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
+            var objAlt = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
+            var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
 
             if (!await ValidarIncluir(dado, item.Arquivos, resposta)) return resposta;

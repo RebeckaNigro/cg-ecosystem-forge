@@ -1,4 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
