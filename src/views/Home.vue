@@ -27,6 +27,7 @@
 		font-size="1.3rem"
 		:has-contact-btn="false"
 		:has-circle-top-border="false"
+		:has-circle-bottom-border="true"
       />
       <Partners 
         :logos-url-array="logosParceiros"
@@ -42,6 +43,7 @@
 		font-size="1.3rem"
 	  	:has-contact-btn="true"
 		:has-circle-top-border="true"
+		:has-circle-bottom-border="false"
       />
     </main>
   </section>
