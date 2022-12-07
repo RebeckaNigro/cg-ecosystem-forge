@@ -40,6 +40,7 @@ namespace Ecossistema.Services.Services
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(token);
             var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
+            //var lalala = jwtSecurityToken.Payload.Values.ElementAt(3).ToJson;
             var objAlt = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
             var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
@@ -102,10 +103,15 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(EventoArquivosDto item, int usuarioId)
+        public async Task<RespostaPadrao> Editar(EventoArquivosDto item, string token)
         {
             var resposta = new RespostaPadrao();
-
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
+            //var perfis = jwtSecurityToken.Payload.Values.ElementAt(3).ToString();
+            var buscaUsuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
+            var usuarioId = buscaUsuario.Id;
             var dado = ConverterEvento(item);
             int idEvento = (int)dado.Id;
 
@@ -294,7 +300,7 @@ namespace Ecossistema.Services.Services
                 //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 //var temp = arquivoDto[cont].Arquivo;
                 //item.Arquivo = temp;
-                evento[evento.Count -1].Id = item.Id;
+                evento[evento.Count - 1].Id = item.Id;
                 evento[evento.Count - 1].Titulo = item.Titulo;
                 evento[evento.Count - 1].DataInicio = item.DataInicio;
                 evento[evento.Count - 1].DataTermino = item.DataTermino;

@@ -47,11 +47,12 @@ namespace Ecossistema.API.Controllers
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             return await _eventoService.Incluir(obj, accessToken);
         }
-
+        [Authorize(Roles = UserRolesDto.AdminParceiro)]
         [HttpPut("editar")]
         public async Task<RespostaPadrao> Editar([FromForm] EventoArquivosDto obj)
         {
-            return await _eventoService.Editar(obj, UsuarioId);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            return await _eventoService.Editar(obj, accessToken);
         }
 
         [HttpDelete("excluir")]
