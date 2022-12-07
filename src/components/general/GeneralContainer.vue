@@ -34,7 +34,7 @@
       </div>
 
     </main>
-	<div id="bottom-border" class="circle-bottom-border" v-if="!hasCircleTopBorder"></div>
+	<div id="bottom-border" class="circle-bottom-border" v-if="hasCircleBottomBorder"></div>
 </section>
 </template>
 
@@ -53,6 +53,7 @@ import GeneralBtn from '../buttons/GeneralBtn.vue';
 	fontFamily: string
 	hasContactBtn: boolean
 	hasCircleTopBorder: boolean
+	hasCircleBottomBorder: boolean
   }>()
 
 const isUrl = (text: string) => {
@@ -73,12 +74,11 @@ onMounted(() => {
   if(props.hasCircleTopBorder){
 	  const divTopBorder: HTMLElement = container.querySelector('.circle-top-border')!
 	  divTopBorder.style.backgroundColor = '#fff'
-  }else{
+  }else if(props.hasCircleBottomBorder){
 	  const divBottomBorder: HTMLElement = container.querySelector('.circle-bottom-border')!
 	  divBottomBorder.style.background = '#81A798'
   }
-  
- 
+
   
 })
 </script>
@@ -87,15 +87,13 @@ onMounted(() => {
   section.general-container {
     padding-top: 40px !important;
     padding-bottom: 40px !important;
-	z-index: 2;
-	
+
 	.circle-bottom-border, .circle-top-border{
 		position: relative;
 		height: 25px;
 		width: 50px;
 		border-bottom-left-radius: 8rem;
-		border-bottom-right-radius: 8rem;
-		z-index: 1;
+		border-bottom-right-radius: 8rem;	
 		margin: 0 auto;
 	
 	}
@@ -110,7 +108,6 @@ onMounted(() => {
 	}
 
 	article{
-		font-family: 'Montserrat-SemiBold', sans-serif;
 		text-align: start;
 	}
   }
