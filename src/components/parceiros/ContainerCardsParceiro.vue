@@ -1,7 +1,7 @@
 <template>
   <section class="container-cards-parceiros" :id="'container-parceiros' + containerId">
     <header>
-      <h1 class="dark-title">{{ tipoDeInstituicao }}</h1>
+      <h1 class="dark-title me-3">{{ tipoDeInstituicao }}</h1>
       <hr class="w-100">
     </header>
     <main>
