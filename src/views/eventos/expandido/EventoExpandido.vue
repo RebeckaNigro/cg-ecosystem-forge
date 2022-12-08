@@ -3,22 +3,44 @@
     :is-transparent="false"
   />
 
-  <Spinner spinnerColorClass="text-dark" v-if="loadingContent"
-  />
-  <ContainerInformacoes
-  :data="{
-	  eventDate: evento?.dataInicio!,
-      eventId: evento?.id!,
-      eventLocation: evento?.local!,
-      eventName: evento?.titulo!,
-      img: null
-    }"
-  />
-  <ContainerDescricao 
- 	:descricaoEvento="evento?.descricao!"
-	:linkEvento="evento?.linkExterno!" 
-  />
-  <!--<ContainerOrganizador />-->
+  <div class="background">
+	  <Spinner spinnerColorClass="text-dark" v-if="loadingContent"
+	  />
+		<div class="evento-breadcrumb">
+			<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item unactive" @click="$router.push({name: 'Eventos'})">Eventos</li>
+					<li class="breadcrumb-item unactive" aria-current="page">Destaques</li>
+					<li class="breadcrumb-item active" aria-current="page">{{evento?.titulo}}</li>
+				</ol>
+			</nav>
+	  	</div>
+
+		<div class="evento-container box">
+
+			<ContainerInformacoes
+			:data="{
+				eventDate: evento?.dataInicio!,
+				eventId: evento?.id!,
+				eventLocation: evento?.local!,
+				eventName: evento?.titulo!,
+				img: evento?.imagem!,
+				eventLink: evento?.linkExterno!
+			  }"
+			/>
+			<ContainerDescricao 
+			   :descricaoEvento="evento?.descricao!"
+			  :linkEvento="evento?.linkExterno!" 
+			/>
+			<!--<ContainerOrganizador />-->
+		</div>
+		<div class="btn-up-container" @click="handleNavigateUp">
+		  <button class="btn-up">
+			<img src="/public/noticias/noticia-expandida/arrow_up.svg" alt="Seta para cima">
+			Subir pro topo
+		  </button>
+	  </div>
+  </div>
   <FooterComponent />
 </template>
 
@@ -26,17 +48,20 @@
 import NavBar from '../../../components/general/NavBar.vue'
 import ContainerInformacoes from '../../../components/eventos/expandido/ContainerInformacoes.vue';
 import ContainerDescricao from '../../../components/eventos/expandido/ContainerDescricao.vue';
-import ContainerOrganizador from '../../../components/eventos/expandido/ContainerOrganizador.vue';
 import FooterComponent from '../../../components/general/FooterComponent.vue';
 import { onMounted, ref } from 'vue';
 import { useEventoStore } from '../../../stores/eventos/store';
 import router from '../../../router';
-import { IEvento, IUltimoEvento } from '../../../stores/eventos/types';
+import { IEvento } from '../../../stores/eventos/types';
 import Spinner from '../../../components/general/Spinner.vue';
 
 const eventoStore = useEventoStore()
 const evento = ref<IEvento>()
 const loadingContent = ref(false)
+
+const handleNavigateUp = () => {
+	window.scrollTo(0, 0)
+}
 
 onMounted(async () => {
 	loadingContent.value = true
@@ -49,6 +74,60 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
+
+.background{
+	background-image: url('/public/user/background.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+	padding-top:3rem;
+	padding-bottom: 3rem;
+}
+
+.btn-up-container{
+	  margin: 0 auto;
+	  margin-top: 2rem;
+	  display: flex;
+	  justify-content: flex-end;
+	  max-width: 1300px;
+	  .btn-up{
+		background-color: #fff;
+		padding: .7rem;
+		border: 1px solid #505050;
+		border-radius: 10px;
+		font-family: 'Montserrat-SemiBold', sans-serif;
+	  }
+
+	  .btn-up:hover{
+		background-color: rgb(232, 229, 229);
+	  }
+  }
+
+.evento-breadcrumb{
+		display: flex;
+		width: fit-content;
+		margin-left:15%;
+		font-size: 20px;
+
+		.active{
+			font-family: 'Montserrat-Medium', sans-serif;
+		}
+
+		.unactive{
+			cursor: pointer;
+			font-family: 'Montserrat-Light', sans-serif;
+		}
+
+		@media(max-width: 920px){
+			font-size: 17px;
+		}
+	}
+
+	.evento-container{
+		margin: 0 auto;
+		max-width: 1300px;
+
+	}
   div.d-flex {
     justify-content: flex-start;
     align-items: center;

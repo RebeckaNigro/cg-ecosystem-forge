@@ -4,11 +4,11 @@
   />
   	<div class="background pt-5 pb-5">
 	  <div class="noticia-breadcrumb">
-		<nav style="--bs-breadcrumb-divider:'>';" aria-label="breadcrumb">
+		<nav style="--bs-breadcrumb-divider'>';" aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item unactive" @click="$router.push({name: 'Noticias'})">Notícias</li>
 				<li class="breadcrumb-item unactive" aria-current="page">Destaques</li>
-				<!--<li class="breadcrumb-item active" aria-current="page">Ciências</li>-->
+				<li class="breadcrumb-item active" aria-current="page">{{noticia.titulo}}</li>
 			</ol>
 		</nav>
 	  </div>

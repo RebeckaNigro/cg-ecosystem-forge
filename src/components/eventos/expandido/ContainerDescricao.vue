@@ -1,20 +1,17 @@
 <template>
   <section id="descricao-evento" class="ghp">
-    <header class="mt-5">
-      <h1 class="dark-title">DESCRIÇÃO DO EVENTO</h1>
-    </header>
     <main>
-      <article class="dark-body-text">
-        {{descricaoEvento}}
+      <article>
+       {{descricaoEvento}}
       </article>
     </main>
     <footer class="mb-5">
       <GeneralBtn
-        btnText="ACESSAR LINK DO EVENTO"
+        btnText="ACESSAR LINK"
         :isExternalLink="linkEvento !== null"
         :link="linkEvento!"
         bgColor="#48947d"
-        width="300px"
+        width="250px"
         textColor="#fff"
         height="40px"
         id="link-evento"
@@ -41,7 +38,9 @@ const props = defineProps<{
     align-items: center;
     justify-content: space-between;
     main > article {
+	margin: 1.8rem 0;
       font-size: 1rem;
+	  font-family: 'Montserrat-Regular', sans-serif;
       text-align: justify;
     }
   }
