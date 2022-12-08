@@ -47,24 +47,27 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import router from '../../../router';
 import { useNoticiaStore } from '../../../stores/noticias/store';
 import { INoticia } from '../../../stores/noticias/types';
 import { friendlyDateTime } from '../../../utils/formatacao/datetime';
 
 const store = useNoticiaStore()
 const noticia = ref<INoticia>({
-		id: "13",
-		titulo: "Em meio a cobranças, Salgado vai ao CT do Vasco e conversa com jogadores e comissão técnica",
-		descricao: "O mandatário discutiu junto com os líderes do futebol o planejamento do Vasco daqui em diante e fez algumas ponderações, principalmente em relação à parte física do elenco. Pegou mal, por exemplo, o fato de alguns jogadores reclamarem de cãibra no primeiro jogo da Série B. Foi solicitada uma revisão dos protocolos de preparação física e avaliações individuais dos atletas. Em um momento da visita, Salgado conversou com Nenê sobre o episódio do empate com o Vila Nova, na última sexta. O meia-atacante saiu irritado ao ser substituído no segundo tempo da partida e jogou a braçadeira de capitão longe. Os dois colocaram os ''pingos nos is'' e deixaram a polêmica para trás. O veterano ainda deve se pronunciar publicamente sobre a situação.",
-		subTitulo: "Presidente discute planejamento do departamento de futebol, solicita revisão dos protocolos e fala com Nenê sobre episódio da última sexta-feira, quando meia se irritou com substituição",
-		dataPublicacao: "2022-04-12T01:28:06.807",
+		id: 0,
+		titulo: "",
+		descricao: "",
+		subTitulo: "",
+		dataPublicacao: "",
 	})
   const handleNavigateUp = () => {
 	window.scrollTo(0, 0)
   }
 
   onMounted(() => {
-	
+	store.getNewsById(parseInt(router.currentRoute.value.params.noticiaId.toString()))
+	noticia.value = store.response.dado
+	console.log(noticia.value);
 	
   })
 </script>
