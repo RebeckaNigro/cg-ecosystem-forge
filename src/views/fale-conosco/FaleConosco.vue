@@ -1,20 +1,22 @@
 <template>
   <NavBar :is-transparent="false"/>
-  <Banner 
-    path="/fale-conosco/fale-conosco-banner.png"
-    figcaption="costumer-service"
-    img-alt="costumer-service"
-  >
-    <div class="d-flex h-100">
-      <img src="/fale-conosco/fale-conosco-icon.png" alt="Fale Conosco">
-      <h1 class="dark-title">FALE<br>CONOSCO
-        <p class="dark-body-text">
-          contato@ecossistemadeinovacaocg.com.br
-        </p>
-      </h1>
-    </div>
-  </Banner>
-  <Formulario />
+  <div class="background">
+	  <Banner 
+		path="/fale-conosco/fale-conosco-banner.png"
+		figcaption="costumer-service"
+		img-alt="costumer-service"
+	  >
+		<div class="banner-fale-conosco ghp">
+		
+		  <h1 class="dark-title">FALE CONOSCO</h1>
+		  <p>
+			  Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS
+		  </p>
+		</div>
+	  </Banner>
+	  <Formulario />
+
+  </div>
   <FooterComponent />
 </template>
 
@@ -24,27 +26,42 @@ import Formulario from '../../components/faleConosco/Formulario.vue';
 </script>
 
 <style scoped lang="scss">
-  div.d-flex {
-    position: absolute;
-    top: 0;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 150px;
-    img {
-      max-width: 120px;
-      min-width: 20px;
-      width: 20%;
-    }
-    h1 {
-      font-size: 2.5rem;
-      text-align: start;
-      margin-bottom: 2.5rem !important;
-      margin-left: 2rem;
-      p.dark-body-text {
-        font-size: 1rem;
-      }
-    }
-  }
+
+.background{
+	background-image: url('/public/user/background.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+	padding-bottom: 3rem;
+}
+
+.banner-fale-conosco {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	padding-left: 64px;
+	display: flex;
+	align-items: start;
+	justify-content: center;
+	flex-direction: column;
+
+
+	.dark-title {
+		font-size: 2rem;
+	}
+	h1 {
+		font-size: 2rem;
+		text-align: start;
+	}
+	p{
+		text-align: start;
+		font-size: 1.5rem;
+		font-family: 'Montserrat-Medium', sans-serif;
+	}
+
+}
+ 
   @media (max-width: 1200px) {
     div.d-flex {
       h1 {
