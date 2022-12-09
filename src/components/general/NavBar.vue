@@ -1,13 +1,19 @@
 <template>
   <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">
-        <img src="/colorful_logo.png" alt="logo">
+      <router-link class="navbar-brand ms-5" to="/">
+        <img src="/colorful_logo.svg" alt="logo">
       </router-link>
       <section class="container-links dark-title">
         <router-link :to="link.path" v-for="link in maisInfos" class="navbar-text">{{ link.title }}</router-link> 
       </section>
       <button type="button" class="light-title" id="login" @click="$router.push({ name: 'Login'})" :class="{'d-none': userStore.loggedUser.token}">LOGIN</button>
+
+	  <!--<div class="profile">
+		<img src="/public/noticias/noticia-expandida/user.svg" alt="Ícone usuário">
+		<span>{{userStore.loggedUser.userName}}</span>
+	  </div>-->
+	  <button type="button" class="light-title" id="logout" @click="logout" :class="{'d-none': !userStore.loggedUser.token}">SAIR</button>
       <div class="dropdown dropstart">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="menuInfos" data-bs-toggle="dropdown" aria-expanded="false">
           <div v-for="hamburguer in 3" class="hamburguer" />
@@ -24,6 +30,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
+import router from '../../router';
 import { useUserStore } from '../../stores/user/store';
 
 defineProps<{
@@ -58,6 +65,11 @@ const maisInfos = reactive([
 ])
 
 const userStore = useUserStore()
+
+const logout = () => {
+	userStore.logout()
+	window.location.reload()
+}
 
 onMounted(() => {
   // TODO: terminar centralização relativa
@@ -116,16 +128,37 @@ a {
   height: 40px;
   justify-content: space-between;
   padding: 0;
-  /* margin-right: 30px; */
+   margin-right: 30px; 
 }
-button#login {
-  background-color: #ba5366;
+button#login, button#logout {
+ 
   color: #fff;
   width: 120px;
   height: 40px;
   border-radius: 25px;
   font-size: 0.8rem;
   border: 0;
+  font-family: 'Montserrat-Bold', sans-serif;
+}
+
+button#login{
+	background-color: #639280;
+}
+button#logout {
+  background-color: #b37562;
+}
+
+.profile{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 1rem;
+	cursor: pointer;
+
+	span{
+		margin-left: .9rem;
+		margin-right: .4rem;
+	}
 }
 @media (max-width: 991px) {
   .navbar-text {

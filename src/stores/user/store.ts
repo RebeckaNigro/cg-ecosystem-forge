@@ -28,7 +28,13 @@ export const useUserStore = defineStore('userStore', {
         if (error instanceof Error) this.userResponse.putError(400, error.message) 
         console.error(error)
       }
-    }
+    },
+
+	logout(){
+		if(window.localStorage.getItem('userStore')){
+			window.localStorage.removeItem('userStore')
+		}
+	}
   },
   getters: {
     getUserId: (state) => state.loggedUser.id,
