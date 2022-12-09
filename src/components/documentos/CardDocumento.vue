@@ -36,17 +36,22 @@
   max-width: 325px;
   width: 100%;
   border: 1px solid black;
+  border-radius: 10px;
   padding: 28px 24px;
   display: flex;
   height: 325px;
   flex-direction: column;
   margin: 10px 0;
+  align-items: center;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  background: #fff;
   
   .hide {
     background-color: unset;
     border: none;
     font-size: 14px;
     font-weight: 600;
+	text-transform: uppercase;
   }
   > div {
     display: flex;
@@ -56,8 +61,8 @@
       margin: 0;
       margin-left: 12px;
       font-weight: bold;
-      font-size: 1.1rem;
-      text-transform: uppercase;
+      font-size: 1.4rem;
+      font-family: 'Montserrat-SemiBold', sans-serif;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -73,6 +78,7 @@
   }
 
   > p {
+	font-size: .8rem;
     margin: 20px 0;
     text-align: justify;
     height: 100%;
@@ -81,18 +87,19 @@
   }
 
   > button, .btn-simulator {
-    padding: 4px 24px;
+    padding: 6px 28px;
     align-self: center;
     border-radius: 20px;
     border: 0;
-    background-color: #c88944;
+	font-family: 'Montserrat-Bold', sans-serif;
+    background-color: #639280;
     color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 14px;
   }
   > button:hover, .btn-simulator:hover  {
-    background-color: greenyellow;
+    background-color: #85a69a;
   }
   /* width */
   ::-webkit-scrollbar {
