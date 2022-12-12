@@ -6,16 +6,12 @@
     <main>
     <nav v-for="(cardPage, index) in dummyCardsPages">
       <div class="destaques" v-if="index === selectedPage">
-        <div v-for="(card, index) in cardPage" :key="index" class="useless-box">
-			<div class="header-card">
-				<span>{{card.tags}}</span>
-				<img src="/public/view_icon.svg" alt="Visualizar documento">
-			</div>
-			
-			<div class="nome-documento">{{ card.nomeDocumento }}</div>
-			<div class="nome-autor">Nome do autor</div>
-			<div class="descricao-documento">Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam.</div>
-			<div class="atualizacao">Atualizado em: 01/01/2000 às 12:00</div>
+        <div v-for="(card, index) in cardPage" :key="index">
+			<CardDocumento
+				:nomeDocumento="card.nomeDocumento"
+				:descricao="card.descricao"
+				:tags="card.tags"
+			/>
       	</div>
 	  </div>
     </nav>
@@ -32,6 +28,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import CardDocumento from './CardDocumento.vue';
 
 const selectedPage = ref(0)
 const indicators = ref(2)
@@ -98,8 +95,6 @@ const setSelectedPage = (page: number) => {
       flex-wrap: wrap;
       min-height: 400px;
       height: fit-content;
-
-	  
     }
   }
   .useless-box {

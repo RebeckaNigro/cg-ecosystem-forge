@@ -23,7 +23,7 @@
 				<h1 class="dark-title">SESSÕES</h1>
 
 				<div class="card-documentos-container ghp">
-					<CardDocumento 
+					<CardSessao 
 						title="Pesquisas"
 						text="Em breve." 
 						:has-icon="true" 
@@ -31,7 +31,7 @@
 						:has-download="false"
 						content-to-download="none"
 					/>
-						<CardDocumento 
+						<CardSessao 
 						title="Editais" 
 						text="Em breve." 
 						:has-icon="true" 
@@ -39,7 +39,7 @@
 						:has-download="false"
 						content-to-download="none"
 					/>
-						<CardDocumento 
+						<CardSessao 
 						title="Leis" 
 						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul." 
 						:has-icon="true" 
@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import Banner from '../../components/general/Banner.vue';
-import CardDocumento from '../../components/documentos/CardDocumento.vue';
+import CardSessao from '../../components/documentos/CardSessao.vue';
 import ContainerDestaques from '../../components/documentos/ContainerDestaques.vue'
 
 </script>
