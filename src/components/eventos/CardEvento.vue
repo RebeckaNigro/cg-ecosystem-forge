@@ -1,8 +1,8 @@
 <template>
   <div class="card-evento">
     <div class="img-container">
-      <img :src="image!" alt="event-image" v-if="hasImage">
-      <span v-else>Imagem do evento</span>
+      <img :src='buildImageSrc(eventoId, nomeEvento, 5)' alt='Imagem do evento' v-if="hasImage">
+      <span v-else>{{nomeEvento}}</span>
     </div>
     <div class="infos-container">
       <h1 class="dark-title">{{ nomeEvento }}</h1>
@@ -15,7 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { brDateString, friendlyDateTime } from '../../utils/formatacao/datetime';
+import { onMounted, ref } from 'vue';
+import { brDateString } from '../../utils/formatacao/datetime';
+import {buildImageSrc} from '../../utils/constantes'
 
   const props = defineProps<{
     hasImage: boolean
@@ -26,6 +28,14 @@ import { brDateString, friendlyDateTime } from '../../utils/formatacao/datetime'
     enderecoEvento: string
 	eventoId: number
   }>()
+
+  const imageSrc = ref('')
+
+  onMounted(() => {
+	if(props.hasImage){
+		imageSrc.value= `http://dev-api.ecossistemadeinovacaocg.com.br/api/documento/downloadDocumento?id=${props.eventoId}&nome=${props.eventoId}&origem=5`
+	}
+  })
 </script>
 
 <style scoped lang="scss">
@@ -46,6 +56,7 @@ import { brDateString, friendlyDateTime } from '../../utils/formatacao/datetime'
       align-items: center;
       img {
         width: -webkit-fill-available;
+		height: -webkit-fill-available;
       }
     }
     .infos-container {

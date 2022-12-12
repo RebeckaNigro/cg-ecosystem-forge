@@ -11,7 +11,7 @@
 	<div class="card-evento-container mb-5">
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
-			:hasImage="false"
+			:hasImage="container.arquivo !== null"
 			:image="container.arquivo"
 			:nomeEvento="container.titulo"
 			:dataInicio="container.dataInicio"
