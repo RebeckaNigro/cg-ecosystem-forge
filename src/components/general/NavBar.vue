@@ -9,11 +9,17 @@
       </section>
       <button type="button" class="light-title" id="login" @click="$router.push({ name: 'Login'})" :class="{'d-none': userStore.loggedUser.token}">LOGIN</button>
 
-	  <!--<div class="profile">
+	  <div class="profile" :class="{'d-none': !userStore.loggedUser.token}" @click="handleProfileDropdown">
 		<img src="/public/noticias/noticia-expandida/user.svg" alt="Ícone usuário">
 		<span>{{userStore.loggedUser.userName}}</span>
-	  </div>-->
-	  <button type="button" class="light-title" id="logout" @click="logout" :class="{'d-none': !userStore.loggedUser.token}">SAIR</button>
+		<img src="/public/arrow_down_icon.svg" alt="Abrir opções" >
+		<div class="profile-dropdown" v-if="isProfileDropdownOpen">
+			<router-link to="/user/home" class="profile-dropdown-text">Painel</router-link>
+			<span type="button" class="light-title" id="logout" @click="logout">Sair</span>
+		</div>
+	</div>
+	 
+	  
       <div class="dropdown dropstart">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="menuInfos" data-bs-toggle="dropdown" aria-expanded="false">
           <div v-for="hamburguer in 3" class="hamburguer" />
@@ -29,13 +35,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import router from '../../router';
 import { useUserStore } from '../../stores/user/store';
 
 defineProps<{
   isTransparent: Boolean
 }>()
+
+const isProfileDropdownOpen = ref(false)
 
 const maisInfos = reactive([
   {
@@ -69,6 +78,10 @@ const userStore = useUserStore()
 const logout = () => {
 	userStore.logout()
 	window.location.reload()
+}
+
+const handleProfileDropdown = () => {	
+	isProfileDropdownOpen.value = !isProfileDropdownOpen.value
 }
 
 onMounted(() => {
@@ -130,8 +143,8 @@ a {
   padding: 0;
    margin-right: 30px; 
 }
-button#login, button#logout {
- 
+button#login{
+  background-color: #639280;
   color: #fff;
   width: 120px;
   height: 40px;
@@ -140,26 +153,56 @@ button#login, button#logout {
   border: 0;
   font-family: 'Montserrat-Bold', sans-serif;
 }
-
-button#login{
-	background-color: #639280;
-}
-button#logout {
-  background-color: #b37562;
-}
-
 .profile{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-right: 1rem;
+	font-family: 'Montserrat-Medium', sans-serif;
 	cursor: pointer;
 
 	span{
 		margin-left: .9rem;
 		margin-right: .4rem;
 	}
+	.profile-dropdown{
+		display: flex;
+		position: absolute;
+		top: 4.7rem;
+		right: 1rem;
+		flex-direction: column;
+		justify-content: center;
+		background: #EFEFEF;
+		border: 1px solid #505050;
+		border-top: none;
+		border-radius: 0 0 10px 10px;
+		z-index: 4;
+		padding: .6rem 0;
+		min-width: 180px;
+		max-width: 300px;
+		
+		.profile-dropdown-text{
+			text-decoration: none;
+			color: #1E1E1E;
+			font-family: 'Montserrat-Medium', sans-serif;
+			margin-bottom: 1rem;
+			padding-bottom: .6rem;
+			border-bottom: 1px solid #1E1E1E;
+
+		}
+	
+		span{
+			color: #1E1E1E;
+			font-size: 1rem;
+			font-family: 'Montserrat-Medium', sans-serif;
+		}
+	}
 }
+
+.display-none{
+	display: none;
+}
+
 @media (max-width: 991px) {
   .navbar-text {
     margin: 5px 10px;
