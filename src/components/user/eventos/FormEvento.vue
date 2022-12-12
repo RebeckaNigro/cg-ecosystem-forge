@@ -18,7 +18,7 @@
 			<label for="nome-evento">Nome do evento*</label>
 			<input type="text" class="form-control boring-gray-border w-100" id="nome-evento" v-model="evento.titulo">
 		</div>
-		<!--<div class="imagem-divulgacao d-flex">
+		<div class="imagem-divulgacao d-flex">
 			<div>
 				<label for="imagem-input-mask">Imagem de divulgação (opicional)</label>
 				<label for="imagem-input" class="boring-gray-border" />
@@ -26,7 +26,7 @@
 					@change="e => handleFileInputChange(e)">
 			</div>
 			<span id="nome-imagem">{{ fileName }}</span>
-		</div>-->
+		</div>
 		<div class="datas-inicio-fim d-flex">
 			<div class="inicio mt-0">
 				<label for="data-inicio">Data de início*</label>
@@ -350,7 +350,7 @@ const existingAddresses = computed(() => {
 
 	.imagem-divulgacao {
 		div {
-
+			margin-top: 0;
 			width: fit-content;
 		}
 	}
