@@ -102,6 +102,21 @@ export const useNoticiaStore = defineStore('noticiaStore', {
 
 	  	return false
 
+	},
+
+	async getNewsById(noticiaId: number){
+		try{
+			const response = await httpRequest.get(`/api/noticia/detalhes?Id=${noticiaId}`)
+			if(response.data.codigo === 200){
+				this.response.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
+			}else{
+				console.log(response.data.codigo);
+				
+			}
+		}catch(error){
+			console.error(error);
+			
+		}
 	}
   },
   getters: {

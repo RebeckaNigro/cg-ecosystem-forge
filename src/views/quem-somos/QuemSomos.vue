@@ -5,30 +5,66 @@
       path="/quem-somos/banner.png"
       figcaption="about-us"
       img-alt="sobre nós"
+	  :imgOverlay="true"
+		maxHeight="650px"
     >
-      <div class="d-flex h-100 ghp">
+      <div class="header-content d-flex h-100 position-absolute top-0 ghp">
         <!-- <h1 class="dark-title">SLOGAN PARA<br>APRESENTAR<br>QUEM SOMOS</h1> -->
-        <h1 class="dark-title">ECOSSISTEMA LOCAL<br>DE INOVAÇÃO<br>CAMPO GRANDE – MS</h1>
-        <p class="dark-body-text">
-          Uma comunidade pronta para contribuir com o seu desenvolvimento!
-        </p>
+        <h1 class="dark-title">ECOSSISTEMA LOCAL DE INOVAÇÃO</h1>
+        <p class="subtitle">Campo Grande - MS</p>
+		  <p>Uma comunidade pronta para contribuir com o seu desenvolvimento!</p>
       </div>
     </Banner>
+
+	 
     <GeneralContainer 
       title="DE ONDE SURGIMOS"
       :darkTitle="true"
       :hasKnowMoreBtn="false"
-      :contentArray="ourStoryContentArray"
-      bgColor="#f6f6f6"
+      :contentArray="[
+		'O Ecossistema Local de Inovação – Campo Grande – MS, surge do desejo das instituições e unificar as competências tecnológicas de CAMPO GRANDE na direção do incentivo a inovação e tecnologia. Foi feito um estudo preliminar, para apurar o que temos de capacidade tecnológica e ciências para que essas capacidades sejam mais trabalhadas em prol do desenvolvimento socioeconômico de Campo Grande - MS. ',
+		'/quem-somos/more_about_us.png'
+		]"
+      bgColor="#fbfbfb"
       id="our-story"
+	  font-size="1.3rem"
+	  font-family="Montserrat-Medium"
+	  :has-contact-btn="false"
+	  :has-circle-top-border="false"
+	  :has-circle-bottom-border="false"
     />
     <GeneralContainer 
-      title="NOSSO PROPÓSITO"
+      title=""
       :darkTitle="true"
       :hasKnowMoreBtn="false"
-      :contentArray="moreAboutUs"
-      bgColor="#fff"
+      :contentArray="[
+		'/quem-somos/our_story.png',
+		'A partir disso, foi identificado que existem empresas que ainda não se beneficiam da capacidade tecnológica das instituições de ciência, tecnologia e inovação. Ou seja, mapeamos uma distância que pode ser aproveitada! Um grande grupo de apoio forma-se aqui para que as para que as ações sejam mais rápidas, efetivas e integradas em busca de melhorar a capacidade da inovação tecnológica e trazer o conhecimento para todos sobre as leis e benefícios proporcionados pela legislação.'
+		]"
+      bgColor="#fbfbfb"
       id="more-about-us"
+	  font-size="1.3rem"
+	  font-family="Montserrat-Medium"
+	  :has-contact-btn="false"
+	  :has-circle-top-border="false"
+	  :has-circle-bottom-border="false"
+    />
+
+	<GeneralContainer 
+      title="NOSSO PROPÓSITO"
+      :darkTitle="false"
+      :hasKnowMoreBtn="false"
+      :contentArray="[
+		'Disponibilizar caminhos norteadores para todos que desejam empreender, crescer e inovar, independente do formato ou tamanho do negócio. Nosso foco é nos tornarmos referência como polo científico e tecnológico para o Brasil.',
+		'/quem-somos/purpose.png',
+		]"
+      bgColor="linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), #639280"
+      id="purpose"
+	  font-size="1.3rem"
+	  font-family="Montserrat-SemiBold"
+	  :has-contact-btn="false"
+	  :has-circle-top-border="true"
+	  :has-circle-bottom-border="false"
     />
   </section>
   <FooterComponent />
@@ -40,37 +76,72 @@ import Banner from '../../components/general/Banner.vue';
 import GeneralContainer from '../../components/general/GeneralContainer.vue';
 
 const ourStoryContentArray = reactive([
-  'O Ecossistema Local de Inovação – Campo Grande – MS, surge do desejo das instituições e unificar as competências tecnológicas de CAMPO GRANDE na direção do incentivo a inovação e tecnologia. Foi feito um estudo preliminar, para apurar o que temos de capacidade tecnológica e ciências para que essas capacidades sejam mais trabalhadas em prol do desenvolvimento socioeconômico de Campo Grande - MS. A partir disso, foi identificado que existem empresas que ainda não se beneficiam da capacidade tecnológica das instituições de ciência, tecnologia e inovação. Ou seja, mapeamos uma distância que pode ser aproveitada! Um grande grupo de apoio forma-se aqui para que as para que as ações sejam mais rápidas, efetivas e integradas em busca de melhorar a capacidade da inovação tecnológica e trazer o conhecimento para todos sobre as leis e benefícios proporcionados pela legislação.',
+  'O Ecossistema Local de Inovação – Campo Grande – MS, surge do desejo das instituições e unificar as competências tecnológicas de CAMPO GRANDE na direção do incentivo a inovação e tecnologia. Foi feito um estudo preliminar, para apurar o que temos de capacidade tecnológica e ciências para que essas capacidades sejam mais trabalhadas em prol do desenvolvimento socioeconômico de Campo Grande - MS. ',
   '/quem-somos/our_story.png'
 ])
 const moreAboutUs = reactive([
   '/quem-somos/more_about_us.png',
-  'Disponibilizar caminhos norteadores para todos que desejam empreender, crescer e inovar, independente do formato ou tamanho do negócio.  Nosso foco é nos tornarmos referência como polo científico e tecnológico para o Brasil.'
+  'A partir disso, foi identificado que existem empresas que ainda não se beneficiam da capacidade tecnológica das instituições de ciência, tecnologia e inovação. Ou seja, mapeamos uma distância que pode ser aproveitada! Um grande grupo de apoio forma-se aqui para que as para que as ações sejam mais rápidas, efetivas e integradas em busca de melhorar a capacidade da inovação tecnológica e trazer o conhecimento para todos sobre as leis e benefícios proporcionados pela legislação.'
 ])
 </script>
 
 <style scoped lang="scss">
   section.quem-somos {
-    div.d-flex {
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      position: absolute;
-      top: 0;
-      h1 {
-        font-size: 3rem;
-        text-align: start;
-      }
-      p {
-        text-align: justify;
-        font-size: 1.5rem;
-        max-width: 500px;
-        max-height: 300px;
-        overflow-y: auto;
-        padding-right: 5px;
-      }
-    }
-  }
+	background: #fbfbfb;
+    .header-content {
+		justify-content: center;
+
+		flex-direction: column;
+
+		h1 {
+
+			text-align: start;
+			font-size: 2rem;
+		}
+
+		.subtitle{
+			font-size: 1.8rem;
+			font-family: 'Montserrat-SemiBold', sans-serif;
+		}
+
+
+		p {
+			font-size: 1.5rem;
+			font-family: 'Montserrat-Medium', sans-serif;
+			max-width: 500px;
+			width: 100%;
+			text-align: justify;
+			margin-top: 10px;
+			margin-bottom: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 4;
+			/* number of lines to show */
+			line-clamp: 4;
+			-webkit-box-orient: vertical;
+			color: #000;
+		}
+
+		@media(max-width: 580px){
+			h1{
+				font-size: 1.5rem;
+			}
+
+			.subtitle{
+				font-size: 1.3rem;
+			}
+
+
+			p {
+				font-size: 1.1rem;
+				text-align: start;
+			}
+		}
+
+
+	}
+}
   /* width */
   ::-webkit-scrollbar {
     width: 7px;

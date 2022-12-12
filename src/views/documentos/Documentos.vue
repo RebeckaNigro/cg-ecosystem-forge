@@ -7,10 +7,10 @@
 				pixels-bg-height="710px"
 			>
 				<div class="banner-documentos-content ghp">
-					<img src="/documentos/icone-documento.png" alt="icon">
-					<div class="banner-text-container">
-						<h1 class="dark-title">Documentos</h1>
-						<p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
+					
+					<div>
+						<h1 class="dark-title">DOCUMENTOS</h1>
+						<p>Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
 					</div>
 				</div>
 			</Banner>
@@ -19,34 +19,34 @@
 				<ContainerDestaques />
 			</div>
 
-			<div class="noticias-content">
-				<h1 class="dark-title">Documentos</h1>
+			<div class="documentos-content">
+				<h1 class="dark-title">SESSÕES</h1>
 
 				<div class="card-documentos-container ghp">
-					<CardDocumento 
-            title="Pesquisas"
-            text="Em breve." 
-            :has-icon="true" 
-            iconPath="/documentos/lupinha.png"
-            :has-download="false"
-            content-to-download="none"
-          />
-					<CardDocumento 
-            title="Editais" 
-            text="Em breve." 
-            :has-icon="true" 
-            iconPath="/documentos/icone-editais.png"
-            :has-download="false"
-            content-to-download="none"
-          />
-					<CardDocumento 
-            title="Leis" 
-            text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul." 
-            :has-icon="true" 
-            iconPath="/documentos/icone-leis.png"
-            :has-download="false"
-            content-to-download="none"
-          />
+					<CardSessao 
+						title="Pesquisas"
+						text="Em breve." 
+						:has-icon="true" 
+						iconPath="/public/search_icon_2.svg"
+						:has-download="false"
+						content-to-download="none"
+					/>
+						<CardSessao 
+						title="Editais" 
+						text="Em breve." 
+						:has-icon="true" 
+						iconPath="/public/list_icon.svg"
+						:has-download="false"
+						content-to-download="none"
+					/>
+						<CardSessao 
+						title="Leis" 
+						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul." 
+						:has-icon="true" 
+						iconPath="/public/paper_fold_icon.svg"
+						:has-download="false"
+						content-to-download="none"
+					/>
 				</div>
 			</div>
 		</main>
@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import Banner from '../../components/general/Banner.vue';
-import CardDocumento from '../../components/documentos/CardDocumento.vue';
+import CardSessao from '../../components/documentos/CardSessao.vue';
 import ContainerDestaques from '../../components/documentos/ContainerDestaques.vue'
 
 </script>
@@ -75,29 +75,30 @@ section.container-fluid {
 	display: flex;
 	align-items: center;
 
-	> img {
-		width: 10%;
-		min-width: 60px;
-		max-width: 128px;
-		margin-right: 24px;
-	}
 
 	> div {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 
+		h1{
+			font-size: 2rem;
+		}
+
 		p {
+			font-family: 'Montserrat-Medium', sans-serif;
 			text-align: start;
-			font-size: 12px;
+			font-size: 1.5rem;
+			max-width: 60%;
 		}
 	}
 }
 
 .destaques-content {
 	width: 100%;
-	margin-bottom: 24px;
-  background-color: #f6f6f6;
+	padding-bottom: 24px;
+	background: #FBFBFB
+;
 
 	> h1 {
 		font-weight: bold !important;
@@ -105,14 +106,16 @@ section.container-fluid {
 	}
 }
 
-.noticias-content {
-	width: 100%;
-  margin: 48px 0;
+.documentos-content {
+  width: 100%;
+
+  padding: 2rem 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #F8F9FA;
 
 	> h1 {
 		font-weight: bold !important;
 		text-transform: uppercase;
-    font-size: 1.5rem;
+    	font-size: 1.5rem;
 	}
 }
 

@@ -3,14 +3,14 @@
     <span class="dark-title">PARCEIRO DO ECOSSISTEMA</span>
     <main>
       <h1 class="dark-title">{{ partnerName }}</h1>
-      <article class="dark-body-text">
+      <article>
         {{ firstParagraph }}
       </article>
     </main>
-    <h2 class="dark-title">
+    <h2>
       {{ subTitle }}
     </h2>
-    <article class="dark-body-text second-paragraph">
+    <article class="second-paragraph">
       {{ secondParagraph }}
     </article>
   </section>
@@ -46,6 +46,7 @@ const props = defineProps({
     align-items: center;
     justify-content: center;
     background-color: #f6f6f6;
+	font-family: 'Montserrat-Medium', sans-serif;
     span {
       color: gray;
       margin-top: 8rem;

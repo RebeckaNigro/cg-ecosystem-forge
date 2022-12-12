@@ -1,5 +1,5 @@
 export interface INoticia {
-	id: string
+	id: number
 	titulo: string
 	descricao: string
 	subTitulo: string
@@ -7,13 +7,13 @@ export interface INoticia {
 }
 
 export class Noticia implements INoticia {
-	id!: string
+	id!: number
 	titulo!: string
 	descricao!: string
 	subTitulo!: string
 	dataPublicacao!: string
 
-	constructor(id: string, titulo: string, descricao: string, subTitulo: string, dataPublicacao: string) {
+	constructor(id: number, titulo: string, descricao: string, subTitulo: string, dataPublicacao: string) {
 		[this.id, this.titulo, this.descricao, this.subTitulo, this.dataPublicacao] = arguments;
 	}
 }

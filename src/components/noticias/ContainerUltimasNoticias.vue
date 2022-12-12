@@ -7,7 +7,7 @@
 				<CardNoticia 
 				:is-relacionada="false"
 				:noticia="container"
-				@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: containerIndex }})"/>
+				@click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: container.id }})"/>
 			</nav>
 
 			<div class="borda-direita"></div>

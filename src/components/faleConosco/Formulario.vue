@@ -1,15 +1,46 @@
 <template>
-  <form action="submit" class="fale-conosco ghp">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.nome" type="text" name="person-name" id="name-input" placeholder="Nome">
-    <select class="half-size form-control form-select boring-gray-border" v-model="contactForm.setorId" aria-label="Default select example" :disabled="waitingSetores">
-      <option v-for="(setor, index) in comunicacaoStore.faleConoscoSetores" :key="setor.id" :value="setor.id">{{ setor.descricao }}</option>
-      <option value="0" selected>Selecione um setor</option>
-    </select>
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.emailCorporativo" type="text" name="corporate-email" id="email-input" placeholder="E-mail corporativo">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.telefone" type="tel" name="phone" id="phone" placeholder="Telefone (Cód área + Número)" maxlength="11" @keyup="evalNumberInput($event)">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.empresa" type="text" name="company" id="company-input" placeholder="Empresa">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.cargo" type="text" name="job-position" id="cargo-input" placeholder="Cargo">
-    <textarea class="form-control boring-gray-border" v-model="contactForm.mensagem" name="message" id="message" cols="30" rows="10" placeholder="Mensagem"></textarea>
+  <form action="submit" class="fale-conosco ghp box">
+	<div class="nome">
+		<label for="name-input">Nome</label>
+		<input class="form-control boring-gray-border" v-model="contactForm.nome" type="text" name="person-name" id="name-input" >
+	</div>
+
+	<div class="two-columns">
+
+		<div class="email">
+			<label for="email-input">Email corporativo</label>
+			<input class="form-control boring-gray-border" v-model="contactForm.emailCorporativo" type="text" name="corporate-email" id="email-input">
+		</div>
+		<div class="telefone">
+			<label for="phone">Telefone</label>
+			<input class="form-control boring-gray-border" v-model="contactForm.telefone" type="tel" name="phone" id="phone" maxlength="11" @keyup="evalNumberInput($event)">
+		</div>
+	</div>
+
+	<div class="two-columns">
+		<div class="empresa">
+			<label for="company-input">Empresa</label>
+			<input class="form-control boring-gray-border" v-model="contactForm.empresa" type="text" name="company" id="company-input">
+		</div>
+		<div class="cargo">
+			<label for="cargo-input">Cargo</label>
+			<input class="form-control boring-gray-border" v-model="contactForm.cargo" type="text" name="job-position" id="cargo-input">
+		</div>
+	</div>
+
+	<div class="setor">
+		<label>Setor do destinatário</label>
+		<select class="form-control form-select boring-gray-border" v-model="contactForm.setorId" aria-label="Default select example" :disabled="waitingSetores">
+		  <option value="0" selected>Selecione um setor</option>
+		  <option v-for="(setor, index) in comunicacaoStore.faleConoscoSetores" :key="setor.id" :value="setor.id">{{ setor.descricao }}</option>
+		</select>
+	</div>
+    
+    <div class="mensagem">
+		<label for="message">Mensagem</label>
+		<textarea class="form-control boring-gray-border" v-model="contactForm.mensagem" name="message" id="message" cols="30" rows="10"></textarea>
+	</div>
+    
     <button v-if="!sendingEmail" type="button" @click="sendEmail()" class="green-btn">ENVIAR</button>
     <div v-else class="spinner-border text-success ml-auto mt-2" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -86,6 +117,34 @@ import { Modal } from 'bootstrap';
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+	max-width: 1100px;
+	text-align: start;
+	margin: 5rem auto;
+
+	font-family: 'Montserrat-SemiBold', sans-serif;
+	color: #6B6A64;
+	font-size: 1.2rem;
+	label{
+		margin-left: 2rem;
+		margin-top: .6rem;
+	}
+	input{
+		color: #000;
+	}
+	div{
+		margin-top: 1rem;
+	}
+
+	.two-columns{
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		gap: 2rem;
+	}
+
+	.nome,.email, .telefone, .empresa, .cargo, .setor, .mensagem{
+		width: 100%;
+	}
     input.half-size, select.half-size {
       width: 48%;
       margin-right: 1%;
@@ -108,14 +167,18 @@ import { Modal } from 'bootstrap';
     }
     .green-btn {
       margin-left: auto;
-      margin-top: 10px;
+      margin-top: 1rem;
       color: #fff;
       border-radius: 25px;
-      width: 130px;
+      width: 250px;
       height: 40px;
       line-height: 40px;
       text-align: center;
     }
+
+	.green-btn:hover{
+		background-color: #aacbc3;
+	}
     .spinner-border, button.green-btn {
       margin-right: 1%;
     }
