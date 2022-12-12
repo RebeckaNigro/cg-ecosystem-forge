@@ -1,69 +1,15 @@
 <template>
-	<NavBar :is-transparent="false" />
-	
-  <Banner
-    path="/documentos/pesquisas.png"
-    img-alt="documentos hub"
-    figcaption="cover documentos"
-	:img-overlay="true"
-  >
-    <div class="banner-documentos-content ghp">
-      <div>
-		<h1 class="dark-title" v-if="leisContainer">LEIS</h1>
-		<h1 class="dark-title" v-if="editaisContainer">Editais</h1>
-        <h1 class="dark-title" v-if="pesquisasContainer">PESQUISAS</h1>
-		<p class="dark-body-text" v-if="leisContainer">Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul.</p>
-		<p class="dark-body-text" v-if="editaisContainer">Tenha acesso aos principais editais disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
-        <p class="dark-body-text" v-if="pesquisasContainer">Tenha acesso às principais pesquisas disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
-      </div>
-    </div>
-  </Banner>
-  <section id="pesquisa-documento" class="container-fluid">
+
+  <section id="editais-container" class="container-fluid">
 
 	<!--
 		Filtros e pesquisa
 	-->
-
-	
     <main class="ghp row mt-5 mb-5">
 
-	  <p class="dark-title text-start">Todos</p>
-
-	  <div class="d-flex pesquisas-container" v-if="!leisContainer">
-		<CardDocumento
-			nome-documento="Nome do documento"
 	  
-		  descricao="Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam."
-		  tags="#Pesquisas #Doutorado"
-		/>
-
-		<CardDocumento
-			nome-documento="Nome do documento"
-	  
-		  descricao="Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam."
-		  tags="#Pesquisas #Doutorado"
-		/>
-
-		<CardDocumento
-			nome-documento="Nome do documento"
-	  
-		  descricao="Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam."
-		  tags="#Pesquisas #Doutorado"
-		/>
-	</div>
-      <div v-for="(doc, index) in docs.value" class="col-12 col-sm-6 col-lg-4 w-fit-content" v-if="leisContainer">
-        <CardSessao
-          :title="doc.title"
-          iconPath="none"
-          :text="doc.description"
-          :hasIcon="false"
-          :contentToDownload="doc.downloadPath"
-          :hasDownload="true"
-        />
-      </div>
     </main>
   </section>
-  <FooterComponent />
 </template>
 
 <script setup lang="ts">
@@ -73,12 +19,9 @@ import Banner from '../../../components/general/Banner.vue';
 import { useRoute } from 'vue-router';
 import CardDocumento from '../../../components/documentos/CardDocumento.vue';
 import CardSessao from '../../../components/documentos/CardSessao.vue';
-import Editais from '../editais/Editais.vue';
 
 const route = useRoute()
 const leisContainer = ref(false)
-const editaisContainer = ref(false)
-const pesquisasContainer = ref(false)
   const dummyResearchs = reactive([
     {
       title: 'NOME DA PESQUISA',
@@ -190,16 +133,12 @@ const pesquisasContainer = ref(false)
     if (route.params.tipoDocumento === 'leis') {
       docs.value = await getDocs()
 	  leisContainer.value = true
-    }else if(route.params.tipoDocumento === 'editais'){
-		editaisContainer.value = true
-	}else{
-		pesquisasContainer.value = true
-	}
+    }
   })
 </script>
 
 <style scoped lang="scss">
-  .banner-documentos-content {
+  .banner-editais-content {
     position: absolute;
     top: 0;
     width: 100%;
