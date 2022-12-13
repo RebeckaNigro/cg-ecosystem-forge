@@ -1,17 +1,17 @@
 <template>
 	<div class="card-container box p-3 d-flex flex-column align-items-start">
 		<div class="img-container">
-			<img :src="image" alt="event-image" v-if="hasImage">
+			<img :src="buildImageSrc(eventoId, nomeEvento, 5)" alt="event-image" v-if="image !== null">
       		<span v-else class="dark-body-text fs-6">{{ nomeEvento }}</span>
 		</div>
 
 		<div class="container">
 
 			<div class="row mt-2">
-				<div class="tags col">
+				<!--<div class="tags col">
 					<span class="me-2">#Confra</span>
 					<span>#Networking</span>
-				</div>
+				</div>-->
 	
 				<div class="d-flex acoes-container col">
 					<button class="visualizar" @click="$router.push({name: 'EventoExpandido', params: {eventoId}})">
@@ -36,14 +36,16 @@
 			<div class="endereco-evento">{{enderecoEvento}}</div>
 		</div>
 
-		<span class="atualizado-em mt-2">Atualizado em: 01/01/2000 às 12:00</span>
+		<!--<span class="atualizado-em mt-2">Atualizado em: 01/01/2000 às 12:00</span>-->
 
 
 	</div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { useEventoStore } from '../../../../stores/eventos/store';
+import { buildImageSrc } from '../../../../utils/constantes';
 import { friendlyDateTime } from '../../../../utils/formatacao/datetime';
 
 
@@ -64,7 +66,10 @@ const handleDeleteEvent = async (eventoId: number) => {
 	await eventoStore.deleteEvent(eventoId)
 	window.location.reload()
   }
-
+onMounted(() => {
+	console.log(props.hasImage);
+	
+})
 
 
 </script>

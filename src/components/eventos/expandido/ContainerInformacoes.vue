@@ -2,7 +2,7 @@
   <section class="d-flex infos position-relative">
     <header class="ghp mt-5">
 	  <img src="/public/eventos/banner.png" class="d-block w-100" alt="destaques-carousel" v-if="data.img == null"/>
-      <img :src="data.img" class="d-block w-100" alt="destaques" v-else>
+      <img :src="buildImageSrc(data.eventId, data.eventName, 5)" class="d-block w-100" alt="destaques" v-else>
     </header>
     <main class="ghp mb-5">
       <div>
@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { buildImageSrc } from '../../../utils/constantes';
 import { friendlyDateTime } from '../../../utils/formatacao/datetime';
 import GeneralBtn from '../../buttons/GeneralBtn.vue';
   // import GeneralBtn from '../../buttons/GeneralBtn.vue'

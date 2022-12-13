@@ -21,7 +21,7 @@
 
 		<div class="cards-container">
 
-			<div v-for="(evento, index) in eventos" :key="index">
+			<div v-for="(evento, index) in eventoStore.eventosUsuarioLogado" :key="index">
 
 				<CardEventoCriado :has-image="evento.arquivo == null" :image="evento.arquivo!" :nome-evento="evento.titulo"
 					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
@@ -38,29 +38,36 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
-import FilterComponent from '../../../../components/general/FilterComponent.vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import CardEventoCriado from '../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
 import { useEventoStore } from '../../../../stores/eventos/store';
-import { IEvento, IUltimoEvento } from '../../../../stores/eventos/types';
+import { IUltimoEvento } from '../../../../stores/eventos/types';
+import { useUserStore } from '../../../../stores/user/store';
 
+// TODO fazer paginação em eventoStore.eventosUsuarioLogado
 const eventoStore = useEventoStore()
+const userStore = useUserStore()
 const lastIndex = ref(6)
-let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventos.slice(0, lastIndex.value))
+let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value))
 
 const isSearchResultsVisible = ref(false)
 const searchInputText = ref('')
 
 const addEventsToView = () => {
 	lastIndex.value += 3
-	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
+	eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
+	if(lastIndex.value > eventoStore.eventosUsuarioLogado.length){
+		const btnVerMais: HTMLElement = document.querySelector('.btn-ver-mais')!
+		btnVerMais.style.display = 'none'
+	}
+	
 }
 
 const handleSearch = () => {
 	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
 	
 	if(inputTextLowerCase !== ''){
-		eventos.value = eventoStore.eventos.filter((evento) => {
+		eventos.value = eventoStore.eventosUsuarioLogado.filter((evento) => {
 			if(evento.titulo){
 				const tituloLowerCase = evento.titulo.toLowerCase()
 				return tituloLowerCase.includes(inputTextLowerCase)
@@ -79,7 +86,9 @@ const handleSearch = () => {
 }
 
 onMounted(() => {
-	eventoStore.getAllEvents()
+	if(userStore.loggedUser.id){
+		eventoStore.getEventByUserId(parseInt(userStore.loggedUser.id))
+	}
 })
 
 </script>
@@ -104,8 +113,8 @@ onMounted(() => {
 		color: #fff;
 		text-transform: uppercase;
 		position: absolute;
-		right: 14rem;
-		top: 13.4rem;
+		right: 8rem;
+		top: 11.7rem;
 	}
 
 	.btn-criar-evento:hover {

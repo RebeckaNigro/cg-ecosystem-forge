@@ -23,6 +23,7 @@ const novoEvento: IEvento = {
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
 const eventos: Array<IUltimoEvento> = []
+const eventosUsuarioLogado: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
@@ -30,7 +31,8 @@ export const useEventoStore = defineStore('eventoStore', {
       enderecosExistentes,
       ultimosEventos,
 	  eventResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
-	  eventos
+	  eventos,
+	  eventosUsuarioLogado
     }
   },
   persist: true,
@@ -167,6 +169,25 @@ export const useEventoStore = defineStore('eventoStore', {
 			console.error(error);
 			
 		}
-	}
+	},
+	async getEventByUserId(userId: number){
+		try{
+			const response = await httpRequest.get(`/api/evento/listarPorId?id=${userId}`)
+			if(response.data.codigo === 200){
+				this.eventosUsuarioLogado = []
+				for(const evento of response.data.retorno){
+					this.eventosUsuarioLogado.push(evento)
+				}
+			}
+			if(response.data.codigo === 404){
+				this.eventosUsuarioLogado = []
+				
+			}
+		}catch(error){
+			console.error(error);
+			
+		}
+	},
+
   }
 })
