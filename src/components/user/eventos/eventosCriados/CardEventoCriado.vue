@@ -1,7 +1,7 @@
 <template>
 	<div class="card-container box p-3 d-flex flex-column align-items-start">
 		<div class="img-container">
-			<img :src="image" alt="event-image" v-if="hasImage">
+			<img :src="buildImageSrc(eventoId, nomeEvento, 5)" alt="event-image" v-if="hasImage">
       		<span v-else class="dark-body-text fs-6">{{ nomeEvento }}</span>
 		</div>
 
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import { useEventoStore } from '../../../../stores/eventos/store';
+import { buildImageSrc } from '../../../../utils/constantes';
 import { friendlyDateTime } from '../../../../utils/formatacao/datetime';
 
 
