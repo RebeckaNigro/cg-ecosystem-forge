@@ -82,7 +82,7 @@ const userId = inject('userId', '')
 //noticiaStore.novaNoticia.id = userId
 
 const noticia: INoticia = reactive({
-	id: '1', // provisório até mudar tipo do id no banco de number para string
+	id: 1, // provisório até mudar tipo do id no banco de number para string
 	titulo: '',
 	descricao: '',
 	subTitulo: '',
