@@ -98,6 +98,7 @@ onMounted(() => {
 	  
       img {
         width: -webkit-fill-available;
+		height: -webkit-fill-available;
       }
     }
 
