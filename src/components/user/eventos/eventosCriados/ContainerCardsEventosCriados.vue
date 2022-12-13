@@ -54,6 +54,11 @@ const searchInputText = ref('')
 const addEventsToView = () => {
 	lastIndex.value += 3
 	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
+	if(lastIndex.value > eventoStore.eventos.length){
+		const btnVerMais: HTMLElement = document.querySelector('.btn-ver-mais')!
+		btnVerMais.style.display = 'none'
+	}
+	
 }
 
 const handleSearch = () => {
@@ -104,8 +109,8 @@ onMounted(() => {
 		color: #fff;
 		text-transform: uppercase;
 		position: absolute;
-		right: 14rem;
-		top: 13.4rem;
+		right: 8rem;
+		top: 11.7rem;
 	}
 
 	.btn-criar-evento:hover {
