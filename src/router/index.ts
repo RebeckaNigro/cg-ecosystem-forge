@@ -126,7 +126,7 @@ const routes: RouteRecordRaw[] = [
     component: GerenciaNoticia
   },
   {
-    path: '/user/eventos/:eventoId',
+    path: '/user/eventos',
     name: 'GerenciaEvento',
     component: GerenciaEvento
   },
