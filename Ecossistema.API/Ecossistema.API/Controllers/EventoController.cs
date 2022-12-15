@@ -65,15 +65,22 @@ namespace Ecossistema.API.Controllers
         [HttpGet("listarUltimas")]
         public async Task<RespostaPadrao> ListarUltimas()
         {
-            var listagem = 2;
-            return await _eventoService.ListarEventos(listagem);
+            var listagem = "ultimos";
+            return await _eventoService.ListarEventos(listagem, 0);
         }
 
         [HttpGet("listarTodas")]
         public async Task<RespostaPadrao> ListarTodas()
         {
-            var listagem = 1;
-            return await _eventoService.ListarEventos(listagem);
+            var listagem = "todos";
+            return await _eventoService.ListarEventos(listagem, 0);
+        }
+
+        [HttpGet("listarPorId")]
+        public async Task<RespostaPadrao> ListarPorId(int id)
+        {
+            var listagem = "id";
+            return await _eventoService.ListarEventos(listagem, id);
         }
 
         [HttpGet("detalhes")]

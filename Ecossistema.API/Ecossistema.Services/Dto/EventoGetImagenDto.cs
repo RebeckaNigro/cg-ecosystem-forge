@@ -11,9 +11,11 @@ namespace Ecossistema.Services.Dto
     {
         public int Id { get; set; } 
         public string? Titulo { get; set; }
+        public string? Responsavel { get; set; }
         public DateTime? DataInicio { get; set; }
         public DateTime? DataTermino { get; set; }
-        public string? Local { get; set; } 
+        public string? Local { get; set; }
+        public int UsuarioId { get; set; }
 
         public Byte[]? Arquivo { get; set; }
         public DateTime? DataOperacao { get; set; }

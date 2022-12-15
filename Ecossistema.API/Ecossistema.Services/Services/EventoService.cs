@@ -286,7 +286,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }*/
 
-        public async Task<RespostaPadrao> ListarEventos(int listagem)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, int id)
         {
             var resposta = new RespostaPadrao();
 
@@ -305,6 +305,7 @@ namespace Ecossistema.Services.Services
                 evento[evento.Count - 1].DataInicio = item.DataInicio;
                 evento[evento.Count - 1].DataTermino = item.DataTermino;
                 evento[evento.Count - 1].Local = item.Local;
+                evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 evento[evento.Count - 1].DataOperacao = item.DataOperacao;
                 if (temp.Count > 0)
@@ -322,7 +323,7 @@ namespace Ecossistema.Services.Services
                     evento[evento.Count - 1].Arquivo = null;
                 evento.Add(new EventoGetImagenDto());
             }
-            if(listagem == 1)
+            if(listagem == "todos")
             {
                 var result = evento.Select(x => new
                 {
@@ -337,11 +338,11 @@ namespace Ecossistema.Services.Services
 
                 })
             .Distinct()
-            .OrderByDescending(x => x.dataInicio)
+            .OrderByDescending(x => x.id)
             .ToList();
                 resposta.Retorno = result;
             }
-            else if(listagem == 2)
+            else if(listagem == "ultimos")
             {
                 var result = evento.Select(x => new
                 {
@@ -358,6 +359,27 @@ namespace Ecossistema.Services.Services
             .OrderByDescending(x => x.dataInicio)
             .Take(3)
             .ToList();
+                resposta.Retorno = result;
+            }
+            else if (listagem == "id" && id != 0)
+            {
+                var result = evento.Select(x => new
+                {
+                    id = x.Id,
+                    titulo = x.Titulo,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    arquivo = x.Arquivo,
+                    usuarioId = x.UsuarioId,
+                    utimaAtualizacao = x.DataOperacao
+
+                }).Where(x => x.usuarioId == id).ToList()
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .ToList();
+                if (result.Count == 0)
+                    resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
                 resposta.Retorno = result;
             }
             return resposta;
