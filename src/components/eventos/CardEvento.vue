@@ -57,6 +57,7 @@ import {buildImageSrc} from '../../utils/constantes'
       img {
         width: -webkit-fill-available;
 		height: -webkit-fill-available;
+		border-radius: 10px;
       }
     }
     .infos-container {
