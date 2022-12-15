@@ -76,8 +76,8 @@ namespace Ecossistema.API.Controllers
             return await _eventoService.ListarEventos(listagem, 0);
         }
 
-        [HttpGet("listarPorId")]
-        public async Task<RespostaPadrao> ListarPorId(int id)
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId(int id)
         {
             var listagem = "id";
             return await _eventoService.ListarEventos(listagem, id);

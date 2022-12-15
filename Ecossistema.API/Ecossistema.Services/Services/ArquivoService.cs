@@ -301,6 +301,10 @@ namespace Ecossistema.Services.Services
                 path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
             }
             string dir = Directory.GetFiles(path, Path.GetFileName(arquivoId.ToString()) + ".*").FirstOrDefault();
+            if(dir == null)
+            {
+                return null;
+            }
             string fileExtension = dir.Split('.').Last();
             var data = System.IO.File.ReadAllBytes(dir);
             var result = new FileContentResult(data, "applicatiom/octet-stream")

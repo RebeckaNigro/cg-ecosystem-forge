@@ -314,7 +314,8 @@ namespace Ecossistema.Services.Services
                     if(evento[evento.Count - 1].Arquivo != null)
                     {
                         var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
-                        evento[evento.Count - 1].LinkImagem = aux.ToString();
+                        if(aux != null)
+                            evento[evento.Count - 1].LinkImagem = aux.ToString();
                     }
                         
                     //
@@ -361,7 +362,7 @@ namespace Ecossistema.Services.Services
             .ToList();
                 resposta.Retorno = result;
             }
-            else if (listagem == "id" && id != 0)
+            else if (listagem == "id" && id != 0) 
             {
                 var result = evento.Select(x => new
                 {
