@@ -80,30 +80,30 @@
 			<div class="numero">
 				<label for="numero">Número *</label>
 				<input type="text" name="numero" id="numero" class="boring-gray-border"
-				 v-model="novoEndereco.numero">
+				 v-model="endereco.numero">
 			</div>
 			<div class="cep">
 				<label for="cep">CEP *</label>
 				<!-- <input type="text" name="cep" id="cep" class="boring-gray-border" :disabled="evento.enderecoId !== null" v-model="evento.endereco.cep" maxlength="7"> -->
 				<input type="text" name="cep" id="cep" class="boring-gray-border"
-					v-model="novoEndereco.cep" maxlength="8" @input.prevent="handleCEPInput()">
+					v-model="endereco.cep" maxlength="8" @input.prevent="handleCEPInput()">
 			</div>
 			
 			<div class="complemento">
 				<label for="complemento">Complemento *</label>
 				<input type="text" name="complemento" id="complemento" class="boring-gray-border"
-				 v-model="novoEndereco.complemento">
+				 v-model="endereco.complemento">
 			</div>
 			<div class="cidade-estado d-flex justify-content-between">
 				<div id="cidade">
 					<label for="cidade-input">Cidade *</label>
 					<input type="text" name="cidade-input" id="cidade-input" class="boring-gray-border"
-					 v-model="novoEndereco.cidade">
+					 v-model="endereco.cidade">
 				</div>
 				<div id="estado">
 					<label for="estado-input">Estado *</label>
 					<input type="text" name="estado-input" id="estado-input" class="boring-gray-border"
-					 v-model="novoEndereco.uf">
+					 v-model="endereco.uf">
 				</div>
 			</div>
 		</div>
@@ -123,7 +123,7 @@
 		<div class="d-flex justify-content-around acoes-container">
 			<!--<button class="btn-salvar-rascunho">Salvar rascunho</button>
 			<button class="btn-pre-visualizar">Pré-visualizar</button>-->
-			<button class="btn-enviar" @click.prevent="handleAction('publicar')">Enviar</button>
+			<button class="btn-enviar" @click.prevent="handleAction('salvar')">Salvar</button>
 		</div>
 	</form>
 
@@ -132,7 +132,7 @@
 </template>
 <!-- TODO: preencher outros campos quando usuário escolher endereço existente -->
 <script setup lang="ts">
-import { onMounted, reactive, computed, ref } from 'vue';
+import { onMounted, reactive, computed, ref, onBeforeMount } from 'vue';
 import { IEvento, INovoEndereco } from '../../../stores/eventos/types';
 import { useEventoStore } from '../../../stores/eventos/store'
 import { getFromCEP } from '../../../utils/http'
@@ -140,6 +140,7 @@ import ModalComponent from '../../../components/general/ModalComponent.vue'
 import { Modal } from 'bootstrap';
 import TagInput from '../../general/TagInput.vue';
 import { useUserStore } from '../../../stores/user/store';
+import { buildImageSrc } from '../../../utils/constantes';
 
 const props = defineProps<{
 	eventoId: number | null
@@ -148,7 +149,7 @@ const props = defineProps<{
 const useStore = useEventoStore()
 const userStore = useUserStore()
 const sendingEvent = ref(false)
-const fileName = ref('')
+let fileName = ref('')
 
 const dataInicio = ref('')
 const dataTermino = ref('')
@@ -156,7 +157,7 @@ const dataTermino = ref('')
 const horaInicio = ref('')
 const horaTermino = ref('')
 
-const novoEndereco: INovoEndereco = reactive({
+let endereco = ref<INovoEndereco>({
 	cep: '',
 	logradouro: '',
 	numero: '',
@@ -166,7 +167,7 @@ const novoEndereco: INovoEndereco = reactive({
 	cidade: '',
 	uf: ''
 })
-let evento: IEvento = reactive({
+/*let evento: IEvento = reactive({
 	id: 1,
 	instituicaoId: 1, // id do parceiro que o usuário logado representa
 	tipoEventoId: 1,
@@ -176,35 +177,52 @@ let evento: IEvento = reactive({
 	dataTermino: '',
 	local: '',
 	enderecoId: null,
-	endereco: novoEndereco,
+	endereco: endereco,
 	linkExterno: '',
 	exibirMaps: false,
 	responsavel: '',
 	imagem: ''
-})
-const buscarEnderecosPeloTipo = async () => {
+})*/
+
+const evento = ref<IEvento>({
+	id: 1,
+	instituicaoId: 1, // id do parceiro que o usuário logado representa
+	tipoEventoId: 1,
+	titulo: '',
+	descricao: '',
+	dataInicio: '',
+	dataTermino: '',
+	local: '',
+	enderecoId: null,
+	endereco: endereco.value,
+	linkExterno: '',
+	exibirMaps: false,
+	responsavel: '',
+	imagem: ''})
+/*const buscarEnderecosPeloTipo = async () => {
 	useStore.evento.tipoEventoId = evento.tipoEventoId
 	await useStore.getAddresses(useStore.evento.tipoEventoId.toString())
-}
+}*/
 const handleAction = (action: string) => {
 	
 	//if (evento.enderecoId) evento.endereco = null
-	//else evento.endereco = { ...novoEndereco }
+	//else evento.endereco = { ...endereco }
 
-	evento.dataInicio = dataInicio.value.concat('T', horaInicio.value)
-	evento.dataTermino = dataTermino.value.concat('T', horaTermino.value)
+	evento.value.dataInicio = dataInicio.value.concat('T', horaInicio.value)
+	evento.value.dataTermino = dataTermino.value.concat('T', horaTermino.value)
 	
-	if (action === 'publicar') {
+	if (action === 'salvar') {
 
-		async function publicarEvento() {
+		async function salvarEvento() {
+			console.log(evento.value);
+			
 			if(userStore.getUserName) {
-				evento.responsavel = userStore.getUserName
+				evento.value.responsavel = userStore.getUserName
 			}
-			evento.local = evento.local.concat(', ', novoEndereco.numero)
 			sendingEvent.value = true
 			const file: HTMLInputElement = document.querySelector('#imagem-input')!
-			if (file) await useStore.postEvent(evento, file)
-			else await useStore.postEvent(evento)
+			if (file) await useStore.putEvent(evento.value, file)
+			else await useStore.putEvent(evento.value)
 			const res = useStore.eventResponse.getResponse()
 			if (res.code === 200) {
 				openModal('novoEventoRes', 'Sucesso', res.message, 'success')
@@ -214,20 +232,20 @@ const handleAction = (action: string) => {
 			sendingEvent.value = false
 		}
 
-		publicarEvento()
+		salvarEvento()
 	}
 }
 const handleCEPInput = async () => {
 	// validate cep input
-	if (novoEndereco.cep.length === 8) {
-		if (evento.endereco) {
-			const data = await getFromCEP(evento.endereco.cep)
-			evento.local = data.street
-			novoEndereco.cidade = data.city
-			novoEndereco.uf = data.state
-			novoEndereco.bairro = data.neighborhood
-			novoEndereco.logradouro = data.street
-			novoEndereco.pontoReferencia = 'oi'
+	if (endereco.value.cep.length === 8) {
+		if (evento.value.endereco) {
+			const data = await getFromCEP(evento.value.endereco.cep)
+			evento.value.local = data.street
+			endereco.value.cidade = data.city
+			endereco.value.uf = data.state
+			endereco.value.bairro = data.neighborhood
+			endereco.value.logradouro = data.street
+			endereco.value.pontoReferencia = 'oi'
 		}
 	}
 }
@@ -257,29 +275,38 @@ const openModal = (modalId: string, mt: string, mm: string, ms: string) => {
 onMounted(async () => {
 	await useStore.getAddresses('1')
 	if(props.eventoId){
-		await useStore.getEventByUserId(props.eventoId)
+		await useStore.getEventById(props.eventoId)
+
+		evento.value = useStore.evento
+	
+		dataInicio.value = useStore.evento.dataInicio.split('T')[0]		
+		dataTermino.value = useStore.evento.dataTermino.split('T')[0]
+		horaInicio.value = useStore.evento.dataInicio.split('T')[1]
+		horaTermino.value = useStore.evento.dataInicio.split('T')[1]
+
+		if(useStore.evento.endereco) endereco.value = useStore.evento.endereco
 	}
 
 })
 const setAddressInputFields = (enderecoId: number | null) => {
 	if (!enderecoId) {
-		novoEndereco.cep = ''
-		novoEndereco.logradouro = ''
-		novoEndereco.cidade = ''
-		novoEndereco.uf = ''
-		novoEndereco.numero = ''
-		novoEndereco.complemento = ''
-		novoEndereco.pontoReferencia = ''
+		endereco.value.cep = ''
+		endereco.value.logradouro = ''
+		endereco.value.cidade = ''
+		endereco.value.uf = ''
+		endereco.value.numero = ''
+		endereco.value.complemento = ''
+		endereco.value.pontoReferencia = ''
 	} else {
 		for (const address of existingAddresses.value) {
 			if (address.enderecoId === enderecoId) {
-				novoEndereco.cep = address.cep
-				novoEndereco.logradouro = address.logradouro
-				novoEndereco.cidade = address.cidade
-				novoEndereco.uf = address.uf
-				novoEndereco.numero = address.numero
-				novoEndereco.complemento = address.complemento
-				novoEndereco.pontoReferencia = address.pontoReferencia
+				endereco.value.cep = address.cep
+				endereco.value.logradouro = address.logradouro
+				endereco.value.cidade = address.cidade
+				endereco.value.uf = address.uf
+				endereco.value.numero = address.numero
+				endereco.value.complemento = address.complemento
+				endereco.value.pontoReferencia = address.pontoReferencia
 			}
 		}
 	}

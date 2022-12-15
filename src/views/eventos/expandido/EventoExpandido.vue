@@ -66,8 +66,10 @@ const handleNavigateUp = () => {
 onMounted(async () => {
 	loadingContent.value = true
 	await eventoStore.getEventById(parseInt(router.currentRoute.value.params.eventoId.toString()))
-	evento.value = eventoStore.eventResponse.dado;
+	evento.value = eventoStore.evento;
 	loadingContent.value = false
+	console.log(evento.value);
+	
 
 })
 

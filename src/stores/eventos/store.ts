@@ -4,7 +4,7 @@ import { httpRequest, getLastContent } from "../../utils/http";
 import { validateEventoInput } from "../../utils/eventos/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
 
-const novoEvento: IEvento = {
+const evento: IEvento = {
   id: 0,
   instituicaoId: 0,
   tipoEventoId: 0,
@@ -27,7 +27,7 @@ const eventosUsuarioLogado: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
-      novoEvento, // TODO: remove novoEvento
+      evento, 
       enderecosExistentes,
       ultimosEventos,
 	  eventResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
@@ -129,7 +129,7 @@ export const useEventoStore = defineStore('eventoStore', {
 		}
 	},
 
-	async putEvent(evento: IEvento, media: HTMLInputElement){
+	async putEvent(evento: IEvento, media?: HTMLInputElement){
 		try {
 			const eventoValidado = validateEventoInput(evento)
 			if(eventoValidado instanceof Evento){
@@ -163,7 +163,7 @@ export const useEventoStore = defineStore('eventoStore', {
 		try{
 			const response = await httpRequest.get(`/api/evento/detalhes?Id=${eventoId}`)
 			if(response.data.codigo === 200){
-				this.eventResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta)
+				this.evento = response.data.retorno
 			}
 		}catch(error){
 			console.error(error);
