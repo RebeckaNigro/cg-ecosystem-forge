@@ -27,7 +27,7 @@
 						title="Pesquisas"
 						text="Em breve." 
 						:has-icon="true" 
-						iconPath="/public/search_icon_2.svg"
+						iconPath="../../../public/search_icon_2.svg"
 						:has-download="false"
 						content-to-download="none"
 					/>
@@ -35,7 +35,7 @@
 						title="Editais" 
 						text="Em breve." 
 						:has-icon="true" 
-						iconPath="/public/list_icon.svg"
+						iconPath="../../../public/list_icon.svg"
 						:has-download="false"
 						content-to-download="none"
 					/>
@@ -43,7 +43,7 @@
 						title="Leis" 
 						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul." 
 						:has-icon="true" 
-						iconPath="/public/paper_fold_icon.svg"
+						iconPath="../../../public/paper_fold_icon.svg"
 						:has-download="false"
 						content-to-download="none"
 					/>
