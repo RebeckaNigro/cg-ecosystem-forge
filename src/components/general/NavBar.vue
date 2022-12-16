@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-light bg-light">
+	<nav class="navbar navbar-light fixed-top">
 		<div class="container-fluid">
 
 			<MenuLateral/>
@@ -107,6 +107,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 nav.navbar {
+	background: #EFEFEF;
 	section.container-links {
 		font-size: 1.2rem;
 	}
@@ -186,7 +187,7 @@ button#login {
 	.profile-dropdown {
 		display: flex;
 		position: absolute;
-		top: 4.7rem;
+		top: 5.6rem;
 		right: 1rem;
 		flex-direction: column;
 		justify-content: center;
