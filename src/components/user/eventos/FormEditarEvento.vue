@@ -214,13 +214,14 @@ const handleAction = (action: string) => {
 	if (action === 'salvar') {
 
 		async function salvarEvento() {
-			console.log(evento.value);
+			
 			
 			if(userStore.getUserName) {
 				evento.value.responsavel = userStore.getUserName
 			}
 			sendingEvent.value = true
 			const file: HTMLInputElement = document.querySelector('#imagem-input')!
+			console.log(evento.value);
 			if (file) await useStore.putEvent(evento.value, file)
 			else await useStore.putEvent(evento.value)
 			const res = useStore.eventResponse.getResponse()

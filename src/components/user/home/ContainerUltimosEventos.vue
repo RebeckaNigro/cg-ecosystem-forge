@@ -11,7 +11,7 @@
         <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
         <div class="location">{{ card.local }}</div>
 		<div class="actions-container">
-			<button @click="$router.push({name: 'GerenciaEvento'})">
+			<button @click="$router.push({name: 'GerenciaEvento', params: {eventoId: card.id}})">
 				<img src="/pen-icon.svg" alt="pen_icon">
 			</button>
 			<button @click="handleDeleteEvent(card.id)">
