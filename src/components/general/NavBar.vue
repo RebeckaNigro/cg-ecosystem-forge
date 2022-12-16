@@ -19,7 +19,6 @@
 				<span>{{ userStore.loggedUser.userName }}</span>
 				<img src="/public/arrow_down_icon.svg" alt="Abrir opções">
 				<div class="profile-dropdown" v-if="isProfileDropdownOpen">
-					<router-link to="/user/home" class="profile-dropdown-text">Painel</router-link>
 					<span type="button" class="light-title" id="logout" @click="logout">Sair</span>
 				</div>
 			</div>

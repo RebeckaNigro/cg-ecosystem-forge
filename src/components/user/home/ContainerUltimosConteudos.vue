@@ -11,13 +11,13 @@
           {{ content.titulo }}
         </div>
 		<div class="actions-container">
-
-			<button type="button" :id="'edit-content-btn' + content.id">
-			  <img src="/pen-icon.svg" alt="pen_icon">
-			</button>
 			<button type="button" :id="'delete-content-btn' + content.id" @click="handleDeleteNews(content.id)">
 			  <img src="/delete-icon.png" alt="delete_icon">
 			</button>
+
+			<!--<button type="button" :id="'edit-content-btn' + content.id">
+			  <img src="/pen-icon.svg" alt="pen_icon">
+			</button>-->
 		</div>
       </div>
     </main>

@@ -172,7 +172,7 @@ export const useEventoStore = defineStore('eventoStore', {
 	},
 	async getEventByUserId(userId: number){
 		try{
-			const response = await httpRequest.get(`/api/evento/listarPorId?id=${userId}`)
+			const response = await httpRequest.get(`/api/evento/listarPorUsuarioId?id=${userId}`)
 			if(response.data.codigo === 200){
 				this.eventosUsuarioLogado = []
 				for(const evento of response.data.retorno){

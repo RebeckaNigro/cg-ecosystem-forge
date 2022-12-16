@@ -194,7 +194,7 @@ const evento = ref<IEvento>({
 	dataTermino: '',
 	local: '',
 	enderecoId: null,
-	endereco: endereco.value,
+	endereco: null,
 	linkExterno: '',
 	exibirMaps: false,
 	responsavel: '',
