@@ -2,7 +2,7 @@
 	<NavBar :is-transparent="false" />
 	
   <Banner
-    path="/documentos/pesquisas.png"
+    :path="bannerImagePath"
     img-alt="documentos hub"
     figcaption="cover documentos"
 	:img-overlay="true"
@@ -24,8 +24,10 @@
 		Filtros e pesquisa
 	-->
 
+	<Editais v-if="editaisContainer"/>
+
 	
-    <main class="ghp row mt-5 mb-5">
+    <main class="ghp row mt-5 mb-5" v-else>
 
 	  <p class="dark-title text-start">Todos</p>
 
@@ -67,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import Banner from '../../../components/general/Banner.vue';
 
 import { useRoute } from 'vue-router';
@@ -79,6 +81,7 @@ const route = useRoute()
 const leisContainer = ref(false)
 const editaisContainer = ref(false)
 const pesquisasContainer = ref(false)
+const bannerImagePath = ref('/documentos/pesquisas.png')
   const dummyResearchs = reactive([
     {
       title: 'NOME DA PESQUISA',
@@ -186,12 +189,14 @@ const pesquisasContainer = ref(false)
     const raw = await fetch('/chumbado/documentos/documentos.json');
     return await raw.json()
   }
-  onBeforeMount( async () => {
+  onMounted( async () => {
     if (route.params.tipoDocumento === 'leis') {
       docs.value = await getDocs()
 	  leisContainer.value = true
+
     }else if(route.params.tipoDocumento === 'editais'){
 		editaisContainer.value = true
+		bannerImagePath.value = '/documentos/editais.png'
 	}else{
 		pesquisasContainer.value = true
 	}

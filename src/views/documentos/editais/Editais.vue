@@ -1,187 +1,109 @@
 <template>
 
-  <section id="editais-container" class="container-fluid">
+	<section id="editais-container" class="container-fluid">
 
-	<!--
+		<!--
 		Filtros e pesquisa
 	-->
-    <main class="ghp row mt-5 mb-5">
+		<main class="ghp row mt-5 mb-5">
 
-	  
-    </main>
-  </section>
+			<div class="d-flex w-100 mb-4">
+				<div>
+					<a class="dropdown-toggle" href="#" @click="novosEditaisToggle">
+						Novos editais
+					</a>
+				</div>
+				
+				<hr class="w-100 ms-3">
+			</div>
+
+			<div v-if="isNovosEditaisVisible">
+				<div v-for="card, index of dummyEdicts" >
+					<CardEdital/>
+				</div>
+	
+				<GeneralBtn
+					btnText="Ver mais"
+					:isExternalLink="false"
+					link=""
+					bgColor="#639280"
+					width="150px"
+					textColor="#fff"
+					height="45px"
+					id="ver-mais"
+				/>
+			</div>
+
+			<div class="d-flex w-100 mb-4">
+				<div>
+					<a class="dropdown-toggle" href="#">
+						Em andamento
+					</a>
+				</div>
+				
+				<hr class="w-100 ms-3">
+			</div>
+
+			<div class="d-flex w-100 mb-4">
+				<div>
+					<a class="dropdown-toggle" href="#">
+						Concluídos
+					</a>
+				</div>
+				
+				<hr class="w-100 ms-3">
+			</div>
+
+		</main>
+	</section>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, reactive, ref } from 'vue';
-import Banner from '../../../components/general/Banner.vue';
+import { reactive, ref } from 'vue';
+import CardEdital from '../../../components/documentos/editais/CardEdital.vue';
+import GeneralBtn from '../../../components/buttons/GeneralBtn.vue';
 
-import { useRoute } from 'vue-router';
-import CardDocumento from '../../../components/documentos/CardDocumento.vue';
-import CardSessao from '../../../components/documentos/CardSessao.vue';
+const isNovosEditaisVisible = ref(true)
 
-const route = useRoute()
-const leisContainer = ref(false)
-  const dummyResearchs = reactive([
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DA PESQUISA',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    }
-  ])
-  const dummyEdicts = reactive([
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    },
-    {
-      title: 'NOME DO EDITAL',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-      downloadPath: ''
-    }
-  ])
-  const docsToShow = computed( async () => {
-    if (route.params.tipoDocumento === 'pesquisas') return dummyResearchs
-    else if (route.params.tipoDocumento === 'editais') return dummyEdicts
-    else {
-      const docs = await getDocs()
-      return docs
-    }
-  })
-  const docs: any = reactive([])
-  const getDocs = async () => {
-    const raw = await fetch('/chumbado/documentos/documentos.json');
-    return await raw.json()
-  }
-  onBeforeMount( async () => {
-    if (route.params.tipoDocumento === 'leis') {
-      docs.value = await getDocs()
-	  leisContainer.value = true
-    }
-  })
+const dummyEdicts = reactive([
+	{
+		title: 'NOME DO EDITAL',
+		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
+		downloadPath: ''
+	},
+	{
+		title: 'NOME DO EDITAL',
+		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
+		downloadPath: ''
+	},
+	{
+		title: 'NOME DO EDITAL',
+		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
+		downloadPath: ''
+	},
+	{
+		title: 'NOME DO EDITAL',
+		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
+		downloadPath: ''
+	}
+	
+])
+
+const novosEditaisToggle = () => {
+	isNovosEditaisVisible.value = !isNovosEditaisVisible.value
+}
+
 </script>
 
 <style scoped lang="scss">
-  .banner-editais-content {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    img {
-      width: 10%;
-      min-width: 60px;
-      max-width: 128px;
-      margin-right: 24px;
-    }
-    h1 {
-		font-size: 2rem;
-        text-align: start;
-    }
 
-	p{
-		font-family: 'Montserrat-Medium', sans-serif;
-		font-size: 1.5rem;
-		text-align: start;
-		max-width: 70%;
+#editais-container{
+
+	.dropdown-toggle{
+		text-decoration: none;
+		color: #000;
+		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-size: 1.4rem;
 	}
-    
-  }
-  section#pesquisa-documento {
-    main {
-      justify-content: space-between;
-		
-	  .pesquisas-container{
-		justify-content: space-between;
-		width: 100%;
-	  }
-      .w-fit-content {
-        width: fit-content !important;
-      }
-    }
-  }
-  @media (max-width: 991px) {
-    section#pesquisa-documento {
-      main {
-        justify-content: space-around;
-      }
-    } 
-  }
+}
 </style>

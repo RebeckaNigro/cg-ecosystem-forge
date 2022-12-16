@@ -43,7 +43,7 @@ const props = defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .card-container {
 	display: flex;
 	background: rgba(255, 255, 255, 0.85);
