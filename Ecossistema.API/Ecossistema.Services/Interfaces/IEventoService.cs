@@ -9,11 +9,11 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IEventoService
     {
-        Task<RespostaPadrao> Incluir(EventoArquivosDto dado, int usuarioId);
-        Task<RespostaPadrao> Editar(EventoArquivosDto dado, int usuarioId);
+        Task<RespostaPadrao> Incluir(EventoArquivosDto dado, string token);
+        Task<RespostaPadrao> Editar(EventoArquivosDto dado, string token);
         Task<RespostaPadrao> Excluir(int id);
         //Task<RespostaPadrao> ListarUltimas();
-        Task<RespostaPadrao> ListarEventos(int listagem);
+        Task<RespostaPadrao> ListarEventos(string listagem, int id);
         Task<RespostaPadrao> Detalhes(int id);
         Task<RespostaPadrao> ListarTiposEventos();
         Task<RespostaPadrao> ListarEnderecos(int instituicaoId, int tipoEnderecoId);

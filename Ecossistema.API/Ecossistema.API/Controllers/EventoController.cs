@@ -1,7 +1,10 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Ecossistema.API.Controllers
 {
@@ -11,6 +14,7 @@ namespace Ecossistema.API.Controllers
     {
         private readonly IEventoService _eventoService;
         private readonly IArquivoService _arquivoService;
+        private readonly IAutenticacaoService _autenticacaoService;
 
 
         private int UsuarioId
@@ -29,22 +33,26 @@ namespace Ecossistema.API.Controllers
             }
         }
 
-        public EventoController(IEventoService eventoService, IArquivoService arquivoService)
+        public EventoController(IEventoService eventoService, IArquivoService arquivoService, IAutenticacaoService autenticacaoService)
         {
             _eventoService = eventoService;
             _arquivoService = arquivoService;
+            _autenticacaoService = autenticacaoService;
         }
 
+        [Authorize(Roles = UserRolesDto.AdminParceiro)]
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] EventoArquivosDto obj)
         {
-            return await _eventoService.Incluir(obj, UsuarioId);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            return await _eventoService.Incluir(obj, accessToken);
         }
-
+        [Authorize(Roles = UserRolesDto.AdminParceiro)]
         [HttpPut("editar")]
         public async Task<RespostaPadrao> Editar([FromForm] EventoArquivosDto obj)
         {
-            return await _eventoService.Editar(obj, UsuarioId);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            return await _eventoService.Editar(obj, accessToken);
         }
 
         [HttpDelete("excluir")]
@@ -57,15 +65,22 @@ namespace Ecossistema.API.Controllers
         [HttpGet("listarUltimas")]
         public async Task<RespostaPadrao> ListarUltimas()
         {
-            var listagem = 2;
-            return await _eventoService.ListarEventos(listagem);
+            var listagem = "ultimos";
+            return await _eventoService.ListarEventos(listagem, 0);
         }
 
         [HttpGet("listarTodas")]
         public async Task<RespostaPadrao> ListarTodas()
         {
-            var listagem = 1;
-            return await _eventoService.ListarEventos(listagem);
+            var listagem = "todos";
+            return await _eventoService.ListarEventos(listagem, 0);
+        }
+
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId(int id)
+        {
+            var listagem = "id";
+            return await _eventoService.ListarEventos(listagem, id);
         }
 
         [HttpGet("detalhes")]

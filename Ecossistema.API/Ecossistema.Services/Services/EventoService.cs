@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,10 +34,15 @@ namespace Ecossistema.Services.Services
             _enderecoService = enderecoService;
         }
 
-        public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
         {
             var resposta = new RespostaPadrao();
-
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
+            //var lalala = jwtSecurityToken.Payload.Values.ElementAt(3).ToJson;
+            var objAlt = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
+            var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
 
             if (!await ValidarIncluir(dado, item.Arquivos, resposta)) return resposta;
@@ -97,11 +103,17 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(EventoArquivosDto item, int usuarioId)
+        public async Task<RespostaPadrao> Editar(EventoArquivosDto item, string token)
         {
             var resposta = new RespostaPadrao();
-
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
+            //var perfis = jwtSecurityToken.Payload.Values.ElementAt(3).ToString();
+            var buscaUsuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
+            var usuarioId = buscaUsuario.Id;
             var dado = ConverterEvento(item);
+            int idEvento = (int)dado.Id;
 
             if (!await ValidarEditar(dado, resposta)) return resposta;
 
@@ -160,6 +172,26 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if (item.Arquivos.Count > 0)
+                    {
+                        var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
+                        if (encontra == 0)
+                        {
+                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivos, usuarioId, dataAtual, resposta);
+                        }
+                        else
+                        {
+                            IFormFile arquivo = item.Arquivos[item.Arquivos.Count - 1];
+                            ArquivoDto arquivoDto = new ArquivoDto();
+                            arquivoDto.Id = encontra;
+                            arquivoDto.NomeOriginal = arquivo.FileName;
+                            arquivoDto.Extensao = arquivo.ContentType;
+                            await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
+                            _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
+                            resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
+                        }
+
+                    }
 
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
@@ -254,7 +286,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }*/
 
-        public async Task<RespostaPadrao> ListarEventos(int listagem)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, int id)
         {
             var resposta = new RespostaPadrao();
 
@@ -268,11 +300,12 @@ namespace Ecossistema.Services.Services
                 //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 //var temp = arquivoDto[cont].Arquivo;
                 //item.Arquivo = temp;
-                evento[evento.Count -1].Id = item.Id;
+                evento[evento.Count - 1].Id = item.Id;
                 evento[evento.Count - 1].Titulo = item.Titulo;
                 evento[evento.Count - 1].DataInicio = item.DataInicio;
                 evento[evento.Count - 1].DataTermino = item.DataTermino;
                 evento[evento.Count - 1].Local = item.Local;
+                evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 evento[evento.Count - 1].DataOperacao = item.DataOperacao;
                 if (temp.Count > 0)
@@ -281,7 +314,8 @@ namespace Ecossistema.Services.Services
                     if(evento[evento.Count - 1].Arquivo != null)
                     {
                         var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
-                        evento[evento.Count - 1].LinkImagem = aux.ToString();
+                        if(aux != null)
+                            evento[evento.Count - 1].LinkImagem = aux.ToString();
                     }
                         
                     //
@@ -290,7 +324,7 @@ namespace Ecossistema.Services.Services
                     evento[evento.Count - 1].Arquivo = null;
                 evento.Add(new EventoGetImagenDto());
             }
-            if(listagem == 1)
+            if(listagem == "todos")
             {
                 var result = evento.Select(x => new
                 {
@@ -305,11 +339,11 @@ namespace Ecossistema.Services.Services
 
                 })
             .Distinct()
-            .OrderByDescending(x => x.dataInicio)
+            .OrderByDescending(x => x.id)
             .ToList();
                 resposta.Retorno = result;
             }
-            else if(listagem == 2)
+            else if(listagem == "ultimos")
             {
                 var result = evento.Select(x => new
                 {
@@ -326,6 +360,27 @@ namespace Ecossistema.Services.Services
             .OrderByDescending(x => x.dataInicio)
             .Take(3)
             .ToList();
+                resposta.Retorno = result;
+            }
+            else if (listagem == "id" && id != 0) 
+            {
+                var result = evento.Select(x => new
+                {
+                    id = x.Id,
+                    titulo = x.Titulo,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    arquivo = x.Arquivo,
+                    usuarioId = x.UsuarioId,
+                    utimaAtualizacao = x.DataOperacao
+
+                }).Where(x => x.usuarioId == id).ToList()
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .ToList();
+                if (result.Count == 0)
+                    resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
                 resposta.Retorno = result;
             }
             return resposta;

@@ -44,7 +44,7 @@ namespace Ecossistema.Services.Services
 
             //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
-
+        //public UserManager<IdentityUser> GetUser() { return _userManager; }
         /*public async Task<RespostaPadrao> Login(LoginDto model)
         {
             var resposta = new RespostaPadrao("Login efetuado com sucesso!");
@@ -100,6 +100,7 @@ namespace Ecossistema.Services.Services
 
         }*/
 
+
         public async Task<RespostaPadrao> Login(LoginDto model)
         {
             var resposta = new RespostaPadrao("Login efetuado com sucesso!");
@@ -126,6 +127,7 @@ namespace Ecossistema.Services.Services
                    
                     var authClaims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.Sid, user.Id),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
@@ -429,6 +431,5 @@ namespace Ecossistema.Services.Services
             }
 
         }
-
     }
 }
