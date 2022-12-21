@@ -21,7 +21,7 @@
 
 		<div class="cards-container">
 
-			<div v-for="(evento, index) in eventoStore.eventosUsuarioLogado" :key="index">
+			<div v-for="(evento, index) in eventos" :key="index">
 
 				<CardEventoCriado :has-image="evento.arquivo == null" :image="evento.arquivo!" :nome-evento="evento.titulo"
 					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
@@ -113,8 +113,8 @@ onMounted(() => {
 		color: #fff;
 		text-transform: uppercase;
 		position: absolute;
-		right: 8rem;
-		top: 11.7rem;
+		right: 11rem;
+		top: 11.4rem;
 	}
 
 	.btn-criar-evento:hover {

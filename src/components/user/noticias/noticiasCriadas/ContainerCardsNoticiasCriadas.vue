@@ -7,9 +7,9 @@
 
 	<div class="row justify-content-between w-100 align-items-end mb-5">
 
-		<div class="filtrar-data col">
+		<!--<div class="filtrar-data col">
 			<FilterComponent :content-type="'data'" :datas="[]" />
-		</div>
+		</div>-->
 
 		<div class="pesquisar col d-flex justify-content-end">
 			<SearchComponent />
@@ -24,6 +24,7 @@
 			:has-image="false"
 			:titulo-noticia="noticia.titulo"
 			image=""
+			:id-noticia="noticia.id"
 			/>
 		</div>
 	</div>
@@ -124,8 +125,8 @@ const dummyContainer = reactive([
 		color: #fff;
 		text-transform: uppercase;
 		position: absolute;
-		right: 18rem;
-		top: 13.4rem;
+		right: 11rem;
+		top: 11.4rem;
 	}
 
 	.btn-criar-noticia:hover{

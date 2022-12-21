@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-light fixed-top">
+	<nav class="navbar navbar-light">
 		<div class="container-fluid">
 
 			<MenuLateral/>

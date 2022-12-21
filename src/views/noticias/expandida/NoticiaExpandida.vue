@@ -3,6 +3,8 @@
     :is-transparent="false"
   />
   	<div class="background pt-5 pb-5">
+	<Spinner spinnerColorClass="text-dark" v-if="isLoadingContent"
+	  />
 	  <div class="noticia-breadcrumb">
 		<nav style="--bs-breadcrumb-divider'>';" aria-label="breadcrumb">
 			<ol class="breadcrumb">
@@ -51,6 +53,7 @@ import router from '../../../router';
 import { useNoticiaStore } from '../../../stores/noticias/store';
 import { INoticia } from '../../../stores/noticias/types';
 import { friendlyDateTime } from '../../../utils/formatacao/datetime';
+import Spinner from '../../../components/general/Spinner.vue';
 
 const store = useNoticiaStore()
 const noticia = ref<INoticia>({
@@ -60,14 +63,17 @@ const noticia = ref<INoticia>({
 		subTitulo: "",
 		dataPublicacao: "",
 	})
+
+const isLoadingContent = ref(false)
   const handleNavigateUp = () => {
 	window.scrollTo(0, 0)
   }
 
-  onMounted(() => {
-	store.getNewsById(parseInt(router.currentRoute.value.params.noticiaId.toString()))
+  onMounted(async () => {
+	isLoadingContent.value = true
+	await store.getNewsById(parseInt(router.currentRoute.value.params.noticiaId.toString()))
 	noticia.value = store.response.dado
-	console.log(noticia.value);
+	isLoadingContent.value = false
 	
   })
 </script>
