@@ -7,11 +7,12 @@
     </div>
     <div class="carousel-inner">
       <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
-        <img :src="buildImageSrc(data.id, data.titulo, 5)" class="d-block w-100" alt="destaques-carousel">
+        <img :src="buildImageSrc(data.id, data.titulo, 5)" class="d-block w-100" :alt="data.titulo" v-if="data.arquivo !== null">
+		<img src="/public/eventos/banner.png" alt="Foto do evento" v-else>
         <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
           <main>
             <h1 id="event-name" class="dark-title">{{ data.titulo }}</h1>
-            <time class="light-body-text calendar-icon">{{ brDateString(data.dataInicio) }}</time>
+            <time class="light-body-text calendar-icon">{{ data.dataInicio ? brDateString(data.dataInicio) : ''}}</time>
             <address class="light-body-text pin-icon">{{ data.local }}</address>
           </main>
           <GeneralBtn

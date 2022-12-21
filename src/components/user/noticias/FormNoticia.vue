@@ -9,10 +9,10 @@
 			<input type="text" id="subtitle" class="w-100 boring-gray-border form-control"
 				v-model="noticia.subTitulo">
 		</div>
-		<div class="group column-direction">
+		<!--<div class="group column-direction">
 			<label>Tags</label>
 			<TagInput/>
-		</div>
+		</div>-->
 		<div class="group column-direction ms-4 dates">
 
 			<div class="labels-date">Publicado em:</div>
@@ -49,8 +49,8 @@
 		</div>
 		<!--<input type="file" name="news-cover" id="news-cover" placeholder="Capa da Notícia">-->
 		<div class="btn-container justify-content-around">
-			<button class=" btn-salvar-rascunho">Salvar rascunho</button>
-			<button class="btn-pre-visualizar">Pré-visualizar</button>
+			<!--<button class=" btn-salvar-rascunho">Salvar rascunho</button>
+			<button class="btn-pre-visualizar">Pré-visualizar</button>-->
 			<button v-if="!sendingNews" type="button" class="btn-enviar" @click.prevent="handleSubmit()">Enviar</button>
 			<div v-else class="spinner-border text-success ml-auto mt-2" role="status">
 				<span class="visually-hidden">Loading...</span>

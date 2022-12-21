@@ -8,7 +8,7 @@
 		spinner-color-class="text-dark"
 		v-if="loadingContent"
 	/>
-	<div class="card-evento-container mb-5">
+	<div class="card-evento-container">
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
 			:hasImage="container.arquivo !== null"
@@ -38,7 +38,7 @@
         height="40px"
         id="know_more"
         @click="addEventsToView()"
-		class="mb-4"
+		class="mb-4 mt-5"
 		:class="{'d-none': lastIndex > eventoStore.eventos.length }"
       />
     </footer>

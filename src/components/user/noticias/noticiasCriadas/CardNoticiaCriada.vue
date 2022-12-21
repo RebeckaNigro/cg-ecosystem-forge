@@ -14,7 +14,7 @@
 				</div>
 	
 				<div class="d-flex acoes-container col">
-					<button class="visualizar">
+					<button class="visualizar" @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: idNoticia } })">
 						<img src="../../../../../public/view_icon.svg" alt="">
 					</button>
 					<!--<button class="editar">
@@ -40,6 +40,7 @@ const props = defineProps<{
 	hasImage: boolean
     image: string
     tituloNoticia: string
+	idNoticia: number
 }>()
 </script>
 
