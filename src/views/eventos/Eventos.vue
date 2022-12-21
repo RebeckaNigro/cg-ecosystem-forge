@@ -53,7 +53,7 @@
 		</div>
 
 		<div v-else>
-			<Destaques v-if="eventoStore.ultimosEventos.length > 1"/>
+			<Destaques v-if="eventoStore.eventos.length > 1"/>
 			<ContainerEventos />
 		</div>
 		<FooterComponent />
