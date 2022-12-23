@@ -157,6 +157,7 @@ const horaInicio = ref('')
 const horaTermino = ref('')
 
 const novoEndereco: INovoEndereco = reactive({
+	id: null,
 	cep: '',
 	logradouro: '',
 	numero: '',
@@ -180,7 +181,7 @@ let evento: IEvento = reactive({
 	linkExterno: '',
 	exibirMaps: false,
 	responsavel: '',
-	imagem: ''
+	arquivos: []
 })
 const buscarEnderecosPeloTipo = async () => {
 	useStore.evento.tipoEventoId = evento.tipoEventoId

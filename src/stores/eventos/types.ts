@@ -12,7 +12,7 @@ export interface IEvento {
   linkExterno: string
   exibirMaps: boolean
   responsavel: string
-  imagem: string | null
+  arquivos: IArquivo[]
 }
 
 export class Evento implements IEvento {
@@ -29,7 +29,7 @@ export class Evento implements IEvento {
 	linkExterno!: string
 	exibirMaps!: boolean
 	responsavel!: string
-	imagem!: string
+	arquivos!: IArquivo[]
 
 	constructor(
 		id: number,
@@ -45,14 +45,21 @@ export class Evento implements IEvento {
 		linkExterno: string,
 		exibirMaps: boolean,
 		responsavel: string,
-		imagem: string | null
+		arquivos: IArquivo[]
 		){
 			
-		[this.instituicaoId, this.tipoEventoId, this.titulo, this.descricao, this.dataInicio, this.dataTermino, this.local, this.enderecoId, this.endereco, this.linkExterno, this.exibirMaps,this.responsavel, this.imagem] = arguments
+		[this.instituicaoId, this.tipoEventoId, this.titulo, this.descricao, this.dataInicio, this.dataTermino, this.local, this.enderecoId, this.endereco, this.linkExterno, this.exibirMaps,this.responsavel, this.arquivos] = arguments
 		}
+}
+export interface IArquivo{
+	arquivo: string
+	extensao: string
+	id: number
+	nomeOriginal: string
 }
 
 export interface INovoEndereco {
+  id: number | null
   cep: string
   logradouro: string
   numero: string

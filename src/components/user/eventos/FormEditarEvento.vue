@@ -158,6 +158,7 @@ const horaInicio = ref('')
 const horaTermino = ref('')
 
 let endereco = ref<INovoEndereco>({
+	id: null,
 	cep: '',
 	logradouro: '',
 	numero: '',
@@ -167,22 +168,6 @@ let endereco = ref<INovoEndereco>({
 	cidade: '',
 	uf: ''
 })
-/*let evento: IEvento = reactive({
-	id: 1,
-	instituicaoId: 1, // id do parceiro que o usuário logado representa
-	tipoEventoId: 1,
-	titulo: '',
-	descricao: '',
-	dataInicio: '',
-	dataTermino: '',
-	local: '',
-	enderecoId: null,
-	endereco: endereco,
-	linkExterno: '',
-	exibirMaps: false,
-	responsavel: '',
-	imagem: ''
-})*/
 
 const evento = ref<IEvento>({
 	id: 1,
@@ -198,7 +183,7 @@ const evento = ref<IEvento>({
 	linkExterno: '',
 	exibirMaps: false,
 	responsavel: '',
-	imagem: ''})
+	arquivos: []})
 /*const buscarEnderecosPeloTipo = async () => {
 	useStore.evento.tipoEventoId = evento.tipoEventoId
 	await useStore.getAddresses(useStore.evento.tipoEventoId.toString())
@@ -220,8 +205,14 @@ const handleAction = (action: string) => {
 				evento.value.responsavel = userStore.getUserName
 			}
 			sendingEvent.value = true
-			const file: HTMLInputElement = document.querySelector('#imagem-input')!
+			
+			endereco.value.id = evento.value.enderecoId
+			evento.value.enderecoId = null
+			
+			const file: HTMLInputElement = document.querySelector("#imagem-input")!	
+			
 			console.log(evento.value);
+			
 			if (file) await useStore.putEvent(evento.value, file)
 			else await useStore.putEvent(evento.value)
 			const res = useStore.eventResponse.getResponse()
@@ -279,6 +270,9 @@ onMounted(async () => {
 		await useStore.getEventById(props.eventoId)
 
 		evento.value = useStore.evento
+		console.log(evento.value.arquivos[0].id);
+		
+		fileName.value = evento.value.arquivos[0].nomeOriginal +'.'+ evento.value.arquivos[0].extensao
 	
 		dataInicio.value = useStore.evento.dataInicio.split('T')[0]		
 		dataTermino.value = useStore.evento.dataTermino.split('T')[0]
