@@ -9,7 +9,7 @@
 		</div>
 		<div v-else>
 			<h1 class="mt-5 mb-5 dark-title m-auto fs-2">Crie seu evento!</h1>
-			<FormEvento :eventoId="eventoId" />
+			<FormEvento/>
 		</div>
 	</div>
 	<FooterComponent />
@@ -23,8 +23,8 @@ import FormEvento from '../../../components/user/eventos/FormEvento.vue'
 import router from '../../../router';
 const eventoId = ref<number | null>(null)
 onMounted(() => {
-	if(parseInt(router.currentRoute.value.params.eventoId.toString()) != 0){
-		eventoId.value = parseInt(router.currentRoute.value.params.eventoId.toString())
+	if(router.currentRoute.value.query.eventoId){
+		eventoId.value = parseInt(router.currentRoute.value.query.eventoId.toString())
 	}
 })
 </script>

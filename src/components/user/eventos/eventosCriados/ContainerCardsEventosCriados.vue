@@ -3,7 +3,7 @@
 
 		<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Eventos criados</h1>
 
-		<button class="btn-criar-evento" @click="$router.push({ name: 'GerenciaEvento', params: { eventoId: 0 } })">+ Criar novo evento</button>
+		<button class="btn-criar-evento" @click="$router.push({ name: 'GerenciaEvento' })">+ Criar novo evento</button>
 
 		<div class="row justify-content-between w-100 align-items-end mb-5">
 
