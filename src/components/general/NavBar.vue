@@ -66,7 +66,7 @@ const maisInfos = reactive([
 		path: '/noticias'
 	},
 	{
-		title: 'DOCUMENTOS',
+		title: 'DOCUMENTOS & EDITAIS',
 		path: '/documentos'
 	},
 	{

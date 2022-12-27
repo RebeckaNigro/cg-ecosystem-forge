@@ -41,11 +41,10 @@ const producerNameIsValid = (n: string) => {
 
 // TODO validar o endereço 
 export const validateEventoInput = (evento: IEvento) : TypeError | Evento => {
-	if(!eventNameIsValid(evento.titulo)) return TypeError('Insira um nome válido para o evento.')
+	if(!eventNameIsValid(evento.titulo)) return TypeError('O nome deve possuir 2 caracteres ou mais')
 	if(!beginDatetimeIsValid(evento.dataInicio)) return TypeError('Selecione uma data de início')
 	if(!endDatetimeIsValid(evento.dataTermino)) return TypeError('Selecione uma data de término')
-	if(!eventDescriptionIsValid(evento.descricao)) return TypeError('Insira uma descrição válida')
-	if(!ticketLinkIsValid(evento.linkExterno)) return TypeError('Insira um link para inscrição')
+	if(!eventDescriptionIsValid(evento.descricao)) return TypeError('A descrição deve possuir 10 caracteres ou mais')
 
 	return new Evento(evento.id,evento.instituicaoId, 
 		evento.tipoEventoId,evento.titulo, evento.descricao, 

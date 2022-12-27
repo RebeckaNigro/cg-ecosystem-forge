@@ -9,7 +9,7 @@
 				<div class="banner-documentos-content ghp">
 					
 					<div>
-						<h1 class="dark-title">DOCUMENTOS</h1>
+						<h1 class="dark-title">DOCUMENTOS & EDITAIS</h1>
 						<p>Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
 					</div>
 				</div>
