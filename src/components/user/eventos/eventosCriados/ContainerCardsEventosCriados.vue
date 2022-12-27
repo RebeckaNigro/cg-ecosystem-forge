@@ -115,6 +115,22 @@ onMounted(() => {
 		position: absolute;
 		right: 11rem;
 		top: 11.4rem;
+
+		@media(max-width: 1400px){
+			right: 7rem;
+			top: 12.5rem;
+		}
+
+		@media(max-width: 992px){
+			right: 3rem;
+			top: 11rem;
+		}
+
+		@media(min-width: 1600px){
+			right: 23rem;
+		}
+
+	
 	}
 
 	.btn-criar-evento:hover {
