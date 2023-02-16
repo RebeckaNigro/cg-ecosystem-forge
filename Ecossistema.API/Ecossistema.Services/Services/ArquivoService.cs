@@ -22,6 +22,7 @@ namespace Ecossistema.Services.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string RepositorioArquivo = "RepositoryFiles";
         private readonly string Documents = "Documents";
+        private readonly string NoticiasImagens = "NoticiasImagens";
 
         public ArquivoService(IUnitOfWork unitOfWork,
             IWebHostEnvironment webHostEnvironment)
@@ -161,6 +162,15 @@ namespace Ecossistema.Services.Services
                 var convertOrigem = origem.ToString();
 
                 var fileExtension = file.FileName.Split('.').Last();
+                if (convertOrigem.Equals("Noticia"))
+                {
+                    using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens, id.ToString() + "." + fileExtension), FileMode.Create))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                else
                 if (convertOrigem.Equals("Documento"))
                 {
                     using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents, id.ToString() + "." + fileExtension), FileMode.Create))

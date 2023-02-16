@@ -5,6 +5,7 @@ using Ecossistema.Services.Interfaces;
 using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Ecossistema.Services.Services
     public class NoticiaService : INoticiaService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IArquivoService _arquivoService;
 
-        public NoticiaService(IUnitOfWork unitOfWork)
+        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
         {
             _unitOfWork = unitOfWork;
+            _arquivoService = arquivoService;
         }
 
-        public async Task<RespostaPadrao> Incluir(NoticiaDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, int usuarioId)
         {
             var resposta = new RespostaPadrao();
 
@@ -44,6 +47,14 @@ namespace Ecossistema.Services.Services
                 _unitOfWork.Complete();
 
                 #endregion
+
+                List<IFormFile> arquivo = new List<IFormFile>();
+                arquivo.Add(imagem);
+
+                if (!await _arquivoService.Vincular(EOrigem.Noticia, obj.Id, arquivo, usuarioId, DateTime.Now, resposta))
+                {
+                    return resposta;
+                }
 
                 #region Aprovação
 
