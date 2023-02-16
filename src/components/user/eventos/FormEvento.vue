@@ -141,9 +141,6 @@ import { Modal } from 'bootstrap';
 import TagInput from '../../general/TagInput.vue';
 import { useUserStore } from '../../../stores/user/store';
 
-const props = defineProps<{
-	eventoId: number | null
-}>()
 
 const useStore = useEventoStore()
 const userStore = useUserStore()
@@ -157,6 +154,7 @@ const horaInicio = ref('')
 const horaTermino = ref('')
 
 const novoEndereco: INovoEndereco = reactive({
+	id: null,
 	cep: '',
 	logradouro: '',
 	numero: '',
@@ -180,7 +178,7 @@ let evento: IEvento = reactive({
 	linkExterno: '',
 	exibirMaps: false,
 	responsavel: '',
-	imagem: ''
+	arquivos: []
 })
 const buscarEnderecosPeloTipo = async () => {
 	useStore.evento.tipoEventoId = evento.tipoEventoId
@@ -255,9 +253,6 @@ const openModal = (modalId: string, mt: string, mm: string, ms: string) => {
 }
 onMounted(async () => {
 	await useStore.getAddresses('1')
-	if(props.eventoId){
-		await useStore.getEventByUserId(props.eventoId)
-	}
 
 })
 const setAddressInputFields = (enderecoId: number | null) => {

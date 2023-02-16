@@ -18,7 +18,7 @@ const evento: IEvento = {
   linkExterno: "",
   exibirMaps: false,
   responsavel: "",
-  imagem: null
+  arquivos: []
 }
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
