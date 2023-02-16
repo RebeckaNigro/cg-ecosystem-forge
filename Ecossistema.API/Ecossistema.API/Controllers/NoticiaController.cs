@@ -9,6 +9,7 @@ namespace Ecossistema.API.Controllers
     public class NoticiaController : ControllerBase
     {
         private readonly INoticiaService _noticiaService;
+        private readonly IArquivoService _arquivoService;
 
         private int UsuarioId
         {
@@ -18,15 +19,16 @@ namespace Ecossistema.API.Controllers
             }
         }
 
-        public NoticiaController(INoticiaService noticiaService)
+        public NoticiaController(INoticiaService noticiaService, IArquivoService arquivoService)
         {
             _noticiaService = noticiaService;
+            _arquivoService = arquivoService;
         }
 
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromBody] NoticiaDto obj)
+        public async Task<RespostaPadrao> Incluir([FromForm] NoticiaDto obj, IFormFile arquivo)
         {
-            return await _noticiaService.Incluir(obj, UsuarioId);
+            return await _noticiaService.Incluir(obj, arquivo, UsuarioId);
         }
 
         [HttpPut("editar")]
