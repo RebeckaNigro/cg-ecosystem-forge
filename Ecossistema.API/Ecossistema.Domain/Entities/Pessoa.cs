@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,14 @@ namespace Ecossistema.Domain.Entities
             PessoasEnderecos = new HashSet<PessoaEndereco>();
             Usuarios = new HashSet<Usuario>();
             HistoricoUsuarios = new HashSet<HistoricoUsuario>();
+        }
+
+        public Pessoa(string nomeCompleto, string cpf, DateTime dataNascimento, int usuarioId, DateTime dataAtual)
+        {
+            NomeCompleto = nomeCompleto;
+            Cpf = cpf;
+            DataNascimento = dataNascimento;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
         }
 
         public int Id { get; set; }

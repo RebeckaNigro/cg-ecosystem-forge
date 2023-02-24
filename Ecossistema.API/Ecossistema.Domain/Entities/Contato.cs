@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,11 @@ namespace Ecossistema.Domain.Entities
             PessoasContatos = new HashSet<PessoaContato>();
         }
 
+        public Contato(string telefone, DateTime dataAtual, int usuarioId)
+        {
+            Telefone = telefone;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
+        }
         public int Id { get; set; }
         public string Telefone { get; set; }
         public bool Ativo { get; set; } = true;
