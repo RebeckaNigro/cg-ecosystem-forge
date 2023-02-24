@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,21 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Domain.Entities
 {
+    
     public class PessoaContato
     {
+        public PessoaContato()
+        {
+
+        }
+
+        public PessoaContato(int pessoaId, int contatoId, int tipoContatoId, int usuarioId, DateTime dataAtual)
+        {
+            PessoaId = pessoaId;
+            ContatoId = contatoId;
+            TipoContatoId = tipoContatoId;
+            Recursos.Auditoria(this, usuarioId, dataAtual);
+        }
         public int Id { get; set; }
         public int PessoaId { get; set; }
         public virtual Pessoa Pessoa { get; set; }

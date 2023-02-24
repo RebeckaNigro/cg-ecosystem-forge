@@ -17,6 +17,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> RegistrarAdmin(ResgistrarLoginDto dado);
         Task<RespostaPadrao> GerarCodigoRedefinirSenha(string dado);
         Task<RespostaPadrao> RedefinirSenha(RedefinirSenhaDto dado);
+        Task<RespostaPadrao> RegistrarUsuarioComum(ResgistrarUsuarioComumDto model);
         //Task<IAsyncResult> Editar(DocumentoDto dado, int usuarioId);
         //Task<IAsyncResult> Excluir(int id);
     }
