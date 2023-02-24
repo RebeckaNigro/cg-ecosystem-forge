@@ -32,9 +32,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromBody] NoticiaDto obj)
+        public async Task<RespostaPadrao> Editar([FromForm] NoticiaDto obj, IFormFile arquivo)
         {
-            return await _noticiaService.Editar(obj, UsuarioId);
+            return await _noticiaService.Editar(obj, arquivo, UsuarioId);
         }
 
         [HttpDelete("excluir")]

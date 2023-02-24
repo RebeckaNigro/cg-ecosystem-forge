@@ -83,7 +83,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(NoticiaDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile imagem, int usuarioId)
         {
             var resposta = new RespostaPadrao();
 
@@ -124,7 +124,18 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Noticias.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if(imagem != null)
+                    {
+                        //var buscaImagem = _arquivoService.EncontraArquivoId(objAlt.Id, EOrigem.Noticia);
+                        await _arquivoService.ExcluirArquivo(objAlt.Id, "noticia");
+                        List<IFormFile> arquivo = new List<IFormFile>();
+                        arquivo.Add(imagem);
 
+                        if (!await _arquivoService.Vincular(EOrigem.Noticia, objAlt.Id, arquivo, usuarioId, DateTime.Now, resposta))
+                        {
+                            return resposta;
+                        }
+                    }
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
                 else resposta.SetErroInterno();
