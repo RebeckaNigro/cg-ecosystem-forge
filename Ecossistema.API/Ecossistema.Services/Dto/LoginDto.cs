@@ -9,10 +9,10 @@ namespace Ecossistema.Services.Dto
 {
     public class LoginDto
     {
-        [Required(ErrorMessage = "Username is required")]
-        public string? UserName { get; set; }
+        [Required(ErrorMessage = "Email é obrigatório")]
+        public string? Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "Senha é obrigatória")]
         public string? Password { get; set; }
     }
 }
