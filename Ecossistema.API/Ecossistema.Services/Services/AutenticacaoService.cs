@@ -109,28 +109,28 @@ namespace Ecossistema.Services.Services
             LoginSucessoDto login = new LoginSucessoDto();
             try
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
                     resposta.SetErroInterno("Usuário não existe");
                     return resposta;
                 }
                 var resultadoIdentity = await _signInManager
-               .PasswordSignInAsync(model.UserName, model.Password, false, false);
+               .PasswordSignInAsync(user.UserName, model.Password, false, false);
                 if (resultadoIdentity.Succeeded)
                 {
                     var identityUser = _signInManager
                         .UserManager
                         .Users
                         .FirstOrDefault(usuario =>
-                         usuario.NormalizedUserName == model.UserName.ToUpper());
+                         usuario.NormalizedUserName == model.Email.ToUpper());
                         var userRoles = await _userManager.GetRolesAsync(user);
                     
                    
                     var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Sid, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
                     foreach (var userRole in userRoles)
