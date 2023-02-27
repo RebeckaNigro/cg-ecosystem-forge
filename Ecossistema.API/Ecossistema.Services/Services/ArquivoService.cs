@@ -218,6 +218,12 @@ namespace Ecossistema.Services.Services
                     var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
                     idArquivo = busca.Id;
                 }
+                else if (tipo == "noticia")
+                {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens);
+                    var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.NoticiaId == id);
+                    idArquivo = busca.Id;
+                }
                 string result = Directory.GetFiles(path, Path.GetFileName(idArquivo.ToString()) + ".*").FirstOrDefault();
                 if (result == null)
                 {
@@ -256,6 +262,13 @@ namespace Ecossistema.Services.Services
                 }
                 else if (tipo == "evento")
                 {
+                    var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == origem.ArquivoId);
+                    idArquivo = busca.Id;
+                }
+                else if (tipo == "noticia")
+                {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens);
                     var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
                     var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == origem.ArquivoId);
                     idArquivo = busca.Id;
