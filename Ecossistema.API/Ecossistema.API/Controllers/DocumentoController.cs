@@ -1,6 +1,7 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Ecossistema.Util.Const;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -26,18 +27,21 @@ namespace Ecossistema.API.Controllers
             _arquivoService = arquivoService;
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
             return await _documentoService.Incluir(obj, arquivo ,UsuarioId);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
         public async Task<RespostaPadrao> Editar([FromBody] DocumentoDto obj)
         {
             return await _documentoService.Editar(obj, UsuarioId);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
@@ -81,6 +85,7 @@ namespace Ecossistema.API.Controllers
             return result;
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("atualizaDocumento")]
         public async Task<IActionResult> AtualizaDocumento([FromForm] ArquivoDto obj)
         {

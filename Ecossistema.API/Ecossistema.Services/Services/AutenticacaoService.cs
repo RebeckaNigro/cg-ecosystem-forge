@@ -236,15 +236,16 @@ namespace Ecossistema.Services.Services
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminGeral));
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
+
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminMaster))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminMaster);
-                    }
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminMaster))
-                    {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
                 }
                 if(role == 2)
@@ -253,41 +254,28 @@ namespace Ecossistema.Services.Services
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminGeral));
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminGeral))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
-                    }
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminGeral))
-                    {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
+                    
                 }
                 if(role == 3)
                 {
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
-                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComun))
-                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComun));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
-                    }
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
-                    {
-                        await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
-                    }
-                }
-
-                if (role == 4)
-                {
-                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComun))
-                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComun));
-
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComun))
-                    {
-                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComun);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
                 }
                 var obj = new Usuario(1, model.InstituicaoId, user.Id, DateTime.Now, model.Cargo, 1, DateTime.Now);
@@ -353,12 +341,12 @@ namespace Ecossistema.Services.Services
                 }
                 if (role == 4)
                 {
-                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComun))
-                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComun));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
 
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComun))
+                    if (await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
                     {
-                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComun);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
                 }
                 //Cadastrar Pessoa

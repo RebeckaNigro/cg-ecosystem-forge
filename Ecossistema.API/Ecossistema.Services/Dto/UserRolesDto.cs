@@ -5,6 +5,6 @@
         public const string AdminMaster = "AdminMaster";
         public const string AdminGeral = "AdminGeral";
         public const string AdminParceiro = "AdminParceiro";
-        public const string UsuarioComun = "UsuarioComum";
+        public const string UsuarioComum = "UsuarioComum";
     }
 }
