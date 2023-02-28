@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -25,18 +26,20 @@ namespace Ecossistema.API.Controllers
             _arquivoService = arquivoService;
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] NoticiaDto obj, IFormFile arquivo)
         {
             return await _noticiaService.Incluir(obj, arquivo, UsuarioId);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
         public async Task<RespostaPadrao> Editar([FromBody] NoticiaDto obj)
         {
             return await _noticiaService.Editar(obj, UsuarioId);
         }
-
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {

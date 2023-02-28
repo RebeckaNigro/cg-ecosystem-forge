@@ -40,14 +40,14 @@ namespace Ecossistema.API.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
-        [Authorize(Roles = UserRolesDto.AdminParceiro)]
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] EventoArquivosDto obj)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             return await _eventoService.Incluir(obj, accessToken);
         }
-        [Authorize(Roles = UserRolesDto.AdminParceiro)]
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
         public async Task<RespostaPadrao> Editar([FromForm] EventoArquivosDto obj)
         {
@@ -55,6 +55,7 @@ namespace Ecossistema.API.Controllers
             return await _eventoService.Editar(obj, accessToken);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
@@ -62,6 +63,7 @@ namespace Ecossistema.API.Controllers
             return await _eventoService.Excluir(id);
         }
 
+        
         [HttpGet("listarUltimas")]
         public async Task<RespostaPadrao> ListarUltimas()
         {
