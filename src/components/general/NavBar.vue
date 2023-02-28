@@ -83,7 +83,8 @@ const userStore = useUserStore()
 
 const logout = () => {
 	userStore.logout()
-	window.location.reload()
+	//window.location.reload()
+	router.push({ name: 'Login'})
 }
 
 const handleProfileDropdown = () => {

@@ -7,7 +7,8 @@ export const useUserStore = defineStore('userStore', {
   state: () => {
     return {
       userResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
-      loggedUser: new LoggedUser(null, null, null)
+      loggedUser: new LoggedUser(null, null, null),
+	  disconnected: false
     }
   },
   persist: true,
@@ -30,10 +31,12 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-	logout(){
+	async logout(){
 		if(window.localStorage.getItem('userStore')){
 			window.localStorage.removeItem('userStore')
 		}
+		const response = await httpRequest.post('/api/autenticacao/logout')
+	
 	}
   },
   getters: {

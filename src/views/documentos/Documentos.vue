@@ -1,5 +1,4 @@
 <template>
-	<NavBar :is-transparent="false" />
 	<section class="container-fluid">
 		<main>
 			<Banner
@@ -7,7 +6,7 @@
 				pixels-bg-height="710px"
 			>
 				<div class="banner-documentos-content ghp">
-					
+
 					<div>
 						<h1 class="dark-title">DOCUMENTOS & EDITAIS</h1>
 						<p>Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
@@ -23,26 +22,26 @@
 				<h1 class="dark-title">SESSÕES</h1>
 
 				<div class="card-documentos-container ghp">
-					<CardSessao 
+					<CardSessao
 						title="Pesquisas"
-						text="Em breve." 
-						:has-icon="true" 
+						text="Em breve."
+						:has-icon="true"
 						iconPath="../../public/search_icon_2.svg"
 						:has-download="false"
 						content-to-download="none"
 					/>
-						<CardSessao 
-						title="Editais" 
-						text="Em breve." 
-						:has-icon="true" 
+						<CardSessao
+						title="Editais"
+						text="Em breve."
+						:has-icon="true"
 						iconPath="../../public/list_icon.svg"
 						:has-download="false"
 						content-to-download="none"
 					/>
-						<CardSessao 
-						title="Leis" 
-						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul." 
-						:has-icon="true" 
+						<CardSessao
+						title="Leis"
+						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul."
+						:has-icon="true"
 						iconPath=".././public/paper_fold_icon.svg"
 						:has-download="false"
 						content-to-download="none"
@@ -51,7 +50,6 @@
 			</div>
 		</main>
 	</section>
-	<FooterComponent />
 </template>
 
 <script setup lang="ts">

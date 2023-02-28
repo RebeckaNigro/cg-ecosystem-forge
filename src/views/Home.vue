@@ -1,8 +1,7 @@
 <template>
-  <NavBar :is-transparent="true"/>
   <section class="container-fluid">
     <main>
-      <Banner 
+      <Banner
         path="/home/fundo.png"
         figcaption="workspace_image"
         img-alt="workspace_image"
@@ -29,7 +28,7 @@
 		:has-circle-top-border="false"
 		:has-circle-bottom-border="true"
       />
-      <Partners 
+      <Partners
         :logos-url-array="logosParceiros"
       />
       <GeneralContainer
@@ -47,7 +46,6 @@
       />
     </main>
   </section>
-  <FooterComponent />
 </template>
 
 <script setup lang="ts">
