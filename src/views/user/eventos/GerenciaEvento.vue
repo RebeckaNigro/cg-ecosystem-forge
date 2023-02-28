@@ -1,8 +1,5 @@
 <template>
-	<div class="background pb-5">
-		<NavBar 
-		:is-transparent="false"
-		/>
+	<div class="pb-5">
 		<div v-if="eventoId">
 			<h1 class="mt-5 mb-5 dark-title m-auto fs-2">Edite seu evento</h1>
 			<FormEditarEvento :eventoId="eventoId"/>
@@ -12,12 +9,10 @@
 			<FormEvento/>
 		</div>
 	</div>
-	<FooterComponent />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import NavBar from '../../../components/general/NavBar.vue';
 import FormEditarEvento from '../../../components/user/eventos/FormEditarEvento.vue';
 import FormEvento from '../../../components/user/eventos/FormEvento.vue'
 import router from '../../../router';
@@ -31,10 +26,4 @@ onMounted(() => {
 
 <style scoped>
 
-.background{
-	background-color: #fff;
-	background-image: url("background.svg") ;
-	background-size: cover;
-	width: 100%;
-}
 </style>

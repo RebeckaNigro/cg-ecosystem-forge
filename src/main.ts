@@ -3,12 +3,11 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router';
+import "./assets/css/global.css"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import { useUserStore } from './stores/user/store'
 // Global components
-import NavBar from './components/general/NavBar.vue'
-import FooterComponent from './components/general/FooterComponent.vue'
 // import { AxiosKey, RouterKey } from './utils/keys';
 // import { httpRequest } from './utils/http';
 
@@ -21,8 +20,6 @@ const ecossistema = createApp(App)
 ecossistema.use(pinia)
 ecossistema.use(router)
 
-ecossistema.component('NavBar', NavBar)
-ecossistema.component('FooterComponent', FooterComponent)
 // ecossistema.provide(AxiosKey, httpRequest)
 // ecossistema.provide(RouterKey, providedUseRoute)
 

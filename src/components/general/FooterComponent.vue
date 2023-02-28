@@ -169,7 +169,7 @@ const info = [
     a:nth-child(2n) {
       margin: 0 10px;
     }
-    
+
   }
   .light-body-text {
     font-size: 0.8rem;

@@ -17,6 +17,7 @@ import GerenciaNoticia from '../views/user/noticias/GerenciaNoticia.vue'
 import GerenciaEvento from '../views/user/eventos/GerenciaEvento.vue'
 import NoticiasCriadas from '../views/user/noticias/NoticiasCriadas.vue';
 import EventosCriados from '../views/user/eventos/EventosCriados.vue';
+import Perfil from '../views/perfil/Perfil.vue'
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -115,6 +116,14 @@ const routes: RouteRecordRaw[] = [
       public: true
     }
   },
+    {
+        path: '/perfil',
+        name: 'Perfil',
+        component: Perfil,
+        meta: {
+            public: true
+        }
+    },
   {
     path: '/user/Home',
     name: 'UserHome',

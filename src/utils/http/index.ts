@@ -18,6 +18,15 @@ httpRequest.interceptors.request.use((config: any) => {
   return Promise.reject(error)
 })
 
+httpRequest.interceptors.response.use((response: any) => {
+	const userStore = useUserStore();
+    if(response.data.codigo == 403) userStore.disconnected = true
+	return response
+}, (error)=> {
+	console.log(error);
+    return error
+})
+
 export const getFromCEP = async (cep: string) => {
   try {
     const response = await (await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`)).json()
