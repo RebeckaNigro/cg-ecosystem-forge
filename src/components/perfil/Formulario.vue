@@ -3,17 +3,21 @@
     <h1 class="titulo-principal">FAÇA PARTE DO ECOSSISTEMA!</h1>
   </div>
   <div class="mx-auto card-form box p-5 mb-5">
-    <form action="submit">
+    <form @submit.prevent="cadastrar()">
       <div>
         <label for="nome-completo" class="form-label-primary"
-          >Nome Completo</label
+          >Nome Completo*</label
         >
         <input
           type="text"
           id="nome-completo"
           class="form-input-primary"
+          :class="v$.nomeCompleto.$error ? 'is-invalid' : ''"
           v-model="perfil.nomeCompleto"
         />
+        <div v-if="v$.nomeCompleto.$error" class="invalid-feedback">
+          {{ v$.nomeCompleto.$errors[0].$message }}
+        </div>
       </div>
 
       <div class="row">
@@ -23,8 +27,12 @@
             type="text"
             id="cpf"
             class="form-input-primary"
+            :class="v$.cpf.$error ? 'is-invalid' : ''"
             v-model="perfil.cpf"
           />
+          <div v-if="v$.cpf.$error" class="invalid-feedback">
+            {{ v$.cpf.$errors[0].$message }}
+          </div>
         </div>
         <div class="col-sm-4">
           <label for="data-nascimento" class="form-label-primary"
@@ -34,22 +42,30 @@
             type="date"
             id="data-nascimento"
             class="form-input-primary"
+            :class="v$.dataNascimento.$error ? 'is-invalid' : ''"
             v-model="perfil.dataNascimento"
           />
+          <div v-if="v$.dataNascimento.$error" class="invalid-feedback">
+            {{ v$.dataNascimento.$errors[0].$message }}
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-8">
           <label for="email-corporativo" class="form-label-primary"
-            >E-mail</label
+            >E-mail*</label
           >
           <input
             type="email"
             id="email-corporativo"
             class="form-input-primary"
+            :class="v$.email.$error ? 'is-invalid' : ''"
             v-model="perfil.email"
           />
+          <div v-if="v$.email.$error" class="invalid-feedback">
+            {{ v$.email.$errors[0].$message }}
+          </div>
         </div>
         <div class="col-sm-4">
           <label for="telefone" class="form-label-primary">Telefone</label>
@@ -68,20 +84,24 @@
           type="text"
           id="cargo"
           class="form-input-primary"
+          :class="v$.cargo.$error ? 'is-invalid' : ''"
           v-model="perfil.cargo"
         />
+        <div v-if="v$.cargo.$error" class="invalid-feedback">
+          {{ v$.cargo.$errors[0].$message }}
+        </div>
       </div>
 
-      <div>
+      <!-- <div>
         <label for="instituicao" class="form-label-primary">Instituição</label>
         <select
           id="instituicao"
           class="form-input-primary padding-increase"
           v-model="perfil.instituicao"
         ></select>
-      </div>
+      </div> -->
 
-      <div>
+      <!-- <div>
         <label for="cpj-insituicao" class="form-label-primary"
           >CNPJ da Instituição</label
         >
@@ -91,7 +111,7 @@
           class="form-input-primary"
           v-model="perfil.cnpjInsituicao"
         />
-      </div>
+      </div> -->
 
       <div>
         <label for="cep" class="form-label-primary">CEP</label>
@@ -99,9 +119,13 @@
           type="text"
           id="cep"
           class="form-input-primary"
+          :class="v$.cep.$error ? 'is-invalid' : ''"
           v-model="perfil.cep"
           @blur="buscarCEP"
         />
+        <div v-if="v$.cep.$error" class="invalid-feedback">
+          {{ v$.cep.$errors[0].$message }}
+        </div>
       </div>
 
       <div class="row">
@@ -109,7 +133,7 @@
           <label for="estado" class="form-label-primary">Estado</label>
           <input
             id="estado"
-            class="form-input-primary padding-increase"
+            class="form-input-primary"
             v-model="perfil.uf"
             disabled
           />
@@ -143,8 +167,12 @@
             type="text"
             id="numero"
             class="form-input-primary"
+            :class="v$.numero.$error ? 'is-invalid' : ''"
             v-model="perfil.numero"
           />
+          <div v-if="v$.numero.$error" class="invalid-feedback">
+            {{ v$.numero.$errors[0].$message }}
+          </div>
         </div>
       </div>
 
@@ -173,10 +201,13 @@
           :type="passwordVisibility ? 'text' : 'password'"
           id="password"
           class="form-input-primary"
+          :class="v$.password.$error ? 'is-invalid' : ''"
           placeholder="*****"
           v-model="perfil.password"
-          required
         />
+        <div v-if="v$.password.$error" class="invalid-feedback">
+          {{ v$.password.$errors[0].$message }}
+        </div>
       </div>
 
       <div class="input-icon-container">
@@ -195,10 +226,13 @@
           :type="confirmPasswordVisibility ? 'text' : 'password'"
           id="confirmPassword"
           class="form-input-primary"
+          :class="v$.confirmPassword.$error ? 'is-invalid' : ''"
           placeholder="*****"
           v-model="perfil.confirmPassword"
-          required
         />
+        <div v-if="v$.confirmPassword.$error" class="invalid-feedback">
+          {{ v$.confirmPassword.$errors[0].$message }}
+        </div>
       </div>
 
       <div class="text-start">
@@ -208,18 +242,22 @@
           class="mx-2"
           v-model="termosDeUso"
         />
-        <span>Aceito os termos de uso...</span>
+        <span>Li e concordo com todos os termos de uso.</span>
+      </div>
+
+      <div
+        v-if="sendingPerfil"
+        class="spinner-border text-success ml-auto mt-2"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
       </div>
 
       <div class="mt-4 d-flex">
         <button type="button" class="green-btn-outlined button-specific">
           VOLTAR
         </button>
-        <button
-          type="button"
-          class="green-btn-primary button-specific"
-          @click="cadastrar"
-        >
+        <button type="submit" class="green-btn-primary button-specific">
           CADASTRAR
         </button>
       </div>
@@ -228,10 +266,19 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from "vue"
+  import { onMounted, ref, computed } from "vue"
   import { getFromCEP } from "../../utils/http"
   import { usePerfilStore } from "../../stores/perfil/store"
   import { useAlertStore } from "../../stores/alert/store"
+  import useValidate from "@vuelidate/core"
+  import {
+    required,
+    email,
+    minLength,
+    sameAs,
+    helpers
+  } from "@vuelidate/validators"
+  import { isPasswordValid } from "./../../utils/validator/validations"
 
   const perfilStore = usePerfilStore()
   const alertStore = useAlertStore()
@@ -241,6 +288,7 @@
   const visibilityIconRef = ref("src/assets/icons/visibility-off.svg")
   const confirmVisibilityIconRef = ref("src/assets/icons/visibility-off.svg")
   let termosDeUso = ref(false)
+  let sendingPerfil = ref(false)
   let perfil = ref({
     nomeCompleto: "",
     cpf: "",
@@ -254,11 +302,55 @@
     bairro: "",
     numero: "",
     cep: "",
-    instituicao: "",
-    cnpjInstituicao: "",
+    instituicaoId: "14",
     password: "",
     confirmPassword: ""
   })
+
+  const formularioRules = computed(() => {
+    return {
+      nomeCompleto: {
+        required: helpers.withMessage("Nome é obrigatório.", required)
+      },
+      cpf: { required, minLength: minLength(11) },
+      dataNascimento: {
+        required: helpers.withMessage(
+          "Data de nascimento é obrigatória.",
+          required
+        )
+      },
+      email: { required, email },
+      telefone: {},
+      cargo: {
+        required: helpers.withMessage("Cargo é obrigatório.", required)
+      },
+      uf: {},
+      cidade: {},
+      logradouro: {},
+      bairro: {},
+      numero: {
+        required: helpers.withMessage("Número é obrigatório.", required)
+      },
+      cep: { required: helpers.withMessage("CEP é obrigatório.", required) },
+      instituicaoId: {},
+      password: {
+        required,
+        passwordFormat: helpers.withMessage(
+          "Formato da senha: 8 ou mais caracteres, devendo conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial.",
+          isPasswordValid
+        )
+      },
+      confirmPassword: {
+        required,
+        sameAs: helpers.withMessage(
+          "Senhas não conferem.",
+          sameAs(perfil.value.password)
+        )
+      }
+    }
+  })
+
+  const v$ = useValidate(formularioRules, perfil)
 
   const changePasswordVisibility = () => {
     passwordVisibility.value = !passwordVisibility.value
@@ -280,25 +372,48 @@
   const getInstituicoes = async () => {}
 
   const cadastrar = async () => {
-    const resposta = await perfilStore.postPerfil(perfil.value)
-
-    if (resposta.status === 200) {
-      alertStore.visible = true
-      alertStore.options = {
-        message: "Perfil cadastrado com sucesso!",
-        type: "success",
-        dispensable: true,
-        timeout: true
-      }
+    if (!termosDeUso.value) {
+      alertStore.showWarningMessage("Você precisa aceitar os termos de uso!")
     } else {
-      alertStore.visible = true
-      alertStore.options = {
-        message: "Erro ao cadastrar perfil!",
-        type: "error",
-        dispensable: true,
-        timeout: true
+      v$.value.$validate()
+
+      if (!v$.value.$error) {
+        sendingPerfil.value = true
+
+        await perfilStore.postPerfil(perfil.value)
+        sendingPerfil.value = false
+        const resposta = perfilStore.perfilResponse.getResponse()
+
+        if (resposta.code === 200) {
+          alertStore.showTimeoutSuccessMessage("Perfil cadastrado com sucesso!")
+          resetForm()
+        } else {
+          alertStore.showTimeoutErrorMessage("Erro ao cadastrar perfil!")
+        }
       }
     }
+  }
+
+  const resetForm = () => {
+    perfil.value = {
+      nomeCompleto: "",
+      cpf: "",
+      dataNascimento: "",
+      email: "",
+      telefone: "",
+      cargo: "",
+      uf: "",
+      cidade: "",
+      logradouro: "",
+      bairro: "",
+      numero: "",
+      cep: "",
+      instituicaoId: "14",
+      password: "",
+      confirmPassword: ""
+    }
+
+    termosDeUso.value = false
   }
 
   const buscarCEP = async () => {
@@ -307,13 +422,7 @@
         const enderecoCompleto = await getFromCEP(perfil.value.cep)
 
         if (enderecoCompleto.errors) {
-          alertStore.visible = true
-          alertStore.options = {
-            message: "Erro ao buscar CEP!",
-            type: "error",
-            dispensable: true,
-            timeout: true
-          }
+          alertStore.showTimeoutErrorMessage("Erro ao buscar CEP!")
         } else {
           perfil.value.cidade = enderecoCompleto.city
           perfil.value.uf = enderecoCompleto.state
@@ -322,14 +431,9 @@
         }
       } catch (error) {
         console.log(error)
-
-        alertStore.visible = true
-        alertStore.options = {
-          message: "CEP Incorreto, digite um valor válido.",
-          type: "error",
-          dispensable: true,
-          timeout: true
-        }
+        alertStore.showTimeoutErrorMessage(
+          "CEP Incorreto, digite um valor válido."
+        )
       }
     }
   }
