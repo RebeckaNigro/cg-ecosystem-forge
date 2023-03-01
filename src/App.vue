@@ -19,13 +19,6 @@
         isTransparent.value = path === "/"
       }
     )
-    //  alertStore.visible = true
-    //alertStore.options =  {
-    //				message: 'Mensagem de Teste',
-    //				type: 'info',
-    //				dispensable: true,
-    //				timeout: false
-    //			}
   })
 </script>
 

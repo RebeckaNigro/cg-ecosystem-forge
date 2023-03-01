@@ -60,7 +60,6 @@
             type="submit"
             class="green-btn-primary full-size"
             v-if="!waitingResponse"
-            @click="cadastrar"
           >
             ENTRAR
           </button>

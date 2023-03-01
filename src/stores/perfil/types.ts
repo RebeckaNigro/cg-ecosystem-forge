@@ -5,7 +5,7 @@ export interface IPerfil {
   dataNascimento: Date
   telefone: string
   cargo: string
-  intituicaoId: number
+  instituicaoId: number
   uf: string
   cidade: string
   logradouro: string
@@ -24,7 +24,7 @@ export class Perfil implements IPerfil {
   dataNascimento!: Date
   telefone!: string
   cargo!: string
-  intituicaoId!: number
+  instituicaoId!: number
   uf!: string
   cidade!: string
   logradouro!: string
@@ -60,7 +60,7 @@ export class Perfil implements IPerfil {
       this.dataNascimento,
       this.telefone,
       this.cargo,
-      this.intituicaoId,
+      this.instituicaoId,
       this.uf,
       this.cidade,
       this.logradouro,
