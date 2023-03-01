@@ -54,5 +54,12 @@ namespace Ecossistema.API.Controllers
         {
             return await _instituicaoService.VincularEndereco(obj, InstituicaoId, UsuarioId);
         }
+
+        [HttpGet("buscarInstituicoes")]
+        public async Task<RespostaPadrao> BuscarInstituicoes()
+        {
+            return await _instituicaoService.BuscarInstituicoes();
+        }
+
     }
 }

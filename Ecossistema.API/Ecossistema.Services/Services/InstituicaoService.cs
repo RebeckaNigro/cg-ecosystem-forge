@@ -619,6 +619,21 @@ namespace Ecossistema.Services.Services
             return await ValidarTipoInstituicaoIdCadastrada(dado.TipoInstituicaoId, resposta);
         }
 
+        public async Task<RespostaPadrao> BuscarInstituicoes()
+        {
+            var respostaPadrao = new RespostaPadrao();
+            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Ativo);
+            var result = query.Select(x => new
+            {
+                x.RazaoSocial,
+                x.Cnpj
+            }).Distinct()
+              .OrderBy(x => x.RazaoSocial)
+              .ToList();
+            respostaPadrao.Retorno = result;
+            return respostaPadrao;
+        }
+
         #endregion
     }
 }
