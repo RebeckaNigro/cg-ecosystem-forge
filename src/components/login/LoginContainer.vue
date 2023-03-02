@@ -6,18 +6,21 @@
       </div>
       <form
         id="login-form"
-        @submit.prevent="callStoreLogin(user.username, user.password)"
+        @submit.prevent="callStoreLogin(user.email, user.password)"
       >
         <div>
-          <label for="username" class="form-label-primary">E-mail</label>
+          <label for="email" class="form-label-primary">E-mail</label>
           <input
             type="text"
-            id="username"
+            id="email"
             class="form-input-primary"
-            v-model="user.username"
+            :class="v$.email.$error ? 'is-invalid' : ''"
+            v-model="user.email"
             placeholder="e-maildousuario@email.com"
-            required
           />
+          <div v-if="v$.email.$error" class="invalid-feedback">
+            {{ v$.email.$errors[0].$message }}
+          </div>
         </div>
 
         <div class="input-icon-container">
@@ -34,10 +37,13 @@
             :type="passwordVisibility ? 'text' : 'password'"
             id="password"
             class="form-input-primary"
+            :class="v$.password.$error ? 'is-invalid' : ''"
             placeholder="*****"
             v-model="user.password"
-            required
           />
+          <div v-if="v$.password.$error" class="invalid-feedback">
+            {{ v$.password.$errors[0].$message }}
+          </div>
         </div>
 
         <div class="row">
@@ -73,16 +79,20 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, ref } from "vue"
+  import { reactive, ref, computed } from "vue"
   import { useUserStore } from "../../stores/user/store"
+  import { useAlertStore } from "../../stores/alert/store"
   import { useRouter } from "vue-router"
+  import useValidate from "@vuelidate/core"
+  import { required, email, helpers } from "@vuelidate/validators"
 
   const router = useRouter()
 
+  const alertStore = useAlertStore()
   const userStore = useUserStore()
 
-  const user = reactive({
-    username: "",
+  const user = ref({
+    email: "",
     password: ""
   })
 
@@ -90,6 +100,21 @@
   const lembrarUsuario = ref(false)
   const passwordVisibility = ref(false)
   const visibilityIconRef = ref("src/assets/icons/visibility-off.svg")
+
+  const usuarioRules = computed(() => {
+    return {
+      email: {
+        required: helpers.withMessage("E-mail é obrigatório.", required),
+        email: helpers.withMessage("E-mail inválido.", email)
+      },
+      password: {
+        required: helpers.withMessage("Senha é obrigatória.", required)
+      }
+    }
+  })
+
+  const v$ = useValidate(usuarioRules, user)
+
   const changePasswordVisibility = () => {
     passwordVisibility.value = !passwordVisibility.value
 
@@ -99,25 +124,31 @@
   }
 
   const callStoreLogin = async (e: string, p: string) => {
-    waitingResponse.value = true
-    await userStore.login(e, p)
-    if (userStore.userResponse.code === 200) {
-      router.push({ name: "UserHome" })
-    } else {
-      // push notification
-      const warning = document.createElement("span")
-      warning.textContent = "Por favor, verifique a senha e o nome de usuário."
-      warning.classList.add("m-auto")
-      warning.style.color = "red"
+    v$.value.$validate()
 
-      const form = document.querySelector("#login-form")
-      form?.append(warning)
+    if (!v$.value.$error) {
+      waitingResponse.value = true
+      await userStore.login(e, p)
+      if (userStore.userResponse.code === 200) {
+        router.push({ name: "UserHome" })
+      } else {
+        alertStore.showTimeoutErrorMessage("E-mail ou senha incorretos.")
+        // push notification
+        // const warning = document.createElement("span")
+        // warning.textContent =
+        //   "Por favor, verifique a senha e o nome de usuário."
+        // warning.classList.add("m-auto")
+        // warning.style.color = "red"
 
-      setTimeout(() => {
-        form?.removeChild(warning)
-      }, 4000)
+        // const form = document.querySelector("#login-form")
+        // form?.append(warning)
+
+        // setTimeout(() => {
+        //   form?.removeChild(warning)
+        // }, 4000)
+      }
+      waitingResponse.value = false
     }
-    waitingResponse.value = false
   }
 </script>
 
