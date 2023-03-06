@@ -438,6 +438,21 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
+        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
+        {
+            var resposta = new RespostaPadrao();
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+            var noticias = await _unitOfWork.Noticias.FindAsync(x => x.UsuarioCriacaoId == usuario.Id);
+            if(noticias == null)
+            {
+                resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
+                return resposta;
+            }
+            resposta.Retorno = noticias;
+            return resposta;
+            
+        }
+
         #endregion
     }
 }
