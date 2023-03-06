@@ -10,7 +10,7 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface INoticiaService
     {
-        Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile arquivo, int usuarioId);
+        Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile arquivo, string idLogin);
         Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile arquivo, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> ListarUltimas();
