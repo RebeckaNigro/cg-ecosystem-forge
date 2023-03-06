@@ -15,6 +15,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> ListarUltimas();
         Task<RespostaPadrao> ListarTodas();
+        Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);
         Task<RespostaPadrao> Detalhes(int id);
     }
 }

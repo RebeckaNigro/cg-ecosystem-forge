@@ -58,6 +58,15 @@ namespace Ecossistema.API.Controllers
             return await _noticiaService.ListarTodas();
         }
 
+        [Authorize(Roles = "UsuarioComum")]
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId()
+        {
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.ListarPorUsuarioId(idLogin);
+        }
+
         [HttpGet("detalhes")]
         public async Task<RespostaPadrao> Detalhes(int id)
         {

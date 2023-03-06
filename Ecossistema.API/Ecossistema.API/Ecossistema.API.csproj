@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="web.config" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
@@ -26,10 +22,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\RepositoryFiles\NoticiasImagens\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="web.config" />
   </ItemGroup>
 
 	<ItemGroup>
