@@ -25,7 +25,7 @@ namespace Ecossistema.Services.Services
             _arquivoService = arquivoService;
         }
 
-        public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -35,11 +35,12 @@ namespace Ecossistema.Services.Services
             {
                 #region Instituição
 
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var obj = new Noticia(dado.Titulo,
                                       dado.Descricao,
                                       dado.SubTitulo,
                                       dado.DataPublicacao,
-                                      usuarioId,
+                                      usuario.Id,
                                       DateTime.Now);
 
                 await _unitOfWork.Noticias.AddAsync(obj);
@@ -51,7 +52,7 @@ namespace Ecossistema.Services.Services
                 List<IFormFile> arquivo = new List<IFormFile>();
                 arquivo.Add(imagem);
 
-                if (!await _arquivoService.Vincular(EOrigem.Noticia, obj.Id, arquivo, usuarioId, DateTime.Now, resposta))
+                if (!await _arquivoService.Vincular(EOrigem.Noticia, obj.Id, arquivo, usuario.Id, DateTime.Now, resposta))
                 {
                     return resposta;
                 }
@@ -441,16 +442,32 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
         {
             var resposta = new RespostaPadrao();
-            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
-            var noticias = await _unitOfWork.Noticias.FindAsync(x => x.UsuarioCriacaoId == usuario.Id);
-            if(noticias == null)
+            try
             {
-                resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
-                return resposta;
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                var noticias = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo &&x.Aprovado);
+                var result = noticias.Select(x => new
+                {
+                    x.Id,
+                    x.Titulo,
+                    x.DataPublicacao
+                })
+                .Distinct()
+                .OrderByDescending(x => x.DataPublicacao)
+                .ToList();
+                if (noticias == null)
+                {
+                    resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
+                    return resposta;
+                }
+                resposta.Retorno = result;
+                
             }
-            resposta.Retorno = noticias;
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+            }
             return resposta;
-            
         }
 
         #endregion
