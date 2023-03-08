@@ -28,12 +28,14 @@ namespace Ecossistema.Services.Services
                 var busca = await _unitOfWork.Tags.FindAsync(x => x.Descricao == tag.Descricao);
                 if(busca != null)
                 {
+                    resposta.Retorno = busca.Id;
                     resposta.SetMensagem("Tag já cadastrada, tente novamente");
                     return resposta;
                 }
                 var query = new Tag(tag.Descricao, 1, DateTime.Now);
-                await _unitOfWork.Tags.AddAsync(query);
-                resposta.Retorno = _unitOfWork.Complete() > 0;
+                var cadastro = await _unitOfWork.Tags.AddAsync(query);
+                _unitOfWork.Complete();
+                resposta.Retorno = cadastro.Id;
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
