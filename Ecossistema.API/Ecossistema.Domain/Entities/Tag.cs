@@ -11,7 +11,7 @@ namespace Ecossistema.Domain.Entities
     {
         public Tag()
         {
-
+          
         }
         public Tag(string descricao, int usuarioId, DateTime data)
         {

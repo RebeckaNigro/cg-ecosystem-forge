@@ -18,16 +18,19 @@ namespace Ecossistema.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
+        private readonly ITagService _tagService;
 
-        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
+        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
+            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
+            dado.Tags =  dado.Tags.OrderBy(x => x.Descricao).ToList();
 
             if (!ValidarIncluir(dado, resposta)) return resposta;
 
@@ -43,12 +46,28 @@ namespace Ecossistema.Services.Services
                                       usuario.Id,
                                       DateTime.Now);
 
-                await _unitOfWork.Noticias.AddAsync(obj);
+                var noticia = await _unitOfWork.Noticias.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
                 #endregion
-
+                TagDto anterior = new TagDto();
+                foreach(var x in dado.Tags)
+                {
+                    RespostaPadrao cadastro = new RespostaPadrao();
+                    cadastro  = await _tagService.CadastrarTag(x, usuario.Id);
+                    x.Descricao = x.Descricao.ToLower();
+                    if(x.Descricao != anterior.Descricao)
+                    {
+                        if (cadastro.Retorno != null)
+                        {
+                            var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, noticia.Id);
+                            await _unitOfWork.TagsItens.AddAsync(tagItem);
+                        }
+                    }
+                    anterior = x;
+                }
+                
                 List<IFormFile> arquivo = new List<IFormFile>();
                 arquivo.Add(imagem);
 

@@ -13,5 +13,6 @@ namespace Ecossistema.Services.Dto
         public string? Descricao { get; set; }
         public string? SubTitulo { get; set; }
         public DateTime? DataPublicacao { get; set; }
+        public List<TagDto>? Tags { get; set; }
     }
 }

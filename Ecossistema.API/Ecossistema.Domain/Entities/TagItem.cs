@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using Ecossistema.Util.Const;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,32 @@ namespace Ecossistema.Domain.Entities
 {
     public class TagItem
     {
+        public TagItem()
+        {
+
+        }
+
+        public TagItem(EOrigem origem, int tagId, int usuarioId, DateTime data, int? id)
+        {
+            TagId = tagId;
+            if (id != null)
+            {
+                switch (origem)
+                {
+                    case EOrigem.Documento:
+                        if (id != null) DocumentoId = id;
+                        break;
+                    case EOrigem.Noticia:
+                        if (id != null) NoticiaId = id;
+                        break;
+                    case EOrigem.Evento:
+                        if (id != null) EventoId = id;
+                        break;
+                }
+            }
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, data);
+        }
         public int Id { get; set; }
         public int TagId { get; set; }
         public virtual Tag Tag { get; set; }
