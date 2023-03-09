@@ -150,7 +150,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Excluir(int id)
+        public async Task<RespostaPadrao> Excluir(int id, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -160,7 +160,14 @@ namespace Ecossistema.Services.Services
             {
                 var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
                 var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.NoticiaId == objAlt.Id);
-                
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+
+                if(usuario.Id != objAlt.UsuarioCriacaoId)
+                {
+                    resposta.SetChamadaInvalida("Você não tem permissão para excluir notícia criada por outro usuário!");
+                    return resposta;
+                }
+
                 if (objAlt != null)
                 {
                     #region Aprovação

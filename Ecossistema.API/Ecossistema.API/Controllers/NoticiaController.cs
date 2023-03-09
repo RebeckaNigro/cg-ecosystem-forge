@@ -45,7 +45,9 @@ namespace Ecossistema.API.Controllers
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
-            return await _noticiaService.Excluir(id);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.Excluir(id, idLogin);
         }
 
         [HttpGet("listarUltimas")]
