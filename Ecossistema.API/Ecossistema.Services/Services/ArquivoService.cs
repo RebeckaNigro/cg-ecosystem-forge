@@ -222,7 +222,7 @@ namespace Ecossistema.Services.Services
                 {
                     path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens);
                     var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.NoticiaId == id);
-                    idArquivo = busca.Id;
+                    if(busca != null) idArquivo = busca.Id;
                 }
                 string result = Directory.GetFiles(path, Path.GetFileName(idArquivo.ToString()) + ".*").FirstOrDefault();
                 if (result == null)
