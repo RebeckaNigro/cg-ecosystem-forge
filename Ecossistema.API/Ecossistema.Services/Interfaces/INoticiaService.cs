@@ -12,7 +12,7 @@ namespace Ecossistema.Services.Interfaces
     {
         Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile arquivo, string idLogin);
         Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile arquivo, int usuarioId);
-        Task<RespostaPadrao> Excluir(int id);
+        Task<RespostaPadrao> Excluir(int id, string idLogin);
         Task<RespostaPadrao> ListarUltimas();
         Task<RespostaPadrao> ListarTodas();
         Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);

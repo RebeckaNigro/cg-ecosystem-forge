@@ -18,19 +18,16 @@ namespace Ecossistema.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
-        private readonly ITagService _tagService;
 
-        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
+        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
-            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
-            dado.Tags =  dado.Tags.OrderBy(x => x.Descricao).ToList();
 
             if (!ValidarIncluir(dado, resposta)) return resposta;
 
@@ -46,28 +43,12 @@ namespace Ecossistema.Services.Services
                                       usuario.Id,
                                       DateTime.Now);
 
-                var noticia = await _unitOfWork.Noticias.AddAsync(obj);
+                await _unitOfWork.Noticias.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
                 #endregion
-                TagDto anterior = new TagDto();
-                foreach(var x in dado.Tags)
-                {
-                    RespostaPadrao cadastro = new RespostaPadrao();
-                    cadastro  = await _tagService.CadastrarTag(x, usuario.Id);
-                    x.Descricao = x.Descricao.ToLower();
-                    if(x.Descricao != anterior.Descricao)
-                    {
-                        if (cadastro.Retorno != null)
-                        {
-                            var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, noticia.Id);
-                            await _unitOfWork.TagsItens.AddAsync(tagItem);
-                        }
-                    }
-                    anterior = x;
-                }
-                
+
                 List<IFormFile> arquivo = new List<IFormFile>();
                 arquivo.Add(imagem);
 
@@ -169,7 +150,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Excluir(int id)
+        public async Task<RespostaPadrao> Excluir(int id, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -178,6 +159,14 @@ namespace Ecossistema.Services.Services
             try
             {
                 var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
+                var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.NoticiaId == objAlt.Id);
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+
+                if(usuario.Id != objAlt.UsuarioCriacaoId)
+                {
+                    resposta.SetChamadaInvalida("Você não tem permissão para excluir notícia criada por outro usuário!");
+                    return resposta;
+                }
 
                 if (objAlt != null)
                 {
@@ -190,7 +179,12 @@ namespace Ecossistema.Services.Services
                     }
 
                     #endregion
-
+                    await _arquivoService.ExcluirArquivo(objAlt.Id, "noticia");
+                    foreach(var x in tagItem)
+                    {
+                        _unitOfWork.TagsItens.Delete(x);
+                        _unitOfWork.Complete();
+                    }
                     _unitOfWork.Noticias.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
