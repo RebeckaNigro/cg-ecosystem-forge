@@ -84,18 +84,24 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile imagem, int usuarioId)
+        public async Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile? imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
+            
             if (!await ValidarEditar(dado, resposta)) return resposta;
 
             try
             {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var dataAtual = DateTime.Now;
 
                 var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacao" });
-
+                if(objAlt.UsuarioCriacaoId != usuario.Id)
+                {
+                    resposta.SetChamadaInvalida("Você não tem permissão para editar notícia de outro ususário.");
+                    return resposta;    
+                }
                 if (objAlt != null)
                 {
                     #region Aprovação
@@ -104,7 +110,7 @@ namespace Ecossistema.Services.Services
 
                     if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
                     {
-                        var aprovacao = new Aprovacao(EOrigem.Noticia, usuarioId, dataAtual, objAlt.Id);
+                        var aprovacao = new Aprovacao(EOrigem.Noticia, usuario.Id, dataAtual, objAlt.Id);
 
                         await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
 
@@ -120,7 +126,7 @@ namespace Ecossistema.Services.Services
                     objAlt.SubTitulo = dado.SubTitulo;
                     objAlt.DataPublicacao = dado.DataPublicacao;
                     objAlt.AprovacaoId = aprovacaoId;
-                    Recursos.Auditoria(objAlt, usuarioId, dataAtual);
+                    Recursos.Auditoria(objAlt, usuario.Id, dataAtual);
 
                     _unitOfWork.Noticias.Update(objAlt);
 
@@ -132,7 +138,7 @@ namespace Ecossistema.Services.Services
                         List<IFormFile> arquivo = new List<IFormFile>();
                         arquivo.Add(imagem);
 
-                        if (!await _arquivoService.Vincular(EOrigem.Noticia, objAlt.Id, arquivo, usuarioId, DateTime.Now, resposta))
+                        if (!await _arquivoService.Vincular(EOrigem.Noticia, objAlt.Id, arquivo, usuario.Id, DateTime.Now, resposta))
                         {
                             return resposta;
                         }
