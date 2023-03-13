@@ -37,9 +37,11 @@ namespace Ecossistema.API.Controllers
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromForm] NoticiaDto obj, IFormFile arquivo)
+        public async Task<RespostaPadrao> Editar([FromForm] NoticiaDto obj, IFormFile? arquivo)
         {
-            return await _noticiaService.Editar(obj, arquivo, UsuarioId);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.Editar(obj, arquivo, idLogin);
         }
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpDelete("excluir")]

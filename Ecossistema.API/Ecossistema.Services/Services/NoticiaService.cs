@@ -18,17 +18,19 @@ namespace Ecossistema.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
+        private readonly ITagService _tagService;
 
-        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
+        public NoticiaService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
+            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
-
+            dado.Tags = dado.Tags.OrderBy(x => x.Descricao).ToList();
             if (!ValidarIncluir(dado, resposta)) return resposta;
 
             try
@@ -43,6 +45,7 @@ namespace Ecossistema.Services.Services
                                       usuario.Id,
                                       DateTime.Now);
 
+                var noticia = await _unitOfWork.Noticias.AddAsync(obj);
                 await _unitOfWork.Noticias.AddAsync(obj);
 
                 _unitOfWork.Complete();
@@ -73,6 +76,24 @@ namespace Ecossistema.Services.Services
 
                 #endregion
 
+                TagDto anterior = new TagDto();
+                foreach (var x in dado.Tags)
+                {
+                    RespostaPadrao cadastro = new RespostaPadrao();
+                    cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                    x.Descricao = x.Descricao.ToLower();
+                    if (x.Descricao != anterior.Descricao)
+                    {
+                        if (cadastro.Retorno != null)
+                        {
+                            var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, noticia.Id);
+                            await _unitOfWork.TagsItens.AddAsync(tagItem);
+                            _unitOfWork.Complete();
+                        }
+                    }
+                    anterior = x;
+                }
+
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
@@ -84,18 +105,24 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile imagem, int usuarioId)
+        public async Task<RespostaPadrao> Editar(NoticiaDto dado, IFormFile? imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
+            
             if (!await ValidarEditar(dado, resposta)) return resposta;
 
             try
             {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var dataAtual = DateTime.Now;
 
                 var objAlt = await _unitOfWork.Noticias.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacao" });
-
+                if(objAlt.UsuarioCriacaoId != usuario.Id)
+                {
+                    resposta.SetChamadaInvalida("Você não tem permissão para editar notícia de outro ususário.");
+                    return resposta;    
+                }
                 if (objAlt != null)
                 {
                     #region Aprovação
@@ -104,7 +131,7 @@ namespace Ecossistema.Services.Services
 
                     if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
                     {
-                        var aprovacao = new Aprovacao(EOrigem.Noticia, usuarioId, dataAtual, objAlt.Id);
+                        var aprovacao = new Aprovacao(EOrigem.Noticia, usuario.Id, dataAtual, objAlt.Id);
 
                         await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
 
@@ -120,7 +147,7 @@ namespace Ecossistema.Services.Services
                     objAlt.SubTitulo = dado.SubTitulo;
                     objAlt.DataPublicacao = dado.DataPublicacao;
                     objAlt.AprovacaoId = aprovacaoId;
-                    Recursos.Auditoria(objAlt, usuarioId, dataAtual);
+                    Recursos.Auditoria(objAlt, usuario.Id, dataAtual);
 
                     _unitOfWork.Noticias.Update(objAlt);
 
@@ -132,10 +159,42 @@ namespace Ecossistema.Services.Services
                         List<IFormFile> arquivo = new List<IFormFile>();
                         arquivo.Add(imagem);
 
-                        if (!await _arquivoService.Vincular(EOrigem.Noticia, objAlt.Id, arquivo, usuarioId, DateTime.Now, resposta))
+                        if (!await _arquivoService.Vincular(EOrigem.Noticia, objAlt.Id, arquivo, usuario.Id, DateTime.Now, resposta))
                         {
                             return resposta;
                         }
+                    }
+                    foreach (var x in dado.Tags)
+                    {
+                        var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                        if(buscaTag == null)
+                        {
+                            resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
+                            return resposta;
+                        }
+                        var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
+                        if(buscaTagItem == null)
+                        {
+                            var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
+                            _unitOfWork.TagsItens.Add(tagItem);
+                            _unitOfWork.Complete();
+                        }
+                    }
+                    var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.NoticiaId == dado.Id);
+                    foreach(var x in buscaTagsItens)
+                    {
+                        var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        bool encontrou = false;
+                        foreach (var z in dado.Tags)
+                        {
+                            if(z.Descricao == tag.Descricao)
+                                encontrou = true;
+                        }
+                        if (encontrou == false)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }   
                     }
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
