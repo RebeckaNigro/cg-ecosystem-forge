@@ -164,6 +164,38 @@ namespace Ecossistema.Services.Services
                             return resposta;
                         }
                     }
+                    foreach (var x in dado.Tags)
+                    {
+                        var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                        if(buscaTag == null)
+                        {
+                            resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
+                            return resposta;
+                        }
+                        var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
+                        if(buscaTagItem == null)
+                        {
+                            var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
+                            _unitOfWork.TagsItens.Add(tagItem);
+                            _unitOfWork.Complete();
+                        }
+                    }
+                    var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.NoticiaId == dado.Id);
+                    foreach(var x in buscaTagsItens)
+                    {
+                        var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        bool encontrou = false;
+                        foreach (var z in dado.Tags)
+                        {
+                            if(z.Descricao == tag.Descricao)
+                                encontrou = true;
+                        }
+                        if (encontrou == false)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }   
+                    }
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
                 else resposta.SetErroInterno();
