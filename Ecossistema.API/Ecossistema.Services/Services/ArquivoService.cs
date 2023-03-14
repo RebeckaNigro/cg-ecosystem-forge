@@ -101,16 +101,18 @@ namespace Ecossistema.Services.Services
             int? eventoId = null;
             int? documentoId = null;
             int? paginaId = null;
-
+            var dir = RepositorioArquivo;
             switch (origem)
             {
                 case EOrigem.Parceiro:
                     instituicaoId = id;
                     break;
                 case EOrigem.Documento:
+                    dir = Documents;
                     documentoId = id;
                     break;
                 case EOrigem.Noticia:
+                    dir = NoticiasImagens;
                     noticiaId = id;
                     break;
                 case EOrigem.Evento:
@@ -147,7 +149,7 @@ namespace Ecossistema.Services.Services
             }*/
             foreach (var item in result)
             {
-                item.Arquivo = ObterArquivoBinario(item.Id);
+                item.Arquivo = ObterArquivoBinario(item.Id, dir);
             }
 
             return result;
@@ -290,12 +292,16 @@ namespace Ecossistema.Services.Services
         }
 
 
-        private byte[] ObterArquivoBinario(int id)
+        private byte[] ObterArquivoBinario(int id, string dir)
         {
             byte[] arquivoBin = null;
 
             //var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Path.GetFileName(id.ToString()));
             var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
+            if(dir != RepositorioArquivo)
+            {
+                path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, dir);
+            }
             string result = Directory.GetFiles(path, Path.GetFileName(id.ToString()) + ".*").FirstOrDefault();
             if(result == null)
                 return null;
