@@ -309,7 +309,6 @@ namespace Ecossistema.Services.Services
                     tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
                     tagDto.Descricao = tag.Descricao;
                     noticia.Tags.Add(tagDto);
-
                 }
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Noticia, item.Id, resposta);
                 if (temp.Count != 0)
@@ -338,23 +337,44 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> Detalhes(int id)
         {
             var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Id == id, new[] { "Aprovacao" });
-
-            var result = query.Select(x => new
+            try
             {
-                x.Id,
-                x.Titulo,
-                x.Descricao,
-                x.SubTitulo,
-                x.DataPublicacao,
-                x.Aprovado
-            })
-            .Distinct();
+                var item = await _unitOfWork.Noticias.FindAsync(x => x.Id == id, new[] { "Aprovacao" });
+                if(item == null)
+                {
+                    resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+                    return resposta;
+                }
+                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
+                NoticiaListaDto noticia = new NoticiaListaDto();
+                noticia.Id = item.Id;
+                noticia.Titulo = item.Titulo;
+                noticia.Descricao = item.Descricao;
+                noticia.SubTitulo = item.SubTitulo;
+                noticia.DataPublicacao = item.DataPublicacao;
+                noticia.Tags = new List<TagDto>();
+                foreach (var x in tagsItens)
+                {
+                    Tag tag = new Tag();
+                    TagDto tagDto = new TagDto();
+                    tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                    tagDto.Descricao = tag.Descricao;
+                    noticia.Tags.Add(tagDto);
+                }
+                var temp = await _arquivoService.ObterArquivos(EOrigem.Noticia, item.Id, resposta);
+                if (temp.Count != 0)
+                {
+                    noticia.Arquivo = temp[temp.Count - 1].Arquivo;
+                }
 
-            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
-            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
-
+                var result = noticia;
+                resposta.Retorno = result;
+                
+            }
+            catch (Exception ex)
+            {
+                resposta.SetMensagem(ex.Message);
+            }
             return resposta;
         }
 
