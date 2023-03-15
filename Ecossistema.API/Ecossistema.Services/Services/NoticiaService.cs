@@ -334,6 +334,67 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
+        {
+            var resposta = new RespostaPadrao();
+            try
+            {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
+
+                List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();
+                List<Tag> tags = new List<Tag>();
+                foreach (var item in query)
+                {
+                    var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
+
+                    NoticiaListaDto noticia = new NoticiaListaDto();
+                    noticia.Id = item.Id;
+                    noticia.Titulo = item.Titulo;
+                    noticia.DataPublicacao = item.DataPublicacao;
+                    noticia.Tags = new List<TagDto>();
+                    foreach (var x in tagsItens)
+                    {
+                        Tag tag = new Tag();
+                        TagDto tagDto = new TagDto();
+                        tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        tagDto.Descricao = tag.Descricao;
+                        noticia.Tags.Add(tagDto);
+                    }
+                    var temp = await _arquivoService.ObterArquivos(EOrigem.Noticia, item.Id, resposta);
+                    if (temp.Count != 0)
+                    {
+                        noticia.Arquivo = temp[temp.Count - 1].Arquivo;
+                    }
+                    noticias.Add(noticia);
+                }
+
+                var result = noticias.Select(x => new
+                {
+                    x.Id,
+                    x.Titulo,
+                    x.DataPublicacao,
+                    x.Tags,
+                    x.Arquivo
+                })
+                .Distinct()
+                .OrderByDescending(x => x.DataPublicacao)
+                .ToList();
+                if (noticias == null)
+                {
+                    resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
+                    return resposta;
+                }
+                resposta.Retorno = result;
+
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+            }
+            return resposta;
+        }
+
         public async Task<RespostaPadrao> Detalhes(int id)
         {
             var resposta = new RespostaPadrao();
@@ -560,36 +621,7 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
-        {
-            var resposta = new RespostaPadrao();
-            try
-            {
-                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
-                var noticias = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo &&x.Aprovado);
-                var result = noticias.Select(x => new
-                {
-                    x.Id,
-                    x.Titulo,
-                    x.DataPublicacao
-                })
-                .Distinct()
-                .OrderByDescending(x => x.DataPublicacao)
-                .ToList();
-                if (noticias == null)
-                {
-                    resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
-                    return resposta;
-                }
-                resposta.Retorno = result;
-                
-            }
-            catch (Exception ex)
-            {
-                resposta.SetErroInterno(ex.Message);
-            }
-            return resposta;
-        }
+        
 
         #endregion
     }
