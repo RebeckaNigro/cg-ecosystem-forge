@@ -28,7 +28,7 @@ namespace Ecossistema.API.Controllers
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromForm] NoticiaDto obj, IFormFile arquivo)
+        public async Task<RespostaPadrao> Incluir([FromForm] NoticiaDto obj, IFormFile? arquivo)
         {
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;

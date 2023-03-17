@@ -30,7 +30,7 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> Incluir(NoticiaDto dado, IFormFile imagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
-            dado.Tags = dado.Tags.OrderBy(x => x.Descricao).ToList();
+            if(dado.Tags != null) dado.Tags = dado.Tags.OrderBy(x => x.Descricao).ToList();
             if (!ValidarIncluir(dado, resposta)) return resposta;
 
             try
@@ -53,7 +53,8 @@ namespace Ecossistema.Services.Services
                 #endregion
 
                 List<IFormFile> arquivo = new List<IFormFile>();
-                arquivo.Add(imagem);
+                if(imagem != null)
+                    arquivo.Add(imagem);
 
                 if (!await _arquivoService.Vincular(EOrigem.Noticia, obj.Id, arquivo, usuario.Id, DateTime.Now, resposta))
                 {
@@ -77,21 +78,24 @@ namespace Ecossistema.Services.Services
                 #endregion
 
                 TagDto anterior = new TagDto();
-                foreach (var x in dado.Tags)
+                if(dado.Tags != null)
                 {
-                    RespostaPadrao cadastro = new RespostaPadrao();
-                    cadastro = await _tagService.CadastrarTag(x, usuario.Id);
-                    x.Descricao = x.Descricao.ToLower();
-                    if (x.Descricao != anterior.Descricao)
+                    foreach (var x in dado.Tags)
                     {
-                        if (cadastro.Retorno != null)
+                        RespostaPadrao cadastro = new RespostaPadrao();
+                        cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                        x.Descricao = x.Descricao.ToLower();
+                        if (x.Descricao != anterior.Descricao)
                         {
-                            var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, noticia.Id);
-                            await _unitOfWork.TagsItens.AddAsync(tagItem);
-                            _unitOfWork.Complete();
+                            if (cadastro.Retorno != null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, noticia.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
                         }
+                        anterior = x;
                     }
-                    anterior = x;
                 }
 
                 resposta.SetMensagem("Dados gravados com sucesso!");
