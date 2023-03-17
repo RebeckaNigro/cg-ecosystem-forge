@@ -40,10 +40,19 @@ export const useUserStore = defineStore("userStore", {
     },
 
     async logout() {
-      if (window.localStorage.getItem("userStore")) {
-        window.localStorage.removeItem("userStore")
+      try {
+        await httpRequest.post("/api/autenticacao/logout")
+
+        if (localStorage.getItem("userStore")) {
+          localStorage.removeItem("userStore")
+        }
+
+        this.loggedUser = new LoggedUser(null, null, null)
+      } catch (error) {
+        if (error instanceof Error)
+          this.userResponse.putError(400, error.message)
+        console.error(error)
       }
-      const response = await httpRequest.post("/api/autenticacao/logout")
     }
   },
   getters: {

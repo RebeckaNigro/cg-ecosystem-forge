@@ -13,13 +13,7 @@
 
   onMounted(() => {
     if (userStore.disconnected) {
-      alertStore.options = {
-        message: "Seu login expirou",
-        type: "warning",
-        dispensable: true,
-        timeout: true
-      }
-      alertStore.visible = true
+      alertStore.showTimeoutWarningMessage("Seu login expirou")
     }
 
     userStore.disconnected = false

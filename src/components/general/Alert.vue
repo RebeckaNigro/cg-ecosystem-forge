@@ -4,9 +4,9 @@
     <button
       type="button"
       class="btn-close"
-      data-bs-dismiss="alert"
       aria-label="Close"
       v-if="alertStore.options.dispensable"
+      @click="closeAlert"
     ></button>
   </div>
 </template>
@@ -20,24 +20,24 @@
   )
   const alertStore = useAlertStore()
 
-  const props = defineProps({
-    mensagem: {
-      type: String,
-      default: "Teste"
-    },
-    tipo: {
-      type: String,
-      default: "info"
-    },
-    dispensavel: {
-      type: Boolean,
-      default: true
-    },
-    timeout: {
-      type: Boolean,
-      default: true
-    }
-  })
+  // const props = defineProps({
+  //   mensagem: {
+  //     type: String,
+  //     default: "Teste"
+  //   },
+  //   tipo: {
+  //     type: String,
+  //     default: "info"
+  //   },
+  //   dispensavel: {
+  //     type: Boolean,
+  //     default: true
+  //   },
+  //   timeout: {
+  //     type: Boolean,
+  //     default: true
+  //   }
+  // })
 
   const closeAlert = () => {
     alertStore.visible = false

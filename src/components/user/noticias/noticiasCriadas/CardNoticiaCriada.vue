@@ -1,120 +1,140 @@
 <template>
-	<div class="card-container box mt-4 p-3 d-flex flex-column align-items-start">
-		<div class="img-container">
-			<img :src="image" alt="event-image" v-if="hasImage">
-      		<span v-else class="dark-body-text fs-6">{{ tituloNoticia }}</span>
-		</div>
+  <div>
+    <div
+      class="container-fluid box p-3 my-3 card-alignment h-100 overflow-hidden"
+    >
+      <div class="">
+        <img
+          :src="'data:image/png;base64, ' + noticia.arquivo"
+          alt="event-image"
+          class="w-100"
+        />
+        <!-- <span class="dark-body-text fs-6">{{ noticia.titulo }}</span> -->
+      </div>
 
-		<div class="container">
+      <div class="container">
+        <div
+          class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
+        >
+          <div class="col-md-8 text-start">
+            <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
+          </div>
 
-			<div class="row mt-2">
-				<div class="tags col">
-					<span class="me-2">#Pesquisas</span>
-					<span>#Doutorado</span>
-				</div>
-	
-				<div class="d-flex acoes-container col">
-					<button class="visualizar" @click="$router.push({ name: 'NoticiaExpandida', params: { noticiaId: idNoticia } })">
-						<img src="../../../../../public/view_icon.svg" alt="">
-					</button>
-					<button class="editar" @click="$router.push({name: 'GerenciaNoticia', query: {idNoticia: idNoticia}})">
-						<img src="../../../../../public/edit_icon.svg" alt="">
-					</button>
-					<button class="deletar">
-						<img src="../../../../../public/delete_icon.svg" alt="">
-					</button>
-				</div>
-			</div>
-		</div>
+          <div class="col-md-4 text-end">
+            <img
+              src="../../../../../public/view_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="
+                $router.push({
+                  name: 'NoticiaExpandida',
+                  params: { noticiaId: noticia.id }
+                })
+              "
+            />
+            <img
+              src="../../../../../public/edit_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="
+                $router.push({
+                  name: 'GerenciaNoticia',
+                  query: { idNoticia: noticia.id }
+                })
+              "
+            />
+            <img
+              src="../../../../../public/delete_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="confirmDelete"
+            />
+          </div>
+        </div>
+      </div>
 
-		<p class="titulo mt-2">{{tituloNoticia}}</p>
+      <p class="fs-3 display-3 mt-2 text-start p-2">
+        {{ noticia.titulo }}
+      </p>
 
-		<span class="atualizado-em">Atualizado em: 01/01/2000 às 12:00</span>
-
-
-	</div>
+      <div class="footer-atualizado">
+        <span class="text-secondary px-1"
+          >Publicado em: {{ dataFormatada }}</span
+        >
+      </div>
+    </div>
+    <ConfirmModal
+      v-show="confirmStore.visible"
+      @confirm-true="confirmado"
+      element-id="confirmModal"
+      id="confirmModal"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-	hasImage: boolean
-    image: string
-    tituloNoticia: string
-	idNoticia: number
-}>()
+  import { INoticiaSimplificada } from "./../../../../stores/noticias/types"
+  import { useNoticiaStore } from "../../../../stores/noticias/store"
+  import { useModalStore } from "../../../../stores/modal/store"
+  import { useConfirmStore } from "../../../../stores/confirm/store"
+  import { brDateString } from "./../../../../utils/formatacao/datetime"
+  import { ref, onMounted } from "vue"
+  import ConfirmModal from "../../../general/ConfirmModal.vue"
+
+  const noticiaStore = useNoticiaStore()
+  const modalStore = useModalStore()
+  const confirmStore = useConfirmStore()
+
+  const emit = defineEmits(["update-list"])
+
+  const props = defineProps<{
+    noticia: INoticiaSimplificada
+  }>()
+
+  const dataFormatada = ref("")
+  const tagsFormatadas = ref("")
+
+  const confirmDelete = () => {
+    confirmStore.showConfirmModal(
+      "Tem certeza que desesja remover esta notícia?",
+      props.noticia.id
+    )
+  }
+
+  const confirmado = async () => {
+    confirmStore.closeConfirm()
+
+    await noticiaStore.deleteNews(confirmStore.options.parameter as number)
+
+    const res = noticiaStore.response.getResponse()
+    if (res.code === 200) {
+      emit("update-list")
+      modalStore.showSuccessModal("Notícia removida com sucesso!")
+    } else {
+      modalStore.showErrorModal("Erro ao remover notícia!")
+    }
+  }
+
+  onMounted(() => {
+    dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
+
+    const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
+    tagsFormatadas.value = prependHashtag.join("  ")
+  })
 </script>
 
-<style scoped lang="scss">
-.card-container {
-	display: flex;
-	background: rgba(255, 255, 255, 0.85);
-	border: 1px solid #6B6A64;
-	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.15);
-	border-radius: 10px;
-	cursor: pointer;
+<style scoped>
+  .card-alignment {
+    position: relative;
+  }
 
-	flex-direction: column;
-	align-items: flex-start;
-	padding: 10px;
-	
+  .footer-atualizado {
+    text-align: left;
+    position: absolute;
+    bottom: 15px;
+  }
 
-	@media (max-width:800px){
-		width: 300px;
-	}
-
-	.img-container {
-      height: 200px;
-	  min-height: 200px;
-	  width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-	  
-      img {
-        width: -webkit-fill-available;
-      }
-    }
-
-	.tags {
-		color: #505050;
-		font-size: 14px;
-		display: flex;
-		flex-direction: row;
-		padding-left: 0;
-	}
-
-	.acoes-container {
-		flex-wrap: wrap;
-		flex-direction: row;
-		width: 100%;
-		justify-content: flex-end;
-		margin-right: 0;
-		button {
-			background-color: transparent;
-			border: unset;
-		}
-
-		img {
-			max-width: 26px;
-			max-height: 26px;
-		}
-
-
-
-	}
-
-	.titulo {
-		max-width: 300px;
-		text-align: start;
-		font-family: 'Montserrat-SemiBold';
-		font-size: 18px;
-		color: #000;
-	}
-
-	.atualizado-em {
-		color: #505050;
-		font-size: 12px;
-	}
-
-}
+  .image-icon-button {
+    cursor: pointer;
+  }
 </style>

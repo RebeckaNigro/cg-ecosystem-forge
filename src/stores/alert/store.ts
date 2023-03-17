@@ -14,6 +14,7 @@ export const useAlertStore = defineStore("alertStore", {
   },
   actions: {
     showErrorMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "error",
@@ -24,6 +25,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showWarningMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "warning",
@@ -34,6 +36,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showSuccessMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "success",
@@ -44,6 +47,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showInfoMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "warning",
@@ -54,6 +58,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showTimeoutErrorMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "error",
@@ -64,6 +69,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showTimeoutWarningMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "warning",
@@ -74,6 +80,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showTimeoutSuccessMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "success",
@@ -84,6 +91,7 @@ export const useAlertStore = defineStore("alertStore", {
     },
 
     showTimeoutInfoMessage(message: string) {
+      this.visible = false
       this.options = {
         message: message,
         type: "warning",

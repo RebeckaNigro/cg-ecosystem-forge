@@ -1,32 +1,49 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from "vue"
+  import { onMounted, getCurrentInstance, watch } from "vue"
   import Alert from "../src/components/general/Alert.vue"
   import Cookies from "./components/general/Cookies.vue"
   import NavBar from "./components/general/NavBar.vue"
   import FooterComponent from "./components/general/FooterComponent.vue"
+  import ModalComponent from "./components/general/ModalComponent.vue"
+  import { Modal } from "bootstrap"
   import { useAlertStore } from "./stores/alert/store"
-  import { useRoute } from "vue-router"
+  import { useUserStore } from "./stores/user/store"
+  import { useModalStore } from "./stores/modal/store"
+  import { useRoute, useRouter } from "vue-router"
 
   const alertStore = useAlertStore()
-  const route = useRoute()
+  const userStore = useUserStore()
+  const modalStore = useModalStore()
 
-  const isTransparent = ref(false)
+  const route = useRoute()
+  const router = useRouter()
 
   onMounted(() => {
+    if (userStore.disconnected) {
+      userStore.logout()
+      router.push({ name: "Login" })
+    }
+
     watch(
       () => route.path,
       async (path) => {
-        isTransparent.value = path === "/"
+        if (path == "/login") {
+          const instance = getCurrentInstance()
+          instance?.proxy?.$forceUpdate()
+        }
       }
     )
   })
 </script>
 
 <template>
-  <!--  <Alert mensagem="Teste" tipo="info" :dispensavel="false" :timeout="false"/>-->
   <div class="background">
     <Alert v-if="alertStore.visible" />
-    <NavBar :is-transparent="isTransparent" />
+    <ModalComponent
+      v-show="modalStore.visible"
+      id="generalModal"
+    ></ModalComponent>
+    <NavBar />
     <router-view />
     <Cookies />
     <FooterComponent />
