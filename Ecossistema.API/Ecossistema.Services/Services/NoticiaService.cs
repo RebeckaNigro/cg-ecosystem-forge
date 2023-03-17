@@ -156,6 +156,10 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Noticias.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
+                    if(imagem == null)
+                    {
+                        await _arquivoService.ExcluirArquivo(objAlt.Id, "noticia");
+                    }
                     if(imagem != null)
                     {
                         //var buscaImagem = _arquivoService.EncontraArquivoId(objAlt.Id, EOrigem.Noticia);
@@ -168,37 +172,53 @@ namespace Ecossistema.Services.Services
                             return resposta;
                         }
                     }
-                    foreach (var x in dado.Tags)
+                    if(dado.Tags != null)
                     {
-                        var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
-                        if(buscaTag == null)
+                        foreach (var x in dado.Tags)
                         {
-                            resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
-                            return resposta;
-                        }
-                        var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
-                        if(buscaTagItem == null)
-                        {
-                            var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
-                            _unitOfWork.TagsItens.Add(tagItem);
-                            _unitOfWork.Complete();
+                            var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                            if (buscaTag == null)
+                            {
+                                resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
+                                return resposta;
+                            }
+                            var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
+                            if (buscaTagItem == null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
+                                _unitOfWork.TagsItens.Add(tagItem);
+                                _unitOfWork.Complete();
+                            }
                         }
                     }
+                    
                     var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.NoticiaId == dado.Id);
                     foreach(var x in buscaTagsItens)
                     {
                         var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
                         bool encontrou = false;
-                        foreach (var z in dado.Tags)
-                        {
-                            if(z.Descricao == tag.Descricao)
-                                encontrou = true;
-                        }
-                        if (encontrou == false)
+                        if (dado.Tags == null)
                         {
                             _unitOfWork.TagsItens.Delete(x);
                             _unitOfWork.Complete();
-                        }   
+                        }
+                        else
+                        {
+                            if (dado.Tags != null)
+                            {
+                                foreach (var z in dado.Tags)
+                                {
+                                    if (z.Descricao == tag.Descricao)
+                                        encontrou = true;
+                                }
+                            }
+                            if (encontrou == false)
+                            {
+                                _unitOfWork.TagsItens.Delete(x);
+                                _unitOfWork.Complete();
+                            }
+                        }
+                        
                     }
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
