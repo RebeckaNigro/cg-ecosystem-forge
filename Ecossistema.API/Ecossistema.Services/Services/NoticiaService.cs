@@ -261,41 +261,14 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas()
+        public async Task<List<NoticiaListaDto>> ListarNoticias(IEnumerable<Noticia> query)
         {
-            var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
-
-            var result = query.Select(x => new
-            {
-                x.Id,
-                x.Titulo,
-                x.DataPublicacao
-            })
-            .Distinct()
-            .OrderByDescending(x => x.DataPublicacao)
-            .Take(3)
-            .ToList();
-
-            resposta.Retorno = result;
-
-            return resposta;
-        }
-
-        public async Task<RespostaPadrao> ListarTodas()
-        {
-            var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
-
-            List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();  
-            List<Tag> tags = new List<Tag>();   
+            List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();
+            List<Tag> tags = new List<Tag>();
+            RespostaPadrao resposta = new RespostaPadrao();
             foreach (var item in query)
             {
-                var tagsItens =  _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
+                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
 
                 NoticiaListaDto noticia = new NoticiaListaDto();
                 noticia.Id = item.Id;
@@ -317,7 +290,42 @@ namespace Ecossistema.Services.Services
                 }
                 noticias.Add(noticia);
             }
-            var result = noticias.Select(x => new
+            return noticias;
+        }
+
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = (await ListarNoticias(query)).Select(x => new
+            {
+                x.Id,
+                x.Titulo,
+                x.DataPublicacao,
+                x.Tags,
+                x.Arquivo
+            })
+            .Distinct()
+            .OrderByDescending(x => x.DataPublicacao)
+            .Take(3)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTodas()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado);
+
+            var result = (await ListarNoticias(query)).Select(x => new
             {
                 x.Id,
                 x.Titulo,
@@ -341,35 +349,7 @@ namespace Ecossistema.Services.Services
             {
                 var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
-
-                List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();
-                List<Tag> tags = new List<Tag>();
-                foreach (var item in query)
-                {
-                    var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
-
-                    NoticiaListaDto noticia = new NoticiaListaDto();
-                    noticia.Id = item.Id;
-                    noticia.Titulo = item.Titulo;
-                    noticia.DataPublicacao = item.DataPublicacao;
-                    noticia.Tags = new List<TagDto>();
-                    foreach (var x in tagsItens)
-                    {
-                        Tag tag = new Tag();
-                        TagDto tagDto = new TagDto();
-                        tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
-                        tagDto.Descricao = tag.Descricao;
-                        noticia.Tags.Add(tagDto);
-                    }
-                    var temp = await _arquivoService.ObterArquivos(EOrigem.Noticia, item.Id, resposta);
-                    if (temp.Count != 0)
-                    {
-                        noticia.Arquivo = temp[temp.Count - 1].Arquivo;
-                    }
-                    noticias.Add(noticia);
-                }
-
-                var result = noticias.Select(x => new
+                var result = (await ListarNoticias(query)).Select(x => new
                 {
                     x.Id,
                     x.Titulo,
@@ -380,7 +360,8 @@ namespace Ecossistema.Services.Services
                 .Distinct()
                 .OrderByDescending(x => x.DataPublicacao)
                 .ToList();
-                if (noticias == null)
+       
+                if (result == null)
                 {
                     resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
                     return resposta;
