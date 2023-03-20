@@ -2,9 +2,9 @@
   <div class="text-center mt-3 mb-2">
     <h1 class="titulo-principal">FAÇA PARTE DO ECOSSISTEMA!</h1>
   </div>
-  <div class="mx-auto card-form box p-5 mb-5">
-    <form @submit.prevent="cadastrar()">
-      <div>
+  <div class="mx-auto card-position box p-5 mb-5">
+    <form @submit.prevent="cadastrar">
+      <div class="mb-3">
         <label for="nome-completo" class="form-label-primary"
           >Nome Completo*</label
         >
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="col-sm-8">
           <label for="cpf" class="form-label-primary">CPF*</label>
           <input
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="col-sm-8">
           <label for="email-corporativo" class="form-label-primary"
             >E-mail*</label
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="mb-3">
         <label for="cargo" class="form-label-primary">Cargo*</label>
         <input
           type="text"
@@ -113,7 +113,7 @@
         />
       </div> -->
 
-      <div>
+      <div class="mb-3">
         <label for="cep" class="form-label-primary">CEP</label>
         <input
           type="text"
@@ -128,7 +128,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="col-sm-4">
           <label for="estado" class="form-label-primary">Estado</label>
           <input
@@ -150,7 +150,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="col-sm-9">
           <label for="logradouro" class="form-label-primary">Logradouro</label>
           <input
@@ -176,7 +176,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="mb-3">
         <label for="bairro" class="form-label-primary">Bairro</label>
         <input
           type="text"
@@ -187,7 +187,7 @@
         />
       </div>
 
-      <div class="input-icon-container">
+      <div class="input-icon-container mb-3">
         <label for="password" class="form-label-primary">Senha</label>
 
         <i class="icon">
@@ -210,7 +210,7 @@
         </div>
       </div>
 
-      <div class="input-icon-container">
+      <div class="input-icon-container mb-3">
         <label for="confirmPassword" class="form-label-primary"
           >Confirmar Senha</label
         >
@@ -235,7 +235,7 @@
         </div>
       </div>
 
-      <div class="text-start">
+      <div class="text-start mb-3">
         <input
           type="checkbox"
           id="concorda"
@@ -444,11 +444,6 @@
 </script>
 
 <style scoped>
-  .card-form {
-    width: 70%;
-    margin: auto;
-  }
-
   .titulo-principal {
     font-family: Montserrat-Bold;
     font-size: 1.5rem;

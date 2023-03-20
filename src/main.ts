@@ -7,6 +7,8 @@ import "./assets/css/global.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import { useUserStore } from "./stores/user/store"
+import { QuillEditor } from "@vueup/vue-quill"
+import "@vueup/vue-quill/dist/vue-quill.snow.css"
 // Global components
 // import { AxiosKey, RouterKey } from './utils/keys';
 // import { httpRequest } from './utils/http';
@@ -19,6 +21,7 @@ const ecossistema = createApp(App)
 
 ecossistema.use(pinia)
 ecossistema.use(router)
+ecossistema.component("QuillEditor", QuillEditor)
 
 // ecossistema.provide(AxiosKey, httpRequest)
 // ecossistema.provide(RouterKey, providedUseRoute)

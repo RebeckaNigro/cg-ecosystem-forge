@@ -1,36 +1,27 @@
 <template>
-	<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar">
-	<button class="btn" id="btn-pesquisar">
-		<img src="../../../public/search_icon.svg" alt="Pesquisar">
-	</button>
+  <div class="input-icon-container overflow-hidden">
+    <i class="icon overflow-hidden">
+      <img
+        src="../../../public/search_icon.svg"
+        class="input-icon-image"
+        @click=""
+      />
+    </i>
+    <input
+      type="text"
+      name="pesquisar"
+      id="pesquisar"
+      placeholder="Pesquisar"
+      class="form-input-primary search-input px-3"
+    />
+  </div>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
-<style scoped lang="scss">
-#pesquisar {
-	border-radius: 40px 0px 0px 40px;
-	border: 1px solid #6B6A64;
-	border-right: unset;
-	padding: .5rem .7rem;
-	width: 300px;
-}
-
-#btn-pesquisar {
-	border: 1px solid #6B6A64;
-	border-left: unset;
-	border-radius: 0 40px 40px 0;
-	background-color: #fff;
-
-	img {
-		max-width: 26px;
-	}
-}
-
-#pesquisar:focus {
-	border-color: #86b7fe;
-	outline: 0;
-	box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-}
+<style scoped>
+  .search-input {
+    border-radius: 50px;
+    border-color: lightgray;
+  }
 </style>

@@ -3,6 +3,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosRequestHeaders
 } from "axios"
+import router from "./../../router"
 import { useUserStore } from "../../stores/user/store"
 
 // TODO: provide axios instance throught provide/inject
@@ -29,11 +30,21 @@ httpRequest.interceptors.request.use(
 httpRequest.interceptors.response.use(
   (response: any) => {
     const userStore = useUserStore()
-    if (response.data.codigo == 440) userStore.disconnected = true
+
+    if (response.data.codigo == 440 || response.status == 440)
+      userStore.disconnected = true
     return response
   },
   (error) => {
-    console.log(error)
+    const userStore = useUserStore()
+
+    if (error.response.status === 440) {
+      userStore.logout()
+      userStore.disconnected = true
+
+      router.push({ name: "Login" })
+    }
+
     return error
   }
 )
