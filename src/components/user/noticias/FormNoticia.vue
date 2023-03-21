@@ -267,7 +267,7 @@
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
   import useValidate from "@vuelidate/core"
-  import { inject, reactive, ref, onMounted } from "vue"
+  import { ref, onMounted } from "vue"
   import { useNoticiaStore } from "../../../stores/noticias/store"
   import { useModalStore } from "../../../stores/modal/store"
   import { NoticiaRascunho, NewsTag } from "../../../stores/noticias/types"
@@ -288,16 +288,11 @@
   const confirmStore = useConfirmStore()
 
   const sendingNews = ref(false)
-  const newTag = ref("")
-  const userId = inject("userId", "")
   const arquivo = ref<File | null>()
   const authorName = ref<string | null>()
   const termosDeUso = ref(false)
   const dataFormatada = ref<string | null>()
-  const showConfirm = ref(false)
   const base64Image = ref("")
-
-  //noticiaStore.novaNoticia.id = userId
 
   const noticia = ref({
     id: -1,
@@ -398,7 +393,7 @@
   ])
 
   onMounted(async () => {
-    verificaRascunho()
+    if (noticiaStore.loadRascunho) verificaRascunho()
     buscarTags()
 
     authorName.value = userStore.getUserName
@@ -424,7 +419,9 @@
       const rascunhoFinal = JSON.parse(rascunhoStr)
       noticia.value = rascunhoFinal.noticia
       termosDeUso.value = rascunhoFinal.termosDeUso
+      alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!")
     }
+    noticiaStore.loadRascunho = false
   }
 
   const onFileChanged = (event: Event) => {
@@ -504,6 +501,7 @@
   const limparRascunho = () => {
     localStorage.removeItem("noticiaRascunho")
   }
+
   const resetarNoticia = () => {
     noticia.value = {
       id: -1,
