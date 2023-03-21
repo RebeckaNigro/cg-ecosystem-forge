@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { INoticia, INoticiaSimplificada, Noticia, Tag } from "./types"
+import { INoticia, INoticiaSimplificada, Noticia, NewsTag } from "./types"
 import { getLastContent, httpRequest } from "../../utils/http"
 import { validateNoticiaInput } from "../../utils/noticias/validation"
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
@@ -7,7 +7,7 @@ import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 const lastNews: Array<INoticiaSimplificada> = []
 const allNews: Array<INoticiaSimplificada> = []
 const allUserNews: Array<INoticiaSimplificada> = []
-const allTags: Array<Tag> = []
+const allTags: Array<NewsTag> = []
 export const useNoticiaStore = defineStore("noticiaStore", {
   state: () => {
     return {
@@ -15,7 +15,8 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       lastNews,
       allNews,
       allUserNews,
-      allTags
+      allTags,
+      loadRascunho: false
     }
   },
   persist: true,

@@ -21,11 +21,19 @@
 
     <div class="container-fluid row justify-content-between g-0">
       <CardNoticiaCriada
+        v-if="rascunho"
+        :noticia="rascunho"
+        class="col-xs-12 col-sm-6 col-lg-4 p-2"
+        @update-list="reloadNoticias"
+        :isRascunho="true"
+      />
+      <CardNoticiaCriada
         v-for="(noticia, index) in noticias"
         :key="index"
         :noticia="noticia"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
         @update-list="reloadNoticias"
+        :isRascunho="false"
       />
     </div>
 
@@ -57,7 +65,11 @@
   import SearchComponent from "../../../../components/general/SearchComponent.vue"
   import CardNoticiaCriada from "../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue"
   import { useNoticiaStore } from "../../../../stores/noticias/store"
-  import { INoticiaSimplificada } from "../../../../stores/noticias/types"
+  import {
+    INoticiaSimplificada,
+    NoticiaSimplificada,
+    Noticia
+  } from "../../../../stores/noticias/types"
 
   const noticiaStore = useNoticiaStore()
   const lastIndex = ref(6)
@@ -65,22 +77,38 @@
     noticiaStore.allUserNews.slice(0, lastIndex.value)
   )
 
+  const rascunho = ref<NoticiaSimplificada>()
+
   const addNewsToView = () => {
     lastIndex.value += 3
     noticias.value = noticiaStore.allUserNews.slice(0, lastIndex.value)
   }
 
   const reloadNoticias = async () => {
-    console.log(`ATUALIZOU LISTA`)
-
+    if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
     await noticiaStore.getUserNews()
     noticias.value = noticiaStore.allUserNews.slice(0, lastIndex.value)
+  }
 
-    console.log(`NOVA LISTA: ${noticias.value}`)
+  const verificaRascunho = () => {
+    const noticiaRascunhoStr = localStorage.getItem("noticiaRascunho")
+
+    if (noticiaRascunhoStr) {
+      const noticiaRascunho = JSON.parse(noticiaRascunhoStr)
+
+      rascunho.value = new NoticiaSimplificada(
+        noticiaRascunho.noticia.id,
+        noticiaRascunho.noticia.titulo,
+        noticiaRascunho.noticia.tags,
+        noticiaRascunho.noticia.dataPublicacao,
+        noticiaRascunho.noticia.arquivo
+      )
+    }
   }
 
   onMounted(() => {
     noticiaStore.getUserNews()
+    verificaRascunho()
   })
 </script>
 

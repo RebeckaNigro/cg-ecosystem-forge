@@ -35,6 +35,29 @@ export class Noticia implements INoticia {
     this.arquivo = arquivo
   }
 }
+
+export class NoticiaSimplificada implements INoticiaSimplificada {
+  id!: number
+  titulo!: string
+  tags!: NewsTag[]
+  dataPublicacao!: string
+  arquivo: string
+
+  constructor(
+    id: number,
+    titulo: string,
+    tags: NewsTag[],
+    dataPublicacao: string,
+    arquivo: string
+  ) {
+    this.id = id
+    this.titulo = titulo
+    this.tags = tags
+    this.dataPublicacao = dataPublicacao
+    this.arquivo = arquivo
+  }
+}
+
 export class NoticiaRascunho {
   noticia: Noticia
   termosDeUso: boolean

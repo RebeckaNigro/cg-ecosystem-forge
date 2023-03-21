@@ -3,13 +3,29 @@
     <div
       class="container-fluid box p-3 my-3 card-alignment h-100 overflow-hidden"
     >
-      <div class="">
+      <div v-if="!props.isRascunho">
         <img
           :src="'data:image/png;base64, ' + noticia.arquivo"
           alt="event-image"
           class="w-100"
         />
         <!-- <span class="dark-body-text fs-6">{{ noticia.titulo }}</span> -->
+      </div>
+      <div v-else>
+        <div class="container-mascara-rascunho">
+          <div class="mascara-rascunho">
+            <img
+              src="./../../../../assets/icons/news.svg"
+              alt="event-image"
+              class="w-50"
+            />
+          </div>
+          <div
+            class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text"
+          >
+            (Rascunho)
+          </div>
+        </div>
       </div>
 
       <div class="container">
@@ -20,7 +36,7 @@
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end">
+          <div class="col-md-4 text-end" v-if="!props.isRascunho">
             <img
               src="../../../../../public/view_icon.svg"
               alt=""
@@ -36,18 +52,28 @@
               src="../../../../../public/edit_icon.svg"
               alt=""
               class="image-icon-button"
-              @click="
-                $router.push({
-                  name: 'GerenciaNoticia',
-                  query: { idNoticia: noticia.id }
-                })
-              "
+              @click="loadFormComRascunho"
             />
             <img
               src="../../../../../public/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"
+            />
+          </div>
+
+          <div class="col-md-4 text-end" v-else>
+            <img
+              src="../../../../../public/edit_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="loadFormComRascunho"
+            />
+            <img
+              src="../../../../../public/delete_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="confirmDeleteRascunho"
             />
           </div>
         </div>
@@ -80,6 +106,7 @@
   import { brDateString } from "./../../../../utils/formatacao/datetime"
   import { ref, onMounted } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
+  import router from "../../../../router"
 
   const noticiaStore = useNoticiaStore()
   const modalStore = useModalStore()
@@ -89,6 +116,7 @@
 
   const props = defineProps<{
     noticia: INoticiaSimplificada
+    isRascunho: boolean
   }>()
 
   const dataFormatada = ref("")
@@ -101,18 +129,38 @@
     )
   }
 
+  const confirmDeleteRascunho = () => {
+    confirmStore.showConfirmModal(
+      "Tem certeza que desesja remover este rascunho?",
+      null
+    )
+  }
+
   const confirmado = async () => {
     confirmStore.closeConfirm()
 
-    await noticiaStore.deleteNews(confirmStore.options.parameter as number)
+    if (confirmStore.options.parameter != null) {
+      await noticiaStore.deleteNews(confirmStore.options.parameter as number)
 
-    const res = noticiaStore.response.getResponse()
-    if (res.code === 200) {
-      emit("update-list")
-      modalStore.showSuccessModal("Notícia removida com sucesso!")
+      const res = noticiaStore.response.getResponse()
+      if (res.code === 200) {
+        emit("update-list")
+        modalStore.showSuccessModal("Notícia removida com sucesso!")
+      } else {
+        modalStore.showErrorModal("Erro ao remover notícia!")
+      }
     } else {
-      modalStore.showErrorModal("Erro ao remover notícia!")
+      localStorage.removeItem("noticiaRascunho")
+      emit("update-list")
+      modalStore.showSuccessModal("Rascunho removido com sucesso!")
     }
+  }
+
+  const loadFormComRascunho = () => {
+    noticiaStore.loadRascunho = true
+    router.push({
+      name: "GerenciaNoticia"
+    })
   }
 
   onMounted(() => {
@@ -136,5 +184,24 @@
 
   .image-icon-button {
     cursor: pointer;
+  }
+
+  .mascara-rascunho {
+    display: flex;
+    background-color: black;
+    opacity: 20%;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container-mascara-rascunho {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mascara-rascunho-text {
+    position: absolute;
   }
 </style>

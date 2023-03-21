@@ -50,7 +50,7 @@ export const useAlertStore = defineStore("alertStore", {
       this.visible = false
       this.options = {
         message: message,
-        type: "warning",
+        type: "info",
         dispensable: true,
         timeout: false
       }
@@ -94,7 +94,7 @@ export const useAlertStore = defineStore("alertStore", {
       this.visible = false
       this.options = {
         message: message,
-        type: "warning",
+        type: "info",
         dispensable: false,
         timeout: true
       }
