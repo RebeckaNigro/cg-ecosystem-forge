@@ -44,6 +44,14 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpPost]
+        [Route("registrar-usuario-comum")]
+        public async Task<RespostaPadrao> RegistrarUsuarioComum([FromBody] ResgistrarUsuarioComumDto model)
+        {
+            model.Role = 4;
+            return await _autenticacaoService.RegistrarUsuarioComum(model);
+        }
+
+        [HttpPost]
         [Route("gerarCodigoRefinirSenha")]
         public async Task<RespostaPadrao> GerarCodigoRedefinirSenha([FromBody] string email)
         {

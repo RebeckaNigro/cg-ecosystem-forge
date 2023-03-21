@@ -46,6 +46,7 @@ namespace Ecossistema.Services.Services
                 resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 resposta.SetMensagem("Dados gravados com sucesso!");
+                resposta.Resposta = obj.Id.ToString();
             }
             catch (Exception ex)
             {

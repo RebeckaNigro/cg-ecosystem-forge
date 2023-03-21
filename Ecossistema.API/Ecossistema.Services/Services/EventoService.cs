@@ -540,7 +540,7 @@ namespace Ecossistema.Services.Services
             || (dado.EnderecoId != null
                 && (!ValidarEnderecoIdValido(dado, resposta)
                     || !await ValidarEnderecoIdCadastrada(dado, resposta)))
-            || !ValidarLinkExternoInformada(dado, resposta)
+            //|| !ValidarLinkExternoInformada(dado, resposta)
             || !ValidarLinkExternoTamanho(dado, resposta)
             || !ValidarExibirMapsInformada(dado, resposta)
             || !ValidarResponsavelInformada(dado, resposta)
@@ -572,7 +572,7 @@ namespace Ecossistema.Services.Services
                || (dado.EnderecoId != null
                     && (!ValidarEnderecoIdValido(dado, resposta)
                         || !await ValidarEnderecoIdCadastrada(dado, resposta)))
-               || !ValidarLinkExternoInformada(dado, resposta)
+               //|| !ValidarLinkExternoInformada(dado, resposta)
                || !ValidarLinkExternoTamanho(dado, resposta)
                || !ValidarExibirMapsInformada(dado, resposta)
                || !ValidarResponsavelInformada(dado, resposta)
@@ -826,7 +826,7 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private bool ValidarLinkExternoInformada(EventoDto dado, RespostaPadrao resposta)
+        /*private bool ValidarLinkExternoInformada(EventoDto dado, RespostaPadrao resposta)
         {
             if (!ValidacaoUtil.ValidarString(dado.LinkExterno))
             {
@@ -834,7 +834,7 @@ namespace Ecossistema.Services.Services
                 return false;
             }
             return true;
-        }
+        }*/
 
         private bool ValidarLinkExternoTamanho(EventoDto dado, RespostaPadrao resposta)
         {

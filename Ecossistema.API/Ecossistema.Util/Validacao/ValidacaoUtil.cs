@@ -168,7 +168,7 @@ namespace Ecossistema.Util.Validacao
 
         public static bool ValidarTamanhoString(string valor, int tamanho)
         {
-            if (!ValidarString(valor) || valor.Length > tamanho) return false;
+            if (valor != null && valor.Length > tamanho) return false;
             return true;
         }
 

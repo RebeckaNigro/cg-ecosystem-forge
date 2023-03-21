@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -9,6 +10,7 @@ namespace Ecossistema.API.Controllers
     public class NoticiaController : ControllerBase
     {
         private readonly INoticiaService _noticiaService;
+        private readonly IArquivoService _arquivoService;
 
         private int UsuarioId
         {
@@ -18,27 +20,36 @@ namespace Ecossistema.API.Controllers
             }
         }
 
-        public NoticiaController(INoticiaService noticiaService)
+        public NoticiaController(INoticiaService noticiaService, IArquivoService arquivoService)
         {
             _noticiaService = noticiaService;
+            _arquivoService = arquivoService;
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPost("incluir")]
-        public async Task<RespostaPadrao> Incluir([FromBody] NoticiaDto obj)
+        public async Task<RespostaPadrao> Incluir([FromForm] NoticiaDto obj, IFormFile? arquivo)
         {
-            return await _noticiaService.Incluir(obj, UsuarioId);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.Incluir(obj, arquivo, idLogin);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromBody] NoticiaDto obj)
+        public async Task<RespostaPadrao> Editar([FromForm] NoticiaDto obj, IFormFile? arquivo)
         {
-            return await _noticiaService.Editar(obj, UsuarioId);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.Editar(obj, arquivo, idLogin);
         }
-
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
-            return await _noticiaService.Excluir(id);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.Excluir(id, idLogin);
         }
 
         [HttpGet("listarUltimas")]
@@ -51,6 +62,15 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarTodas()
         {
             return await _noticiaService.ListarTodas();
+        }
+
+        [Authorize(Roles = "UsuarioComum")]
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId()
+        {
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.ListarPorUsuarioId(idLogin);
         }
 
         [HttpGet("detalhes")]

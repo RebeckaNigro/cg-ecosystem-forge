@@ -27,13 +27,14 @@ namespace Ecossistema.Services.Services
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailService _emailService;
+        private readonly IEnderecoService _enderecoService;
         //private readonly UsuarioCriacaoDto _usuarioCriacaoDto;
 
         public AutenticacaoService(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration, IUnitOfWork unitOfWork, IEmailService emailService)
+            IConfiguration configuration, IUnitOfWork unitOfWork, IEmailService emailService, IEnderecoService enderecoService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -41,6 +42,7 @@ namespace Ecossistema.Services.Services
             _signInManager = signInManager;
             _unitOfWork = unitOfWork;
             _emailService = emailService;
+            _enderecoService = enderecoService;
 
             //_usuarioCriacaoDto = usuarioCriacaoDto; 
         }
@@ -107,28 +109,28 @@ namespace Ecossistema.Services.Services
             LoginSucessoDto login = new LoginSucessoDto();
             try
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
                     resposta.SetErroInterno("Usuário não existe");
                     return resposta;
                 }
                 var resultadoIdentity = await _signInManager
-               .PasswordSignInAsync(model.UserName, model.Password, false, false);
+               .PasswordSignInAsync(user.UserName, model.Password, false, false);
                 if (resultadoIdentity.Succeeded)
                 {
                     var identityUser = _signInManager
                         .UserManager
                         .Users
                         .FirstOrDefault(usuario =>
-                         usuario.NormalizedUserName == model.UserName.ToUpper());
+                         usuario.NormalizedUserName == model.Email.ToUpper());
                         var userRoles = await _userManager.GetRolesAsync(user);
                     
                    
                     var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Sid, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
                     foreach (var userRole in userRoles)
@@ -234,15 +236,16 @@ namespace Ecossistema.Services.Services
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminGeral));
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
+
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminMaster))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminMaster);
-                    }
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminMaster))
-                    {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
                 }
                 if(role == 2)
@@ -251,24 +254,28 @@ namespace Ecossistema.Services.Services
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminGeral));
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminGeral))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminGeral);
-                    }
-                    if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminGeral))
-                    {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
+                    
                 }
                 if(role == 3)
                 {
                     if (!await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                         await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.AdminParceiro));
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
 
                     if (await _roleManager.RoleExistsAsync(UserRolesDto.AdminParceiro))
                     {
                         await _userManager.AddToRoleAsync(user, UserRolesDto.AdminParceiro);
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
                     }
                 }
                 var obj = new Usuario(1, model.InstituicaoId, user.Id, DateTime.Now, model.Cargo, 1, DateTime.Now);
@@ -282,6 +289,112 @@ namespace Ecossistema.Services.Services
                 return resposta;
             }
         }
+
+        public async Task<RespostaPadrao> RegistrarUsuarioComum(ResgistrarUsuarioComumDto model)
+        {
+            RespostaPadrao resposta = new RespostaPadrao("Usuário cadastrado com sucesso!");
+            try
+            {
+                var username = model.NomeCompleto.Replace(" ", "");
+                var emailExists = await _userManager.FindByEmailAsync(model.Email);
+                var nameExists = await _userManager.FindByNameAsync(username);
+                var cargo = model.Cargo;
+                var role = model.Role;
+                var cpf = await _unitOfWork.Pessoas.FindAsync(x => x.Cpf == model.Cpf);
+                var instituicao = await _unitOfWork.Instituicoes.FindAsync(x => x.Id == model.InstituicaoId);
+                if (cpf != null)
+                {
+                    resposta.SetErroInterno("Cpf já cadastrado");
+                    return resposta;
+                }
+                if (instituicao == null)
+                {
+                    resposta.SetErroInterno("Instituição inexistente.");
+                    return resposta;
+                }
+                if (emailExists != null)
+                {
+                    resposta.SetErroInterno("Email de usuário já cadastrado.");
+                    return resposta;
+                }
+                if (nameExists != null)
+                {
+                    resposta.SetErroInterno("Nome de usuário já cadastrado.");
+                    return resposta;
+                }
+                if (model.Password != model.ConfirmPassword)
+                {
+                    resposta.SetErroInterno("Senha e confirmação estão diferentes, digite novamente");
+                    return resposta;
+                }
+                IdentityUser user = new()
+                {
+                    Email = model.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    UserName = username
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                {
+                    resposta.SetErroInterno("Não foi possível criar o usuário, tente novamente mais tarde.");
+                    return resposta;
+                }
+                if (role == 4)
+                {
+                    if (!await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                        await _roleManager.CreateAsync(new IdentityRole(UserRolesDto.UsuarioComum));
+
+                    if (await _roleManager.RoleExistsAsync(UserRolesDto.UsuarioComum))
+                    {
+                        await _userManager.AddToRoleAsync(user, UserRolesDto.UsuarioComum);
+                    }
+                }
+                //Cadastrar Pessoa
+                var pessoa = new Pessoa(model.NomeCompleto, model.Cpf, model.DataNascimento, 0, DateTime.Now);
+                await _unitOfWork.Pessoas.AddAsync(pessoa);
+                _unitOfWork.Complete();
+                //Cadastrar Usuario
+                var obj = new Usuario(pessoa.Id, model.InstituicaoId, user.Id, DateTime.Now, model.Cargo, 0, DateTime.Now);
+                await _unitOfWork.Usuarios.AddAsync(obj);
+                _unitOfWork.Complete();
+
+                //Cadastrar Endereco
+                EnderecoDto enderecoDto = new EnderecoDto();
+                enderecoDto.Uf = model.Uf;
+                enderecoDto.Cidade = model.Cidade;
+                enderecoDto.Numero = model.Numero;
+                enderecoDto.Logradouro = model.Logradouro;
+                enderecoDto.Bairro = model.Bairro;
+                enderecoDto.Cep = model.Cep;
+                enderecoDto.Complemento = null;
+                var endereco = await _enderecoService.Incluir(enderecoDto, obj.Id);
+                _unitOfWork.Complete();
+                //Cadastrar EnderecoPessoa
+                if (endereco.Codigo != 661)
+                {
+                    var pessoasEndereco = new PessoaEndereco(pessoa.Id, endereco.Resposta.ToInt32(), 1, obj.Id, DateTime.Now);
+                    await _unitOfWork.PessoasEnderecos.AddAsync(pessoasEndereco);
+                    _unitOfWork.Complete();
+                }
+                //Cadastrar Contato
+                var contato = new Contato(model.Telefone, DateTime.Now, obj.Id);
+                await _unitOfWork.Contatos.AddAsync(contato);
+                _unitOfWork.Complete();
+                
+                //Cadastrar ContatoPessoa
+                var pessoaContato = new PessoaContato(pessoa.Id, contato.Id, 3, obj.Id, DateTime.Now);
+                await _unitOfWork.PessoasContatos.AddAsync(pessoaContato);
+                _unitOfWork.Complete();
+                return resposta;
+            }
+            catch (Exception e)
+            {
+                resposta.SetErroInterno(e.Message + ". " + e.InnerException);
+                return resposta;
+            }
+        }
+
+
 
         /*private JwtSecurityToken GetToken(List<Claim> authClaims)
         {

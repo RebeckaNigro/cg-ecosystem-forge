@@ -33,6 +33,8 @@ builder.Services.AddScoped<IFaleConoscoSetorService, FaleConoscoSetorService>();
 builder.Services.AddScoped<IInstituicaoService, InstituicaoService>();
 builder.Services.AddScoped<INoticiaService, NoticiaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ITagService, TagService>();
+
 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -81,6 +83,17 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.Response.Headers.Add("Token-Expired", "true");
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -110,6 +123,18 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
+
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 401 && context.Response.Headers.ContainsKey("Token-Expired"))
+    {
+        context.Response.Headers.Remove("Token-Expired");
+        context.Response.StatusCode = 440; // Código de erro que representa um token expirado
+        await context.Response.WriteAsJsonAsync(new { message = "Token expirado. Por favor, faça login novamente." });
+    }
+});
 
 app.UseStaticFiles();
 

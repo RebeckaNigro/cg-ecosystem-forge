@@ -22,6 +22,7 @@ namespace Ecossistema.Services.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string RepositorioArquivo = "RepositoryFiles";
         private readonly string Documents = "Documents";
+        private readonly string NoticiasImagens = "NoticiasImagens";
 
         public ArquivoService(IUnitOfWork unitOfWork,
             IWebHostEnvironment webHostEnvironment)
@@ -100,16 +101,18 @@ namespace Ecossistema.Services.Services
             int? eventoId = null;
             int? documentoId = null;
             int? paginaId = null;
-
+            var dir = RepositorioArquivo;
             switch (origem)
             {
                 case EOrigem.Parceiro:
                     instituicaoId = id;
                     break;
                 case EOrigem.Documento:
+                    dir = Documents;
                     documentoId = id;
                     break;
                 case EOrigem.Noticia:
+                    dir = NoticiasImagens;
                     noticiaId = id;
                     break;
                 case EOrigem.Evento:
@@ -131,9 +134,10 @@ namespace Ecossistema.Services.Services
                                                                         && x.DocumentoId == documentoId
                                                                         && x.PaginaId == paginaId, includes);
 
+
             var result = query.Select(x => new ArquivoDto
             {
-                Id = x.Id,
+                Id = x.ArquivoId,
                 NomeOriginal = x.Arquivo.NomeOriginal,
                 Extensao = x.Arquivo.Extensao,
                 Arquivo = null
@@ -146,7 +150,7 @@ namespace Ecossistema.Services.Services
             }*/
             foreach (var item in result)
             {
-                item.Arquivo = ObterArquivoBinario(item.Id);
+                item.Arquivo = ObterArquivoBinario(item.Id, dir);
             }
 
             return result;
@@ -161,6 +165,15 @@ namespace Ecossistema.Services.Services
                 var convertOrigem = origem.ToString();
 
                 var fileExtension = file.FileName.Split('.').Last();
+                if (convertOrigem.Equals("Noticia"))
+                {
+                    using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens, id.ToString() + "." + fileExtension), FileMode.Create))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                else
                 if (convertOrigem.Equals("Documento"))
                 {
                     using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents, id.ToString() + "." + fileExtension), FileMode.Create))
@@ -197,15 +210,28 @@ namespace Ecossistema.Services.Services
             {
                 var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
                 var idArquivo = 0;
+                var idArquivoOrigem = 0;
                 if (tipo == "documento")
                 {
                     path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Documents);
-                    var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+                    var buscaOrigem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.DocumentoId == id);
+                    var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == buscaOrigem.ArquivoId);
+                    idArquivoOrigem = buscaOrigem.Id;
                     idArquivo = busca.Id;
                 }
                 else if(tipo == "evento")
                 {
-                    var busca = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    var buscaOrigem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == buscaOrigem.ArquivoId);
+                    idArquivoOrigem = buscaOrigem.Id;
+                    idArquivo = busca.Id;
+                }
+                else if (tipo == "noticia")
+                {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens);
+                    var buscaOrigem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.NoticiaId == id);
+                    var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == buscaOrigem.ArquivoId);
+                    idArquivoOrigem = buscaOrigem.Id;
                     idArquivo = busca.Id;
                 }
                 string result = Directory.GetFiles(path, Path.GetFileName(idArquivo.ToString()) + ".*").FirstOrDefault();
@@ -215,7 +241,7 @@ namespace Ecossistema.Services.Services
                     return resposta;
                 }
                 File.Delete(result);
-                var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.Id == idArquivo);
+                var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.Id == idArquivoOrigem);
                 var arquivo = await _unitOfWork.Arquivos.FindAsync(x => x.Id == idArquivo);
                 _unitOfWork.ArquivosOrigens.Delete(origem);
                 _unitOfWork.Arquivos.Delete(arquivo);
@@ -250,6 +276,13 @@ namespace Ecossistema.Services.Services
                     var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == origem.ArquivoId);
                     idArquivo = busca.Id;
                 }
+                else if (tipo == "noticia")
+                {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, NoticiasImagens);
+                    var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
+                    var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == origem.ArquivoId);
+                    idArquivo = busca.Id;
+                }
                 string result = Directory.GetFiles(path, Path.GetFileName(idArquivo.ToString()) + ".*").FirstOrDefault();
                 if (result == null)
                 {
@@ -267,12 +300,16 @@ namespace Ecossistema.Services.Services
         }
 
 
-        private byte[] ObterArquivoBinario(int id)
+        private byte[] ObterArquivoBinario(int id, string dir)
         {
             byte[] arquivoBin = null;
 
             //var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, Path.GetFileName(id.ToString()));
             var path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo);
+            if(dir != RepositorioArquivo)
+            {
+                path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, dir);
+            }
             string result = Directory.GetFiles(path, Path.GetFileName(id.ToString()) + ".*").FirstOrDefault();
             if(result == null)
                 return null;

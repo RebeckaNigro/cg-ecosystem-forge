@@ -13,5 +13,6 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Editar(InstituicaoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> VincularEndereco(EnderecoDto dado, int instituicaoId, int usuarioId);
+        Task<RespostaPadrao> BuscarInstituicoes();
     }
 }

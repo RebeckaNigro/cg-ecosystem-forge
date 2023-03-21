@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecossistema.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,16 @@ namespace Ecossistema.Domain.Entities
 {
     public class Tag
     {
+        public Tag()
+        {
+          
+        }
+        public Tag(string descricao, int usuarioId, DateTime data)
+        {
+            Descricao = descricao;
+            Ativo = true;
+            Recursos.Auditoria(this, usuarioId, data);
+        }
         public int Id { get; set; }
         public string Descricao { get; set; }   
         public bool Ativo { get; set; } = true;
