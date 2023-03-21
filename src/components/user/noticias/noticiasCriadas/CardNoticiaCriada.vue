@@ -44,7 +44,7 @@
               @click="
                 $router.push({
                   name: 'NoticiaExpandida',
-                  params: { noticiaId: noticia.id }
+                  params: { noticiaId: props.noticia.id }
                 })
               "
             />
@@ -52,7 +52,12 @@
               src="../../../../../public/edit_icon.svg"
               alt=""
               class="image-icon-button"
-              @click="loadFormComRascunho"
+              @click="
+                $router.push({
+                  name: 'GerenciaNoticia',
+                  params: { noticiaId: noticia.id }
+                })
+              "
             />
             <img
               src="../../../../../public/delete_icon.svg"

@@ -22,7 +22,6 @@ export const useNoticiaStore = defineStore("noticiaStore", {
   persist: true,
   actions: {
     async postNews(novaNoticia: INoticia) {
-      // TODO salvar capa da noticia no banco
       try {
         const formData = new FormData()
         formData.append("titulo", novaNoticia.titulo)
@@ -153,20 +152,31 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       }
     },
 
-    async putNews(noticia: INoticia) {
-      // TODO editar capa da noticia
+    async putNews(noticiaEdicao: INoticia) {
       try {
-        const noticiaInput = validateNoticiaInput({ ...noticia })
-        if (noticiaInput instanceof Noticia) {
-          const res = await httpRequest.put("/api/noticia/editar", noticia)
-          this.response.putResponse(
-            res.data.codigo,
-            res.data.dado,
-            res.data.resposta
-          )
-        } else {
-          this.response.putError(223, noticiaInput.message)
-        }
+        const formData = new FormData()
+        formData.append("id", noticiaEdicao.id.toString())
+        formData.append("titulo", noticiaEdicao.titulo)
+        formData.append("descricao", noticiaEdicao.descricao)
+        formData.append("subTitulo", noticiaEdicao.subTitulo)
+        formData.append(
+          "dataPublicacao",
+          noticiaEdicao.dataPublicacao.toString()
+        )
+
+        noticiaEdicao.tags.forEach((tag, index) => {
+          formData.append(`tags[${index}].descricao`, tag.descricao)
+        })
+
+        formData.append("arquivo", noticiaEdicao.arquivo)
+        const res = await httpRequest.put("/api/noticia/editar", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        })
+        this.response.putResponse(
+          res.data.codigo,
+          res.data.dado,
+          res.data.resposta
+        )
       } catch (error) {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message)
@@ -175,8 +185,6 @@ export const useNoticiaStore = defineStore("noticiaStore", {
           console.error(error)
         }
       }
-
-      return false
     },
 
     async getNewsById(noticiaId: number) {
