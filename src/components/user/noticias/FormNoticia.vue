@@ -145,13 +145,7 @@
       <span>Li e concordo com todos os termos de uso.</span>
     </div>
 
-    <div
-      v-if="sendingNews"
-      class="spinner-border text-success ml-auto mt-2"
-      role="status"
-    >
-      <span class="visually-hidden">Loading...</span>
-    </div>
+    <Spinner v-if="sendingNews" />
 
     <div class="row container-fluid">
       <div class="col-sm-4">
@@ -231,12 +225,7 @@
         class="content ql-editor"
         v-html="noticia.descricao"
       ></div>
-      <div
-        v-if="sendingNews"
-        class="spinner-border text-success ml-auto mt-2"
-        role="status"
-      ></div>
-      <div class="text-center" v-if="sendingNews">Loading...</div>
+      <Spinner v-if="sendingNews" />
       <div class="row container-fluid justify-content-center my-5">
         <button
           type="button"
@@ -280,6 +269,7 @@
   import { fileToBase64 } from "../../../utils/image/converter"
   import ConfirmModal from "../../general/ConfirmModal.vue"
   import AutocompleteComponent from "../../general/AutocompleteComponent.vue"
+  import Spinner from "../../general/Spinner.vue"
 
   const noticiaStore = useNoticiaStore()
   const alertStore = useAlertStore()

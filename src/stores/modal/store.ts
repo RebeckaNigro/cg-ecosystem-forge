@@ -1,4 +1,3 @@
-import { Modal } from "bootstrap"
 import { defineStore } from "pinia"
 export const useModalStore = defineStore("modalStore", {
   state: () => {
@@ -8,7 +7,7 @@ export const useModalStore = defineStore("modalStore", {
       loading: false,
       options: {
         message: "",
-        status: "info"
+        status: ""
       }
     }
   },
@@ -65,7 +64,6 @@ export const useModalStore = defineStore("modalStore", {
     },
 
     closeModal() {
-      this.loading = false
       this.modalInstance.toggle()
     }
   },
