@@ -43,7 +43,7 @@
             :class="v$.arquivo.$error ? 'is-invalid' : ''"
             type="file"
             name="imagem-input"
-            accept="image/*"
+            accept="image/png, image/jpg,image/jpeg"
             id="imagem-input"
             @change="(e) => onFileChanged(e)"
           />
@@ -276,7 +276,7 @@
   import { useConfirmStore } from "../../../stores/confirm/store"
   import { required, helpers } from "@vuelidate/validators"
   import { brDateString } from "../../../utils/formatacao/datetime"
-  import { dateAndHourToDatetime } from "../../../utils/formatacao/datetime"
+  import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime"
   import { fileToBase64 } from "../../../utils/image/converter"
   import ConfirmModal from "../../general/ConfirmModal.vue"
   import AutocompleteComponent from "../../general/AutocompleteComponent.vue"
@@ -412,18 +412,6 @@
     allTags.value = noticiaStore.allTags
   }
 
-  const verificaRascunho = () => {
-    const rascunhoStr = localStorage.getItem("noticiaRascunho")
-
-    if (rascunhoStr) {
-      const rascunhoFinal = JSON.parse(rascunhoStr)
-      noticia.value = rascunhoFinal.noticia
-      termosDeUso.value = rascunhoFinal.termosDeUso
-      alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!")
-    }
-    noticiaStore.loadRascunho = false
-  }
-
   const onFileChanged = (event: Event) => {
     const target = event.target as HTMLInputElement
     if (target && target.files) {
@@ -436,6 +424,11 @@
     if (!termosDeUso.value) {
       alertStore.showWarningMessage("Você precisa aceitar os termos de uso!")
     } else {
+      noticia.value.dataPublicacao = dateAndTimeToDatetime(
+        data.value,
+        hora.value
+      )
+
       const formValidation = await v$.value.$validate()
       if (!formValidation) {
         alertStore.showTimeoutErrorMessage(
@@ -444,13 +437,12 @@
         return
       }
 
-      noticia.value.dataPublicacao = dateAndHourToDatetime(
-        noticia.value.dataPublicacao,
-        noticia.value.hora
-      )
+      if (new Date(noticia.value.dataPublicacao) > new Date()) {
+        console.log("DATA MAIOR")
 
-      if (noticia.value.dataPublicacao > new Date()) {
-        alertStore.showErrorMessage("Data não pode ser maior que a atual!")
+        alertStore.showTimeoutErrorMessage(
+          "Data e hora não podem ser maior que as atuais!"
+        )
         return
       }
 
@@ -491,11 +483,33 @@
         null
       )
     } else {
+      noticia.value.dataPublicacao = dateAndTimeToDatetime(
+        data.value,
+        hora.value
+      )
       let rascunho = new NoticiaRascunho(noticia.value, termosDeUso.value)
       localStorage.setItem("noticiaRascunho", JSON.stringify(rascunho))
 
       modalStore.showSuccessModal("Rascunho salvo com sucesso!")
     }
+  }
+
+  const verificaRascunho = () => {
+    const rascunhoStr = localStorage.getItem("noticiaRascunho")
+
+    if (rascunhoStr) {
+      const rascunhoFinal = JSON.parse(rascunhoStr)
+      noticia.value = rascunhoFinal.noticia
+      data.value = noticia.value.dataPublicacao.substring(0, 10)
+      hora.value = noticia.value.dataPublicacao.substring(
+        noticia.value.dataPublicacao.length - 13,
+        noticia.value.dataPublicacao.length - 5
+      )
+      termosDeUso.value = rascunhoFinal.termosDeUso
+      alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!")
+    }
+    deleteRascunhoAfter.value = true
+    noticiaStore.loadRascunho = false
   }
 
   const limparRascunho = () => {
