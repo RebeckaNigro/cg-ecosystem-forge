@@ -104,7 +104,7 @@
   import { useModalStore } from "../../../../stores/modal/store"
   import { useConfirmStore } from "../../../../stores/confirm/store"
   import { brDateString } from "./../../../../utils/formatacao/datetime"
-  import { ref, onMounted } from "vue"
+  import { ref, onMounted, onUpdated } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
 
@@ -166,6 +166,11 @@
   onMounted(() => {
     dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
 
+    const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
+    tagsFormatadas.value = prependHashtag.join("  ")
+  })
+
+  onUpdated(() => {
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })

@@ -1,7 +1,8 @@
 export const friendlyDateTime = (dateTimeString: string) => {
-  const date = new Date(dateTimeString).toLocaleDateString("pt-br")
-  const time = new Date(dateTimeString).toLocaleTimeString("pt-br")
-  return `${date} às ${time.slice(0, time.length - 3)}`
+  const data = adjustStringDateForTimezone(dateTimeString)
+  return `${data.toLocaleDateString()} às ${data
+    .toLocaleTimeString()
+    .substring(0, data.toLocaleTimeString().length - 3)}`
 }
 
 export const brDateString = (date: string) => {
@@ -11,12 +12,20 @@ export const brDateString = (date: string) => {
   )}`
 }
 
-export const dateAndHourToDatetime = (data: string, hora: string) => {
+export const dateAndTimeToDatetime = (data: string, hora: string) => {
   return new Date(`${data}T${hora}`).toISOString()
 }
 
-export const adjustForTimezone = (date: Date) => {
+export const adjustDateForTimezone = (date: Date) => {
   var timeOffsetInMS: number = date.getTimezoneOffset() * 60000
   date.setTime(date.getTime() + timeOffsetInMS)
   return date
+}
+
+export const adjustStringDateForTimezone = (date: string) => {
+  const data = new Date(date)
+
+  var timeOffsetInMS: number = data.getTimezoneOffset() * 60000
+  data.setTime(data.getTime() - timeOffsetInMS)
+  return data
 }

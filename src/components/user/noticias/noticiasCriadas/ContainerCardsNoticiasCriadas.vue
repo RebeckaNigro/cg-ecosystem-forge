@@ -15,7 +15,11 @@
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-        <SearchComponent />
+        <SearchComponent
+          :items="noticiaStore.allUserNews"
+          type="noticia"
+          @search-result="filtrarNoticias"
+        />
       </div>
     </div>
 
@@ -73,11 +77,15 @@
 
   const noticiaStore = useNoticiaStore()
   const lastIndex = ref(6)
-  let noticias = ref<Array<INoticiaSimplificada>>(
-    noticiaStore.allUserNews.slice(0, lastIndex.value)
-  )
+  let noticias = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
+
+  const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
+    console.dir(noticiasFiltradas)
+    noticias.value = []
+    noticias.value = noticiasFiltradas.slice(0, lastIndex.value)
+  }
 
   const addNewsToView = () => {
     lastIndex.value += 3
@@ -106,8 +114,9 @@
     }
   }
 
-  onMounted(() => {
-    noticiaStore.getUserNews()
+  onMounted(async () => {
+    await noticiaStore.getUserNews()
+    noticias.value = noticiaStore.allUserNews
     verificaRascunho()
   })
 </script>

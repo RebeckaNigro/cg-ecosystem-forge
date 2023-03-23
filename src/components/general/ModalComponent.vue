@@ -4,8 +4,14 @@
     data-bs-backdrop="static"
     data-bs-keyboard="false"
   >
-    <div class="modal-dialog modal-dialog-centered" id="modalBody">
-      <div class="modal-content modal-content-adapter">
+    <div
+      class="modal-dialog modal-dialog-centered modal-dialog-centered-adapter"
+      id="modalBody"
+    >
+      <div
+        class="modal-content modal-content-adapter"
+        v-if="!modalStore.loading"
+      >
         <div class="modal-header modal-header-adapter">
           <img
             :src="
@@ -28,6 +34,17 @@
           >
             Fechar
           </button>
+        </div>
+      </div>
+      <div v-else>
+        <div class="modal-content modal-content-loading-adapter">
+          <div
+            class="spinner-border text-success m-auto mt-2"
+            role="status"
+          ></div>
+          <div class="text-center my-3 fs-4 verde-padrao fw-bold">
+            Carregando...
+          </div>
         </div>
       </div>
     </div>
@@ -73,6 +90,12 @@
     padding: 20px 5px;
   }
 
+  .modal-content-loading-adapter {
+    border-radius: 20px;
+    padding: 40px 50px;
+    text-align: center;
+  }
+
   .modal-header-adapter {
     border: none;
     margin: auto;
@@ -85,5 +108,9 @@
   .modal-content-font {
     font-size: 1.5rem;
     font-weight: 600;
+  }
+
+  .modal-dialog-centered-adapter {
+    justify-content: center;
   }
 </style>
