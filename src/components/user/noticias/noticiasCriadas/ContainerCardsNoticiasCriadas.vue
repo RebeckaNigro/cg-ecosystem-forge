@@ -11,7 +11,12 @@
 
     <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
       <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-        <FilterComponent :content-type="'data'" :datas="[]" />
+        <FilterComponent
+          field="data"
+          :items="noticiaStore.allUserNews"
+          type="noticia"
+          @filter-result="filtrarNoticias"
+        />
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -24,6 +29,8 @@
     </div>
 
     <div class="container-fluid row justify-content-between g-0">
+      <Spinner v-if="loadingNews" />
+
       <CardNoticiaCriada
         v-if="rascunho"
         :noticia="rascunho"
@@ -68,22 +75,23 @@
   import FilterComponent from "../../../../components/general/FilterComponent.vue"
   import SearchComponent from "../../../../components/general/SearchComponent.vue"
   import CardNoticiaCriada from "../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue"
+  import Spinner from "../../../../components/general/Spinner.vue"
   import { useNoticiaStore } from "../../../../stores/noticias/store"
+  import { useModalStore } from "../../../../stores/modal/store"
   import {
     INoticiaSimplificada,
-    NoticiaSimplificada,
-    Noticia
+    NoticiaSimplificada
   } from "../../../../stores/noticias/types"
 
   const noticiaStore = useNoticiaStore()
+  const modalStore = useModalStore()
   const lastIndex = ref(6)
+  const loadingNews = ref(false)
   let noticias = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
 
   const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
-    console.dir(noticiasFiltradas)
-    noticias.value = []
     noticias.value = noticiasFiltradas.slice(0, lastIndex.value)
   }
 
@@ -93,9 +101,11 @@
   }
 
   const reloadNoticias = async () => {
+    loadingNews.value = true
     if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
     await noticiaStore.getUserNews()
     noticias.value = noticiaStore.allUserNews.slice(0, lastIndex.value)
+    loadingNews.value = false
   }
 
   const verificaRascunho = () => {
@@ -115,9 +125,11 @@
   }
 
   onMounted(async () => {
+    loadingNews.value = true
     await noticiaStore.getUserNews()
     noticias.value = noticiaStore.allUserNews
     verificaRascunho()
+    loadingNews.value = false
   })
 </script>
 

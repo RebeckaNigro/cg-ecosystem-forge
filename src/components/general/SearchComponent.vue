@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps, onMounted, ref } from "vue"
+  import { onMounted, ref } from "vue"
   import { NewsTag, NoticiaSimplificada } from "../../stores/noticias/types"
 
   const props = defineProps({

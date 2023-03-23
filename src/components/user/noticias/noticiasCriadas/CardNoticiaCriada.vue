@@ -171,6 +171,7 @@
   })
 
   onUpdated(() => {
+    dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })

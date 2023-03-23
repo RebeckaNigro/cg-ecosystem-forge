@@ -1,29 +1,97 @@
 <template>
   <div class="text-start">
-    <label for="filtro-data" class="ms-3 mb-2"
-      >Filtrar por {{ contentType }}:</label
-    >
+    <label for="filtro-data" class="ms-3 mb-2">Filtrar por {{ field }}:</label>
     <div>
       <select
         name="filtro"
         id="filtro"
         class="form-input-primary borda-cinza-claro cinza"
+        v-model="selectedOption"
+        @change="doFilter($event)"
       >
         <option value="">Todas</option>
-        <option>Últimos 7 dias</option>
-        <option>Últimos 15 dias</option>
-        <option>Últimos 30 dias</option>
-        <option>Últimos 3 meses</option>
+        <option
+          v-for="(option, index) in menuOptions"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.text }}
+        </option>
       </select>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { onMounted, ref } from "vue"
+  import { adjustStringDateForTimezone } from "../../utils/formatacao/datetime"
+  import {
+    FilterOption,
+    NoticiaSimplificada
+  } from "./../../stores/noticias/types"
+
   const props = defineProps<{
-    contentType: string
-    datas: string[]
+    field: string
+    items: any[]
+    type: string
   }>()
+
+  const emit = defineEmits(["filter-result"])
+  const menuOptions = ref([])
+  const results = ref([])
+  const selectedOption = ref("")
+
+  onMounted(() => {
+    switch (props.type) {
+      case "noticia":
+        menuOptions.value.push(new FilterOption("Últimos 7 dias", "7"))
+        menuOptions.value.push(new FilterOption("Últimos 15 dias", "15"))
+        menuOptions.value.push(new FilterOption("Últimos 30 dias", "30"))
+        menuOptions.value.push(new FilterOption("Últimos 90 dias", "90"))
+        break
+    }
+  })
+
+  const doFilter = (event: any) => {
+    if (event.target.value) {
+      selectedOption.value = event.target.value
+
+      if (props.type == "noticia") {
+        const dataReferencia = new Date()
+        dataReferencia.setDate(
+          dataReferencia.getDate() - Number(selectedOption.value)
+        )
+        dataReferencia.setHours(0, 0, 0)
+
+        console.log(`Data de referencia: ${dataReferencia}`)
+
+        results.value = props.items.filter((noticia: NoticiaSimplificada) => {
+          // console.log(
+          //   `DATA CORRENTE: ${adjustStringDateForTimezone(
+          //     noticia.dataPublicacao
+          //   )}`
+          // )
+
+          return adjustStringDateForTimezone(
+            noticia.dataPublicacao
+          ).getTime() >= dataReferencia.getTime()
+            ? true
+            : false
+        })
+        sendSearchResult()
+      }
+    } else {
+      results.value = props.items
+      sendSearchResult()
+    }
+  }
+
+  const sendSearchResult = () => {
+    console.log("Resultado:")
+    console.dir(results.value)
+
+    emit("filter-result", results.value)
+  }
 </script>
 
 <style scoped></style>
