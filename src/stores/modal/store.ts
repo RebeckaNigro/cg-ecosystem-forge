@@ -5,6 +5,7 @@ export const useModalStore = defineStore("modalStore", {
     return {
       modalInstance: {},
       visible: false,
+      loading: false,
       options: {
         message: "",
         status: "info"
@@ -18,7 +19,7 @@ export const useModalStore = defineStore("modalStore", {
         status: "error"
       }
       this.visible = true
-
+      this.loading = false
       this.showModal()
     },
 
@@ -28,7 +29,7 @@ export const useModalStore = defineStore("modalStore", {
         status: "info"
       }
       this.visible = true
-
+      this.loading = false
       this.showModal()
     },
 
@@ -38,7 +39,7 @@ export const useModalStore = defineStore("modalStore", {
         status: "success"
       }
       this.visible = true
-
+      this.loading = false
       this.showModal()
     },
 
@@ -47,6 +48,13 @@ export const useModalStore = defineStore("modalStore", {
         message: message,
         status: "warning"
       }
+      this.visible = true
+      this.loading = false
+      this.showModal()
+    },
+
+    showLoadingModal() {
+      this.loading = true
       this.visible = true
 
       this.showModal()
@@ -57,6 +65,7 @@ export const useModalStore = defineStore("modalStore", {
     },
 
     closeModal() {
+      this.loading = false
       this.modalInstance.toggle()
     }
   },
