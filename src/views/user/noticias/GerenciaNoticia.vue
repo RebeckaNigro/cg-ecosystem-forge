@@ -25,7 +25,7 @@
 
     <div class="pb-5">
       <div v-if="noticiaId">
-        <FormEditarNoticia :noticia-id="noticiaId" />
+        <FormNoticia :noticia-id="noticiaId" />
       </div>
       <div v-else>
         <FormNoticia />
@@ -37,16 +37,16 @@
 <script setup lang="ts">
   import { onMounted, ref } from "vue"
   import FormNoticia from "../../../components/user/noticias/FormNoticia.vue"
-  import FormEditarNoticia from "../../../components/user/noticias/FormEditarNoticia.vue"
-  import router from "../../../router"
+  import { useRoute } from "vue-router"
 
+  const route = useRoute()
   const noticiaId = ref<number | null>(null)
 
   onMounted(() => {
-    if (router.currentRoute.value.query.idNoticia) {
-      noticiaId.value = parseInt(
-        router.currentRoute.value.query.idNoticia.toString()
-      )
+    const id = route.params.noticiaId
+
+    if (id) {
+      noticiaId.value = Number(id)
     }
   })
 </script>

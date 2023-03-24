@@ -2,7 +2,7 @@
   <div class="pt-5 pb-5">
     <Spinner spinnerColorClass="text-dark" v-if="isLoadingContent" />
     <div class="noticia-breadcrumb">
-      <nav style="--bs-breadcrumb-divider'>';" aria-label="breadcrumb">
+      <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"

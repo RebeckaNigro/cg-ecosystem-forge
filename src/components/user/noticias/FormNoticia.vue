@@ -1,5 +1,10 @@
 <template>
-  <h1 class="dark-title mt-5 mb-5 fs-2 text-center">Envie sua notícia!</h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="noticia.id < 0">
+    Envie sua notícia!
+  </h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
+    Edite sua notícia!
+  </h1>
   <form class="mx-auto card-position box p-5 mb-5" v-if="!isVisualizacao">
     <div class="mb-3">
       <label for="titulo" class="form-label-primary">Título*</label>
@@ -21,12 +26,8 @@
         type="text"
         id="subtitulo"
         class="form-input-primary"
-        :class="v$.subTitulo.$error ? 'is-invalid' : ''"
         v-model="noticia.subTitulo"
       />
-      <div v-if="v$.subTitulo.$error" class="invalid-feedback">
-        {{ v$.subTitulo.$errors[0].$message }}
-      </div>
     </div>
 
     <div class="mb-3">
@@ -99,7 +100,7 @@
           id="data"
           class="form-input-primary"
           :class="v$.dataPublicacao.$error ? 'is-invalid' : ''"
-          v-model="noticia.dataPublicacao"
+          v-model="data"
         />
         <div v-if="v$.dataPublicacao.$error" class="invalid-feedback">
           {{ v$.dataPublicacao.$errors[0].$message }}
@@ -113,11 +114,11 @@
           type="time"
           id="hora"
           class="form-input-primary"
-          :class="v$.hora.$error ? 'is-invalid' : ''"
-          v-model="noticia.hora"
+          :class="!hora ? 'is-invalid' : ''"
+          v-model="hora"
         />
-        <div v-if="v$.hora.$error" class="invalid-feedback">
-          {{ v$.hora.$errors[0].$message }}
+        <div v-if="invalidHora" class="invalid-feedback">
+          Hora é obrigatória
         </div>
       </div>
     </div>
@@ -259,7 +260,12 @@
   import { ref, onMounted } from "vue"
   import { useNoticiaStore } from "../../../stores/noticias/store"
   import { useModalStore } from "../../../stores/modal/store"
-  import { NoticiaRascunho, NewsTag } from "../../../stores/noticias/types"
+  import { useRoute } from "vue-router"
+  import {
+    Noticia,
+    NoticiaRascunho,
+    NewsTag
+  } from "../../../stores/noticias/types"
   import { useAlertStore } from "../../../stores/alert/store"
   import { useUserStore } from "../../../stores/user/store"
   import { useConfirmStore } from "../../../stores/confirm/store"
@@ -276,12 +282,17 @@
   const userStore = useUserStore()
   const modalStore = useModalStore()
   const confirmStore = useConfirmStore()
+  const route = useRoute()
 
   const sendingNews = ref(false)
+  const invalidHora = ref(false)
+  const deleteRascunhoAfter = ref(false)
   const arquivo = ref<File | null>()
   const authorName = ref<string | null>()
   const termosDeUso = ref(false)
   const dataFormatada = ref<string | null>()
+  const data = ref("")
+  const hora = ref("")
   const base64Image = ref("")
 
   const noticia = ref({
@@ -307,11 +318,6 @@
     },
     descricao: {
       required: helpers.withMessage("Corpo da notícia é obrigatório.", required)
-    },
-    subTitulo: "",
-    tags: "",
-    hora: {
-      required: helpers.withMessage("Hora é obrigatória.", required)
     },
     dataPublicacao: {
       required: helpers.withMessage("Data é obrigatória.", required)
@@ -383,6 +389,23 @@
   ])
 
   onMounted(async () => {
+    const id = route.params.noticiaId
+
+    if (id) {
+      await noticiaStore.getNewsById(Number(id))
+
+      if (noticiaStore.response.code == 200) {
+        noticia.value = noticiaStore.response.dado
+        data.value = noticia.value.dataPublicacao.substring(0, 10)
+        hora.value = noticia.value.dataPublicacao.substring(
+          noticia.value.dataPublicacao.length - 8,
+          noticia.value.dataPublicacao.length
+        )
+      } else {
+        alertStore.showTimeoutErrorMessage("Erro ao carregar notícia!")
+      }
+    }
+
     if (noticiaStore.loadRascunho) verificaRascunho()
     buscarTags()
 
@@ -420,7 +443,10 @@
       )
 
       const formValidation = await v$.value.$validate()
-      if (!formValidation) {
+      if (!hora.value) invalidHora.value = true
+      else invalidHora.value = false
+
+      if (!formValidation || invalidHora.value) {
         alertStore.showTimeoutErrorMessage(
           "Preencha todos os campos obrigatórios."
         )
@@ -438,20 +464,41 @@
 
       noticia.value.arquivo = arquivo.value
 
-      sendingNews.value = true
+      console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+      console.dir(noticia.value)
 
-      await noticiaStore.postNews(noticia.value)
-      sendingNews.value = false
+      if (noticia.value.id > 0) {
+        sendingNews.value = true
 
-      const res = noticiaStore.response.getResponse()
-      if (res.code === 200) {
-        limparRascunho()
-        resetarNoticia()
-        modalStore.showSuccessModal("Notícia cadastrada com sucesso!")
-      } else if (res.code === 661) {
-        console.error(res.message)
+        await noticiaStore.putNews(noticia.value)
+        sendingNews.value = false
+
+        const res = noticiaStore.response.getResponse()
+        if (res.code === 200) {
+          if (deleteRascunhoAfter.value) limparRascunho()
+          resetarNoticia()
+          modalStore.showSuccessModal("Notícia editada com sucesso!")
+        } else if (res.code === 661) {
+          console.error(res.message)
+        } else {
+          modalStore.showErrorModal("Erro ao editar notícia!")
+        }
       } else {
-        modalStore.showErrorModal("Erro ao cadastrar notícia!")
+        sendingNews.value = true
+
+        await noticiaStore.postNews(noticia.value)
+        sendingNews.value = false
+
+        const res = noticiaStore.response.getResponse()
+        if (res.code === 200) {
+          if (deleteRascunhoAfter.value) limparRascunho()
+          resetarNoticia()
+          modalStore.showSuccessModal("Notícia cadastrada com sucesso!")
+        } else if (res.code === 661) {
+          console.error(res.message)
+        } else {
+          modalStore.showErrorModal("Erro ao cadastrar notícia!")
+        }
       }
     }
   }
