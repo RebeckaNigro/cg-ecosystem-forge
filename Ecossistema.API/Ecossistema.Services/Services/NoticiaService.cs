@@ -179,16 +179,24 @@ namespace Ecossistema.Services.Services
                             var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
                             if (buscaTag == null)
                             {
-                                resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
-                                return resposta;
-                            }
-                            var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
-                            if (buscaTagItem == null)
-                            {
-                                var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
-                                _unitOfWork.TagsItens.Add(tagItem);
+                                //resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
+                                var cadastro = new RespostaPadrao();
+                                cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                                var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, objAlt.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
                                 _unitOfWork.Complete();
                             }
+                            if(buscaTag != null)
+                            {
+                                var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
+                                if (buscaTagItem == null)
+                                {
+                                    var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
+                                    _unitOfWork.TagsItens.Add(tagItem);
+                                    _unitOfWork.Complete();
+                                }
+                            }
+                            
                         }
                     }
                     
