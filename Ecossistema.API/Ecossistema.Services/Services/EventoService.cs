@@ -22,16 +22,19 @@ namespace Ecossistema.Services.Services
         private readonly IAprovacaoService _aprovacaoService;
         private readonly IArquivoService _arquivoService;
         private readonly IEnderecoService _enderecoService;
+        private readonly ITagService _tagService;
 
         public EventoService(IUnitOfWork unitOfWork,
             IEnderecoService enderecoService,
             IArquivoService arquivoService,
-            IAprovacaoService aprovacaoService)
+            IAprovacaoService aprovacaoService,
+            ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _aprovacaoService = aprovacaoService;
             _arquivoService = arquivoService;
             _enderecoService = enderecoService;
+            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
@@ -79,7 +82,7 @@ namespace Ecossistema.Services.Services
                                           usuarioId,
                                           dataAtual);
 
-                await _unitOfWork.Eventos.AddAsync(obj);
+                var evento = await _unitOfWork.Eventos.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
@@ -89,6 +92,27 @@ namespace Ecossistema.Services.Services
                     || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
                     return resposta;
+                }
+
+                TagDto anterior = new TagDto();
+                if (item.Tags != null)
+                {
+                    foreach (var x in item.Tags)
+                    {
+                        RespostaPadrao cadastro = new RespostaPadrao();
+                        cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                        x.Descricao = x.Descricao.ToLower();
+                        if (x.Descricao != anterior.Descricao)
+                        {
+                            if (cadastro.Retorno != null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, evento.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                        }
+                        anterior = x;
+                    }
                 }
 
                 resposta.Retorno = true;
