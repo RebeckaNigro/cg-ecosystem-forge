@@ -23,6 +23,7 @@ namespace Ecossistema.Services.Services
         private readonly string RepositorioArquivo = "RepositoryFiles";
         private readonly string Documents = "Documents";
         private readonly string NoticiasImagens = "NoticiasImagens";
+        private readonly string EventosImagens = "EventosImagens";
 
         public ArquivoService(IUnitOfWork unitOfWork,
             IWebHostEnvironment webHostEnvironment)
@@ -116,6 +117,7 @@ namespace Ecossistema.Services.Services
                     noticiaId = id;
                     break;
                 case EOrigem.Evento:
+                    dir = EventosImagens;
                     eventoId = id;
                     break;
                 case EOrigem.Pagina:
@@ -183,6 +185,15 @@ namespace Ecossistema.Services.Services
                     }
                 }
                 else
+                if (convertOrigem.Equals("Evento"))
+                {
+                    using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, EventosImagens, id.ToString() + "." + fileExtension), FileMode.Create))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                else
                 {
                     using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, id.ToString() + "." + fileExtension), FileMode.Create))
                 {
@@ -221,6 +232,7 @@ namespace Ecossistema.Services.Services
                 }
                 else if(tipo == "evento")
                 {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, EventosImagens);
                     var buscaOrigem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
                     var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == buscaOrigem.ArquivoId);
                     idArquivoOrigem = buscaOrigem.Id;
@@ -272,6 +284,7 @@ namespace Ecossistema.Services.Services
                 }
                 else if (tipo == "evento")
                 {
+                    path = Path.Combine(_webHostEnvironment.WebRootPath, RepositorioArquivo, EventosImagens);
                     var origem = await _unitOfWork.ArquivosOrigens.FindAsync(x => x.EventoId == id);
                     var busca = await _unitOfWork.Arquivos.FindAsync(x => x.Id == origem.ArquivoId);
                     idArquivo = busca.Id;
