@@ -625,6 +625,7 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Ativo);
             var result = query.Select(x => new
             {
+                x.Id,
                 x.RazaoSocial,
                 x.Cnpj
             }).Distinct()
