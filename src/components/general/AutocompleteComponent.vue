@@ -10,7 +10,7 @@
       @keydown.enter="onEnter"
     />
     <ul class="autocomplete-results" v-show="isOpen">
-      <li v-if="isLoading" class="loading">Carregando tags...</li>
+      <li v-if="isLoading" class="loading">Carregando...</li>
       <li
         v-else
         class="autocomplete-result"
@@ -19,14 +19,17 @@
         @click="setResult(result)"
         :class="{ 'is-active': i === arrowCounter }"
       >
-        <span v-if="props.type == 'NewsTag'">{{ result.descricao }} </span>
+        <span v-if="props.type == 'CustomTag'">{{ result.descricao }} </span>
+        <span v-if="props.type == 'Instituicao'"
+          >{{ result.razaoSocial }}
+        </span>
       </li>
     </ul>
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, watch } from "vue"
-  import { NewsTag } from "../../stores/noticias/types"
+  import { ref, watch } from "vue"
+  import { CustomTag } from "../../stores/tag/types"
 
   const emit = defineEmits(["selected-value"])
   const props = defineProps({
@@ -38,11 +41,6 @@
     type: {
       type: String,
       required: true
-    },
-    isAsync: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   })
 
@@ -63,14 +61,17 @@
   )
 
   const filterResults = () => {
-    switch (props.type) {
-      case "NewsTag":
-        results.value = props.items.filter(
-          (item: any) =>
-            item.descricao.toLowerCase().indexOf(search.value.toLowerCase()) >
-            -1
-        )
-        break
+    if (props.type == "CustomTag") {
+      results.value = props.items.filter(
+        (item: any) =>
+          item.descricao.toLowerCase().indexOf(search.value.toLowerCase()) > -1
+      )
+    } else if (props.type == "Instituicao") {
+      results.value = props.items.filter(
+        (item: any) =>
+          item.razaoSocial.toLowerCase().indexOf(search.value.toLowerCase()) >
+          -1
+      )
     }
   }
 
@@ -100,14 +101,17 @@
     if (!search.value) return
 
     const previousValue = search.value
-    const newsObj = results.value[arrowCounter.value]
+    const obj = results.value[arrowCounter.value]
     search.value = ""
 
-    if (props.type == "NewsTag") {
-      if (newsObj) {
-        emit("selected-value", newsObj)
-      } else {
-        const addTag = new NewsTag(previousValue)
+    if (obj) {
+      emit("selected-value", obj)
+      if (props.type == "Instituicao") {
+        search.value = obj.razaoSocial
+      }
+    } else {
+      if (props.type == "CustomTag") {
+        const addTag = new CustomTag(previousValue)
         emit("selected-value", addTag)
       }
     }

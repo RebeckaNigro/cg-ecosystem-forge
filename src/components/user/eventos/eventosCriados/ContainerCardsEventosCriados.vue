@@ -1,225 +1,161 @@
 <template>
-	<div class="eventos-container box">
+  <div class="box mx-auto external-card p-5 container-fluid">
+    <h1 class="dark-title fs-4 text-start">Eventos criados</h1>
 
-		<h1 class="dark-title fs-4 mb-4 mt-4 ms-3">Eventos criados</h1>
+    <button
+      class="fab green-btn-primary"
+      @click="$router.push({ name: 'GerenciaEvento' })"
+    >
+      + CRIAR NOVO EVENTO
+    </button>
 
-		<button class="btn-criar-evento" @click="$router.push({ name: 'GerenciaEvento' })">+ Criar novo evento</button>
+    <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
+      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <!-- COMPONENTE DE FILTRO -->
+        <FilterComponent
+          field="data"
+          :items="eventoStore.eventosUsuarioLogado"
+          type="evento"
+          @filter-result="filtrarEventos"
+        />
+      </div>
 
-		<div class="row justify-content-between w-100 align-items-end mb-5">
+      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <!-- COMPONENTE DE BUSCA -->
+        <SearchComponent
+          :items="eventoStore.eventosUsuarioLogado"
+          type="evento"
+          @search-result="filtrarEventos"
+        />
+      </div>
+    </div>
 
-			<!--<div class="filtrar-data col">
-				<FilterComponent :content-type="'data'" :datas="[]" />
-			</div>-->
+    <div class="container-fluid row justify-content-between g-0">
+      <!-- LOADING SPINNER -->
+      <Spinner v-if="loadingEvents" />
 
-			<div class="pesquisar col d-flex justify-content-end">
-				<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" v-model="searchInputText">
-				<button class="btn" id="btn-pesquisar" @click="handleSearch">
-					<img src="../../../../../public/search_icon.svg" alt="Pesquisar">
-				</button>
-			</div>
-		</div>
+      <!-- CARD DE RASCUNHO -->
+      <CardEventoCriado
+        v-if="rascunho"
+        :evento="rascunho"
+        class="col-xs-12 col-sm-6 col-lg-4 p-2"
+        @update-list="reloadEventos"
+        :isRascunho="true"
+      />
 
-		<div class="cards-container">
+      <!-- CARDS DO USUÁRIO -->
+      <CardEventoCriado
+        v-for="(evento, index) in eventos"
+        :key="index"
+        :evento="evento"
+        class="col-xs-12 col-sm-6 col-lg-4 p-2"
+        @update-list="reloadEventos"
+        :isRascunho="false"
+      />
+    </div>
 
-			<div v-for="(evento, index) in eventos" :key="index">
+    <div class="row container-fluid mb-3 mt-5">
+      <div class="col-sm-6">
+        <button
+          class="green-btn-outlined button-specific"
+          @click="$router.back()"
+        >
+          Voltar
+        </button>
+      </div>
 
-				<CardEventoCriado :has-image="evento.arquivo == null" :image="evento.arquivo!" :nome-evento="evento.titulo"
-					:data-inicio="evento.dataInicio" :data-termino="evento.dataTermino" :endereco-evento="evento.local"
-					:evento-id="evento.id" />
-			</div>
-		</div>
-
-		<div class="botoes-container w-100 d-flex justify-content-around mt-5">
-			<button class="btn-voltar w-100 me-3" @click="$router.back()">Voltar</button>
-			<button class="btn-ver-mais w-100 ms-3" @click="addEventsToView" v-if="!isSearchResultsVisible">Ver mais</button>
-		</div>
-	</div>
-
+      <div class="col-sm-6">
+        <button
+          class="green-btn-primary button-specific"
+          @click="addEventsToView"
+        >
+          Ver mais
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
-import CardEventoCriado from '../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
-import { useEventoStore } from '../../../../stores/eventos/store';
-import { IUltimoEvento } from '../../../../stores/eventos/types';
-import { useUserStore } from '../../../../stores/user/store';
+  import { onMounted, reactive, ref } from "vue"
+  import FilterComponent from "../../../../components/general/FilterComponent.vue"
+  import SearchComponent from "../../../../components/general/SearchComponent.vue"
+  import CardEventoCriado from "../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue"
+  import Spinner from "../../../../components/general/Spinner.vue"
+  import { useEventoStore } from "../../../../stores/eventos/store"
+  import { useModalStore } from "../../../../stores/modal/store"
+  import {
+    IEventoSimplificado,
+    EventoSimplificado
+  } from "../../../../stores/eventos/types"
 
-// TODO fazer paginação em eventoStore.eventosUsuarioLogado
-const eventoStore = useEventoStore()
-const userStore = useUserStore()
-const lastIndex = ref(6)
-let eventos = ref<Array<IUltimoEvento>>(eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value))
+  const eventoStore = useEventoStore()
+  const modalStore = useModalStore()
+  const lastIndex = ref(6)
+  const loadingEvents = ref(false)
+  let eventos = ref<Array<IEventoSimplificado>>()
 
-const isSearchResultsVisible = ref(false)
-const searchInputText = ref('')
+  const rascunho = ref<EventoSimplificado>()
 
-const addEventsToView = () => {
-	lastIndex.value += 3
-	eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
-	if(lastIndex.value > eventoStore.eventosUsuarioLogado.length){
-		const btnVerMais: HTMLElement = document.querySelector('.btn-ver-mais')!
-		btnVerMais.style.display = 'none'
-	}
-	
-}
+  const filtrarEventos = (eventosFiltrados: Array<IEventoSimplificado>) => {
+    eventos.value = eventosFiltrados.slice(0, lastIndex.value)
+  }
 
-const handleSearch = () => {
-	const inputTextLowerCase = searchInputText.value.trim().toLowerCase()
-	
-	if(inputTextLowerCase !== ''){
-		eventos.value = eventoStore.eventosUsuarioLogado.filter((evento) => {
-			if(evento.titulo){
-				const tituloLowerCase = evento.titulo.toLowerCase()
-				return tituloLowerCase.includes(inputTextLowerCase)
-			}
-			return false
-			
-		})
+  const addEventsToView = () => {
+    lastIndex.value += 3
+    eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
+  }
 
-		isSearchResultsVisible.value = true
-	}else{
-		isSearchResultsVisible.value = false
-	}
+  const reloadEventos = async () => {
+    loadingEvents.value = true
+    if (!localStorage.getItem("eventoRascunho")) rascunho.value = undefined
+    await eventoStore.getUserEvents()
+    eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
+    loadingEvents.value = false
+  }
 
-	console.log(isSearchResultsVisible.value);
-	
-}
+  const verificaRascunho = () => {
+    const eventoRascunhoStr = localStorage.getItem("eventoRascunho")
 
-onMounted(() => {
-	if(userStore.loggedUser.id){
-		eventoStore.getEventByUserId(parseInt(userStore.loggedUser.id))
-	}
-})
+    if (eventoRascunhoStr) {
+      const eventoRascunho = JSON.parse(eventoRascunhoStr)
 
+      rascunho.value = new EventoSimplificado(
+        eventoRascunho.evento.id,
+        eventoRascunho.evento.tags,
+        eventoRascunho.evento.titulo,
+        eventoRascunho.evento.dataInicio,
+        eventoRascunho.evento.dataTermino,
+        eventoRascunho.evento.local,
+        eventoRascunho.evento.arquivo
+      )
+    }
+  }
+
+  onMounted(async () => {
+    loadingEvents.value = true
+    await eventoStore.getUserEvents()
+    eventos.value = eventoStore.eventosUsuarioLogado
+    verificaRascunho()
+    loadingEvents.value = false
+  })
 </script>
 
-<style scoped lang="scss">
-.eventos-container {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	margin: 1.4rem auto;
-	max-width: 1300px;
-	padding: 3rem;
-	border-radius: 10px;
-	flex-wrap: wrap;
+<style scoped>
+  .external-card {
+    width: 80%;
+    position: relative;
+  }
 
-	.btn-criar-evento {
-		background-color: #639280;
-		border: unset;
-		border-radius: 30px;
-		padding: .7rem 2rem;
-		font-family: 'Montserrat-Bold';
-		color: #fff;
-		text-transform: uppercase;
-		position: absolute;
-		right: 11rem;
-		top: 11.4rem;
+  .fab {
+    position: absolute;
+    top: -1.2rem;
+    right: 3rem;
+  }
 
-		@media(max-width: 1400px){
-			right: 7rem;
-			top: 12.5rem;
-		}
-
-		@media(max-width: 992px){
-			right: 3rem;
-			top: 11rem;
-		}
-
-		@media(min-width: 1600px){
-			right: 23rem;
-		}
-
-	
-	}
-
-	.btn-criar-evento:hover {
-		background-color: #73b79d;
-	}
-
-	.filtrar-data {
-		max-width: 300px;
-	}
-
-	.cards-container {
-		width: 100%;
-		display: grid;
-		margin: 0 auto;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 48px 32px;
-
-		@media (max-width: 920px) {
-			max-width: 520px;
-			grid-template-columns: 1fr 1fr;
-			margin: 0;
-		}
-
-		@media (max-width: 580px) {
-			max-width: 280px;
-			grid-template-columns: 1fr;
-		}
-	}
-
-	.pesquisar {
-		@media (max-width: 580px) {
-			margin-top: 1.5rem;
-		}
-	}
-
-	#pesquisar {
-		border-radius: 40px 0px 0px 40px;
-		border: 1px solid #6B6A64;
-		border-right: unset;
-		padding: .5rem .7rem;
-		width: 300px;
-	}
-
-	#btn-pesquisar {
-		border: 1px solid #6B6A64;
-		border-left: unset;
-		border-radius: 0 40px 40px 0;
-		background-color: #fff;
-
-		img {
-			max-width: 26px;
-		}
-	}
-
-	#pesquisar:focus {
-		border-color: #86b7fe;
-		outline: 0;
-		box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-	}
-
-	.botoes-container {
-		button {
-			width: 30%;
-			border-radius: 30px;
-			padding: .8rem 0;
-			font-family: 'Montserrat-SemiBold';
-			color: #fff;
-			font-size: 19px;
-		}
-
-		.btn-voltar {
-			background-color: #fff;
-			border: 1px solid #639280;
-			color: #639280;
-		}
-
-		.btn-voltar:hover {
-			background-color: #ececec;
-
-		}
-
-		.btn-ver-mais {
-			background-color: #639280;
-			border: unset;
-		}
-
-		.btn-ver-mais:hover {
-			background-color: #73b79d;
-		}
-	}
-}
+  .button-specific {
+    width: 100%;
+    margin: 1rem 1rem;
+    box-sizing: border-box;
+  }
 </style>

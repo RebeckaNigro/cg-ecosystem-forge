@@ -25,10 +25,9 @@
 <script setup lang="ts">
   import { onMounted, ref } from "vue"
   import { adjustStringDateForTimezone } from "../../utils/formatacao/datetime"
-  import {
-    FilterOption,
-    NoticiaSimplificada
-  } from "./../../stores/noticias/types"
+  import { NoticiaSimplificada } from "./../../stores/noticias/types"
+  import { FilterOption } from "../../stores/general/types"
+  import { EventoSimplificado } from "../../stores/eventos/types"
 
   const props = defineProps<{
     field: string
@@ -44,6 +43,12 @@
   onMounted(() => {
     switch (props.type) {
       case "noticia":
+        menuOptions.value.push(new FilterOption("Últimos 7 dias", "7"))
+        menuOptions.value.push(new FilterOption("Últimos 15 dias", "15"))
+        menuOptions.value.push(new FilterOption("Últimos 30 dias", "30"))
+        menuOptions.value.push(new FilterOption("Últimos 90 dias", "90"))
+        break
+      case "evento":
         menuOptions.value.push(new FilterOption("Últimos 7 dias", "7"))
         menuOptions.value.push(new FilterOption("Últimos 15 dias", "15"))
         menuOptions.value.push(new FilterOption("Últimos 30 dias", "30"))
@@ -66,15 +71,23 @@
         console.log(`Data de referencia: ${dataReferencia}`)
 
         results.value = props.items.filter((noticia: NoticiaSimplificada) => {
-          // console.log(
-          //   `DATA CORRENTE: ${adjustStringDateForTimezone(
-          //     noticia.dataPublicacao
-          //   )}`
-          // )
-
           return adjustStringDateForTimezone(
             noticia.dataPublicacao
           ).getTime() >= dataReferencia.getTime()
+            ? true
+            : false
+        })
+        sendSearchResult()
+      } else if (props.type == "evento") {
+        const dataReferencia = new Date()
+        dataReferencia.setDate(
+          dataReferencia.getDate() - Number(selectedOption.value)
+        )
+        dataReferencia.setHours(0, 0, 0)
+
+        results.value = props.items.filter((evento: EventoSimplificado) => {
+          return adjustStringDateForTimezone(evento.dataInicio).getTime() >=
+            dataReferencia.getTime()
             ? true
             : false
         })
@@ -87,9 +100,6 @@
   }
 
   const sendSearchResult = () => {
-    console.log("Resultado:")
-    console.dir(results.value)
-
     emit("filter-result", results.value)
   }
 </script>

@@ -6,7 +6,7 @@
       class="fab green-btn-primary"
       @click="$router.push({ name: 'GerenciaNoticia' })"
     >
-      + Criar nova notícia
+      + CRIAR NOVA NOTÍCIA
     </button>
 
     <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
@@ -151,87 +151,3 @@
     box-sizing: border-box;
   }
 </style>
-<!-- .noticias-container {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 1.4rem auto;
-    width: 90%;
-    padding: 3rem;
-    border-radius: 10px;
-    flex-wrap: wrap;
-
-    .btn-criar-noticia {
-      background-color: #639280;
-      border: unset;
-      border-radius: 30px;
-      padding: 0.7rem 2rem;
-      font-family: "Montserrat-Bold";
-      color: #fff;
-      text-transform: uppercase;
-      position: absolute;
-      right: 3rem;
-      top: -1.6rem;
-    }
-
-    .btn-criar-noticia:hover {
-      background-color: #73b79d;
-    }
-
-    .filtrar-data {
-      max-width: 300px;
-    }
-
-    .cards-container {
-      width: 100%;
-      display: grid;
-      margin: 0 auto;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 48px 32px;
-
-      @media (max-width: 820px) {
-        max-width: 520px;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      @media (max-width: 580px) {
-        max-width: 280px;
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .pesquisar {
-      @media (max-width: 580px) {
-        margin-top: 1.5rem;
-      }
-    }
-    .botoes-container {
-      button {
-        width: 30%;
-        border-radius: 30px;
-        padding: 0.8rem 0;
-        font-family: "Montserrat-SemiBold";
-        color: #fff;
-        font-size: 19px;
-      }
-      .btn-voltar {
-        background-color: #fff;
-        border: 1px solid #639280;
-        color: #639280;
-      }
-
-      .btn-voltar:hover {
-        background-color: #ececec;
-      }
-
-      .btn-ver-mais {
-        background-color: #639280;
-        border: unset;
-      }
-
-      .btn-ver-mais:hover {
-        background-color: #73b79d;
-      }
-    }
-  } -->
