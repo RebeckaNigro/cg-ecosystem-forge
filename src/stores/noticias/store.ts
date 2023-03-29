@@ -1,13 +1,11 @@
 import { defineStore } from "pinia"
-import { INoticia, INoticiaSimplificada, Noticia, NewsTag } from "./types"
+import { INoticia, INoticiaSimplificada } from "./types"
 import { getLastContent, httpRequest } from "../../utils/http"
-import { validateNoticiaInput } from "../../utils/noticias/validation"
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 
 const lastNews: Array<INoticiaSimplificada> = []
 const allNews: Array<INoticiaSimplificada> = []
 const allUserNews: Array<INoticiaSimplificada> = []
-const allTags: Array<NewsTag> = []
 export const useNoticiaStore = defineStore("noticiaStore", {
   state: () => {
     return {
@@ -15,7 +13,6 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       lastNews,
       allNews,
       allUserNews,
-      allTags,
       loadRascunho: false
     }
   },
@@ -84,25 +81,6 @@ export const useNoticiaStore = defineStore("noticiaStore", {
           this.allUserNews = []
           for (const news of response.data.retorno) {
             this.allUserNews.push(news)
-          }
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    },
-
-    async getTags() {
-      try {
-        const response = await httpRequest.get("/api/Tag/listarTags")
-        if (response.data.codigo === 200) {
-          this.response.putResponse(
-            response.data.codigo,
-            response.data.retorno,
-            response.data.resposta
-          )
-          this.allTags = []
-          for (const tags of response.data.retorno) {
-            this.allTags.push(tags)
           }
         }
       } catch (error) {

@@ -21,7 +21,9 @@
 
 <script setup lang="ts">
   import { onMounted, ref } from "vue"
-  import { NewsTag, NoticiaSimplificada } from "../../stores/noticias/types"
+  import { EventoSimplificado } from "../../stores/eventos/types"
+  import { NoticiaSimplificada } from "../../stores/noticias/types"
+  import { CustomTag } from "../../stores/tag/types"
 
   const props = defineProps({
     items: {
@@ -45,7 +47,33 @@
           )
             return true
 
-          const tagMatch = item.tags.find((tag: NewsTag) => {
+          const tagMatch = item.tags.find((tag: CustomTag) => {
+            return tag.descricao
+              .toLowerCase()
+              .indexOf(searchWord.value.toLowerCase()) >= 0
+              ? true
+              : false
+          })
+
+          return tagMatch ? true : false
+        })
+        break
+
+      case "evento":
+        results.value = props.items.filter((item: EventoSimplificado) => {
+          if (
+            item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
+            0
+          )
+            return true
+
+          if (
+            item.local.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
+            0
+          )
+            return true
+
+          const tagMatch = item.tags.find((tag: CustomTag) => {
             return tag.descricao
               .toLowerCase()
               .indexOf(searchWord.value.toLowerCase()) >= 0
