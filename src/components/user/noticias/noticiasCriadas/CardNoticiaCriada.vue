@@ -6,7 +6,7 @@
       <div v-if="!props.isRascunho">
         <img
           :src="'data:image/png;base64, ' + noticia.arquivo"
-          alt="event-image"
+          alt="news-image"
           class="w-100"
         />
         <!-- <span class="dark-body-text fs-6">{{ noticia.titulo }}</span> -->
@@ -16,7 +16,7 @@
           <div class="mascara-rascunho">
             <img
               src="./../../../../assets/icons/news.svg"
-              alt="event-image"
+              alt="news-image"
               class="w-50"
             />
           </div>

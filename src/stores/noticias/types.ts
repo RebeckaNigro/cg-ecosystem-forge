@@ -1,7 +1,8 @@
+import { CustomTag } from "../tag/types"
 export interface INoticia {
   id: number
   titulo: string
-  tags: NewsTag[]
+  tags: CustomTag[]
   descricao: string
   subTitulo: string
   dataPublicacao: string
@@ -11,7 +12,7 @@ export interface INoticia {
 export class Noticia implements INoticia {
   id!: number
   titulo!: string
-  tags!: NewsTag[]
+  tags!: CustomTag[]
   descricao!: string
   subTitulo!: string
   dataPublicacao!: string
@@ -20,7 +21,7 @@ export class Noticia implements INoticia {
   constructor(
     id: number,
     titulo: string,
-    tags: NewsTag[],
+    tags: CustomTag[],
     descricao: string,
     subTitulo: string,
     dataPublicacao: string,
@@ -39,14 +40,14 @@ export class Noticia implements INoticia {
 export class NoticiaSimplificada implements INoticiaSimplificada {
   id!: number
   titulo!: string
-  tags!: NewsTag[]
+  tags!: CustomTag[]
   dataPublicacao!: string
   arquivo: string
 
   constructor(
     id: number,
     titulo: string,
-    tags: NewsTag[],
+    tags: CustomTag[],
     dataPublicacao: string,
     arquivo: string
   ) {
@@ -71,27 +72,7 @@ export class NoticiaRascunho {
 export interface INoticiaSimplificada {
   id: number
   titulo: string
-  tags: NewsTag[]
+  tags: CustomTag[]
   dataPublicacao: string
   arquivo: string
-}
-
-export class NewsTag {
-  id: number
-  descricao: string
-
-  constructor(descricao: string) {
-    this.id = -1
-    this.descricao = descricao
-  }
-}
-
-export class FilterOption {
-  text: string
-  value: string
-
-  constructor(text: string, value: string) {
-    this.text = text
-    this.value = value
-  }
 }

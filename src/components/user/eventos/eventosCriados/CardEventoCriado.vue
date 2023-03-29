@@ -1,195 +1,247 @@
 <template>
-	<div class="card-container box p-3 d-flex flex-column align-items-start">
-		<div class="img-container">
-			<img :src="buildImageSrc(eventoId, nomeEvento, 5)" alt="event-image" v-if="image !== null">
-      		<span v-else class="dark-body-text fs-6">{{ nomeEvento }}</span>
-		</div>
+  <div>
+    <div
+      class="container-fluid box p-3 my-3 card-alignment h-100 overflow-hidden"
+    >
+      <div v-if="!props.isRascunho">
+        <img
+          :src="'data:image/png;base64, ' + evento.arquivo"
+          alt="event-image"
+          class="w-100"
+        />
+      </div>
+      <div v-else>
+        <div class="container-mascara-rascunho">
+          <div class="mascara-rascunho">
+            <img
+              src="./../../../../assets/icons/news.svg"
+              alt="event-image"
+              class="w-50"
+            />
+          </div>
+          <div
+            class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text"
+          >
+            (Rascunho)
+          </div>
+        </div>
+      </div>
 
-		<div class="container">
+      <div class="container">
+        <div
+          class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
+        >
+          <div class="col-md-8 text-start">
+            <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
+          </div>
 
-			<div class="row mt-2">
-				<!--<div class="tags col">
-					<span class="me-2">#Confra</span>
-					<span>#Networking</span>
-				</div>-->
-	
-				<div class="d-flex acoes-container col">
-					<button class="visualizar" @click="$router.push({name: 'EventoExpandido', params: {eventoId}})">
-						<img src="../../../../../public/view_icon.svg" alt="Visualizar evento">
-					</button>
-					<!---<button class="editar" @click="$router.push({name: 'GerenciaEvento', params: {eventoId: eventoId}})">
-						<img src="../../../../../public/edit_icon.svg" alt="Editar evento">
-					</button>-->
-					<button class="deletar" @click="handleDeleteEvent(eventoId)">
-						<img src="../../../../../public/delete_icon.svg" alt="Excluir evento">
-					</button>
-				</div>
-			</div>
-		</div>
+          <div class="col-md-4 text-end" v-if="!props.isRascunho">
+            <img
+              src="../../../../../public/view_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="
+                $router.push({
+                  name: 'EventoExpandido',
+                  params: { eventoId: props.evento.id }
+                })
+              "
+            />
+            <img
+              src="../../../../../public/edit_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="
+                $router.push({
+                  name: 'GerenciaEvento',
+                  params: { eventoId: evento.id }
+                })
+              "
+            />
+            <img
+              src="../../../../../public/delete_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="confirmDelete"
+            />
+          </div>
 
-		<div class="infos-container">
+          <div class="col-md-4 text-end" v-else>
+            <img
+              src="../../../../../public/edit_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="loadFormComRascunho"
+            />
+            <img
+              src="../../../../../public/delete_icon.svg"
+              alt=""
+              class="image-icon-button"
+              @click="confirmDeleteRascunho"
+            />
+          </div>
+        </div>
+      </div>
 
-			<div class="titulo mt-2 mb-1">{{nomeEvento}}</div>
-	
-			<div class="data-evento">{{friendlyDateTime(dataInicio)}} - {{friendlyDateTime(dataTermino)}}</div>
-	
-			<div class="endereco-evento">{{enderecoEvento}}</div>
-		</div>
+      <p class="fs-3 display-3 mt-2 text-start p-2">
+        {{ evento.titulo }}
+      </p>
 
-		<!--<span class="atualizado-em mt-2">Atualizado em: 01/01/2000 às 12:00</span>-->
+      <div>
+        <div class="d-flex mt-2 mb-2">
+          <img
+            src="./../../../../assets/icons/calendar-icon.svg"
+            alt="icone pino de endereço"
+            class="icone-usuario"
+          />
+          <div class="d-flex align-items-center mx-2 fw-bold">
+            {{ dataFormatada }}
+          </div>
+        </div>
 
+        <div class="d-flex mt-2 mb-2">
+          <img
+            src="./../../../../assets/icons/pin-icon.svg"
+            alt="icone pino de endereço"
+            class="icone-usuario"
+          />
+          <div class="d-flex align-items-center mx-2 fw-bold">
+            {{ props.evento.local }}
+          </div>
+        </div>
+      </div>
 
-	</div>
+      <div class="footer-atualizado">
+        <span class="text-secondary px-1">Atualizado em: </span>
+      </div>
+    </div>
+    <ConfirmModal
+      v-show="confirmStore.visible"
+      @confirm-true="confirmado"
+      element-id="confirmModal"
+      id="confirmModal"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { useEventoStore } from '../../../../stores/eventos/store';
-import { buildImageSrc } from '../../../../utils/constantes';
-import { friendlyDateTime } from '../../../../utils/formatacao/datetime';
+  import { useEventoStore } from "../../../../stores/eventos/store"
+  import { useModalStore } from "../../../../stores/modal/store"
+  import { useConfirmStore } from "../../../../stores/confirm/store"
+  import { brDateString } from "./../../../../utils/formatacao/datetime"
+  import { ref, onMounted, onUpdated } from "vue"
+  import ConfirmModal from "../../../general/ConfirmModal.vue"
+  import router from "../../../../router"
+  import { IEventoSimplificado } from "../../../../stores/eventos/types"
 
+  const eventoStore = useEventoStore()
+  const modalStore = useModalStore()
+  const confirmStore = useConfirmStore()
 
-const props = defineProps<{
-	hasImage: boolean
-    image: string
-    nomeEvento: string
-    dataInicio: string
-	dataTermino: string
-    enderecoEvento: string
-	eventoId: number
-}>()
+  const emit = defineEmits(["update-list"])
 
-const eventoStore = useEventoStore()
+  const props = defineProps<{
+    evento: IEventoSimplificado
+    isRascunho: boolean
+  }>()
 
-const handleDeleteEvent = async (eventoId: number) => {
-	console.log("askdhakd")
-	await eventoStore.deleteEvent(eventoId)
-	window.location.reload()
+  const dataFormatada = ref("")
+  const tagsFormatadas = ref("")
+
+  const confirmDelete = () => {
+    confirmStore.showConfirmModal(
+      "Tem certeza que desesja remover este evento?",
+      props.evento.id
+    )
   }
-onMounted(() => {
-	console.log(props.hasImage);
-	
-})
 
+  const confirmDeleteRascunho = () => {
+    confirmStore.showConfirmModal(
+      "Tem certeza que desesja remover este rascunho?",
+      null
+    )
+  }
 
+  const confirmado = async () => {
+    confirmStore.closeConfirm()
+
+    if (confirmStore.options.parameter != null) {
+      await eventoStore.deleteEvent(confirmStore.options.parameter as number)
+
+      const res = eventoStore.response.getResponse()
+      if (res.code === 200) {
+        emit("update-list")
+        modalStore.showSuccessModal("Evento removido com sucesso!")
+      } else {
+        modalStore.showErrorModal("Erro ao remover evento!")
+      }
+    } else {
+      localStorage.removeItem("eventoRascunho")
+      emit("update-list")
+      modalStore.showSuccessModal("Rascunho removido com sucesso!")
+    }
+  }
+
+  const loadFormComRascunho = () => {
+    eventoStore.loadRascunho = true
+    router.push({
+      name: "GerenciaEvento"
+    })
+  }
+
+  onMounted(() => {
+    dataFormatada.value = ` ${brDateString(
+      props.evento.dataInicio.toString()
+    )} -  ${brDateString(props.evento.dataTermino.toString())}`
+
+    const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
+    tagsFormatadas.value = prependHashtag.join("  ")
+  })
+
+  onUpdated(() => {
+    dataFormatada.value = ` ${brDateString(
+      props.evento.dataInicio.toString()
+    )} -  ${brDateString(props.evento.dataTermino.toString())}`
+    const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
+    tagsFormatadas.value = prependHashtag.join("  ")
+  })
 </script>
 
-<style scoped lang="scss">
-.card-container {
-	display: flex;
-	background: rgba(255, 255, 255, 0.85);
-	border: 1px solid #6B6A64;
-	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.15);
-	border-radius: 10px;
-	cursor: pointer;
+<style scoped>
+  .card-alignment {
+    position: relative;
+  }
 
-	flex-direction: column;
-	align-items: flex-start;
-	padding: 10px;
-	width: 95%;
+  .footer-atualizado {
+    text-align: left;
+    position: absolute;
+    bottom: 15px;
+  }
 
-	.img-container {
-      height: 200px;
-	  min-height: 200px;
-	  width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-	  
-      img {
-        width: -webkit-fill-available;
-		height: -webkit-fill-available;
-      }
-    }
+  .image-icon-button {
+    cursor: pointer;
+  }
 
-	.tags {
-		color: #505050;
-		font-size: 14px;
-		display: flex;
-		flex-direction: row;
-		padding-left: 0;
+  .mascara-rascunho {
+    display: flex;
+    background-color: black;
+    opacity: 20%;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+  }
 
-	}
+  .container-mascara-rascunho {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-	.acoes-container {
-		flex-wrap: wrap;
-		flex-direction: row;
-		width: 100%;
-		justify-content: flex-end;
-		padding-right: 0;
+  .mascara-rascunho-text {
+    position: absolute;
+  }
 
-		button {
-			background-color: transparent;
-			border: unset;
-		}
-
-		button:hover{
-			box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.20);
-		}
-
-		img {
-			max-width: 26px;
-			max-height: 26px;
-		}
-
-	}
-
-	.infos-container{
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-	
-		.titulo {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			text-align: start;
-			font-family: 'Montserrat-SemiBold';
-			font-size: 18px;
-			color: #000;
-		}
-		.data-evento, .endereco-evento {
-			  background-repeat: no-repeat;
-			  background-position-y: center;
-			  background-size: contain;
-			  margin: 5px 0;
-			  padding-left: 30px;
-			  flex-wrap: wrap;
-			}
-		.data-evento, .endereco-evento {
-			  white-space: nowrap;
-			  text-overflow: ellipsis;
-			  overflow: hidden;
-
-			}
-	
-		.data-evento{
-			background-image: url('/public/calendar_icon.svg');
-			font-size: 14px;
-			
-		}
-	
-		.endereco-evento{
-			background-image: url('/public/location_icon.svg');
-			font-size: 13px;
-			@media (max-width: 920px) {
-				font-size: 12px;
-			}
-		}
-	}
-
-
-	.atualizado-em {
-		color: #505050;
-		font-size: 12px;
-		margin-bottom: 0;
-	}
-
-	@media (max-width:800px){
-		width: 300px;
-	}
-
-	
-
-}
+  .icone-usuario {
+    width: 30px;
+  }
 </style>

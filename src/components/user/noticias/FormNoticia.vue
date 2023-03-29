@@ -1,9 +1,9 @@
 <template>
   <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="noticia.id < 0">
-    Envie sua notícia!
+    ENVIE SUA NOTÍCIA!
   </h1>
   <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
-    Edite sua notícia!
+    EDITE SUA NOTÍCIA!
   </h1>
   <form class="mx-auto card-position box p-5 mb-5" v-if="!isVisualizacao">
     <div class="mb-3">
@@ -70,7 +70,7 @@
     <div class="mb-3">
       <label for="tags" class="form-label-primary">Tags</label>
       <AutocompleteComponent
-        type="NewsTag"
+        type="CustomTag"
         :items="allTags"
         @selected-value="addTag"
       />
@@ -129,6 +129,7 @@
 
     <div>
       <QuillEditor
+        ref="customEditor"
         theme="snow"
         :modules="modules"
         :toolbar="customToolbar"
@@ -258,17 +259,13 @@
   // import ImageUploader from "quill-image-uploader"
   import useValidate from "@vuelidate/core"
   import { ref, onMounted } from "vue"
+  import { useRoute } from "vue-router"
   import { useNoticiaStore } from "../../../stores/noticias/store"
   import { useModalStore } from "../../../stores/modal/store"
-  import { useRoute } from "vue-router"
-  import {
-    Noticia,
-    NoticiaRascunho,
-    NewsTag
-  } from "../../../stores/noticias/types"
   import { useAlertStore } from "../../../stores/alert/store"
   import { useUserStore } from "../../../stores/user/store"
   import { useConfirmStore } from "../../../stores/confirm/store"
+  import { useTagStore } from "../../../stores/tag/store"
   import { required, helpers } from "@vuelidate/validators"
   import { brDateString } from "../../../utils/formatacao/datetime"
   import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime"
@@ -276,16 +273,20 @@
   import ConfirmModal from "../../general/ConfirmModal.vue"
   import AutocompleteComponent from "../../general/AutocompleteComponent.vue"
   import Spinner from "../../general/Spinner.vue"
+  import { NoticiaRascunho } from "../../../stores/noticias/types"
+  import { CustomTag } from "../../../stores/tag/types"
 
   const noticiaStore = useNoticiaStore()
   const alertStore = useAlertStore()
   const userStore = useUserStore()
   const modalStore = useModalStore()
   const confirmStore = useConfirmStore()
+  const tagStore = useTagStore()
   const route = useRoute()
 
   const sendingNews = ref(false)
   const invalidHora = ref(false)
+  const customEditor = ref()
   const deleteRascunhoAfter = ref(false)
   const arquivo = ref<File | null>()
   const authorName = ref<string | null>()
@@ -363,7 +364,7 @@
 
   const v$ = useValidate(noticiaRules, noticia)
 
-  const allTags = ref([{ NewsTag }])
+  const allTags = ref<CustomTag[]>()
   const isVisualizacao = ref(false)
   const fileName = ref("")
   const customToolbar = ref([
@@ -421,8 +422,8 @@
   }
 
   const buscarTags = () => {
-    noticiaStore.getTags()
-    allTags.value = noticiaStore.allTags
+    tagStore.getTags()
+    allTags.value = tagStore.allTags
   }
 
   const onFileChanged = (event: Event) => {
@@ -565,14 +566,15 @@
       arquivo: File
     }
     termosDeUso.value = false
+    customEditor.value.setHTML("")
   }
 
   const deleteTag = (index: number) => {
     noticia.value.tags.splice(index, 1)
   }
 
-  const addTag = (selectedTag: NewsTag) => {
-    const tagFound = noticia.value.tags.find((tag: NewsTag) => {
+  const addTag = (selectedTag: CustomTag) => {
+    const tagFound = noticia.value.tags.find((tag: CustomTag) => {
       return tag.descricao == selectedTag.descricao
     })
 
