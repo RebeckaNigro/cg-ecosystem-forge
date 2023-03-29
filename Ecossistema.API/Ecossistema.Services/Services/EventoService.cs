@@ -22,19 +22,16 @@ namespace Ecossistema.Services.Services
         private readonly IAprovacaoService _aprovacaoService;
         private readonly IArquivoService _arquivoService;
         private readonly IEnderecoService _enderecoService;
-        private readonly ITagService _tagService;
 
         public EventoService(IUnitOfWork unitOfWork,
             IEnderecoService enderecoService,
             IArquivoService arquivoService,
-            IAprovacaoService aprovacaoService,
-            ITagService tagService)
+            IAprovacaoService aprovacaoService)
         {
             _unitOfWork = unitOfWork;
             _aprovacaoService = aprovacaoService;
             _arquivoService = arquivoService;
             _enderecoService = enderecoService;
-            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
@@ -82,7 +79,7 @@ namespace Ecossistema.Services.Services
                                           usuarioId,
                                           dataAtual);
 
-                var evento = await _unitOfWork.Eventos.AddAsync(obj);
+                await _unitOfWork.Eventos.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
@@ -92,27 +89,6 @@ namespace Ecossistema.Services.Services
                     || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
                     return resposta;
-                }
-
-                TagDto anterior = new TagDto();
-                if (item.Tags != null)
-                {
-                    foreach (var x in item.Tags)
-                    {
-                        RespostaPadrao cadastro = new RespostaPadrao();
-                        cadastro = await _tagService.CadastrarTag(x, usuarioId);
-                        x.Descricao = x.Descricao.ToLower();
-                        if (x.Descricao != anterior.Descricao)
-                        {
-                            if (cadastro.Retorno != null)
-                            {
-                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, evento.Id);
-                                await _unitOfWork.TagsItens.AddAsync(tagItem);
-                                _unitOfWork.Complete();
-                            }
-                        }
-                        anterior = x;
-                    }
                 }
 
                 resposta.Retorno = true;
@@ -239,6 +215,7 @@ namespace Ecossistema.Services.Services
             try
             {
                 var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
+                var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.EventoId == id);
 
                 if (objAlt != null)
                 {
@@ -252,6 +229,14 @@ namespace Ecossistema.Services.Services
 
                     #endregion
 
+                    if(tagItem != null)
+                    {
+                        foreach (var x in tagItem)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                    }
                     _unitOfWork.Eventos.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
