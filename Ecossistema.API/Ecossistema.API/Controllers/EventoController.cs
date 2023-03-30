@@ -68,7 +68,7 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarUltimas()
         {
             var listagem = "ultimos";
-            return await _eventoService.ListarEventos(listagem, 0);
+            return await _eventoService.ListarEventos(listagem, null);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
@@ -80,14 +80,17 @@ namespace Ecossistema.API.Controllers
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(accessToken);
             var aspNetId = jwtSecurityToken.Payload.Values.FirstOrDefault().ToString();
-            return await _eventoService.ListarEventos(listagem, 0);
+            return await _eventoService.ListarEventos(listagem, null);
         }
 
+        [Authorize(Roles = "UsuarioComum")]
         [HttpGet("listarPorUsuarioId")]
-        public async Task<RespostaPadrao> ListarPorUsuarioId(int id)
+        public async Task<RespostaPadrao> ListarPorUsuarioId()
         {
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
             var listagem = "id";
-            return await _eventoService.ListarEventos(listagem, id);
+            return await _eventoService.ListarEventos(listagem, idLogin);
         }
 
         [HttpGet("detalhes")]
