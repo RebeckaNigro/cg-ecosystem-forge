@@ -22,16 +22,19 @@ namespace Ecossistema.Services.Services
         private readonly IAprovacaoService _aprovacaoService;
         private readonly IArquivoService _arquivoService;
         private readonly IEnderecoService _enderecoService;
+        private readonly ITagService _tagService;
 
         public EventoService(IUnitOfWork unitOfWork,
             IEnderecoService enderecoService,
             IArquivoService arquivoService,
-            IAprovacaoService aprovacaoService)
+            IAprovacaoService aprovacaoService,
+            ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _aprovacaoService = aprovacaoService;
             _arquivoService = arquivoService;
             _enderecoService = enderecoService;
+            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
@@ -79,7 +82,7 @@ namespace Ecossistema.Services.Services
                                           usuarioId,
                                           dataAtual);
 
-                await _unitOfWork.Eventos.AddAsync(obj);
+                var evento = await _unitOfWork.Eventos.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
@@ -92,6 +95,26 @@ namespace Ecossistema.Services.Services
                 }
 
                 resposta.Retorno = true;
+                TagDto anterior = new TagDto();
+                if (item.Tags != null)
+                {
+                    foreach (var x in item.Tags)
+                    {
+                        RespostaPadrao cadastro = new RespostaPadrao();
+                        cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                        x.Descricao = x.Descricao.ToLower();
+                        if (x.Descricao != anterior.Descricao)
+                        {
+                            if (cadastro.Retorno != null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, evento.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                        }
+                        anterior = x;
+                    }
+                }
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
@@ -189,6 +212,62 @@ namespace Ecossistema.Services.Services
                             await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
                             _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
                             resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
+                        }
+
+                    }
+
+                    if (item.Tags != null)
+                    {
+                        foreach (var x in item.Tags)
+                        {
+                            var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                            if (buscaTag == null)
+                            {
+                                var cadastro = new RespostaPadrao();
+                                cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, objAlt.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                            if (buscaTag != null)
+                            {
+                                var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.EventoId == dado.Id);
+                                if (buscaTagItem == null)
+                                {
+                                    var tagItem = new TagItem(EOrigem.Evento, buscaTag.Id, usuarioId, DateTime.Now, dado.Id);
+                                    _unitOfWork.TagsItens.Add(tagItem);
+                                    _unitOfWork.Complete();
+                                }
+                            }
+
+                        }
+                    }
+
+                    var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.EventoId == dado.Id);
+                    foreach (var x in buscaTagsItens)
+                    {
+                        var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        bool encontrou = false;
+                        if (item.Tags == null)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                        else
+                        {
+                            if (item.Tags != null)
+                            {
+                                foreach (var z in item.Tags)
+                                {
+                                    if (z.Descricao == tag.Descricao)
+                                        encontrou = true;
+                                }
+                            }
+                            if (encontrou == false)
+                            {
+                                _unitOfWork.TagsItens.Delete(x);
+                                _unitOfWork.Complete();
+                            }
                         }
 
                     }
