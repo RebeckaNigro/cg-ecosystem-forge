@@ -81,5 +81,6 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<ArquivoOrigem> ArquivosOrigens { get; set; }
         public virtual ICollection<HistoricoEvento> HistoricoEventos { get; set; }
         public virtual ICollection<TagItem> TagsItens { get; set; }
+
     }
 }

@@ -18,6 +18,7 @@ namespace Ecossistema.Services.Dto
         public int UsuarioId { get; set; }
 
         public Byte[]? Arquivo { get; set; }
+        public List<TagDto>? Tags { get; set; }
         public DateTime? DataOperacao { get; set; }
 
         public string? LinkImagem { get; set; }
