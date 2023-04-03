@@ -381,16 +381,22 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
-            var id = usuario.Id;
+            var id = 0;
+
+            if (idLogin != null)
+            {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                id = usuario.Id;
+            }
 
             List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
-            evento.Add(new EventoGetImagenDto());
+            //evento.Add(new EventoGetImagenDto());
             foreach (var item in query)
             {
                 //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 //var temp = arquivoDto[cont].Arquivo;
                 //item.Arquivo = temp;
+                evento.Add(new EventoGetImagenDto());
                 evento[evento.Count - 1].Id = item.Id;
                 evento[evento.Count - 1].Titulo = item.Titulo;
                 evento[evento.Count - 1].DataInicio = item.DataInicio;
@@ -427,7 +433,6 @@ namespace Ecossistema.Services.Services
                 }
                 else
                     evento[evento.Count - 1].Arquivo = null;
-                evento.Add(new EventoGetImagenDto());
             }
             if (listagem == "todos")
             {
