@@ -48,7 +48,7 @@ namespace Ecossistema.Services.Services
             var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
 
-            if (!await ValidarIncluir(dado, item.Arquivos, resposta)) return resposta;
+            if (!await ValidarIncluir(dado, item.Arquivo, resposta)) return resposta;
 
             try
             {
@@ -88,7 +88,7 @@ namespace Ecossistema.Services.Services
 
                 #endregion
 
-                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, item.Arquivos, usuarioId, dataAtual, resposta)
+                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, item.Arquivo, usuarioId, dataAtual, resposta)
                     || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
                     return resposta;
@@ -195,16 +195,16 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
-                    if (item.Arquivos.Count > 0)
+                    if (item.Arquivo.Count > 0)
                     {
                         var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
                         if (encontra == 0)
                         {
-                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivos, usuarioId, dataAtual, resposta);
+                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivo, usuarioId, dataAtual, resposta);
                         }
                         else
                         {
-                            IFormFile arquivo = item.Arquivos[item.Arquivos.Count - 1];
+                            IFormFile arquivo = item.Arquivo[item.Arquivo.Count - 1];
                             ArquivoDto arquivoDto = new ArquivoDto();
                             arquivoDto.Id = encontra;
                             arquivoDto.NomeOriginal = arquivo.FileName;
