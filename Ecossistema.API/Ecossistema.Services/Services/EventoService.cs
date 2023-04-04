@@ -445,8 +445,8 @@ namespace Ecossistema.Services.Services
                     local = x.Local,
                     arquivo = x.Arquivo,
                     link = x.LinkImagem,
-                    tag = x.Tags,
-                    utimaAtualizacao = x.DataOperacao
+                    tags = x.Tags,
+                    ultimaAtualizacao = x.DataOperacao
 
                 })
             .Distinct()
@@ -464,8 +464,8 @@ namespace Ecossistema.Services.Services
                     dataTermino = x.DataTermino,
                     local = x.Local,
                     arquivo = x.Arquivo,
-                    tag = x.Tags,
-                    utimaAtualizacao = x.DataOperacao
+                    tags = x.Tags,
+                    ultimaAtualizacao = x.DataOperacao
 
                 })
             .Distinct()
@@ -484,9 +484,9 @@ namespace Ecossistema.Services.Services
                     dataTermino = x.DataTermino,
                     local = x.Local,
                     arquivo = x.Arquivo,
-                    tag = x.Tags,
+                    tags = x.Tags,
                     usuarioId = x.UsuarioId,
-                    utimaAtualizacao = x.DataOperacao
+                    ultimaAtualizacao = x.DataOperacao
 
                 }).Where(x => x.usuarioId == id).ToList()
             .Distinct()
