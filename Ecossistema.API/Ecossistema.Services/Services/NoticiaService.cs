@@ -293,7 +293,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<List<NoticiaListaDto>> ListarNoticias(IEnumerable<Noticia> query)
+        public async Task<List<NoticiaListaDto>> BuscarTagsArquivos(IEnumerable<Noticia> query)
         {
             List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();
             List<Tag> tags = new List<Tag>();
@@ -332,7 +332,7 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var result = (await ListarNoticias(query)).Select(x => new
+            var result = (await BuscarTagsArquivos(query)).Select(x => new
             {
                 x.Id,
                 x.Titulo,
@@ -357,7 +357,7 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var result = (await ListarNoticias(query)).Select(x => new
+            var result = (await BuscarTagsArquivos(query)).Select(x => new
             {
                 x.Id,
                 x.Titulo,
@@ -381,7 +381,7 @@ namespace Ecossistema.Services.Services
             {
                 var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
-                var result = (await ListarNoticias(query)).Select(x => new
+                var result = (await BuscarTagsArquivos(query)).Select(x => new
                 {
                     x.Id,
                     x.Titulo,

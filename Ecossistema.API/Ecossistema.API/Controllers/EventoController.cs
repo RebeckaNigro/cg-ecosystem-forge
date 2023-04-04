@@ -71,7 +71,7 @@ namespace Ecossistema.API.Controllers
             return await _eventoService.ListarEventos(listagem, null);
         }
 
-        [Authorize(Roles = UserRolesDto.UsuarioComum)]
+        //[Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpGet("listarTodas")]
         public async Task<RespostaPadrao> ListarTodas()
         {
