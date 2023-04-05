@@ -58,8 +58,10 @@ namespace Ecossistema.Services.Services
 
                 if (dado.EnderecoId == null)
                 {
-
-                    dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
+                    if(dado.Endereco != null)
+                    {
+                        dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
+                    }
 
                     if (dado.EnderecoId == 0) return resposta;
                 }
@@ -658,7 +660,7 @@ namespace Ecossistema.Services.Services
             || !ValidarDataTerminoInformada(dado, resposta)
             || !ValidarDataTerminoValida(dado, resposta)
             || !ValidarPeriodoValido(dado, resposta)
-            || !ValidarLocalInformada(dado, resposta)
+            //|| !ValidarLocalInformada(dado, resposta)
             || !ValidarLocalTamanho(dado, resposta)
             || (dado.EnderecoId != null
                 && (!ValidarEnderecoIdValido(dado, resposta)
