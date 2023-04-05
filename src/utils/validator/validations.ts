@@ -1,7 +1,6 @@
 export const isPasswordValid = (password: string) => {
-  return password.match(
-    "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^ws]).{8,}$/"
-  )
-    ? true
-    : false
+  var decimal =
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+
+  return password.match(decimal) ? true : false
 }

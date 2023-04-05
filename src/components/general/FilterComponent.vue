@@ -68,8 +68,6 @@
         )
         dataReferencia.setHours(0, 0, 0)
 
-        console.log(`Data de referencia: ${dataReferencia}`)
-
         results.value = props.items.filter((noticia: NoticiaSimplificada) => {
           return adjustStringDateForTimezone(
             noticia.dataPublicacao

@@ -5,7 +5,11 @@
     >
       <div v-if="!props.isRascunho">
         <img
-          :src="'data:image/png;base64, ' + evento.arquivo"
+          :src="
+            evento.arquivo
+              ? 'data:image/png;base64, ' + evento.arquivo
+              : '/public/eventos/eventoExpandido/default-event-cover.jpeg'
+          "
           alt="event-image"
           class="w-100"
         />
@@ -106,13 +110,15 @@
             class="icone-usuario"
           />
           <div class="d-flex align-items-center mx-2 fw-bold">
-            {{ props.evento.local }}
+            {{ evento.local }}
           </div>
         </div>
       </div>
 
       <div class="footer-atualizado">
-        <span class="text-secondary px-1">Atualizado em: </span>
+        <span class="text-secondary px-1"
+          >Atualizado em: {{ dataAtualizacaoFormatada }}</span
+        >
       </div>
     </div>
     <ConfirmModal
@@ -146,6 +152,7 @@
   }>()
 
   const dataFormatada = ref("")
+  const dataAtualizacaoFormatada = ref("")
   const tagsFormatadas = ref("")
 
   const confirmDelete = () => {
@@ -194,6 +201,10 @@
       props.evento.dataInicio.toString()
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
 
+    dataAtualizacaoFormatada.value = ` ${brDateString(
+      props.evento.ultimaAtualizacao
+    )} `
+
     const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })
@@ -202,6 +213,10 @@
     dataFormatada.value = ` ${brDateString(
       props.evento.dataInicio.toString()
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
+
+    dataAtualizacaoFormatada.value = ` ${brDateString(
+      props.evento.ultimaAtualizacao
+    )} `
     const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })

@@ -38,6 +38,12 @@
   const searchWord = ref("")
 
   const search = () => {
+    if (!searchWord.value) {
+      results.value = props.items
+
+      sendSearchResult()
+      return
+    }
     switch (props.type) {
       case "noticia":
         results.value = props.items.filter((item: NoticiaSimplificada) => {

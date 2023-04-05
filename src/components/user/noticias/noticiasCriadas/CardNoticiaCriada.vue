@@ -5,7 +5,11 @@
     >
       <div v-if="!props.isRascunho">
         <img
-          :src="'data:image/png;base64, ' + noticia.arquivo"
+          :src="
+            noticia.arquivo
+              ? 'data:image/png;base64, ' + noticia.arquivo
+              : '/public/noticias/noticia-expandida/default-news-cover.jpeg'
+          "
           alt="news-image"
           class="w-100"
         />

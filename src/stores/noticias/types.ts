@@ -61,11 +61,9 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
 
 export class NoticiaRascunho {
   noticia: Noticia
-  termosDeUso: boolean
 
-  constructor(noticia: Noticia, termosDeUso: boolean) {
+  constructor(noticia: Noticia) {
     this.noticia = noticia
-    this.termosDeUso = termosDeUso
   }
 }
 

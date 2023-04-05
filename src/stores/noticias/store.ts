@@ -16,7 +16,7 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       loadRascunho: false
     }
   },
-  persist: true,
+  persist: false,
   actions: {
     async postNews(novaNoticia: INoticia) {
       try {
@@ -26,9 +26,11 @@ export const useNoticiaStore = defineStore("noticiaStore", {
         formData.append("subTitulo", novaNoticia.subTitulo)
         formData.append("dataPublicacao", novaNoticia.dataPublicacao.toString())
 
-        novaNoticia.tags.forEach((tag, index) => {
-          formData.append(`tags[${index}].descricao`, tag.descricao)
-        })
+        if (novaNoticia.tags.length > 0) {
+          novaNoticia.tags.forEach((tag, index) => {
+            formData.append(`tags[${index}].descricao`, tag.descricao)
+          })
+        }
 
         formData.append("arquivo", novaNoticia.arquivo)
 
@@ -142,9 +144,11 @@ export const useNoticiaStore = defineStore("noticiaStore", {
           noticiaEdicao.dataPublicacao.toString()
         )
 
-        noticiaEdicao.tags.forEach((tag, index) => {
-          formData.append(`tags[${index}].descricao`, tag.descricao)
-        })
+        if (noticiaEdicao.tags.length > 0) {
+          noticiaEdicao.tags.forEach((tag, index) => {
+            formData.append(`tags[${index}].descricao`, tag.descricao)
+          })
+        }
 
         formData.append("arquivo", noticiaEdicao.arquivo)
         const res = await httpRequest.put("/api/noticia/editar", formData, {

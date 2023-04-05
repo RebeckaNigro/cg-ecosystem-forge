@@ -147,6 +147,7 @@ export interface IEventoSimplificado {
   dataTermino: string
   local: string
   arquivo: string | null
+  ultimaAtualizacao: string
 }
 
 export class EventoSimplificado implements IEventoSimplificado {
@@ -157,6 +158,7 @@ export class EventoSimplificado implements IEventoSimplificado {
   dataTermino: string
   local: string
   arquivo: string | null
+  ultimaAtualizacao: string = ""
 
   constructor(
     id: number,
@@ -184,19 +186,16 @@ export class EventoRascunho {
   instituicao: Instituicao
   horaInicio: string
   horaTermino: string
-  termosDeUso: boolean
 
   constructor(
     evento: Evento,
     instituicao: Instituicao,
     horaInicio: string,
-    horaTermino: string,
-    termosDeUso: boolean
+    horaTermino: string
   ) {
     this.evento = evento
     this.horaInicio = horaInicio
     this.horaTermino = horaTermino
     this.instituicao = instituicao
-    this.termosDeUso = termosDeUso
   }
 }

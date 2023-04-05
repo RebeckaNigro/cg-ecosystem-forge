@@ -28,7 +28,7 @@ export const useInstituicaoStore = defineStore("instituicaoStore", {
       response: new GeneralResponseHandler(0, "none", "no request made yet")
     }
   },
-  persist: true,
+  persist: false,
 
   actions: {
     async getInstituicoes() {

@@ -1,9 +1,11 @@
 <template>
   <footer class="container-fluid">
     <div class="img-container">
-      <img src="/logo_with_text.png" alt="white_logo">
+      <img src="/logo_with_text.png" alt="white_logo" />
       <div class="ecossistema-contato d-lg-none text-start" id="below-991">
-        <router-link to="fale-conosco" class="light-title">FALE CONOSCO</router-link>
+        <router-link to="/fale-conosco" class="light-title"
+          >FALE CONOSCO</router-link
+        >
         <h5 class="light-body-text">Contato:</h5>
         <p class="light-body-text">contato@ecossistemadeinovacaocg.com.br</p>
       </div>
@@ -20,34 +22,66 @@
       </div> -->
     </div>
     <nav class="container-list">
-      <a href="/privacidade_ecossistemacg.pdf" download="POLITICA DE PRIVACIDADE ECOSSISTEMA" class="light-title d-lg-show">Termo de privacidade</a>
-      <router-link class="light-title d-lg-show" to="quem-somos">Quem somos</router-link>
+      <a
+        href="/privacidade_ecossistemacg.pdf"
+        download="POLITICA DE PRIVACIDADE ECOSSISTEMA"
+        class="light-title d-lg-show"
+        >Termo de privacidade</a
+      >
+      <router-link class="light-title d-lg-show" to="/quem-somos"
+        >Quem somos</router-link
+      >
       <div class="d-lg-none d-flex">
-        <a href="/privacidade_ecossistemacg.pdf" download="POLITICA DE PRIVACIDADE ECOSSISTEMA" class="light-title">Termo de privacidade</a>
-        <router-link class="light-title" to="quem-somos">Quem somos</router-link>
-    <div class="vertical-container-list d-md-none">
-      <ul id="opens">
-        <li class="light-body-text"  v-for="(item, itemIndex) in info" :key="itemIndex">
-          <span :id="'topico' + itemIndex" class="light-title" @click="showItems(itemIndex)">{{ item.title }}</span>
-        </li>
-      </ul>
-      <div v-for="(item, index) in info.length">
-        <ul :id="'hidden-' + index" v-if="selectedItem === item - 1">
-          <li v-for="infoItens in info[selectedItem].infos" class="light-body-text">
-            {{ infoItens }}
-          </li>
-        </ul>
-      </div>
-    </div>
+        <a
+          href="/privacidade_ecossistemacg.pdf"
+          download="POLITICA DE PRIVACIDADE ECOSSISTEMA"
+          class="light-title"
+          >Termo de privacidade</a
+        >
+        <router-link class="light-title" to="/quem-somos"
+          >Quem somos</router-link
+        >
+        <div class="vertical-container-list d-md-none">
+          <ul id="opens">
+            <li
+              class="light-body-text"
+              v-for="(item, itemIndex) in info"
+              :key="itemIndex"
+            >
+              <span
+                :id="'topico' + itemIndex"
+                class="light-title"
+                @click="showItems(itemIndex)"
+                >{{ item.title }}</span
+              >
+            </li>
+          </ul>
+          <div v-for="(item, index) in info.length">
+            <ul :id="'hidden-' + index" v-if="selectedItem === item - 1">
+              <li
+                v-for="infoItens in info[selectedItem].infos"
+                class="light-body-text"
+              >
+                {{ infoItens }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
       <ul id="regular" v-for="(item, itemIndex) in info" :key="itemIndex">
         <span class="light-title">{{ item.title }}</span>
-        <li class="light-body-text" v-for="(info, infoIndex) in item.infos" :key="infoIndex">
+        <li
+          class="light-body-text"
+          v-for="(info, infoIndex) in item.infos"
+          :key="infoIndex"
+        >
           {{ info }}
         </li>
       </ul>
       <div class="ecossistema-contato" id="hides-in-911">
-        <router-link to="fale-conosco" class="light-title">FALE CONOSCO</router-link>
+        <router-link to="/fale-conosco" class="light-title"
+          >FALE CONOSCO</router-link
+        >
         <h5 class="light-body-text">Contato:</h5>
         <p class="light-body-text">contato@ecossistemadeinovacaocg.com.br</p>
       </div>
@@ -56,48 +90,54 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+  import { onMounted, reactive, ref } from "vue"
 
-const selectedItem = ref(0)
-const menusFooter = reactive(new Array)
+  const selectedItem = ref(0)
+  const menusFooter = reactive(new Array())
 
-function showItems(index: number) {
-  selectedItem.value = index;
+  function showItems(index: number) {
+    selectedItem.value = index
 
-  menusFooter.forEach((item) => { // Itera sobre o menu de itens para remover o highlight de outro item e reforçar o item clicado
-    if (item.classList.contains('highlight')) {
-      item.classList.remove('highlight')
-    }
-    if (item.id === 'topico' + index) {
-      item.classList.add('highlight')
+    menusFooter.forEach((item) => {
+      // Itera sobre o menu de itens para remover o highlight de outro item e reforçar o item clicado
+      if (item.classList.contains("highlight")) {
+        item.classList.remove("highlight")
+      }
+      if (item.id === "topico" + index) {
+        item.classList.add("highlight")
+      }
+    })
+  }
+
+  onMounted(() => {
+    // popula uma array com os elementos do footer para mudar seu background, indicando ao usuário onde clicou
+    for (const item in info) {
+      const el: HTMLElement = document.querySelector("#topico" + item)!
+
+      if (parseInt(item) === 0) {
+        el.classList.add("highlight")
+      }
+
+      menusFooter.push(el)
     }
   })
-}
 
-onMounted(() => {
-  // popula uma array com os elementos do footer para mudar seu background, indicando ao usuário onde clicou
-  for (const item in info) {
-    const el: HTMLElement = document.querySelector('#topico' + item)!
-
-    if (parseInt(item) === 0) {
-      el.classList.add('highlight')
+  const info = [
+    {
+      title: "PARCEIROS",
+      infos: [
+        "ICTIs",
+        "Empresas",
+        "Mecanismos de Inovação",
+        "Governo",
+        "Sociedade Organizada"
+      ]
+    },
+    {
+      title: "DOCUMENTOS",
+      infos: ["Pesquisas", "Leis", "Editais"]
     }
-
-    menusFooter.push(el)
-  }
-})
-
-const info = [
-  {
-    title: 'PARCEIROS',
-    infos: ['ICTIs', 'Empresas', 'Mecanismos de Inovação', 'Governo', 'Sociedade Organizada']
-  },
-  {
-    title: 'DOCUMENTOS',
-    infos: ['Pesquisas', 'Leis', 'Editais']
-  }
-]
-
+  ]
 </script>
 
 <style scoped lang="scss">
@@ -115,7 +155,8 @@ const info = [
     margin-bottom: 0;
     list-style-type: none;
     text-align: left;
-    span, li {
+    span,
+    li {
       color: #fff;
     }
   }
@@ -126,14 +167,16 @@ const info = [
     justify-content: space-between;
     width: 100%;
     max-width: 1500px;
-    a, ul {
+    a,
+    ul {
       flex: 1 1 auto;
     }
     .ecossistema-contato {
       h5 {
         font-size: 1rem;
       }
-      h5, p {
+      h5,
+      p {
         margin-top: 1rem;
         margin-bottom: 0;
       }
@@ -169,7 +212,6 @@ const info = [
     a:nth-child(2n) {
       margin: 0 10px;
     }
-
   }
   .light-body-text {
     font-size: 0.8rem;
@@ -207,9 +249,9 @@ const info = [
     background: radial-gradient(#e66465, #28353e);
   }
   #below-991 {
-
   }
-  #hides-in-911 {}
+  #hides-in-911 {
+  }
   @media (max-width: 1068px) {
     .img-container {
       width: 200px;
@@ -275,8 +317,9 @@ const info = [
       padding: 0;
     }
   }
-  @media(max-width: 576px) {
-    footer, .container-list {
+  @media (max-width: 576px) {
+    footer,
+    .container-list {
       flex-direction: column;
       align-items: center;
     }
@@ -290,7 +333,8 @@ const info = [
       align-items: center;
       height: 120px;
     }
-    .img-container, .container-list {
+    .img-container,
+    .container-list {
       max-width: 350px;
       width: 100%;
       align-items: flex-start !important;

@@ -39,7 +39,7 @@
         :isRascunho="true"
       />
       <CardNoticiaCriada
-        v-for="(noticia, index) in noticias"
+        v-for="(noticia, index) in noticiasExibidas"
         :key="index"
         :noticia="noticia"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -77,34 +77,38 @@
   import CardNoticiaCriada from "../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue"
   import Spinner from "../../../../components/general/Spinner.vue"
   import { useNoticiaStore } from "../../../../stores/noticias/store"
-  import { useModalStore } from "../../../../stores/modal/store"
   import {
     INoticiaSimplificada,
     NoticiaSimplificada
   } from "../../../../stores/noticias/types"
 
   const noticiaStore = useNoticiaStore()
-  const modalStore = useModalStore()
   const lastIndex = ref(6)
   const loadingNews = ref(false)
   let noticias = ref<Array<INoticiaSimplificada>>()
+  let noticiasExibidas = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
 
   const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
-    noticias.value = noticiasFiltradas.slice(0, lastIndex.value)
+    lastIndex.value = 6
+    noticias.value = noticiasFiltradas
+    noticiasExibidas.value = noticiasFiltradas.slice(0, lastIndex.value)
   }
 
   const addNewsToView = () => {
     lastIndex.value += 3
-    noticias.value = noticiaStore.allUserNews.slice(0, lastIndex.value)
+    noticiasExibidas.value = noticias.value?.slice(0, lastIndex.value)
   }
 
   const reloadNoticias = async () => {
     loadingNews.value = true
+    lastIndex.value = 6
+
     if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
     await noticiaStore.getUserNews()
-    noticias.value = noticiaStore.allUserNews.slice(0, lastIndex.value)
+    noticias.value = noticiaStore.allUserNews
+    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     loadingNews.value = false
   }
 
@@ -128,6 +132,7 @@
     loadingNews.value = true
     await noticiaStore.getUserNews()
     noticias.value = noticiaStore.allUserNews
+    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingNews.value = false
   })

@@ -45,7 +45,7 @@
 
       <!-- CARDS DO USUÁRIO -->
       <CardEventoCriado
-        v-for="(evento, index) in eventos"
+        v-for="(evento, index) in eventosExibidos"
         :key="index"
         :evento="evento"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -83,34 +83,37 @@
   import CardEventoCriado from "../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue"
   import Spinner from "../../../../components/general/Spinner.vue"
   import { useEventoStore } from "../../../../stores/eventos/store"
-  import { useModalStore } from "../../../../stores/modal/store"
   import {
     IEventoSimplificado,
     EventoSimplificado
   } from "../../../../stores/eventos/types"
 
   const eventoStore = useEventoStore()
-  const modalStore = useModalStore()
   const lastIndex = ref(6)
   const loadingEvents = ref(false)
   let eventos = ref<Array<IEventoSimplificado>>()
+  let eventosExibidos = ref<Array<IEventoSimplificado>>()
 
   const rascunho = ref<EventoSimplificado>()
 
   const filtrarEventos = (eventosFiltrados: Array<IEventoSimplificado>) => {
-    eventos.value = eventosFiltrados.slice(0, lastIndex.value)
+    lastIndex.value = 6
+    eventos.value = eventosFiltrados
+    eventosExibidos.value = eventosFiltrados.slice(0, lastIndex.value)
   }
 
   const addEventsToView = () => {
     lastIndex.value += 3
-    eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
+    eventosExibidos.value = eventos.value?.slice(0, lastIndex.value)
   }
 
   const reloadEventos = async () => {
     loadingEvents.value = true
+    lastIndex.value = 6
     if (!localStorage.getItem("eventoRascunho")) rascunho.value = undefined
     await eventoStore.getUserEvents()
-    eventos.value = eventoStore.eventosUsuarioLogado.slice(0, lastIndex.value)
+    eventos.value = eventoStore.eventosUsuarioLogado
+    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     loadingEvents.value = false
   }
 
@@ -136,6 +139,7 @@
     loadingEvents.value = true
     await eventoStore.getUserEvents()
     eventos.value = eventoStore.eventosUsuarioLogado
+    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingEvents.value = false
   })

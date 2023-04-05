@@ -92,29 +92,17 @@
         </div>
       </div>
 
-      <!-- <div>
-        <label for="instituicao" class="form-label-primary">Instituição</label>
-        <select
-          id="instituicao"
-          class="form-input-primary padding-increase"
-          v-model="perfil.instituicao"
-        ></select>
-      </div> -->
-
-      <!-- <div>
-        <label for="cpj-insituicao" class="form-label-primary"
-          >CNPJ da Instituição</label
-        >
-        <input
-          type="text"
-          id="cpj-insituicao"
-          class="form-input-primary"
-          v-model="perfil.cnpjInsituicao"
-        />
-      </div> -->
-
       <div class="mb-3">
-        <label for="cep" class="form-label-primary">CEP</label>
+        <div class="text-start">
+          <label for="cep" class="form-label-primary d-inline"
+            >CEP
+            <a
+              href="https://buscacepinter.correios.com.br/app/endereco/index.php"
+              >(Não sabe o CEP?)</a
+            ></label
+          >
+        </div>
+
         <input
           type="text"
           id="cep"
@@ -123,6 +111,7 @@
           v-model="perfil.cep"
           @blur="buscarCEP"
         />
+
         <div v-if="v$.cep.$error" class="invalid-feedback">
           {{ v$.cep.$errors[0].$message }}
         </div>
@@ -131,12 +120,7 @@
       <div class="row mb-3">
         <div class="col-sm-4">
           <label for="estado" class="form-label-primary">Estado</label>
-          <input
-            id="estado"
-            class="form-input-primary"
-            v-model="perfil.uf"
-            disabled
-          />
+          <input id="estado" class="form-input-primary" v-model="perfil.uf" />
         </div>
         <div class="col-sm-8">
           <label for="cidade" class="form-label-primary">Cidade</label>
@@ -145,7 +129,6 @@
             id="cidade"
             class="form-input-primary"
             v-model="perfil.cidade"
-            disabled
           />
         </div>
       </div>
@@ -158,7 +141,6 @@
             id="logradouro"
             class="form-input-primary"
             v-model="perfil.logradouro"
-            disabled
           />
         </div>
         <div class="col-sm-3">
@@ -183,7 +165,6 @@
           id="bairro"
           class="form-input-primary"
           v-model="perfil.bairro"
-          disabled
         />
       </div>
 
@@ -336,7 +317,7 @@
       password: {
         required,
         passwordFormat: helpers.withMessage(
-          "Formato da senha: 8 ou mais caracteres, devendo conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial.",
+          "Formato da senha: De 8 a 15 caracteres, devendo conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial.",
           isPasswordValid
         )
       },
@@ -377,6 +358,7 @@
     } else {
       v$.value.$validate()
 
+      console.dir(v$.value)
       if (!v$.value.$error) {
         sendingPerfil.value = true
 
