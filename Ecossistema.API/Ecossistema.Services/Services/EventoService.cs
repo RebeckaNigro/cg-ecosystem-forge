@@ -544,7 +544,7 @@ namespace Ecossistema.Services.Services
                     exibirMaps = x.ExibirMaps,
                     responsavel = x.Responsavel,
                     aprovado = x.Aprovado,
-                    arquivos = arquivos
+                    arquivo = arquivos
                 })
                 .Distinct();
 
