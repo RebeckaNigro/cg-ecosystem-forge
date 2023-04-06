@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,7 +59,7 @@ namespace Ecossistema.Services.Services
 
                 if (dado.EnderecoId == null)
                 {
-                    if(dado.Endereco != null)
+                    if (dado.Endereco != null)
                     {
                         dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
                     }
@@ -509,7 +510,7 @@ namespace Ecossistema.Services.Services
             {
                 var arquivos = await _arquivoService.ObterArquivos(EOrigem.Evento, id, resposta);
 
-                var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco" };
+                var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco", "TagsItens.Tag" };
 
                 var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, includes);
                 var evento = query.FirstOrDefault();
@@ -544,7 +545,8 @@ namespace Ecossistema.Services.Services
                     exibirMaps = x.ExibirMaps,
                     responsavel = x.Responsavel,
                     aprovado = x.Aprovado,
-                    arquivo = arquivos
+                    arquivos = arquivos,
+                    tags = x.TagsItens.Select(ti => new { id = ti.Tag.Id, descricao = ti.Tag.Descricao }).ToList()
                 })
                 .Distinct();
 
@@ -692,7 +694,7 @@ namespace Ecossistema.Services.Services
                || !ValidarDataTerminoInformada(dado, resposta)
                || !ValidarDataTerminoValida(dado, resposta)
                || !ValidarPeriodoValido(dado, resposta)
-               || !ValidarLocalInformada(dado, resposta)
+               //|| !ValidarLocalInformada(dado, resposta)
                || !ValidarLocalTamanho(dado, resposta)
                || (dado.EnderecoId != null
                     && (!ValidarEnderecoIdValido(dado, resposta)
