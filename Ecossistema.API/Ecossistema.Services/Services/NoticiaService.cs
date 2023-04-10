@@ -325,12 +325,13 @@ namespace Ecossistema.Services.Services
             return noticias;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas()
+        public async Task<RespostaPadrao> ListarUltimas(string idLogin)
         {
             var resposta = new RespostaPadrao();
 
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
+           
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
 
             var result = (await BuscarTagsArquivos(query)).Select(x => new
             {
