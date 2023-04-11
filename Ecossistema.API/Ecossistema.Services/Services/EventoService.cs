@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,16 +23,19 @@ namespace Ecossistema.Services.Services
         private readonly IAprovacaoService _aprovacaoService;
         private readonly IArquivoService _arquivoService;
         private readonly IEnderecoService _enderecoService;
+        private readonly ITagService _tagService;
 
         public EventoService(IUnitOfWork unitOfWork,
             IEnderecoService enderecoService,
             IArquivoService arquivoService,
-            IAprovacaoService aprovacaoService)
+            IAprovacaoService aprovacaoService,
+            ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _aprovacaoService = aprovacaoService;
             _arquivoService = arquivoService;
             _enderecoService = enderecoService;
+            _tagService = tagService;
         }
 
         public async Task<RespostaPadrao> Incluir(EventoArquivosDto item, string token)
@@ -45,7 +49,7 @@ namespace Ecossistema.Services.Services
             var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
 
-            if (!await ValidarIncluir(dado, item.Arquivos, resposta)) return resposta;
+            if (!await ValidarIncluir(dado, item.Arquivo, resposta)) return resposta;
 
             try
             {
@@ -55,8 +59,10 @@ namespace Ecossistema.Services.Services
 
                 if (dado.EnderecoId == null)
                 {
-                    
-                    dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
+                    if (dado.Endereco != null)
+                    {
+                        dado.EnderecoId = await _enderecoService.Vincular(dado.Endereco, dataAtual, usuarioId, resposta);
+                    }
 
                     if (dado.EnderecoId == 0) return resposta;
                 }
@@ -79,19 +85,39 @@ namespace Ecossistema.Services.Services
                                           usuarioId,
                                           dataAtual);
 
-                await _unitOfWork.Eventos.AddAsync(obj);
+                var evento = await _unitOfWork.Eventos.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
                 #endregion
 
-                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, item.Arquivos, usuarioId, dataAtual, resposta)
+                if (!await _arquivoService.Vincular(EOrigem.Evento, obj.Id, item.Arquivo, usuarioId, dataAtual, resposta)
                     || !await _aprovacaoService.Vincular(EOrigem.Evento, obj.Id, resposta))
                 {
                     return resposta;
                 }
 
                 resposta.Retorno = true;
+                TagDto anterior = new TagDto();
+                if (item.Tags != null)
+                {
+                    foreach (var x in item.Tags)
+                    {
+                        RespostaPadrao cadastro = new RespostaPadrao();
+                        cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                        x.Descricao = x.Descricao.ToLower();
+                        if (x.Descricao != anterior.Descricao)
+                        {
+                            if (cadastro.Retorno != null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, evento.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                        }
+                        anterior = x;
+                    }
+                }
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
             catch (Exception ex)
@@ -172,16 +198,16 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
-                    if (item.Arquivos.Count > 0)
+                    if (item.Arquivo.Count > 0)
                     {
                         var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
                         if (encontra == 0)
                         {
-                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivos, usuarioId, dataAtual, resposta);
+                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivo, usuarioId, dataAtual, resposta);
                         }
                         else
                         {
-                            IFormFile arquivo = item.Arquivos[item.Arquivos.Count - 1];
+                            IFormFile arquivo = item.Arquivo[item.Arquivo.Count - 1];
                             ArquivoDto arquivoDto = new ArquivoDto();
                             arquivoDto.Id = encontra;
                             arquivoDto.NomeOriginal = arquivo.FileName;
@@ -189,6 +215,62 @@ namespace Ecossistema.Services.Services
                             await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
                             _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
                             resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
+                        }
+
+                    }
+
+                    if (item.Tags != null)
+                    {
+                        foreach (var x in item.Tags)
+                        {
+                            var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                            if (buscaTag == null)
+                            {
+                                var cadastro = new RespostaPadrao();
+                                cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                                var tagItem = new TagItem(EOrigem.Evento, (int)cadastro.Retorno, usuarioId, DateTime.Now, objAlt.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                            if (buscaTag != null)
+                            {
+                                var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.EventoId == dado.Id);
+                                if (buscaTagItem == null)
+                                {
+                                    var tagItem = new TagItem(EOrigem.Evento, buscaTag.Id, usuarioId, DateTime.Now, dado.Id);
+                                    _unitOfWork.TagsItens.Add(tagItem);
+                                    _unitOfWork.Complete();
+                                }
+                            }
+
+                        }
+                    }
+
+                    var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.EventoId == dado.Id);
+                    foreach (var x in buscaTagsItens)
+                    {
+                        var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        bool encontrou = false;
+                        if (item.Tags == null)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                        else
+                        {
+                            if (item.Tags != null)
+                            {
+                                foreach (var z in item.Tags)
+                                {
+                                    if (z.Descricao == tag.Descricao)
+                                        encontrou = true;
+                                }
+                            }
+                            if (encontrou == false)
+                            {
+                                _unitOfWork.TagsItens.Delete(x);
+                                _unitOfWork.Complete();
+                            }
                         }
 
                     }
@@ -215,6 +297,7 @@ namespace Ecossistema.Services.Services
             try
             {
                 var objAlt = await _unitOfWork.Eventos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
+                var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.EventoId == id);
 
                 if (objAlt != null)
                 {
@@ -228,6 +311,14 @@ namespace Ecossistema.Services.Services
 
                     #endregion
 
+                    if (tagItem != null)
+                    {
+                        foreach (var x in tagItem)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                    }
                     _unitOfWork.Eventos.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
@@ -286,20 +377,29 @@ namespace Ecossistema.Services.Services
             return resposta;
         }*/
 
-        public async Task<RespostaPadrao> ListarEventos(string listagem, int id)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
             var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
+            var id = 0;
+
+            if (idLogin != null)
+            {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                id = usuario.Id;
+            }
+
             List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
-            evento.Add(new EventoGetImagenDto());
+            //evento.Add(new EventoGetImagenDto());
             foreach (var item in query)
             {
                 //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 //var temp = arquivoDto[cont].Arquivo;
                 //item.Arquivo = temp;
+                evento.Add(new EventoGetImagenDto());
                 evento[evento.Count - 1].Id = item.Id;
                 evento[evento.Count - 1].Titulo = item.Titulo;
                 evento[evento.Count - 1].DataInicio = item.DataInicio;
@@ -308,23 +408,36 @@ namespace Ecossistema.Services.Services
                 evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
                 var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
                 evento[evento.Count - 1].DataOperacao = item.DataOperacao;
+                evento[evento.Count - 1].Tags = new List<TagDto>();
+                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.EventoId == item.Id);
+                if(tagsItens != null)
+                {
+                    foreach (var x in tagsItens)
+                    {
+                        Tag tag = new Tag();
+                        TagDto tagDto = new TagDto();
+                        tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        tagDto.Descricao = tag.Descricao;
+                        evento[evento.Count - 1].Tags.Add(tagDto);
+                    }
+                }
+                
                 if (temp.Count > 0)
                 {
                     evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
-                    if(evento[evento.Count - 1].Arquivo != null)
+                    if (evento[evento.Count - 1].Arquivo != null)
                     {
                         var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
-                        if(aux != null)
+                        if (aux != null)
                             evento[evento.Count - 1].LinkImagem = aux.ToString();
                     }
-                        
+
                     //
                 }
                 else
                     evento[evento.Count - 1].Arquivo = null;
-                evento.Add(new EventoGetImagenDto());
             }
-            if(listagem == "todos")
+            if (listagem == "todos")
             {
                 var result = evento.Select(x => new
                 {
@@ -335,7 +448,8 @@ namespace Ecossistema.Services.Services
                     local = x.Local,
                     arquivo = x.Arquivo,
                     link = x.LinkImagem,
-                    utimaAtualizacao = x.DataOperacao
+                    tags = x.Tags,
+                    ultimaAtualizacao = x.DataOperacao
 
                 })
             .Distinct()
@@ -343,7 +457,7 @@ namespace Ecossistema.Services.Services
             .ToList();
                 resposta.Retorno = result;
             }
-            else if(listagem == "ultimos")
+            else if (listagem == "ultimos")
             {
                 var result = evento.Select(x => new
                 {
@@ -353,7 +467,8 @@ namespace Ecossistema.Services.Services
                     dataTermino = x.DataTermino,
                     local = x.Local,
                     arquivo = x.Arquivo,
-                    utimaAtualizacao = x.DataOperacao
+                    tags = x.Tags,
+                    ultimaAtualizacao = x.DataOperacao
 
                 })
             .Distinct()
@@ -362,7 +477,7 @@ namespace Ecossistema.Services.Services
             .ToList();
                 resposta.Retorno = result;
             }
-            else if (listagem == "id" && id != 0) 
+            else if (listagem == "id" && id != 0)
             {
                 var result = evento.Select(x => new
                 {
@@ -372,8 +487,9 @@ namespace Ecossistema.Services.Services
                     dataTermino = x.DataTermino,
                     local = x.Local,
                     arquivo = x.Arquivo,
+                    tags = x.Tags,
                     usuarioId = x.UsuarioId,
-                    utimaAtualizacao = x.DataOperacao
+                    ultimaAtualizacao = x.DataOperacao
 
                 }).Where(x => x.usuarioId == id).ToList()
             .Distinct()
@@ -390,48 +506,59 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            var arquivos = await _arquivoService.ObterArquivos(EOrigem.Evento, id, resposta);
-
-            var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco" };
-
-            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, includes);
-
-            var result = query.Select(x => new
+            try
             {
-                id = x.Id,
-                instituicaoId = x.InstituicaoId,
-                instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
-                tipoEventoId = x.TipoEventoId,
-                tipoEvento = x.TipoEvento != null ? x.Descricao : null,
-                titulo = x.Titulo,
-                descricao = x.Descricao,
-                dataInicio = x.DataInicio,
-                dataTermino = x.DataTermino,
-                local = x.Local,
-                enderecoId = x.EnderecoId,
-                endereco = x.Endereco != null
-                    ? new
-                    {
-                        cep = x.Endereco.Cep,
-                        logradouro = x.Endereco.Logradouro,
-                        numero = x.Endereco.Numero,
-                        complemento = x.Endereco.Complemento,
-                        pontoReferencia = x.Endereco.PontoReferencia,
-                        bairro = x.Endereco.Bairro,
-                        cidade = x.Endereco.Cidade,
-                        uf = x.Endereco.Uf
-                    }
-                    : null,
-                linkExterno = x.LinkExterno,
-                exibirMaps = x.ExibirMaps,
-                responsavel = x.Responsavel,
-                aprovado = x.Aprovado,
-                arquivos = arquivos
-            })
-            .Distinct();
+                var arquivos = await _arquivoService.ObterArquivos(EOrigem.Evento, id, resposta);
 
-            if (result.Any()) resposta.Retorno = result.FirstOrDefault();
-            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+                var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco", "TagsItens.Tag" };
+
+                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, includes);
+                var evento = query.FirstOrDefault();
+                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.EventoId == evento.Id);
+                var result = query.Select(x => new
+                {
+                    id = x.Id,
+                    instituicaoId = x.InstituicaoId,
+                    instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
+                    tipoEventoId = x.TipoEventoId,
+                    tipoEvento = x.TipoEvento != null ? x.Descricao : null,
+                    titulo = x.Titulo,
+                    descricao = x.Descricao,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    enderecoId = x.EnderecoId,
+                    endereco = x.Endereco != null
+                        ? new
+                        {
+                            cep = x.Endereco.Cep,
+                            logradouro = x.Endereco.Logradouro,
+                            numero = x.Endereco.Numero,
+                            complemento = x.Endereco.Complemento,
+                            pontoReferencia = x.Endereco.PontoReferencia,
+                            bairro = x.Endereco.Bairro,
+                            cidade = x.Endereco.Cidade,
+                            uf = x.Endereco.Uf
+                        }
+                        : null,
+                    linkExterno = x.LinkExterno,
+                    exibirMaps = x.ExibirMaps,
+                    responsavel = x.Responsavel,
+                    aprovado = x.Aprovado,
+                    arquivos = arquivos,
+                    tags = x.TagsItens.Select(ti => new { id = ti.Tag.Id, descricao = ti.Tag.Descricao }).ToList()
+                })
+                .Distinct();
+
+
+                if (result.Any()) resposta.Retorno = result.FirstOrDefault();
+                else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+            }
+            catch (Exception ex)
+            {
+                resposta.SetBadRequest(ex.Message);
+            }
+
 
             return resposta;
         }
@@ -535,7 +662,7 @@ namespace Ecossistema.Services.Services
             || !ValidarDataTerminoInformada(dado, resposta)
             || !ValidarDataTerminoValida(dado, resposta)
             || !ValidarPeriodoValido(dado, resposta)
-            || !ValidarLocalInformada(dado, resposta)
+            //|| !ValidarLocalInformada(dado, resposta)
             || !ValidarLocalTamanho(dado, resposta)
             || (dado.EnderecoId != null
                 && (!ValidarEnderecoIdValido(dado, resposta)
@@ -567,7 +694,7 @@ namespace Ecossistema.Services.Services
                || !ValidarDataTerminoInformada(dado, resposta)
                || !ValidarDataTerminoValida(dado, resposta)
                || !ValidarPeriodoValido(dado, resposta)
-               || !ValidarLocalInformada(dado, resposta)
+               //|| !ValidarLocalInformada(dado, resposta)
                || !ValidarLocalTamanho(dado, resposta)
                || (dado.EnderecoId != null
                     && (!ValidarEnderecoIdValido(dado, resposta)

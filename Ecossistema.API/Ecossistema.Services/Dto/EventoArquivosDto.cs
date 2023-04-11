@@ -10,6 +10,7 @@ namespace Ecossistema.Services.Dto
     public class EventoArquivosDto
     {
         public string Evento { get; set; }
-        public List<IFormFile>? Arquivos { get; set; }
+        public List<IFormFile>? Arquivo { get; set; }
+        public List<TagDto>? Tags { get; set; }
     }
 }

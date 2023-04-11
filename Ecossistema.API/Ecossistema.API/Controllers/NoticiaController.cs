@@ -52,10 +52,13 @@ namespace Ecossistema.API.Controllers
             return await _noticiaService.Excluir(id, idLogin);
         }
 
+        [Authorize(Roles = "UsuarioComum")]
         [HttpGet("listarUltimas")]
         public async Task<RespostaPadrao> ListarUltimas()
         {
-            return await _noticiaService.ListarUltimas();
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _noticiaService.ListarUltimas(idLogin);
         }
 
         [HttpGet("listarTodas")]

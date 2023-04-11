@@ -179,16 +179,24 @@ namespace Ecossistema.Services.Services
                             var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
                             if (buscaTag == null)
                             {
-                                resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
-                                return resposta;
-                            }
-                            var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
-                            if (buscaTagItem == null)
-                            {
-                                var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
-                                _unitOfWork.TagsItens.Add(tagItem);
+                                //resposta.SetBadRequest("Tags da noticia não modificadas. Tag não cadastrada, selecione uma tag válida.");
+                                var cadastro = new RespostaPadrao();
+                                cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                                var tagItem = new TagItem(EOrigem.Noticia, (int)cadastro.Retorno, usuario.Id, DateTime.Now, objAlt.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
                                 _unitOfWork.Complete();
                             }
+                            if(buscaTag != null)
+                            {
+                                var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.NoticiaId == dado.Id);
+                                if (buscaTagItem == null)
+                                {
+                                    var tagItem = new TagItem(EOrigem.Noticia, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
+                                    _unitOfWork.TagsItens.Add(tagItem);
+                                    _unitOfWork.Complete();
+                                }
+                            }
+                            
                         }
                     }
                     
@@ -285,7 +293,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<List<NoticiaListaDto>> ListarNoticias(IEnumerable<Noticia> query)
+        public async Task<List<NoticiaListaDto>> BuscarTagsArquivos(IEnumerable<Noticia> query)
         {
             List<NoticiaListaDto> noticias = new List<NoticiaListaDto>();
             List<Tag> tags = new List<Tag>();
@@ -317,14 +325,15 @@ namespace Ecossistema.Services.Services
             return noticias;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas()
+        public async Task<RespostaPadrao> ListarUltimas(string idLogin)
         {
             var resposta = new RespostaPadrao();
 
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
+           
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
 
-            var result = (await ListarNoticias(query)).Select(x => new
+            var result = (await BuscarTagsArquivos(query)).Select(x => new
             {
                 x.Id,
                 x.Titulo,
@@ -349,7 +358,7 @@ namespace Ecossistema.Services.Services
             var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var result = (await ListarNoticias(query)).Select(x => new
+            var result = (await BuscarTagsArquivos(query)).Select(x => new
             {
                 x.Id,
                 x.Titulo,
@@ -373,7 +382,7 @@ namespace Ecossistema.Services.Services
             {
                 var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
-                var result = (await ListarNoticias(query)).Select(x => new
+                var result = (await BuscarTagsArquivos(query)).Select(x => new
                 {
                     x.Id,
                     x.Titulo,
