@@ -31,7 +31,7 @@ namespace Ecossistema.Domain.Entities
             //Aprovado = false;
             Aprovado = true;
             Ativo = true;
-            Recursos.Auditoria(this, usuarioId, data);
+            Recursos.Auditoria(this, usuarioId, dataAtual);
         }
 
         public int Id { get; set; }

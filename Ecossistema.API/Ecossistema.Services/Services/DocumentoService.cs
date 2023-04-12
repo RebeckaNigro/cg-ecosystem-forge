@@ -28,7 +28,7 @@ namespace Ecossistema.Services.Services
 
         }
 
-        public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, string usuarioId)
         {
             var resposta = new RespostaPadrao();
 
@@ -36,7 +36,8 @@ namespace Ecossistema.Services.Services
 
             try
             {
-                var dataAtual = DateTime.Now;
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == usuarioId);
+
                 #region Instituição
 
                 var obj = new Documento(dado.Nome,
@@ -45,7 +46,7 @@ namespace Ecossistema.Services.Services
                                           (int)dado.DocumentoAreaId,
                                           (int)dado.InstituicaoId,
                                           (DateTime)dado.Data,
-                                          usuarioId,
+                                          usuario.Id,
                                           DateTime.Now);
 
                 await _unitOfWork.Documentos.AddAsync(obj);
@@ -56,7 +57,7 @@ namespace Ecossistema.Services.Services
                 List<IFormFile> arquivo = new List<IFormFile>();
                 arquivo.Add(doc);
 
-                if (!await _arquivoService.Vincular(EOrigem.Documento, obj.Id, arquivo, usuarioId, dataAtual, resposta))
+                if (!await _arquivoService.Vincular(EOrigem.Documento, obj.Id, arquivo, usuario.Id, DateTime.Now, resposta))
                 {
                     return resposta;
                 }

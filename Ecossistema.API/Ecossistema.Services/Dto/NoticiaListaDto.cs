@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Dto
         public int? Id { get; set; }
         public string? Titulo { get; set; }
         public DateTime? DataPublicacao { get; set; }
-        public DateTime? DataOpereacao { get; set; }
+        public DateTime? DataOperacao { get; set; }
         public string? Descricao { get; set; }
         public string? SubTitulo { get; set; }
         public List<TagDto>? Tags { get; set; }
