@@ -20,11 +20,13 @@ namespace Ecossistema.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
+        private readonly ITagService _tagService;
 
-        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService)
+        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
+            _tagService = tagService;   
 
         }
 
@@ -49,7 +51,7 @@ namespace Ecossistema.Services.Services
                                           usuario.Id,
                                           DateTime.Now);
 
-                await _unitOfWork.Documentos.AddAsync(obj);
+                var documento = await _unitOfWork.Documentos.AddAsync(obj);
 
                 _unitOfWork.Complete();
 
@@ -76,6 +78,27 @@ namespace Ecossistema.Services.Services
                 resposta.Retorno = _unitOfWork.Complete() > 0;
 
                 #endregion
+
+                TagDto anterior = new TagDto();
+                if (dado.Tags != null)
+                {
+                    foreach (var x in dado.Tags)
+                    {
+                        RespostaPadrao cadastro = new RespostaPadrao();
+                        cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                        x.Descricao = x.Descricao.ToLower();
+                        if (x.Descricao != anterior.Descricao)
+                        {
+                            if (cadastro.Retorno != null)
+                            {
+                                var tagItem = new TagItem(EOrigem.Documento, (int)cadastro.Retorno, usuario.Id, DateTime.Now, documento.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                        }
+                        anterior = x;
+                    }
+                }
 
                 resposta.SetMensagem("Dados gravados com sucesso!");
             }
