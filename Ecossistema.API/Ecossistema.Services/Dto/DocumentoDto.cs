@@ -16,6 +16,7 @@ namespace Ecossistema.Services.Dto
         public int? DocumentoAreaId { get; set; }
         public int? InstituicaoId { get; set; }
         public DateTime? Data { get; set; }
+        public List<TagDto>? Tags { get; set; }
         //public IFormFile Arquivo { get; set; }
     }
 }
