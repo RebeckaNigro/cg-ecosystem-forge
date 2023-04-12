@@ -31,7 +31,8 @@ namespace Ecossistema.API.Controllers
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
-            return await _documentoService.Incluir(obj, arquivo ,UsuarioId);
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.Incluir(obj, arquivo , idLogin);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
