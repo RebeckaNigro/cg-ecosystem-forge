@@ -267,6 +267,32 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
+        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
+        {
+            var resposta = new RespostaPadrao();
+
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
+
+            var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
+            {
+                id = x.Id,
+                nome = x.Nome,
+                descricao = x.Descricao,
+                ultimaOperacao = x.DataOperacao,
+                autor = x.NomeUsuario,
+                tags = x.Tags,
+                data = x.Data
+            })
+            .Distinct()
+            .OrderByDescending(x => x.data)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
         public async Task<RespostaPadrao> Detalhes(int id)
         {
             var resposta = new RespostaPadrao();

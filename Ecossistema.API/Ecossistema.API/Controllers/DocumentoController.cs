@@ -58,6 +58,14 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.ListarUltimas(idLogin);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId()
+        {
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.ListarPorUsuarioId(idLogin);
+        }
+
         [HttpGet("listarTodas")]
         public async Task<RespostaPadrao> ListarTodas()
         {
