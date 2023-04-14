@@ -22,14 +22,12 @@ namespace Ecossistema.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
         private readonly ITagService _tagService;
-        private readonly EcossistemaContext _contex;
 
-        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService, EcossistemaContext context)
+        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
             _tagService = tagService;   
-            _contex = context;
         }
 
         public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, string usuarioId)
