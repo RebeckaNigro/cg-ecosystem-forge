@@ -50,10 +50,12 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.Excluir(id);
         }
 
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpGet("listarUltimas")]
         public async Task<RespostaPadrao> ListarUltimas()
         {
-            return await _documentoService.ListarUltimas();
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.ListarUltimas(idLogin);
         }
 
         [HttpGet("listarTodas")]

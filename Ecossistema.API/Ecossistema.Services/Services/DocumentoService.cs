@@ -1,4 +1,5 @@
-﻿using Ecossistema.Data.Interfaces;
+﻿using Ecossistema.Data;
+using Ecossistema.Data.Interfaces;
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
@@ -27,7 +28,6 @@ namespace Ecossistema.Services.Services
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
             _tagService = tagService;   
-
         }
 
         public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, string usuarioId)
@@ -207,25 +207,36 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas()
+        public async Task<RespostaPadrao> ListarUltimas(string idLogin)
         {
             var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
-                                                                   && x.Aprovado);
-
-            var result = query.Select(x => new
+            try
             {
-                id = x.Id,
-                nome = x.Nome,
-                data = x.Data
-            })
-            .Distinct()
-            .OrderByDescending(x => x.data)
-            .Take(3)
-            .ToList();
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                var query = await _unitOfWork.Documentos.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
 
-            resposta.Retorno = result;
+                var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
+                {
+                    id = x.Id,
+                    nome = x.Nome,
+                    descricao = x.Descricao,
+                    ultimaOperacao = x.DataOperacao,
+                    autor = x.NomeUsuario,
+                    tags = x.Tags,
+                    data = x.Data
+                })
+                .Distinct()
+                .OrderByDescending(x => x.ultimaOperacao)
+                .Take(3)
+                .ToList();
+
+                resposta.Retorno = result;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+            }
+           
 
             return resposta;
         }
@@ -236,14 +247,15 @@ namespace Ecossistema.Services.Services
 
             var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
-            var user = await _unitOfWork.Usuarios.GetAllAsync();
 
-            
-            var result = query.Select(x => new
+            var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
             {
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
+                ultimaOperacao = x.DataOperacao,
+                autor = x.NomeUsuario,
+                tags = x.Tags,
                 data = x.Data
             })
             .Distinct()
@@ -321,6 +333,46 @@ namespace Ecossistema.Services.Services
             resposta.Retorno = result;
 
             return resposta;
+        }
+
+        public async Task<List<DocumentoDto>> BuscarNomeUsuarioEtags(IEnumerable<Documento> query)
+        {
+            List<DocumentoDto> documentos = new List<DocumentoDto>();
+            List<Tag> tags = new List<Tag>();
+            RespostaPadrao resposta = new RespostaPadrao();
+            foreach (var item in query)
+            {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == item.UsuarioCriacaoId);
+                var pessoa = _unitOfWork.Pessoas.FindAll(x => x.Id == usuario.PessoaId)
+                                .Select(x => new { x.NomeCompleto })
+                                .FirstOrDefault();
+
+                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.DocumentoId == item.Id);
+                
+
+                DocumentoDto documento = new DocumentoDto();
+                documento.Id = item.Id;
+                documento.Descricao = item.Descricao;
+                documento.Data = item.Data;
+                documento.DataOperacao = item.DataOperacao;
+                documento.NomeUsuario = pessoa.NomeCompleto;
+                documento.Tags = new List<TagDto>();
+                foreach (var x in tagsItens)
+                {
+                    Tag tag = new Tag();
+                    TagDto tagDto = new TagDto();
+                    tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                    tagDto.Descricao = tag.Descricao;
+                    documento.Tags.Add(tagDto);
+                }
+                /*var temp = await _arquivoService.ObterArquivos(EOrigem.Noticia, item.Id, resposta);
+                if (temp.Count != 0)
+                {
+                    noticia.Arquivo = temp[temp.Count - 1].Arquivo;
+                }*/
+                documentos.Add(documento);
+            }
+            return documentos;
         }
 
         #region Validações
