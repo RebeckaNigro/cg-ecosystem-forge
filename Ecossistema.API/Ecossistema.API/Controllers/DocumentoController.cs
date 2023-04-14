@@ -51,11 +51,17 @@ namespace Ecossistema.API.Controllers
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
-        [HttpGet("listarUltimas")]
-        public async Task<RespostaPadrao> ListarUltimas()
+        [HttpGet("listarUltimosPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarUltimosPorUsuarioId()
         {
             var idLogin = User.Claims.FirstOrDefault().Value;
-            return await _documentoService.ListarUltimas(idLogin);
+            return await _documentoService.ListarUltimosPorUsuarioId(idLogin);
+        }
+
+        [HttpGet("listarUltimos")]
+        public async Task<RespostaPadrao> ListarUltimos()
+        {
+            return await _documentoService.ListarUltimos();
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
@@ -66,10 +72,10 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.ListarPorUsuarioId(idLogin);
         }
 
-        [HttpGet("listarTodas")]
-        public async Task<RespostaPadrao> ListarTodas()
+        [HttpGet("listarTodos")]
+        public async Task<RespostaPadrao> ListarTodos()
         {
-            return await _documentoService.ListarTodas();
+            return await _documentoService.ListarTodos();
         }
 
         [HttpGet("detalhes")]

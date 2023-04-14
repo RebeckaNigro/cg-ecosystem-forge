@@ -207,7 +207,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas(string idLogin)
+        public async Task<RespostaPadrao> ListarUltimosPorUsuarioId(string idLogin)
         {
             var resposta = new RespostaPadrao();
             try
@@ -241,7 +241,41 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarTodas()
+
+        public async Task<RespostaPadrao> ListarUltimos()
+        {
+            var resposta = new RespostaPadrao();
+            try
+            {
+                var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo && x.Aprovado);
+
+                var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
+                {
+                    id = x.Id,
+                    nome = x.Nome,
+                    descricao = x.Descricao,
+                    ultimaOperacao = x.DataOperacao,
+                    autor = x.NomeUsuario,
+                    tags = x.Tags,
+                    data = x.Data
+                })
+                .Distinct()
+                .OrderByDescending(x => x.ultimaOperacao)
+                .Take(3)
+                .ToList();
+
+                resposta.Retorno = result;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetErroInterno(ex.Message);
+            }
+
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarTodos()
         {
             var resposta = new RespostaPadrao();
 
