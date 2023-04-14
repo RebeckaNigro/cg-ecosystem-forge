@@ -352,6 +352,7 @@ namespace Ecossistema.Services.Services
 
                 DocumentoDto documento = new DocumentoDto();
                 documento.Id = item.Id;
+                documento.Nome = item.Nome;
                 documento.Descricao = item.Descricao;
                 documento.Data = item.Data;
                 documento.DataOperacao = item.DataOperacao;
