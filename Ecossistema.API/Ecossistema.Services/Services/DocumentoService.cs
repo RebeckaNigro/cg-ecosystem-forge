@@ -247,14 +247,15 @@ namespace Ecossistema.Services.Services
 
             var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
-            var user = await _unitOfWork.Usuarios.GetAllAsync();
 
-            
-            var result = query.Select(x => new
+            var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
             {
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
+                ultimaOperacao = x.DataOperacao,
+                autor = x.NomeUsuario,
+                tags = x.Tags,
                 data = x.Data
             })
             .Distinct()
