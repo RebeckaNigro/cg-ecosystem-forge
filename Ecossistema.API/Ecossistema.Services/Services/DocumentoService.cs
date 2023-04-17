@@ -22,12 +22,14 @@ namespace Ecossistema.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArquivoService _arquivoService;
         private readonly ITagService _tagService;
+        private readonly UrlStringsDto _urlStrings;
 
-        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService)
+        public DocumentoService(IUnitOfWork unitOfWork, IArquivoService arquivoService, ITagService tagService, UrlStringsDto urlStrings)
         {
             _unitOfWork = unitOfWork;
             _arquivoService = arquivoService;
             _tagService = tagService;   
+            _urlStrings = urlStrings;   
         }
 
         public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, string usuarioId)
@@ -332,9 +334,11 @@ namespace Ecossistema.Services.Services
             var resposta = new RespostaPadrao();
 
             var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == id, new[] { "Aprovacao", "TipoDocumento", "DocumentoArea", "Instituicao" });
-
+            var doc = query.FirstOrDefault();
+            var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+doc.Nome+"&origem=3";
             var result = query.Select(x => new
             {
+                download,
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
@@ -343,7 +347,7 @@ namespace Ecossistema.Services.Services
                 documentoAreaid = x.DocumentoAreaId,
                 documentoArea = x.DocumentoArea != null ? x.DocumentoArea.Descricao : null,
                 instituicaoId = x.InstituicaoId,
-                instituicao = x.Instituicao != null ? x.Instituicao.Descricao : null,
+                instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
                 data = x.Data,
                 x.Aprovado
             })
