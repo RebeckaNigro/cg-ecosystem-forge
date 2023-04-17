@@ -13,9 +13,10 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile arquivo, string usuarioId);
         Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
-        Task<RespostaPadrao> ListarUltimas(string idLogin);
+        Task<RespostaPadrao> ListarUltimos();
+        Task<RespostaPadrao> ListarUltimosPorUsuarioId(string idLogin);
         Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);
-        Task<RespostaPadrao> ListarTodas();
+        Task<RespostaPadrao> ListarTodos();
         Task<RespostaPadrao> Detalhes(int id);
         Task<RespostaPadrao> ListarTiposDocumentos();
         Task<RespostaPadrao> ListarDocumentosAreas();
