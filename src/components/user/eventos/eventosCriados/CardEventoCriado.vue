@@ -1,26 +1,24 @@
 <template>
   <div>
-    <div
-      class="container-fluid box p-3 my-3 card-alignment h-100 overflow-hidden"
-    >
+    <div class="container-fluid box p-3 my-3 h-100 overflow-hidden">
       <div v-if="!props.isRascunho">
         <img
           :src="
             evento.arquivo
               ? 'data:image/png;base64, ' + evento.arquivo
-              : '/public/eventos/eventoExpandido/default-event-cover.jpeg'
+              : '/public/eventos/eventoExpandido/default-event-cover.svg'
           "
           alt="event-image"
-          class="w-100"
+          class="image-limiter"
         />
       </div>
       <div v-else>
         <div class="container-mascara-rascunho">
           <div class="mascara-rascunho">
             <img
-              src="./../../../../assets/icons/news.svg"
+              src="/public/eventos/eventoExpandido/default-event-cover.svg"
               alt="event-image"
-              class="w-50"
+              class="rascunho-img"
             />
           </div>
           <div
@@ -31,17 +29,17 @@
         </div>
       </div>
 
-      <div class="container">
+      <div class="container px-0 py-1">
         <div
           class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
         >
-          <div class="col-md-8 text-start">
+          <div class="col-md-8 text-start p-0">
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end" v-if="!props.isRascunho">
+          <div class="col-md-4 text-end p-0" v-if="!props.isRascunho">
             <img
-              src="../../../../../public/view_icon.svg"
+              src="/public/view_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -52,7 +50,7 @@
               "
             />
             <img
-              src="../../../../../public/edit_icon.svg"
+              src="/public/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -63,7 +61,7 @@
               "
             />
             <img
-              src="../../../../../public/delete_icon.svg"
+              src="/public/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"
@@ -72,13 +70,13 @@
 
           <div class="col-md-4 text-end" v-else>
             <img
-              src="../../../../../public/edit_icon.svg"
+              src="/public/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="loadFormComRascunho"
             />
             <img
-              src="../../../../../public/delete_icon.svg"
+              src="/public/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDeleteRascunho"
@@ -115,8 +113,8 @@
         </div>
       </div>
 
-      <div class="footer-atualizado">
-        <span class="text-secondary px-1"
+      <div class="text-start mt-4">
+        <span class="text-secondary px-1" v-if="evento.ultimaAtualizacao"
           >Atualizado em: {{ dataAtualizacaoFormatada }}</span
         >
       </div>
@@ -201,9 +199,11 @@
       props.evento.dataInicio.toString()
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
 
-    dataAtualizacaoFormatada.value = ` ${brDateString(
-      props.evento.ultimaAtualizacao
-    )} `
+    if (props.evento.ultimaAtualizacao) {
+      dataAtualizacaoFormatada.value = ` ${brDateString(
+        props.evento.ultimaAtualizacao
+      )} `
+    }
 
     const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
@@ -214,36 +214,36 @@
       props.evento.dataInicio.toString()
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
 
-    dataAtualizacaoFormatada.value = ` ${brDateString(
-      props.evento.ultimaAtualizacao
-    )} `
+    if (props.evento.ultimaAtualizacao) {
+      dataAtualizacaoFormatada.value = ` ${brDateString(
+        props.evento.ultimaAtualizacao
+      )} `
+    }
     const prependHashtag = props.evento.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })
 </script>
 
 <style scoped>
-  .card-alignment {
-    position: relative;
-  }
-
-  .footer-atualizado {
-    text-align: left;
-    position: absolute;
-    bottom: 15px;
-  }
-
   .image-icon-button {
     cursor: pointer;
+  }
+
+  .image-limiter {
+    width: 100%;
+    height: 300px;
   }
 
   .mascara-rascunho {
     display: flex;
     background-color: black;
-    opacity: 20%;
-    padding: 20px;
+    opacity: 60%;
     justify-content: center;
     align-items: center;
+  }
+
+  .rascunho-img {
+    height: 300px;
   }
 
   .container-mascara-rascunho {

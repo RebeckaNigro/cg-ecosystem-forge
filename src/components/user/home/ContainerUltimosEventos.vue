@@ -1,122 +1,68 @@
 <template>
-  <section id="ultimos-eventos">
-    <header>
-      <h1 class="dark-title p-4">Últimos eventos enviados</h1>
-    </header>
-    <main class="d-flex mt-3 mb-3" v-if="!isLoadingLastEvents">
-      <div class="card-ultimo-evento" v-for="(card, index) in useStore.ultimosEventos">
-        <img class="capa-evento" src="" alt="capa evento">
-        <span class="title">{{ card.titulo }}</span>
-        <div class="when">{{ friendlyDateTime(card.dataInicio) }}</div>
-        <div class="when">{{ friendlyDateTime(card.dataTermino) }}</div>
-        <div class="location">{{ card.local }}</div>
-		<div class="actions-container">
-			<button @click="$router.push({name: 'GerenciaEvento', query: {eventoId: card.id}})">
-				<img src="/pen-icon.svg" alt="pen_icon">
-			</button>
-			<button @click="handleDeleteEvent(card.id)">
-				<img src="/delete-icon.png" alt="delete_icon">
-			</button>
-		</div>
-      </div>
-    </main>
-    <div v-else class="spinner-border text-dark" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <div class="mx-auto box p-5 mb-5">
+    <div class="text-center">
+      <h1 class="fs-5 fw-bold">Últimos eventos enviados</h1>
     </div>
-    <footer>
-      <button type="button" class="btn btn-primary" @click="$router.push({ name: 'EventosCriados'})">Ver mais</button>
-      <button type="button" class="btn btn-primary" @click="$router.push({ name: 'GerenciaEvento'})">Criar evento</button>
-    </footer>
-  </section>
+
+    <Spinner v-if="loadingEvents" />
+
+    <div class="container-fluid row justify-content-between g-0">
+      <!-- ÚLTIMOS CARDS DO USUÁRIO -->
+      <CardEventoCriado
+        v-for="(evento, index) in eventoStore.ultimosEventos"
+        :key="index"
+        :evento="evento"
+        class="col-xs-12 col-sm-6 col-lg-4 p-2"
+        @update-list="loadLastEvents"
+        :isRascunho="false"
+      />
+    </div>
+
+    <div class="text-center row container-fluid mt-5 gy-2">
+      <div class="col-lg-6">
+        <button
+          class="green-btn-outlined"
+          @click="
+            $router.push({
+              name: 'eventosCriados'
+            })
+          "
+        >
+          VER MAIS
+        </button>
+      </div>
+      <div class="col-lg-6">
+        <button
+          class="green-btn-primary"
+          @click="$router.push({ name: 'GerenciaEvento' })"
+        >
+          CRIAR EVENTO
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useEventoStore } from '../../../stores/eventos/store';
-  const friendlyDateTime = (dateTimeString: string) => {
-    const date = new Date(dateTimeString).toLocaleDateString('pt-br')
-    const time = new Date(dateTimeString).toLocaleTimeString('pt-br')
-    return `${date} às ${time.slice(0, time.length - 3)}`
-  }
-  const isLoadingLastEvents = ref(true)
-  const useStore = useEventoStore()
+  import { onMounted, ref } from "vue"
+  import { useEventoStore } from "../../../stores/eventos/store"
+  import CardEventoCriado from "../../../components/user/eventos/eventosCriados/CardEventoCriado.vue"
+  import Spinner from "../../general/Spinner.vue"
 
-  const handleDeleteEvent = async (eventoId: number) => {
-	await useStore.deleteEvent(eventoId)
-	window.location.reload()
+  const eventoStore = useEventoStore()
+  const loadingEvents = ref(false)
+
+  const loadLastEvents = async () => {
+    loadingEvents.value = true
+    await eventoStore.getLastEvents()
+
+    console.dir(eventoStore.ultimosEventos)
+    loadingEvents.value = false
   }
 
-  onMounted(() => {
-    useStore.getLastEvents()
-    isLoadingLastEvents.value = false
+  onMounted(async () => {
+    await loadLastEvents()
   })
 </script>
 
-<style scoped lang="scss">
-  section#ultimos-eventos {
-    background-color: #e6e6e6;
-    height: 450px;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    header > h1 {
-      font-size: 1rem;
-    }
-    main {
-      width: 800px;
-      justify-content: space-between;
-      .card-ultimo-evento {
-        background-color: #fff;
-        width: 250px;
-        min-height: 150px;
-        border: 1px solid black;
-        padding: 1rem;
-        img.capa-evento {
-          min-height: 80px;
-          min-width: 200px;
-          border: 1px solid black;
-        }
-        .when, .location {
-          background-repeat: no-repeat;
-          background-position-y: center;
-          background-size: contain;
-          margin: 5px 0;
-        }
-        .title, .when, .location {
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
-        .title {
-          font-weight: bold;
-        }
-        .when {
-          background-image: url('/eventos/calendar_icon.png');
-        }
-        .location {
-          background-image: url('/eventos/pin_icon.png');
-        }
-
-		.actions-container{
-			
-			float: right;
-			button{
-				background-color: unset;
-   				border: 0;
-			}
-			img{
-				max-width: 25px;
-			}
-			
-		}
-      }
-    }
-    footer {
-      button {
-        margin: 0 10px;
-      }
-    }
-  }
-</style>
+<style scoped></style>

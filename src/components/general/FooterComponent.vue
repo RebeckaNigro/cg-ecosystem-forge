@@ -144,7 +144,6 @@
   footer {
     background-color: #28353e;
     padding: 0.5rem;
-    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: center;

@@ -17,6 +17,10 @@ import GerenciaNoticia from "../views/user/noticias/GerenciaNoticia.vue"
 import GerenciaEvento from "../views/user/eventos/GerenciaEvento.vue"
 import NoticiasCriadas from "../views/user/noticias/NoticiasCriadas.vue"
 import EventosCriados from "../views/user/eventos/EventosCriados.vue"
+import DocumentosCriados from "../views/user/documentos/DocumentosCriados.vue"
+import GerenciaDocumento from "../views/user/documentos/GerenciaDocumento.vue"
+import EsqueciSenha from "../components/esqueciSenha/EsqueciSenha.vue"
+import RedefinirSenha from "../components/esqueciSenha/RedefinirSenha.vue"
 import Perfil from "../views/perfil/Perfil.vue"
 
 const routes: RouteRecordRaw[] = [
@@ -117,6 +121,22 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: "/esqueci-a-senha",
+    name: "EsqueciSenha",
+    component: EsqueciSenha,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: "/redefinir-senha",
+    name: "RedefinirSenha",
+    component: RedefinirSenha,
+    meta: {
+      public: true
+    }
+  },
+  {
     path: "/perfil",
     name: "Perfil",
     component: Perfil,
@@ -149,6 +169,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: "/user/documentos",
+    name: "GerenciaDocumento",
+    component: GerenciaDocumento,
+    meta: {
+      public: false
+    }
+  },
+  {
     path: "/user/noticias-criadas",
     name: "NoticiasCriadas",
     component: NoticiasCriadas,
@@ -160,6 +188,14 @@ const routes: RouteRecordRaw[] = [
     path: "/user/eventos-criados",
     name: "EventosCriados",
     component: EventosCriados,
+    meta: {
+      public: false
+    }
+  },
+  {
+    path: "/user/documentos-criados",
+    name: "DocumentosCriados",
+    component: DocumentosCriados,
     meta: {
       public: false
     }

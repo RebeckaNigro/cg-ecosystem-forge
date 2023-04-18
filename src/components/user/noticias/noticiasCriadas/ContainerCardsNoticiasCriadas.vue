@@ -3,7 +3,7 @@
     <h1 class="dark-title fs-4 text-start">Notícias criadas</h1>
 
     <button
-      class="fab green-btn-primary"
+      class="fab green-btn-primary max-w-25"
       @click="$router.push({ name: 'GerenciaNoticia' })"
     >
       + CRIAR NOVA NOTÍCIA
@@ -40,7 +40,7 @@
       />
       <CardNoticiaCriada
         v-for="(noticia, index) in noticiasExibidas"
-        :key="index"
+        :key="noticia.id"
         :noticia="noticia"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
         @update-list="reloadNoticias"
@@ -122,6 +122,7 @@
         noticiaRascunho.noticia.id,
         noticiaRascunho.noticia.titulo,
         noticiaRascunho.noticia.tags,
+        "",
         noticiaRascunho.noticia.dataPublicacao,
         noticiaRascunho.noticia.arquivo
       )

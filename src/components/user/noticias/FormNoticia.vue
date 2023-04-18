@@ -299,7 +299,6 @@
     subTitulo: "",
     tags: [],
     dataPublicacao: "",
-    hora: "",
     arquivo: File
   })
 
@@ -514,6 +513,7 @@
       )
 
       let rascunho = new NoticiaRascunho(noticia.value)
+      console.dir(rascunho)
       localStorage.setItem("noticiaRascunho", JSON.stringify(rascunho))
 
       modalStore.showSuccessModal("Rascunho salvo com sucesso!")

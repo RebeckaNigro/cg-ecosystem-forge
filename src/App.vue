@@ -46,7 +46,7 @@
     <NavBar />
     <router-view />
     <Cookies />
-    <FooterComponent />
+    <FooterComponent class="navbar-fixed-bottom" />
   </div>
 </template>
 
@@ -88,7 +88,7 @@
     background-image: url("/user/background.svg");
     background-repeat: no-repeat;
     background-size: cover;
-    width: 100%;
+    height: 100%;
   }
 
   .dark-title,
@@ -164,77 +164,6 @@
       height: 100%;
       margin-bottom: 0;
       overflow-y: auto;
-    }
-  }
-
-  @media (max-width: 1200px) {
-    .banner-text-container {
-      h1 {
-        font-size: 2rem;
-      }
-
-      p {
-        text-align: start;
-        font-size: 1rem !important;
-        max-height: 60px;
-      }
-    }
-  }
-
-  @media (max-width: 991px) {
-    .ghp {
-      padding: 0 100px !important;
-    }
-    .banner-text-container {
-      max-width: 300px;
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      p {
-        text-align: start;
-        font-size: 0.8rem !important;
-        max-height: 60px;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .ghp {
-      padding: 0 50px !important;
-    }
-    .banner-text-container {
-      max-width: 200px;
-
-      h1 {
-        font-size: 1rem;
-      }
-
-      p {
-        text-align: start;
-        font-size: 0.7rem !important;
-        max-height: 60px;
-      }
-    }
-  }
-
-  @media (max-width: 576px) {
-    .ghp {
-      padding: 0 15px !important;
-    }
-    .banner-text-container {
-      max-width: 150px;
-
-      h1 {
-        font-size: 0.8rem;
-      }
-
-      p {
-        text-align: start;
-        font-size: 0.6rem !important;
-        max-height: 40px;
-      }
     }
   }
 </style>

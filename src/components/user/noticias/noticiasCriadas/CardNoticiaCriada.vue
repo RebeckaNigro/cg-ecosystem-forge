@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div
-      class="container-fluid box p-3 my-3 card-alignment h-100 overflow-hidden"
-    >
+    <div class="container-fluid box p-3 my-3 h-100 overflow-hidden">
       <div v-if="!props.isRascunho">
         <img
           :src="
             noticia.arquivo
               ? 'data:image/png;base64, ' + noticia.arquivo
-              : '/public/noticias/noticia-expandida/default-news-cover.jpeg'
+              : '/public/noticias/noticia-expandida/default-news-cover.svg'
           "
           alt="news-image"
-          class="w-100"
+          class="image-limiter"
         />
         <!-- <span class="dark-body-text fs-6">{{ noticia.titulo }}</span> -->
       </div>
@@ -19,9 +17,9 @@
         <div class="container-mascara-rascunho">
           <div class="mascara-rascunho">
             <img
-              src="./../../../../assets/icons/news.svg"
+              src="/public/noticias/noticia-expandida/default-news-cover.svg"
               alt="news-image"
-              class="w-50"
+              class="rascunho-img"
             />
           </div>
           <div
@@ -42,7 +40,7 @@
 
           <div class="col-md-4 text-end" v-if="!props.isRascunho">
             <img
-              src="../../../../../public/view_icon.svg"
+              src="/public/view_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -53,7 +51,7 @@
               "
             />
             <img
-              src="../../../../../public/edit_icon.svg"
+              src="/public/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -64,7 +62,7 @@
               "
             />
             <img
-              src="../../../../../public/delete_icon.svg"
+              src="/public/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"
@@ -73,13 +71,13 @@
 
           <div class="col-md-4 text-end" v-else>
             <img
-              src="../../../../../public/edit_icon.svg"
+              src="/public/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="loadFormComRascunho"
             />
             <img
-              src="../../../../../public/delete_icon.svg"
+              src="/public/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDeleteRascunho"
@@ -92,9 +90,9 @@
         {{ noticia.titulo }}
       </p>
 
-      <div class="footer-atualizado">
-        <span class="text-secondary px-1"
-          >Publicado em: {{ dataFormatada }}</span
+      <div class="text-start mt-4">
+        <span class="text-secondary px-1" v-if="noticia.dataOperacao"
+          >Atualizada em: {{ dataOperacaoFormatada }}</span
         >
       </div>
     </div>
@@ -129,6 +127,7 @@
   }>()
 
   const dataFormatada = ref("")
+  const dataOperacaoFormatada = ref("")
   const tagsFormatadas = ref("")
 
   const confirmDelete = () => {
@@ -174,6 +173,8 @@
 
   onMounted(() => {
     dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
+    if (props.noticia.dataOperacao)
+      dataOperacaoFormatada.value = brDateString(props.noticia.dataOperacao)
 
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
@@ -181,31 +182,32 @@
 
   onUpdated(() => {
     dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
+
+    if (props.noticia.dataOperacao)
+      dataOperacaoFormatada.value = brDateString(props.noticia.dataOperacao)
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })
 </script>
 
 <style scoped>
-  .card-alignment {
-    position: relative;
-  }
-
-  .footer-atualizado {
-    text-align: left;
-    position: absolute;
-    bottom: 15px;
-  }
-
   .image-icon-button {
     cursor: pointer;
+  }
+
+  .image-limiter {
+    width: 100%;
+    height: 300px;
+  }
+
+  .rascunho-img {
+    height: 300px;
   }
 
   .mascara-rascunho {
     display: flex;
     background-color: black;
     opacity: 20%;
-    padding: 20px;
     justify-content: center;
     align-items: center;
   }

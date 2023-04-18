@@ -314,7 +314,7 @@
 
     <!-- LOCAL DO EVENTO -->
     <div class="mb-3">
-      <label for="local" class="form-label-primary">Local</label>
+      <label for="local" class="form-label-primary">Nome do Local</label>
       <input
         type="text"
         id="local"

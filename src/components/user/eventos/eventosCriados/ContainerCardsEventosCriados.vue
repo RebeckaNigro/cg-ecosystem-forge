@@ -3,7 +3,7 @@
     <h1 class="dark-title fs-4 text-start">Eventos criados</h1>
 
     <button
-      class="fab green-btn-primary"
+      class="fab green-btn-primary max-w-25"
       @click="$router.push({ name: 'GerenciaEvento' })"
     >
       + CRIAR NOVO EVENTO

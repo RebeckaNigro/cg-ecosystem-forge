@@ -15,7 +15,7 @@ export interface IEvento {
   linkExterno: string
   exibirMaps: boolean
   responsavel: string
-  arquivo: File
+  arquivos: Array<IFile>
 }
 
 export class Evento implements IEvento {
@@ -33,7 +33,7 @@ export class Evento implements IEvento {
   linkExterno!: string
   exibirMaps!: boolean
   responsavel!: string
-  arquivo!: File
+  arquivos!: Array<IFile>
 
   constructor(
     id: number,
@@ -50,7 +50,7 @@ export class Evento implements IEvento {
     linkExterno: string,
     exibirMaps: boolean,
     responsavel: string,
-    arquivo: File
+    arquivos: File
   ) {
     ;[
       this.instituicaoId,
@@ -66,7 +66,7 @@ export class Evento implements IEvento {
       this.linkExterno,
       this.exibirMaps,
       this.responsavel,
-      this.arquivo
+      this.arquivos
     ] = arguments
   }
 }
@@ -179,6 +179,13 @@ export class EventoSimplificado implements IEventoSimplificado {
       this.arquivo
     ] = arguments
   }
+}
+
+export interface IFile {
+  id: number
+  arquivo: string
+  extensao: string
+  nomeOriginal: string
 }
 
 export class EventoRascunho {

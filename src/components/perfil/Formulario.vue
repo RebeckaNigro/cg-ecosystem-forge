@@ -226,13 +226,7 @@
         <span>Li e concordo com todos os termos de uso.</span>
       </div>
 
-      <div
-        v-if="sendingPerfil"
-        class="spinner-border text-success ml-auto mt-2"
-        role="status"
-      >
-        <span class="visually-hidden">Loading...</span>
-      </div>
+      <Spinner v-if="sendingPerfil" />
 
       <div class="mt-4 d-flex">
         <button type="button" class="green-btn-outlined button-specific">
@@ -260,6 +254,7 @@
     helpers
   } from "@vuelidate/validators"
   import { isPasswordValid } from "./../../utils/validator/validations"
+  import Spinner from "../general/Spinner.vue"
 
   const perfilStore = usePerfilStore()
   const alertStore = useAlertStore()

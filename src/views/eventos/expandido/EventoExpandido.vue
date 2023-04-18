@@ -24,8 +24,8 @@
         <img
           class="w-100"
           :src="
-            evento.arquivo
-              ? 'data:image/png;base64, ' + evento.arquivo
+            evento.arquivos[0]
+              ? 'data:image/png;base64, ' + evento.arquivos[0].arquivo
               : '/public/eventos/eventoExpandido/default-event-cover.jpeg'
           "
           alt="capa do evento"
@@ -74,7 +74,7 @@
         </div>
         <div class="d-flex col-sm-4 align-items-end justify-content-end">
           <button type="button" class="green-btn-primary mx-2">
-            <a :href="evento.linkExterno" class="link-btn">Acessar Link</a>
+            <a :href="generatedLink" class="link-btn">Acessar Link</a>
           </button>
         </div>
       </div>
@@ -106,7 +106,7 @@
     id: -1,
     instituicaoId: -1,
     tags: [],
-    tipoEventoId: -1,
+    tipoEventoId: 1,
     titulo: "",
     descricao: "",
     dataInicio: "",
@@ -117,12 +117,13 @@
     linkExterno: "",
     exibirMaps: false,
     responsavel: "",
-    arquivo: {} as File
+    arquivos: []
   })
   const dataInicioFormatada = ref("")
   const dataTerminoFormatada = ref("")
   const dataFormatada = ref("")
   const enderecoFormatado = ref("")
+  const generatedLink = ref("")
   const isLoadingContent = ref(false)
 
   const handleNavigateUp = () => {
@@ -138,6 +139,15 @@
 
     evento.value = store.response.dado
     isLoadingContent.value = false
+
+    if (
+      evento.value.linkExterno.startsWith("http://") ||
+      evento.value.linkExterno.startsWith("https://")
+    ) {
+      generatedLink.value = evento.value.linkExterno
+    } else {
+      generatedLink.value = `http://${evento.value.linkExterno}`
+    }
 
     dataInicioFormatada.value = brDateString(evento.value.dataInicio.toString())
     dataTerminoFormatada.value = brDateString(
