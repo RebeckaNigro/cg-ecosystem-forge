@@ -18,7 +18,13 @@ ConfigurationManager configuration = builder.Configuration; //identity
 var configuracaoEmail = builder.Configuration.GetSection("ConfiguracaoEmail")
     .Get<ConfiguracaoEmail>();
 
+var urls = builder.Configuration.GetSection("UrlStrings")
+                .Get<UrlStringsDto>();
+
+builder.Services.AddSingleton(urls);
+
 builder.Services.AddSingleton(configuracaoEmail);
+builder.Services.AddSingleton(urls);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();

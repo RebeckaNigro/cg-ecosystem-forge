@@ -10,11 +10,13 @@ namespace Ecossistema.Services.Interfaces
 {
     public interface IDocumentoService
     {
-        Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile arquivo, int usuarioId);
+        Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile arquivo, string usuarioId);
         Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId);
         Task<RespostaPadrao> Excluir(int id);
-        Task<RespostaPadrao> ListarUltimas();
-        Task<RespostaPadrao> ListarTodas();
+        Task<RespostaPadrao> ListarUltimos();
+        Task<RespostaPadrao> ListarUltimosPorUsuarioId(string idLogin);
+        Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);
+        Task<RespostaPadrao> ListarTodos();
         Task<RespostaPadrao> Detalhes(int id);
         Task<RespostaPadrao> ListarTiposDocumentos();
         Task<RespostaPadrao> ListarDocumentosAreas();

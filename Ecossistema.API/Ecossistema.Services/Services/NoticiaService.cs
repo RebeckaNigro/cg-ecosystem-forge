@@ -306,6 +306,7 @@ namespace Ecossistema.Services.Services
                 noticia.Id = item.Id;
                 noticia.Titulo = item.Titulo;
                 noticia.DataPublicacao = item.DataPublicacao;
+                noticia.DataOperacao = item.DataOperacao;
                 noticia.Tags = new List<TagDto>();
                 foreach (var x in tagsItens)
                 {
@@ -338,6 +339,7 @@ namespace Ecossistema.Services.Services
                 x.Id,
                 x.Titulo,
                 x.DataPublicacao,
+                x.DataOperacao,
                 x.Tags,
                 x.Arquivo
             })
@@ -363,6 +365,7 @@ namespace Ecossistema.Services.Services
                 x.Id,
                 x.Titulo,
                 x.DataPublicacao,
+                x.DataOperacao,
                 x.Tags,
                 x.Arquivo
             })
@@ -387,6 +390,7 @@ namespace Ecossistema.Services.Services
                     x.Id,
                     x.Titulo,
                     x.DataPublicacao,
+                    x.DataOperacao,
                     x.Tags,
                     x.Arquivo
                 })

@@ -31,7 +31,8 @@ namespace Ecossistema.API.Controllers
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
-            return await _documentoService.Incluir(obj, arquivo ,UsuarioId);
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.Incluir(obj, arquivo , idLogin);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
@@ -49,16 +50,32 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.Excluir(id);
         }
 
-        [HttpGet("listarUltimas")]
-        public async Task<RespostaPadrao> ListarUltimas()
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
+        [HttpGet("listarUltimosPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarUltimosPorUsuarioId()
         {
-            return await _documentoService.ListarUltimas();
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.ListarUltimosPorUsuarioId(idLogin);
         }
 
-        [HttpGet("listarTodas")]
-        public async Task<RespostaPadrao> ListarTodas()
+        [HttpGet("listarUltimos")]
+        public async Task<RespostaPadrao> ListarUltimos()
         {
-            return await _documentoService.ListarTodas();
+            return await _documentoService.ListarUltimos();
+        }
+
+        [Authorize(Roles = UserRolesDto.UsuarioComum)]
+        [HttpGet("listarPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarPorUsuarioId()
+        {
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.ListarPorUsuarioId(idLogin);
+        }
+
+        [HttpGet("listarTodos")]
+        public async Task<RespostaPadrao> ListarTodos()
+        {
+            return await _documentoService.ListarTodos();
         }
 
         [HttpGet("detalhes")]
