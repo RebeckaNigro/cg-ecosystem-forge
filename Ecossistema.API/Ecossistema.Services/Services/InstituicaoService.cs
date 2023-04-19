@@ -635,6 +635,22 @@ namespace Ecossistema.Services.Services
             return respostaPadrao;
         }
 
+        public async Task<RespostaPadrao> BuscarParceirosPorArea(int idArea)
+        {
+            var respostaPadrao = new RespostaPadrao();
+            var query = await _unitOfWork.Instituicoes.FindAllAsync(x => x.Ativo && x.InstituicaoAreaId == idArea && x.TipoInstituicaoId == 1);
+            var result = query.Select(x => new
+            {
+                x.Id,
+                x.RazaoSocial,
+                x.Cnpj
+            }).Distinct()
+              .OrderBy(x => x.RazaoSocial)
+              .ToList();
+            respostaPadrao.Retorno = result;
+            return respostaPadrao;
+        }
+
         #endregion
     }
 }
