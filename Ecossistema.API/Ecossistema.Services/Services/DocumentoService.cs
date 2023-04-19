@@ -179,6 +179,7 @@ namespace Ecossistema.Services.Services
             try
             {
                 var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
+                var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
 
                 if (objAlt != null)
                 {
@@ -191,7 +192,14 @@ namespace Ecossistema.Services.Services
                     }
 
                     #endregion
-
+                    if (tagItem != null)
+                    {
+                        foreach (var x in tagItem)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                    }
                     _unitOfWork.Documentos.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
