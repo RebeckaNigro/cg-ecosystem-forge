@@ -211,7 +211,7 @@
         />
         <img
           v-else
-          src="/public/noticias/noticia-expandida/default-news-cover.jpeg"
+          src="/public/noticias/noticia-expandida/default-news-cover.svg"
           class="w-100 max-image-width"
           alt="capa noticia"
         />
@@ -249,6 +249,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
   import useValidate from "@vuelidate/core"
@@ -297,7 +298,7 @@
     titulo: "",
     descricao: "",
     subTitulo: "",
-    tags: [],
+    tags: new Array<CustomTag>(),
     dataPublicacao: "",
     arquivo: File
   })

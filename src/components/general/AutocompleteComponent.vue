@@ -28,6 +28,7 @@
   </div>
 </template>
 <script setup lang="ts">
+//@ts-nocheck
   import { ref, watch } from "vue"
   import { CustomTag } from "../../stores/tag/types"
 

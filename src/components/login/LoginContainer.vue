@@ -98,7 +98,7 @@
   const waitingResponse = ref(false)
   const lembrarUsuario = ref(false)
   const passwordVisibility = ref(false)
-  const visibilityIconRef = ref("src/assets/icons/visibility-off.svg")
+  const visibilityIconRef = ref("/visibility-off.svg")
 
   const usuarioRules = computed(() => {
     return {
@@ -118,8 +118,8 @@
     passwordVisibility.value = !passwordVisibility.value
 
     visibilityIconRef.value = passwordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/visibility-on.svg"
+      : "/visibility-off.svg"
   }
 
   const callStoreLogin = async (e: string, p: string) => {

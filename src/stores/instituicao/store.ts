@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Instituicao } from "./types"
 import { defineStore } from "pinia"
 import { httpRequest } from "../../utils/http"

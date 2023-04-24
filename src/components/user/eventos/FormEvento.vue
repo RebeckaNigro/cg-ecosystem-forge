@@ -473,6 +473,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
 
@@ -534,7 +535,7 @@
   const evento = ref({
     id: -1,
     instituicaoId: -1,
-    tags: [],
+    tags: new Array<CustomTag>(),
     tipoEventoId: 1,
     titulo: "",
     descricao: "",

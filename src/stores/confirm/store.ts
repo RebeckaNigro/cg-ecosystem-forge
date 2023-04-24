@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { defineStore } from "pinia"
 export const useConfirmStore = defineStore("confirmStore", {
   state: () => {

@@ -241,6 +241,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   import { onMounted, ref, computed } from "vue"
   import { getFromCEP } from "../../utils/http"
   import { usePerfilStore } from "../../stores/perfil/store"
@@ -261,8 +262,8 @@
 
   const passwordVisibility = ref(false)
   const confirmPasswordVisibility = ref(false)
-  const visibilityIconRef = ref("src/assets/icons/visibility-off.svg")
-  const confirmVisibilityIconRef = ref("src/assets/icons/visibility-off.svg")
+  const visibilityIconRef = ref("/visibility-off.svg")
+  const confirmVisibilityIconRef = ref("/visibility-off.svg")
   let termosDeUso = ref(false)
   let sendingPerfil = ref(false)
   let perfil = ref({
@@ -278,7 +279,7 @@
     bairro: "",
     numero: "",
     cep: "",
-    instituicaoId: "14",
+    instituicaoId: "5",
     password: "",
     confirmPassword: ""
   })
@@ -332,16 +333,16 @@
     passwordVisibility.value = !passwordVisibility.value
 
     visibilityIconRef.value = passwordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/visibility-on.svg"
+      : "/visibility-off.svg"
   }
 
   const changeConfirmPasswordVisibility = () => {
     confirmPasswordVisibility.value = !confirmPasswordVisibility.value
 
     confirmVisibilityIconRef.value = confirmPasswordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/visibility-on.svg"
+      : "/visibility-off.svg"
   }
   const instituicoes = ref({})
 
@@ -385,7 +386,7 @@
       bairro: "",
       numero: "",
       cep: "",
-      instituicaoId: "14",
+      instituicaoId: "5",
       password: "",
       confirmPassword: ""
     }

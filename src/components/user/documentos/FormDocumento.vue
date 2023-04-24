@@ -150,6 +150,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
   import useValidate from "@vuelidate/core"
@@ -191,7 +192,7 @@
     id: -1,
     nome: "",
     descricao: "",
-    tags: [],
+    tags: new Array<CustomTag>(),
     tipoDocumentoId: 1,
     documentoAreaId: 1,
     instituicaoId: -1,

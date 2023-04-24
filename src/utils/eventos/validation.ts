@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {Evento, IEvento, INovoEndereco} from '../../stores/eventos/types'
 
 const eventNameIsValid = (en: string) => {

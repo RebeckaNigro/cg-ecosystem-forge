@@ -36,8 +36,8 @@
   }>()
 
   const emit = defineEmits(["filter-result"])
-  const menuOptions = ref([])
-  const results = ref([])
+  const menuOptions = ref<FilterOption[]>([])
+  const results = ref<any[]>([])
   const selectedOption = ref("")
 
   onMounted(() => {

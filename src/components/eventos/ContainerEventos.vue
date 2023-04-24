@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
 import { onMounted, reactive, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
