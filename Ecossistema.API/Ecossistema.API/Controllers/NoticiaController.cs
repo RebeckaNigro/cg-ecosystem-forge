@@ -53,12 +53,18 @@ namespace Ecossistema.API.Controllers
         }
 
         [Authorize(Roles = "UsuarioComum")]
-        [HttpGet("listarUltimas")]
-        public async Task<RespostaPadrao> ListarUltimas()
+        [HttpGet("listarUltimasPorUsuarioId")]
+        public async Task<RespostaPadrao> ListarUltimasPorUsuarioId()
         {
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
-            return await _noticiaService.ListarUltimas(idLogin);
+            return await _noticiaService.ListarUltimasPorUsuarioId(idLogin);
+        }
+
+        [HttpGet("listarUltimas")]
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            return await _noticiaService.ListarUltimas();
         }
 
         [HttpGet("listarTodas")]
