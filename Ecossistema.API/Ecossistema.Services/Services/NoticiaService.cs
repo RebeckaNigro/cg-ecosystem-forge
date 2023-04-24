@@ -326,7 +326,33 @@ namespace Ecossistema.Services.Services
             return noticias;
         }
 
-        public async Task<RespostaPadrao> ListarUltimas(string idLogin)
+        public async Task<RespostaPadrao> ListarUltimas()
+        {
+            var resposta = new RespostaPadrao();
+
+
+            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo && x.Aprovado);
+
+            var result = (await BuscarTagsArquivos(query)).Select(x => new
+            {
+                x.Id,
+                x.Titulo,
+                x.DataPublicacao,
+                x.DataOperacao,
+                x.Tags,
+                x.Arquivo
+            })
+            .Distinct()
+            .OrderByDescending(x => x.DataPublicacao)
+            .Take(3)
+            .ToList();
+
+            resposta.Retorno = result;
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarUltimasPorUsuarioId(string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -639,7 +665,6 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        
 
         #endregion
     }
