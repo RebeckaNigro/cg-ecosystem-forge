@@ -157,6 +157,62 @@ namespace Ecossistema.Services.Services
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
 
+                    if (dado.Tags != null)
+                    {
+                        foreach (var x in dado.Tags)
+                        {
+                            var buscaTag = await _unitOfWork.Tags.FindAsync(y => y.Descricao == x.Descricao);
+                            if (buscaTag == null)
+                            {
+                                var cadastro = new RespostaPadrao();
+                                cadastro = await _tagService.CadastrarTag(x, usuarioId);
+                                var tagItem = new TagItem(EOrigem.Documento, (int)cadastro.Retorno, usuarioId, DateTime.Now, objAlt.Id);
+                                await _unitOfWork.TagsItens.AddAsync(tagItem);
+                                _unitOfWork.Complete();
+                            }
+                            if (buscaTag != null)
+                            {
+                                var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.DocumentoId == dado.Id);
+                                if (buscaTagItem == null)
+                                {
+                                    var tagItem = new TagItem(EOrigem.Documento, buscaTag.Id, usuarioId, DateTime.Now, dado.Id);
+                                    _unitOfWork.TagsItens.Add(tagItem);
+                                    _unitOfWork.Complete();
+                                }
+                            }
+
+                        }
+                    }
+
+                    var buscaTagsItens = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == dado.Id);
+                    foreach (var x in buscaTagsItens)
+                    {
+                        var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                        bool encontrou = false;
+                        if (dado.Tags == null)
+                        {
+                            _unitOfWork.TagsItens.Delete(x);
+                            _unitOfWork.Complete();
+                        }
+                        else
+                        {
+                            if (dado.Tags != null)
+                            {
+                                foreach (var z in dado.Tags)
+                                {
+                                    if (z.Descricao == tag.Descricao)
+                                        encontrou = true;
+                                }
+                            }
+                            if (encontrou == false)
+                            {
+                                _unitOfWork.TagsItens.Delete(x);
+                                _unitOfWork.Complete();
+                            }
+                        }
+
+                    }
+
                     resposta.SetMensagem("Dados gravados com sucesso!");
                 }
                 else resposta.SetErroInterno();

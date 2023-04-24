@@ -477,6 +477,27 @@ namespace Ecossistema.Services.Services
             .ToList();
                 resposta.Retorno = result;
             }
+            else if (listagem == "ultimosPorUsuarioId")
+            {
+                var result = evento.Select(x => new
+                {
+                    id = x.Id,
+                    titulo = x.Titulo,
+                    dataInicio = x.DataInicio,
+                    dataTermino = x.DataTermino,
+                    local = x.Local,
+                    arquivo = x.Arquivo,
+                    tags = x.Tags,
+                    usuarioId = x.UsuarioId,
+                    ultimaAtualizacao = x.DataOperacao
+
+                }).Where(x => x.usuarioId == id)
+            .Distinct()
+            .OrderByDescending(x => x.dataInicio)
+            .Take(3)
+            .ToList();
+                resposta.Retorno = result;
+            }
             else if (listagem == "id" && id != 0)
             {
                 var result = evento.Select(x => new
