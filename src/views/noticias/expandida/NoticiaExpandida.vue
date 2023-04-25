@@ -31,7 +31,7 @@
         :src="
           noticia.arquivo
             ? 'data:image/png;base64, ' + noticia.arquivo
-            : '/public/noticias/noticia-expandida/default-news-cover.jpeg'
+            : '/public/noticias/noticia-expandida/default-news-cover.svg'
         "
         alt="capa da notícia"
       />

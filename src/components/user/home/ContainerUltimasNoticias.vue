@@ -9,7 +9,7 @@
     <div class="container-fluid">
       <div
         class="custom-list-item"
-        v-for="noticia in noticiaStore.lastNews"
+        v-for="noticia in noticiaStore.userLastNews"
         :key="noticia.id"
       >
         <div class="row g-0 px-2">
@@ -119,7 +119,7 @@
 
   const loadLastNews = async () => {
     loadingNews.value = true
-    await noticiaStore.getLastNews()
+    await noticiaStore.getUserLastNews()
     loadingNews.value = false
   }
 
