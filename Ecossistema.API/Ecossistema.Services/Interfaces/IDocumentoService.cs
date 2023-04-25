@@ -18,7 +18,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);
         Task<RespostaPadrao> ListarTodos();
         Task<RespostaPadrao> Detalhes(int id);
-        Task<RespostaPadrao> ListarTiposDocumentos();
+        //Task<RespostaPadrao> ListarTiposDocumentos();
         Task<RespostaPadrao> ListarDocumentosAreas();
     }
 }

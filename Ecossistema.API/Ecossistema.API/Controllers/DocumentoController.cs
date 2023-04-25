@@ -84,11 +84,11 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.Detalhes(id);
         }
 
-        [HttpGet("listarTiposDocumentos")]
+        /*[HttpGet("listarTiposDocumentos")]
         public async Task<RespostaPadrao> ListarTiposDocumentos()
         {
             return await _documentoService.ListarTiposDocumentos();
-        }
+        }*/
 
         [HttpGet("downloadDocumento")]
 

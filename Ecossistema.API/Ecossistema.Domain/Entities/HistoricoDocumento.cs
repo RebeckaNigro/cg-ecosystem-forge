@@ -13,8 +13,6 @@ namespace Ecossistema.Domain.Entities
         public virtual Documento Documento { get; set; }
         public string Nome { get; set; }
         public string? Descricao { get; set; }
-        public int TipoDocumentoId { get; set; }
-        public virtual TipoDocumento TipoDocumento { get; set; }
         public int DocumentoAreaId { get; set; }
         public virtual DocumentoArea DocumentoArea { get; set; }
         public int InstituicaoId { get; set; }

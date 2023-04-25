@@ -128,7 +128,7 @@ namespace Ecossistema.Data
         public IBaseRepository<Tag> Tags { get; private set; }
         public IBaseRepository<TagItem> TagsItens { get; private set; }
         public IBaseRepository<TipoContato> TiposContatos { get; private set; }
-        public IBaseRepository<TipoDocumento> TiposDocumentos { get; private set; }
+        //public IBaseRepository<TipoDocumento> TiposDocumentos { get; private set; }
         public IBaseRepository<TipoEndereco> TiposEnderecos { get; private set; }
         public IBaseRepository<TipoEvento> TiposEventos { get; private set; }
         public IBaseRepository<TipoInstituicao> TiposInstituicoes { get; private set; }
@@ -280,7 +280,7 @@ namespace Ecossistema.Data
             Tags = new BaseRepository<Tag>(_context);
             TagsItens = new BaseRepository<TagItem>(_context);
             TiposContatos = new BaseRepository<TipoContato>(_context);
-            TiposDocumentos = new BaseRepository<TipoDocumento>(_context);
+            //TiposDocumentos = new BaseRepository<TipoDocumento>(_context);
             TiposEnderecos = new BaseRepository<TipoEndereco>(_context);
             TiposEventos = new BaseRepository<TipoEvento>(_context);
             TiposInstituicoes = new BaseRepository<TipoInstituicao>(_context);

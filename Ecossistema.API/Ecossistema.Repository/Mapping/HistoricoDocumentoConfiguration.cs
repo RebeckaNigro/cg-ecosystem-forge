@@ -20,9 +20,6 @@ namespace Ecossistema.Data.Mapping
                 .WithMany(x => x.HistoricoDocumentos)
                 .HasForeignKey(y => y.DocumentoId);
 
-            builder.HasOne(x => x.TipoDocumento)
-                .WithMany(x => x.HistoricoDocumentos)
-                .HasForeignKey(y => y.TipoDocumentoId);
 
             builder.HasOne(x => x.DocumentoArea)
                 .WithMany(x => x.HistoricoDocumentos)

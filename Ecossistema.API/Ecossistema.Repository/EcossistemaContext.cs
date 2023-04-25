@@ -129,7 +129,7 @@ namespace Ecossistema.Data
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<TagItem> TagsItens { get; set; }
         public virtual DbSet<TipoContato> TiposContatos { get; set; }
-        public virtual DbSet<TipoDocumento> TiposDocumentos { get; set; }
+        //public virtual DbSet<TipoDocumento> TiposDocumentos { get; set; }
         public virtual DbSet<TipoEndereco> TiposEnderecos { get; set; }
         public virtual DbSet<TipoEvento> TiposEventos { get; set; }
         public virtual DbSet<TipoInstituicao> TiposInstituicoes { get; set; }

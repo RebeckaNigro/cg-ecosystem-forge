@@ -128,7 +128,7 @@ namespace Ecossistema.Data.Interfaces
         IBaseRepository<Tag> Tags { get; }
         IBaseRepository<TagItem> TagsItens { get; }
         IBaseRepository<TipoContato> TiposContatos { get; }
-        IBaseRepository<TipoDocumento> TiposDocumentos { get; }
+        //IBaseRepository<TipoDocumento> TiposDocumentos { get; }
         IBaseRepository<TipoEndereco> TiposEnderecos { get; }
         IBaseRepository<TipoEvento> TiposEventos { get; }
         IBaseRepository<TipoInstituicao> TiposInstituicoes { get; }

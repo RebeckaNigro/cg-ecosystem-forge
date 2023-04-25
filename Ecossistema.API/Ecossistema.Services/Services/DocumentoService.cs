@@ -46,7 +46,6 @@ namespace Ecossistema.Services.Services
 
                 var obj = new Documento(dado.Nome,
                                           dado.Descricao,
-                                          (int)dado.TipoDocumentoId,
                                           (int)dado.DocumentoAreaId,
                                           (int)dado.InstituicaoId,
                                           (DateTime)dado.Data,
@@ -146,7 +145,6 @@ namespace Ecossistema.Services.Services
 
                     objAlt.Nome = (string)dado.Nome;
                     objAlt.Descricao = dado.Descricao;
-                    objAlt.TipoDocumentoId = (int)dado.TipoDocumentoId;
                     objAlt.DocumentoAreaId = (int)dado.DocumentoAreaId;
                     objAlt.InstituicaoId = (int)dado.InstituicaoId;
                     objAlt.Data = (DateTime)dado.Data;
@@ -344,27 +342,35 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> ListarTodos()
         {
             var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
+            try
+            {
+                var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
+                var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
+                {
+                    id = x.Id,
+                    nome = x.Nome,
+                    descricao = x.Descricao,
+                    ultimaOperacao = x.DataOperacao,
+                    autor = x.NomeUsuario,
+                    tags = x.Tags,
+                    data = x.Data
+                })
+                .Distinct()
+                .OrderByDescending(x => x.data)
+                .ToList();
+
+                resposta.Retorno = result;
+
+                return resposta;
+            }
+            catch(Exception ex)
             {
-                id = x.Id,
-                nome = x.Nome,
-                descricao = x.Descricao,
-                ultimaOperacao = x.DataOperacao,
-                autor = x.NomeUsuario,
-                tags = x.Tags,
-                data = x.Data
-            })
-            .Distinct()
-            .OrderByDescending(x => x.data)
-            .ToList();
+                resposta.SetBadRequest(ex.Message);
+                return resposta;
+            }
 
-            resposta.Retorno = result;
-
-            return resposta;
         }
 
         public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
@@ -397,7 +403,7 @@ namespace Ecossistema.Services.Services
         {
             var resposta = new RespostaPadrao();
 
-            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == id, new[] { "Aprovacao", "TipoDocumento", "DocumentoArea", "Instituicao" });
+            var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == id, new[] { "Aprovacao" , "DocumentoArea", "Instituicao" });
             var doc = query.FirstOrDefault();
             var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+doc.Nome+"&origem=3";
             var result = query.Select(x => new
@@ -406,8 +412,6 @@ namespace Ecossistema.Services.Services
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
-                tipoDocumentoId = x.TipoDocumentoId,
-                tipoDocumento = x.TipoDocumento != null ? x.TipoDocumento.Descricao : null,
                 documentoAreaid = x.DocumentoAreaId,
                 documentoArea = x.DocumentoArea != null ? x.DocumentoArea.Descricao : null,
                 instituicaoId = x.InstituicaoId,
@@ -423,7 +427,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarTiposDocumentos()
+        /*public async Task<RespostaPadrao> ListarTiposDocumentos()
         {
             var resposta = new RespostaPadrao();
 
@@ -441,7 +445,7 @@ namespace Ecossistema.Services.Services
             resposta.Retorno = result;
 
             return resposta;
-        }
+        }*/
 
         public async Task<RespostaPadrao> ListarDocumentosAreas()
         {
@@ -512,8 +516,6 @@ namespace Ecossistema.Services.Services
                 || !ValidarNomeTamanho(dado, resposta)
                 || !ValidarDescricaoInformada(dado, resposta)
                 || !ValidarDescricaoTamanho(dado, resposta)
-                || !ValidarTipoDocumentoIdValido(dado, resposta)
-                || !await ValidarTipoDocumentoIdCadastrado(dado, resposta)
                 || !ValidarDocumentoAreaIdValido(dado, resposta)
                 || !await ValidarDocumentoAreaIdCadastrado(dado, resposta)
                 || !ValidarInstituicaoIdValida(dado, resposta)
@@ -536,8 +538,6 @@ namespace Ecossistema.Services.Services
                 || !ValidarNomeTamanho(dado, resposta)
                 || !ValidarDescricaoInformada(dado, resposta)
                 || !ValidarDescricaoTamanho(dado, resposta)
-                || !ValidarTipoDocumentoIdValido(dado, resposta)
-                || !await ValidarTipoDocumentoIdCadastrado(dado, resposta)
                 || !ValidarDocumentoAreaIdValido(dado, resposta)
                 || !await ValidarDocumentoAreaIdCadastrado(dado, resposta)
                 || !ValidarInstituicaoIdValida(dado, resposta)
@@ -657,39 +657,6 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
-        private bool ValidarTipoDocumentoIdValido(DocumentoDto dado, RespostaPadrao resposta)
-        {
-            return ValidarTipoDocumentoIdValido(dado.TipoDocumentoId, resposta);
-        }
-
-        private bool ValidarTipoDocumentoIdValido(int? tipoDocumentoId, RespostaPadrao resposta)
-        {
-            if (!ValidacaoUtil.ValidarInteiroValido(tipoDocumentoId))
-            {
-                resposta.SetCampoInvalido("TipoDocumentoId");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> ValidarTipoDocumentoIdCadastrado(int? tipoDocumentoId, RespostaPadrao resposta)
-        {
-            var query = await _unitOfWork.TiposDocumentos.FindAllAsync(x => x.Id == (int)tipoDocumentoId
-                                                                        && x.Ativo);
-
-            if (!query.Any())
-            {
-                resposta.SetNaoEncontrado("Registro não encontrado.");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> ValidarTipoDocumentoIdCadastrado(DocumentoDto dado, RespostaPadrao resposta)
-        {
-
-            return await ValidarTipoDocumentoIdCadastrado(dado.TipoDocumentoId, resposta);
-        }
 
         private bool ValidarDocumentoAreaIdValido(DocumentoDto dado, RespostaPadrao resposta)
         {

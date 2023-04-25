@@ -78,8 +78,8 @@ namespace Ecossistema.Domain.Entities
             UsuariosOperacoesTagItens = new HashSet<TagItem>();
             UsuariosCriacoesTiposContatos = new HashSet<TipoContato>();
             UsuariosOperacoesTiposContatos = new HashSet<TipoContato>();
-            UsuariosCriacoesTiposDocumentos = new HashSet<TipoDocumento>();
-            UsuariosOperacoesTiposDocumentos = new HashSet<TipoDocumento>();
+            //UsuariosCriacoesTiposDocumentos = new HashSet<TipoDocumento>();
+            //UsuariosOperacoesTiposDocumentos = new HashSet<TipoDocumento>();
             UsuariosCriacoesTiposEnderecos = new HashSet<TipoEndereco>();
             UsuariosOperacoesTiposEnderecos = new HashSet<TipoEndereco>();
             UsuariosCriacoesTiposEventos = new HashSet<TipoEvento>();
@@ -193,8 +193,8 @@ namespace Ecossistema.Domain.Entities
         public virtual ICollection<TagItem> UsuariosOperacoesTagItens { get; set; }
         public virtual ICollection<TipoContato> UsuariosCriacoesTiposContatos { get; set; }
         public virtual ICollection<TipoContato> UsuariosOperacoesTiposContatos { get; set; }
-        public virtual ICollection<TipoDocumento> UsuariosCriacoesTiposDocumentos { get; set; }
-        public virtual ICollection<TipoDocumento> UsuariosOperacoesTiposDocumentos { get; set; }
+       // public virtual ICollection<TipoDocumento> UsuariosCriacoesTiposDocumentos { get; set; }
+       // public virtual ICollection<TipoDocumento> UsuariosOperacoesTiposDocumentos { get; set; }
         public virtual ICollection<TipoEndereco> UsuariosCriacoesTiposEnderecos { get; set; }
         public virtual ICollection<TipoEndereco> UsuariosOperacoesTiposEnderecos { get; set; }
         public virtual ICollection<TipoEvento> UsuariosCriacoesTiposEventos { get; set; }

@@ -16,10 +16,6 @@ namespace Ecossistema.Data.Mapping
             builder.ToTable("Documento", "dbo")
                 .HasKey(x => x.Id);
 
-            builder.HasOne(x => x.TipoDocumento)
-                .WithMany(x => x.Documentos)
-                .HasForeignKey(y => y.TipoDocumentoId);
-
             builder.HasOne(x => x.DocumentoArea)
                 .WithMany(x => x.Documentos)
                 .HasForeignKey(y => y.DocumentoAreaId);
