@@ -405,7 +405,8 @@ namespace Ecossistema.Services.Services
 
             var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Id == id, new[] { "Aprovacao" , "DocumentoArea", "Instituicao" });
             var doc = query.FirstOrDefault();
-            var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+doc.Nome+"&origem=3";
+            var nome = doc.Nome.Replace(" ", "%20");
+            var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+nome+"&origem=3";
             var result = query.Select(x => new
             {
                 download,
