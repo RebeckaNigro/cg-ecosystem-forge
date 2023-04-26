@@ -254,6 +254,8 @@ namespace Ecossistema.Services.Services
                             _unitOfWork.Complete();
                         }
                     }
+                    await _arquivoService.ExcluirArquivo(objAlt.Id, "documento");
+
                     _unitOfWork.Documentos.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
