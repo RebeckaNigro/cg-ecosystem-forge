@@ -319,6 +319,8 @@ namespace Ecossistema.Services.Services
                             _unitOfWork.Complete();
                         }
                     }
+
+                    await _arquivoService.ExcluirArquivo(objAlt.Id, "evento");
                     _unitOfWork.Eventos.Delete(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
