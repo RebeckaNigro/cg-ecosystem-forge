@@ -109,7 +109,7 @@ export const useEventoStore = defineStore("eventoStore", {
 
     async getAllEvents() {
       try {
-        const response = await httpRequest.get("/api/evento/listarTodas")
+        const response = await httpRequest.get("/api/evento/listarTodos")
         if (response.data.codigo === 200) {
           this.eventos = []
 
