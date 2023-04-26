@@ -9,7 +9,7 @@
     <div class="container-fluid row justify-content-between g-0">
       <!-- ÚLTIMOS CARDS DO USUÁRIO -->
       <CardEventoCriado
-        v-for="(evento, index) in eventoStore.ultimosEventos"
+        v-for="(evento, index) in eventoStore.ultimosEventosUsuarioLogado"
         :key="index"
         :evento="evento"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -54,7 +54,7 @@
 
   const loadLastEvents = async () => {
     loadingEvents.value = true
-    await eventoStore.getLastEvents()
+    await eventoStore.getUserLastEvents()
 
     console.dir(eventoStore.ultimosEventos)
     loadingEvents.value = false

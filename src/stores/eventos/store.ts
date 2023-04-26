@@ -9,6 +9,7 @@ const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
 const eventos: Array<IUltimoEvento> = []
 const eventosUsuarioLogado: Array<IUltimoEvento> = []
+const ultimosEventosUsuarioLogado: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore("eventoStore", {
   state: () => {
     return {
@@ -17,6 +18,7 @@ export const useEventoStore = defineStore("eventoStore", {
       response: new GeneralResponseHandler(0, "none", "no request made yet"),
       eventos,
       eventosUsuarioLogado,
+	  ultimosEventosUsuarioLogado,
       loadRascunho: false
     }
   },
@@ -106,6 +108,27 @@ export const useEventoStore = defineStore("eventoStore", {
         }
       }
     },
+
+	async getUserLastEvents() {
+		try {
+		  const response = await httpRequest.get("/api/evento/listarUltimosPorUsuarioId")
+		  if (response.data.codigo === 200) {
+			this.response.putResponse(
+			  response.data.codigo,
+			  response.data.retorno,
+			  response.data.resposta
+			)
+			this.ultimosEventosUsuarioLogado = []
+			for (const event of response.data.retorno) {
+			  this.ultimosEventosUsuarioLogado.push(event)
+			}
+		  }else{
+			this.response.putError(response.data.codigo, response.data.resposta)
+		  }
+		} catch (error) {
+		  console.error(error)
+		}
+	  },
 
     async getAllEvents() {
       try {
