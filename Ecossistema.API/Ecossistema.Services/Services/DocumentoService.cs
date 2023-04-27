@@ -118,17 +118,24 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Editar(DocumentoDto dado, IFormFile doc, string usuarioLoginId)
         {
             var resposta = new RespostaPadrao();
 
             if (!await ValidarEditar(dado, resposta)) return resposta;
+            var extensao = System.IO.Path.GetExtension(doc.FileName);
+            if (extensao != ".pdf")
+            {
+                resposta.SetBadRequest("Tipo de documento não válido, por favor, insira um do tipo pdf");
+                return resposta;
+            }
 
             try
             {
                 var dataAtual = DateTime.Now;
 
                 var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == dado.Id, new[] { "Aprovacoes" });
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == usuarioLoginId);
 
                 if (objAlt != null)
                 {
@@ -138,7 +145,7 @@ namespace Ecossistema.Services.Services
 
                     if (objAlt.Aprovacao.SituacaoAprovacaoId != ESituacaoAprovacao.Pendente.Int32Val())
                     {
-                        var aprovacao = new Aprovacao(EOrigem.Documento, usuarioId, dataAtual, objAlt.Id);
+                        var aprovacao = new Aprovacao(EOrigem.Documento, usuario.Id, dataAtual, objAlt.Id);
 
                         await _unitOfWork.Aprovacoes.AddAsync(aprovacao);
 
@@ -155,11 +162,30 @@ namespace Ecossistema.Services.Services
                     objAlt.InstituicaoId = (int)dado.InstituicaoId;
                     objAlt.Data = (DateTime)dado.Data;
                     objAlt.AprovacaoId = aprovacaoId;
-                    Recursos.Auditoria(objAlt, usuarioId, dataAtual);
+                    Recursos.Auditoria(objAlt, usuario.Id, dataAtual);
 
                     _unitOfWork.Documentos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
+                    List<IFormFile> arquivo = new List<IFormFile>();
+                    arquivo.Add(doc);
+
+                    var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Documento);
+                    if (encontra == 0)
+                    {
+                        await _arquivoService.Vincular(EOrigem.Documento, objAlt.Id, arquivo, usuario.Id, dataAtual, resposta);
+                    }
+                    else
+                    {
+                        IFormFile documento = arquivo[arquivo.Count - 1];
+                        ArquivoDto arquivoDto = new ArquivoDto();
+                        arquivoDto.Id = encontra;
+                        arquivoDto.NomeOriginal = doc.FileName;
+                        arquivoDto.Extensao = documento.ContentType;
+                        await _arquivoService.ExcluirDoDiretorio(objAlt.Id, "documento");
+                        _arquivoService.SalvarArquivo(encontra, documento, EOrigem.Documento);
+                        resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Documento, usuario.Id);
+                    }
 
                     if (dado.Tags != null)
                     {
@@ -169,17 +195,17 @@ namespace Ecossistema.Services.Services
                             if (buscaTag == null)
                             {
                                 var cadastro = new RespostaPadrao();
-                                cadastro = await _tagService.CadastrarTag(x, usuarioId);
-                                var tagItem = new TagItem(EOrigem.Documento, (int)cadastro.Retorno, usuarioId, DateTime.Now, objAlt.Id);
+                                cadastro = await _tagService.CadastrarTag(x, usuario.Id);
+                                var tagItem = new TagItem(EOrigem.Documento, (int)cadastro.Retorno, usuario.Id, DateTime.Now, objAlt.Id);
                                 await _unitOfWork.TagsItens.AddAsync(tagItem);
                                 _unitOfWork.Complete();
                             }
-                            if (buscaTag != null)
+                            else
                             {
                                 var buscaTagItem = await _unitOfWork.TagsItens.FindAsync(y => y.TagId == buscaTag.Id && y.DocumentoId == dado.Id);
                                 if (buscaTagItem == null)
                                 {
-                                    var tagItem = new TagItem(EOrigem.Documento, buscaTag.Id, usuarioId, DateTime.Now, dado.Id);
+                                    var tagItem = new TagItem(EOrigem.Documento, buscaTag.Id, usuario.Id, DateTime.Now, dado.Id);
                                     _unitOfWork.TagsItens.Add(tagItem);
                                     _unitOfWork.Complete();
                                 }

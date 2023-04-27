@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\RepositoryFiles\NoticiasImagens\" />
-    <Folder Include="wwwroot\RepositoryFiles\Documents\" />
   </ItemGroup>
 
 	<ItemGroup>

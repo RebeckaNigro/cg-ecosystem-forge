@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Interfaces
     public interface IDocumentoService
     {
         Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile arquivo, string usuarioId);
-        Task<RespostaPadrao> Editar(DocumentoDto dado, int usuarioId);
+        Task<RespostaPadrao> Editar(DocumentoDto dado, IFormFile arquivo, string usuarioId);
         Task<RespostaPadrao> Excluir(int id);
         Task<RespostaPadrao> ListarUltimos();
         Task<RespostaPadrao> ListarUltimosPorUsuarioId(string idLogin);
