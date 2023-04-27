@@ -35,6 +35,12 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> Incluir(DocumentoDto dado, IFormFile doc, string usuarioId)
         {
             var resposta = new RespostaPadrao();
+            var extensao = System.IO.Path.GetExtension(doc.FileName);
+            if (extensao != ".pdf")
+            {
+                resposta.SetBadRequest("Tipo de documento não válido, por favor, insira um do tipo pdf");
+                return resposta;
+            }
 
             if (!await ValidarIncluir(dado, resposta)) return resposta;
 
