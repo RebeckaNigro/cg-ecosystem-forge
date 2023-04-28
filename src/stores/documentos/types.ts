@@ -5,7 +5,7 @@ export interface IDocumento {
   descricao: string
   tags: CustomTag[]
   tipoDocumentoId: number
-  documentoAreaId: number
+  documentoAreaid: number
   instituicaoId: number
   data: string
   arquivo: File
@@ -17,7 +17,7 @@ export class Documento implements IDocumento {
   descricao: string
   tags: CustomTag[]
   tipoDocumentoId: number
-  documentoAreaId: number
+  documentoAreaid: number
   instituicaoId: number
   data: string
   arquivo: File
@@ -28,7 +28,7 @@ export class Documento implements IDocumento {
     descricao: string,
     tags: CustomTag[],
     tipoDocumentoId: number,
-    documentoAreaId: number,
+    documentoAreaid: number,
     instituicaoId: number,
     data: string,
     arquivo: File
@@ -38,9 +38,9 @@ export class Documento implements IDocumento {
     this.descricao = descricao
     this.tags = tags
     this.tipoDocumentoId = tipoDocumentoId
-    this.documentoAreaId = documentoAreaId
+    this.documentoAreaid = documentoAreaid
     this.instituicaoId = instituicaoId
-    this.documentoAreaId = documentoAreaId
+    this.documentoAreaid = documentoAreaid
     this.data = data
     this.arquivo = arquivo
   }

@@ -8,7 +8,7 @@
   <form class="mx-auto card-position box p-5 mb-5">
     <!-- NOME -->
     <div class="mb-3">
-      <label for="nome" class="form-label-primary">Nome*</label>
+      <label for="nome" class="form-label-primary">Nome do documento*</label>
       <input
         type="text"
         id="nome"
@@ -23,7 +23,7 @@
 
     <!-- DESCRIÇÃO -->
     <div class="mb-3">
-      <label for="descricao" class="form-label-primary">Descrição</label>
+      <label for="descricao" class="form-label-primary">Descrição do documento</label>
       <input
         type="text"
         id="descricao"
@@ -34,12 +34,12 @@
 
     <!-- SESSÃO -->
     <div class="mb-3">
-      <label for="descricao" class="form-label-primary">Sessão</label>
+      <label for="descricao" class="form-label-primary">Sessão*</label>
       <select
         class="form-input-primary"
         id="descricao"
         name="descricao"
-        v-model="documento.documentoAreaId"
+        v-model="documento.documentoAreaid"
       >
         <option value="1">Pesquisa</option>
         <option value="2">Edital</option>
@@ -49,7 +49,7 @@
 
     <!-- INSTITUIÇÕES -->
     <div class="mb-3">
-      <label for="tags" class="form-label-primary">Instituição*</label>
+      <label for="tags" class="form-label-primary">Instituição responsável*</label>
       <AutocompleteComponent
         type="Instituicao"
         :items="instituicoes"
@@ -99,15 +99,15 @@
 
     <!-- ARQUIVO -->
     <div class="mb-3">
-      <label for="arquivo" class="form-label-primary">Arquivo*</label>
+      <label for="arquivo" class="form-label-primary">Upload do Arquivo*</label>
       <div class="imagem-divulgacao d-flex">
         <div>
-          <label for="imagem-input" class="borda-cinza" />
+          <label for="imagem-input" class="borda-cinza"></label>
           <input
             class="form-input-primary"
             type="file"
             name="imagem-input"
-            accept="image/png, image/jpg,image/jpeg"
+            accept=".pdf, .doc, .docx"
             id="imagem-input"
             @change="(e) => onFileChanged(e)"
           />
@@ -193,8 +193,7 @@
     nome: "",
     descricao: "",
     tags: new Array<CustomTag>(),
-    tipoDocumentoId: 1,
-    documentoAreaId: 1,
+    documentoAreaid: 1,
     instituicaoId: -1,
     data: "",
     arquivo: File
@@ -225,22 +224,26 @@
   onMounted(async () => {
     const id = route.params.documentoId
 
+	await buscarTags()
+    await buscarInstituicoes()
+
     if (id) {
-      // await documentStore.getNewsById(Number(id))
-      // if (noticiaStore.response.code == 200) {
-      //   noticia.value = noticiaStore.response.dado
-      //   data.value = noticia.value.dataPublicacao.substring(0, 10)
-      //   hora.value = noticia.value.dataPublicacao.substring(
-      //     noticia.value.dataPublicacao.length - 8,
-      //     noticia.value.dataPublicacao.length
-      //   )
-      // } else {
-      //   alertStore.showTimeoutErrorMessage("Erro ao carregar documento!")
-      // }
+      await documentStore.getDocDetailsById(Number(id))
+      if (documentStore.response.code == 200) {
+        documento.value = documentStore.response.dado
+		documento.value.tags = [{id: 1, descricao: 'doc'}, {id: 2, descricao: 'documento'}]
+		
+		selectedValue.value = instituicoes.value?.find(
+          (item) => item.id == documento.value.instituicaoId
+        )
+		
+      } else {
+        alertStore.showTimeoutErrorMessage("Erro ao carregar documento!")
+      }
+
     }
 
-    buscarTags()
-    buscarInstituicoes()
+    
   })
 
   const confirmado = () => {
@@ -287,8 +290,8 @@
     documento.value.data = new Date().toISOString()
     documento.value.arquivo = arquivo.value
 
-    console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
-    console.dir(documento.value)
+     console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+	 console.dir(documento.value)
 
     if (documento.value.id > 0) {
       sendingDocs.value = true
@@ -300,7 +303,7 @@
         modalStore.showSuccessModal("Documento editado com sucesso!")
       } else if (res.code === 661) {
         console.error(res.message)
-      } else {
+      } else{
         modalStore.showErrorModal("Erro ao editar documento!")
       }
     } else {
@@ -325,8 +328,7 @@
       nome: "",
       descricao: "",
       tags: [],
-      tipoDocumentoId: 1,
-      documentoAreaId: -1,
+      documentoAreaid: -1,
       instituicaoId: -1,
       data: "",
       arquivo: File
@@ -387,6 +389,7 @@
     background-image: url("/user/eventos/cloud_icon.svg");
     background-repeat: no-repeat;
     background-position: center;
+	cursor: pointer;
   }
 
   input#imagem-input {

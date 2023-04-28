@@ -6,6 +6,7 @@ import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 const lastNews: Array<INoticiaSimplificada> = []
 const allNews: Array<INoticiaSimplificada> = []
 const allUserNews: Array<INoticiaSimplificada> = []
+const userLastNews: Array<INoticiaSimplificada> = []
 export const useNoticiaStore = defineStore("noticiaStore", {
   state: () => {
     return {
@@ -13,6 +14,7 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       lastNews,
       allNews,
       allUserNews,
+	  userLastNews,
       loadRascunho: false
     }
   },
@@ -68,6 +70,27 @@ export const useNoticiaStore = defineStore("noticiaStore", {
         }
       }
     },
+	async getUserLastNews() {
+		try{
+			const response = await httpRequest.get('/api/noticia/listarUltimasPorUsuarioId')
+			if (response.data.codigo === 200) {
+			  this.response.putResponse(
+				response.data.codigo,
+				response.data.retorno,
+				response.data.resposta
+			  )
+			  this.userLastNews = []
+			  for (const news of response.data.retorno) {
+				this.userLastNews.push(news)
+			  }
+			}else{
+				console.error(response.data.resposta);
+				this.response.putError(response.data.codigo, response.data.resposta)
+			}
+		}catch(error){
+			console.error(error)
+		}
+	  },
 
     async getUserNews() {
       try {

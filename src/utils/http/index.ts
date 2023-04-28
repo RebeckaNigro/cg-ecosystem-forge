@@ -62,6 +62,11 @@ export const getFromCEP = async (cep: string) => {
 }
 
 export const getLastContent = async (contentType: string) => {
-  const response = await httpRequest.get(`/api/${contentType}/listarUltimas`)
+	let response = null
+	if(contentType === 'evento'){
+		response = await httpRequest.get(`/api/${contentType}/listarUltimos`)
+	}else{
+		response = await httpRequest.get(`/api/${contentType}/listarUltimas`)
+	}
   return response
 }
