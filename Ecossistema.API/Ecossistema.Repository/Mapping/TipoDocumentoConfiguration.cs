@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ecossistema.Data.Mapping
 {
-    public class TipoDocumentoConfiguration : IEntityTypeConfiguration<TipoDocumento>
+    /*public class TipoDocumentoConfiguration : IEntityTypeConfiguration<TipoDocumento>
     {
         public void Configure(EntityTypeBuilder<TipoDocumento> builder)
         {
@@ -24,5 +24,5 @@ namespace Ecossistema.Data.Mapping
                 .WithMany(x => x.UsuariosOperacoesTiposDocumentos)
                 .HasForeignKey(y => y.UsuarioOperacaoId);
         }
-    }
+    }*/
 }

@@ -32,14 +32,15 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> Incluir([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
             var idLogin = User.Claims.FirstOrDefault().Value;
-            return await _documentoService.Incluir(obj, arquivo , idLogin);
+            return await _documentoService.Incluir(obj, arquivo, idLogin);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpPut("editar")]
-        public async Task<RespostaPadrao> Editar([FromBody] DocumentoDto obj)
+        public async Task<RespostaPadrao> Editar([FromForm] DocumentoDto obj, IFormFile arquivo)
         {
-            return await _documentoService.Editar(obj, UsuarioId);
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.Editar(obj, arquivo, idLogin);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
@@ -84,11 +85,11 @@ namespace Ecossistema.API.Controllers
             return await _documentoService.Detalhes(id);
         }
 
-        [HttpGet("listarTiposDocumentos")]
+        /*[HttpGet("listarTiposDocumentos")]
         public async Task<RespostaPadrao> ListarTiposDocumentos()
         {
             return await _documentoService.ListarTiposDocumentos();
-        }
+        }*/
 
         [HttpGet("downloadDocumento")]
 
