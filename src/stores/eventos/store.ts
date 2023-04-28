@@ -25,6 +25,8 @@ export const useEventoStore = defineStore("eventoStore", {
   persist: false,
   actions: {
     async postEvent(novoEvento: IEvento) {
+		console.log(novoEvento);
+		
       try {
         const formData = new FormData()
         formData.append("evento", JSON.stringify(novoEvento))
@@ -33,7 +35,7 @@ export const useEventoStore = defineStore("eventoStore", {
           formData.append(`tags[${index}].descricao`, tag.descricao)
         })
 
-        formData.append("arquivo", novoEvento.arquivos[0].arquivo)
+        formData.append("arquivo", novoEvento.arquivo)
 
         const response = await httpRequest.post(
           "/api/evento/incluir",

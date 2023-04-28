@@ -786,7 +786,7 @@
       sendingEvent.value = false
 
       const res = eventoStore.response.getResponse()
-      console.dir(res)
+      //console.dir(res)
       if (res.code === 200) {
         if (deleteRascunhoAfter.value) limparRascunho()
         resetarEvento()
