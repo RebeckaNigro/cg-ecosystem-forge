@@ -441,6 +441,14 @@ namespace Ecossistema.Services.Services
             var doc = query.FirstOrDefault();
             var nome = doc.Nome.Replace(" ", "%20");
             var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+nome+"&origem=3";
+            var tagItems = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
+            List<TagDto> tags = new List<TagDto>();
+            foreach(var x in tagItems)
+            {
+                tags.Add(new TagDto());
+                var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                tags[tags.Count - 1].Descricao = tag.Descricao;
+            }
             var result = query.Select(x => new
             {
                 download,
@@ -452,6 +460,7 @@ namespace Ecossistema.Services.Services
                 instituicaoId = x.InstituicaoId,
                 instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
                 data = x.Data,
+                tags,
                 x.Aprovado
             })
             .Distinct();
