@@ -256,7 +256,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> Excluir(int id)
+        public async Task<RespostaPadrao> Excluir(int id, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -266,6 +266,13 @@ namespace Ecossistema.Services.Services
             {
                 var objAlt = await _unitOfWork.Documentos.FindAsync(x => x.Id == id, new[] { "Aprovacoes" });
                 var tagItem = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+
+                if (usuario.Id != objAlt.UsuarioCriacaoId)
+                {
+                    resposta.SetChamadaInvalida("Você não tem permissão para excluir documento criada por outro usuário!");
+                    return resposta;
+                }
 
                 if (objAlt != null)
                 {
@@ -441,6 +448,14 @@ namespace Ecossistema.Services.Services
             var doc = query.FirstOrDefault();
             var nome = doc.Nome.Replace(" ", "%20");
             var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+nome+"&origem=3";
+            var tagItems = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
+            List<TagDto> tags = new List<TagDto>();
+            foreach(var x in tagItems)
+            {
+                tags.Add(new TagDto());
+                var tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                tags[tags.Count - 1].Descricao = tag.Descricao;
+            }
             var result = query.Select(x => new
             {
                 download,
@@ -452,6 +467,7 @@ namespace Ecossistema.Services.Services
                 instituicaoId = x.InstituicaoId,
                 instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
                 data = x.Data,
+                tags,
                 x.Aprovado
             })
             .Distinct();
