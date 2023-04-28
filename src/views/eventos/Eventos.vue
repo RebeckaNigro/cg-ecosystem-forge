@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
 import Banner from '../../components/general/Banner.vue';
 import Destaques from '../../components/eventos/Destaques.vue';
 import ContainerEventos from '../../components/eventos/ContainerEventos.vue';

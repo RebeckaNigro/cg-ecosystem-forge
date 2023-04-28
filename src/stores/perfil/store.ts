@@ -35,7 +35,7 @@ export const usePerfilStore = defineStore("perfilStore", {
       )
     }
   },
-  persist: true,
+  persist: false,
   actions: {
     async postPerfil(newPerfil: IPerfil) {
       try {

@@ -9,21 +9,30 @@
     <!-- TIPO -->
     <div class="mb-3 text-start">
       <label for="titulo" class="form-label-primary">Tipo</label>
-      <select
-        name="tipoEvento"
-        id="tipoEvento"
-        v-model="evento.tipoEventoId"
-        class="form-input-primary w-50"
-      >
-        <option
-          :value="index + 1"
-          v-for="(tipo, index) in tipoEventoOptions"
-          class="form-input-primary"
-          :key="index"
+      <div class="my-2 px-3">
+        <input
+          type="radio"
+          name="tipoEvento"
+          id="tipoEventoPresencial"
+          value="1"
+          v-model="evento.tipoEventoId"
+        />
+        <label
+          for="tipoEventoPresencial"
+          class="form-label-primary d-inline mx-3"
+          >Presencial</label
         >
-          {{ tipo }}
-        </option>
-      </select>
+        <input
+          type="radio"
+          name="tipoEvento"
+          id="tipoEventoOnline"
+          value="2"
+          v-model="evento.tipoEventoId"
+        />
+        <label for="tipoEventoOnline" class="form-label-primary d-inline mx-3"
+          >Online</label
+        >
+      </div>
     </div>
 
     <!-- NOME -->
@@ -48,7 +57,7 @@
         type="text"
         id="responsavel"
         class="form-input-primary"
-        :class="v$.endereco.numero.$error ? 'is-invalid' : ''"
+        :class="v$.responsavel.$error ? 'is-invalid' : ''"
         v-model="evento.responsavel"
       />
       <div v-if="v$.responsavel.$error" class="invalid-feedback">
@@ -58,7 +67,7 @@
 
     <!-- INSTITUIÇÕES -->
     <div class="mb-3">
-      <label for="tags" class="form-label-primary">Instituição</label>
+      <label for="tags" class="form-label-primary">Instituição*</label>
       <AutocompleteComponent
         type="Instituicao"
         :items="instituicoes"
@@ -86,23 +95,15 @@
       <label for="arquivo" class="form-label-primary">Imagem de capa*</label>
       <div class="imagem-divulgacao d-flex">
         <div>
-          <label
-            for="imagem-input"
-            class="borda-cinza"
-            :class="v$.arquivo.$error ? 'error-border' : ''"
-          />
+          <label for="imagem-input" class="borda-cinza" />
           <input
             class="form-input-primary"
-            :class="v$.arquivo.$error ? 'is-invalid' : ''"
             type="file"
             name="imagem-input"
             accept="image/png, image/jpg,image/jpeg"
             id="imagem-input"
             @change="(e) => onFileChanged(e)"
           />
-          <div v-if="v$.arquivo.$error" class="invalid-feedback">
-            {{ v$.arquivo.$errors[0].$message }}
-          </div>
         </div>
         <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
       </div>
@@ -207,7 +208,7 @@
     <!-- DESCRIÇÃO -->
     <label for="data" class="form-label-primary mt-5 mb-2">DESCRIÇÃO*</label>
 
-    <div>
+    <div class="mb-4">
       <QuillEditor
         ref="customEditor"
         theme="snow"
@@ -221,79 +222,72 @@
       </div>
     </div>
 
-    <!-- ENDEREÇO E MAPA -->
+    <!-- ENDEREÇO -->
     <div class="row">
       <Spinner v-if="gettingAddress" />
-      <div class="col-sm-6">
-        <!-- CEP -->
-        <div class="mb-3 mt-4">
-          <label for="cep" class="form-label-primary">CEP</label>
-          <input
-            type="text"
-            id="cep"
-            class="form-input-primary"
-            :class="v$.endereco.cep.$error ? 'is-invalid' : ''"
-            v-model="evento.endereco.cep"
-            @blur="buscarCEP"
-          />
-          <div v-if="v$.endereco.cep.$error" class="invalid-feedback">
-            {{ v$.endereco.cep.$errors[0].$message }}
-          </div>
+      <!-- CEP -->
+      <div class="mb-3" v-if="evento.tipoEventoId == 1">
+        <div class="text-start">
+          <label for="cep" class="form-label-primary d-inline"
+            >CEP
+            <a
+              href="https://buscacepinter.correios.com.br/app/endereco/index.php"
+              >(Não sabe o CEP?)</a
+            ></label
+          >
         </div>
 
-        <!-- LOGRADOURO -->
-        <div class="mb-3">
-          <label for="logradouro" class="form-label-primary">Logradouro</label>
-          <input
-            type="text"
-            id="logradouro"
-            class="form-input-primary"
-            v-model="evento.endereco.logradouro"
-            disabled
-          />
-        </div>
-
-        <!-- NÚMERO -->
-        <div class="mb-3">
-          <label for="numero" class="form-label-primary">Número</label>
-          <input
-            type="text"
-            id="numero"
-            class="form-input-primary"
-            :class="v$.endereco.numero.$error ? 'is-invalid' : ''"
-            v-model="evento.endereco.numero"
-          />
-          <div v-if="v$.endereco.numero.$error" class="invalid-feedback">
-            {{ v$.endereco.numero.$errors[0].$message }}
-          </div>
-        </div>
-
-        <!-- BAIRRO -->
-        <div class="mb-3">
-          <label for="bairro" class="form-label-primary">Bairro</label>
-          <input
-            type="text"
-            id="bairro"
-            class="form-input-primary"
-            v-model="evento.endereco.bairro"
-            disabled
-          />
-        </div>
+        <input
+          type="text"
+          id="cep"
+          class="form-input-primary"
+          v-model="evento.endereco.cep"
+          @blur="buscarCEP"
+          v-if="evento.tipoEventoId == 1"
+        />
       </div>
-      <!-- MAPA -->
-      <div class="col-sm-6" id="mapa">
-        <div style="background-color: blueviolet"></div>
+
+      <!-- LOGRADOURO -->
+      <div class="mb-3" v-if="evento.tipoEventoId == 1">
+        <label for="logradouro" class="form-label-primary">Logradouro</label>
+        <input
+          type="text"
+          id="logradouro"
+          class="form-input-primary"
+          v-model="evento.endereco.logradouro"
+        />
+      </div>
+
+      <!-- NÚMERO -->
+      <div class="mb-3" v-if="evento.tipoEventoId == 1">
+        <label for="numero" class="form-label-primary">Número</label>
+        <input
+          type="text"
+          id="numero"
+          class="form-input-primary"
+          v-model="evento.endereco.numero"
+        />
+      </div>
+
+      <!-- BAIRRO -->
+      <div class="mb-3" v-if="evento.tipoEventoId == 1">
+        <label for="bairro" class="form-label-primary">Bairro</label>
+        <input
+          type="text"
+          id="bairro"
+          class="form-input-primary"
+          v-model="evento.endereco.bairro"
+        />
       </div>
     </div>
 
-    <div class="row mb-3">
+    <div class="row mb-3" v-if="evento.tipoEventoId == 1">
       <div class="col-sm-4">
         <label for="estado" class="form-label-primary">Estado</label>
         <input
           id="estado"
           class="form-input-primary"
           v-model="evento.endereco.uf"
-          disabled
         />
       </div>
       <div class="col-sm-8">
@@ -303,13 +297,12 @@
           id="cidade"
           class="form-input-primary"
           v-model="evento.endereco.cidade"
-          disabled
         />
       </div>
     </div>
 
     <!-- COMPLEMENTO -->
-    <div class="mb-3">
+    <div class="mb-3" v-if="evento.tipoEventoId == 1">
       <label for="complemento" class="form-label-primary">Complemento</label>
       <input
         type="text"
@@ -321,23 +314,19 @@
 
     <!-- LOCAL DO EVENTO -->
     <div class="mb-3">
-      <label for="local" class="form-label-primary">Local</label>
+      <label for="local" class="form-label-primary">Nome do Local</label>
       <input
         type="text"
         id="local"
         class="form-input-primary"
-        :class="v$.endereco.numero.$error ? 'is-invalid' : ''"
         v-model="evento.local"
       />
-      <div v-if="v$.local.$error" class="invalid-feedback">
-        {{ v$.local.$errors[0].$message }}
-      </div>
     </div>
 
     <!-- LINK -->
     <div class="mb-3">
       <label for="link" class="form-label-primary"
-        >Link para compra dos ingressos</label
+        >Link para mais informações</label
       >
       <input
         type="text"
@@ -347,18 +336,12 @@
       />
     </div>
 
-    <!-- TERMOS DE USO -->
-    <div class="text-start my-3">
-      <input type="checkbox" id="concorda" class="mx-2" v-model="termosDeUso" />
-      <span>Li e concordo com todos os termos de uso.</span>
-    </div>
-
     <!-- LOADING SPINNER -->
     <Spinner v-if="sendingEvent" />
 
     <!-- PREVIEW -->
     <div class="row container-fluid">
-      <div class="col-sm-4">
+      <div class="col-sm-4" v-if="!editFlag">
         <button
           type="button"
           class="gray-btn-primary button-specific"
@@ -368,7 +351,7 @@
         </button>
       </div>
 
-      <div class="col-sm-4">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'">
         <button
           type="button"
           class="green-btn-outlined button-specific"
@@ -378,7 +361,7 @@
         </button>
       </div>
 
-      <div class="col-sm-4 fs-xs-1">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1">
         <button
           type="button"
           class="green-btn-primary button-specific"
@@ -427,7 +410,7 @@
           class="icone-usuario"
         />
         <div class="d-flex align-items-center mx-2 fw-bold">
-          {{ authorName }}
+          {{ evento.responsavel }}
         </div>
       </div>
 
@@ -449,7 +432,11 @@
           class="icone-usuario"
         />
         <div class="d-flex align-items-center mx-2 fw-bold">
-          {{ enderecoFormatado }}
+          {{
+            evento.tipoEventoId == 1
+              ? `${evento.local} - ${enderecoFormatado}`
+              : evento.linkExterno
+          }}
         </div>
       </div>
 
@@ -486,6 +473,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
 
@@ -525,7 +513,6 @@
   const tagStore = useTagStore()
   const route = useRoute()
 
-  const tipoEventoOptions = ["Presencial", "Online", "Palestra", "Workshop"]
   const customEditor = ref()
   const instituicoes = ref<Array<Instituicao>>()
   const selectedValue = ref<Instituicao>()
@@ -534,9 +521,9 @@
   const deleteRascunhoAfter = ref(false)
   const arquivo = ref<File | null>()
   const authorName = ref<string | null>()
-  const termosDeUso = ref(false)
   const invalidHoraInicio = ref(false)
   const invalidHoraFim = ref(false)
+  const editFlag = ref(false)
   const enderecoFormatado = ref("")
   const dataFormatada = ref<string | null>()
   const dataInicioFormatada = ref<string | null>()
@@ -548,7 +535,7 @@
   const evento = ref({
     id: -1,
     instituicaoId: -1,
-    tags: [],
+    tags: new Array<CustomTag>(),
     tipoEventoId: 1,
     titulo: "",
     descricao: "",
@@ -562,11 +549,6 @@
     responsavel: "",
     arquivo: File
   })
-
-  const fileSizeValidation = () => {
-    if (!arquivo.value) return false
-    return arquivo.value.size < 5 * 1024 * 1024
-  }
 
   const eventoRules = ref({
     id: -1,
@@ -585,29 +567,12 @@
         minValue(0)
       )
     },
-    endereco: {
-      numero: {
-        required: helpers.withMessage("Número é obrigatório.", required)
-      },
-      cep: { required: helpers.withMessage("CEP é obrigatório.", required) }
-    },
+
     dataInicio: {
       required: helpers.withMessage("Data de início é obrigatória.", required)
     },
     dataTermino: {
       required: helpers.withMessage("Data de término é obrigatória.", required)
-    },
-    arquivo: {
-      fileValidation: helpers.withMessage(
-        "Imagem obrigatória. (Deve ter no máximo 5MB)",
-        fileSizeValidation
-      )
-    },
-    local: {
-      required: helpers.withMessage(
-        "Nome do local do evento é obrigatório.",
-        required
-      )
     },
     responsavel: {
       required: helpers.withMessage(
@@ -647,19 +612,36 @@
   onMounted(async () => {
     const id = route.params.eventoId
 
+    await buscarInstituicoes()
+    await buscarTags()
+
     if (id) {
+      editFlag.value = true
       await eventoStore.getEventById(Number(id))
 
       if (eventoStore.response.code == 200) {
         evento.value = eventoStore.response.dado
+        horaInicio.value = evento.value.dataInicio.substring(
+          evento.value.dataInicio.length - 8,
+          evento.value.dataInicio.length
+        )
+        horaFim.value = evento.value.dataTermino.substring(
+          evento.value.dataTermino.length - 8,
+          evento.value.dataTermino.length
+        )
+
+        evento.value.dataInicio = evento.value.dataInicio.substring(0, 10)
+        evento.value.dataTermino = evento.value.dataTermino.substring(0, 10)
+
+        selectedValue.value = instituicoes.value?.find(
+          (item) => item.id == evento.value.instituicaoId
+        )
       } else {
         alertStore.showTimeoutErrorMessage("Erro ao carregar evento!")
       }
     }
 
     if (eventoStore.loadRascunho) verificaRascunho()
-    buscarInstituicoes()
-    buscarTags()
 
     authorName.value = userStore.getUserName
   })
@@ -670,16 +652,15 @@
       evento.value,
       selectedValue.value,
       horaInicio.value,
-      horaFim.value,
-      termosDeUso.value
+      horaFim.value
     )
     localStorage.setItem("eventoRascunho", JSON.stringify(rascunho))
 
     modalStore.showSuccessModal("Rascunho salvo com sucesso!")
   }
 
-  const buscarTags = () => {
-    tagStore.getTags()
+  const buscarTags = async () => {
+    await tagStore.getTags()
     allTags.value = tagStore.allTags
   }
 
@@ -693,115 +674,127 @@
     }
   }
 
+  const fileSizeValidation = () => {
+    if (!arquivo.value) return false
+
+    return arquivo.value.size < 5 * 1024 * 1024
+  }
+
   const onFileChanged = (event: Event) => {
     const target = event.target as HTMLInputElement
     if (target && target.files) {
       arquivo.value = target.files[0]
       fileName.value = target.files[0].name
     }
+
+    if (!fileSizeValidation()) {
+      alertStore.showTimeoutWarningMessage("Imagem deve ter no máximo 5MB")
+      arquivo.value = null
+      fileName.value = ""
+      return
+    }
   }
 
   const cadastrar = async () => {
-    if (!termosDeUso.value) {
-      alertStore.showWarningMessage("Você precisa aceitar os termos de uso!")
-    } else {
-      const formValidation = await v$.value.$validate()
-      if (!horaInicio.value) invalidHoraInicio.value = true
-      else invalidHoraInicio.value = false
+    const formValidation = await v$.value.$validate()
+    if (!horaInicio.value) invalidHoraInicio.value = true
+    else invalidHoraInicio.value = false
 
-      if (!horaFim.value) invalidHoraFim.value = true
-      else invalidHoraFim.value = false
+    if (!horaFim.value) invalidHoraFim.value = true
+    else invalidHoraFim.value = false
 
-      if (!formValidation || invalidHoraInicio.value || invalidHoraFim.value) {
+    if (!formValidation || invalidHoraInicio.value || invalidHoraFim.value) {
+      alertStore.showTimeoutErrorMessage(
+        "Preencha todos os campos obrigatórios."
+      )
+      return
+    }
+
+    if (
+      evento.value.dataInicio.length <= 10 &&
+      evento.value.dataTermino.length <= 10
+    ) {
+      const dataInicioDateTime = dateAndTimeToDatetime(
+        evento.value.dataInicio,
+        horaInicio.value
+      )
+      const dataTerminoDateTime = dateAndTimeToDatetime(
+        evento.value.dataTermino,
+        horaFim.value
+      )
+      if (new Date(dataInicioDateTime) < new Date()) {
         alertStore.showTimeoutErrorMessage(
-          "Preencha todos os campos obrigatórios."
+          "Data de início do evento já passou!"
+        )
+        return
+      }
+
+      if (new Date(dataInicioDateTime) > new Date(dataTerminoDateTime)) {
+        alertStore.showTimeoutErrorMessage(
+          "Data de início não pode ser maior que a data de término!"
+        )
+        return
+      }
+
+      evento.value.dataInicio = dataInicioDateTime
+      evento.value.dataTermino = dataTerminoDateTime
+    } else {
+      if (new Date(evento.value.dataInicio) < new Date()) {
+        alertStore.showTimeoutErrorMessage(
+          "Data de início do evento já passou!"
         )
         return
       }
 
       if (
-        evento.value.dataInicio.length <= 10 &&
-        evento.value.dataTermino.length <= 10
+        new Date(evento.value.dataInicio) > new Date(evento.value.dataTermino)
       ) {
-        const dataInicioDateTime = dateAndTimeToDatetime(
-          evento.value.dataInicio,
-          horaInicio.value
+        alertStore.showTimeoutErrorMessage(
+          "Data de início não pode ser maior que a data de término!"
         )
-        const dataTerminoDateTime = dateAndTimeToDatetime(
-          evento.value.dataTermino,
-          horaFim.value
-        )
-        if (new Date(dataInicioDateTime) < new Date()) {
-          alertStore.showTimeoutErrorMessage(
-            "Data de início do evento já passou!"
-          )
-          return
-        }
-
-        if (new Date(dataInicioDateTime) > new Date(dataTerminoDateTime)) {
-          alertStore.showTimeoutErrorMessage(
-            "Data de início não pode ser maior que a data de término!"
-          )
-          return
-        }
-
-        evento.value.dataInicio = dataInicioDateTime
-        evento.value.dataTermino = dataTerminoDateTime
-      } else {
-        if (new Date(evento.value.dataInicio) < new Date()) {
-          alertStore.showTimeoutErrorMessage(
-            "Data de início do evento já passou!"
-          )
-          return
-        }
-
-        if (
-          new Date(evento.value.dataInicio) > new Date(evento.value.dataTermino)
-        ) {
-          alertStore.showTimeoutErrorMessage(
-            "Data de início não pode ser maior que a data de término!"
-          )
-          return
-        }
+        return
       }
+    }
 
-      evento.value.arquivo = arquivo.value
+    evento.value.arquivo = arquivo.value
 
-      console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
-      console.dir(evento.value)
+    if (evento.value.tipoEventoId == 2) evento.value.endereco = null
 
-      if (evento.value.id > 0) {
-        sendingEvent.value = true
+    console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+    console.dir(evento.value)
 
-        await eventoStore.putEvent(evento.value)
-        sendingEvent.value = false
+    if (evento.value.id > 0) {
+      sendingEvent.value = true
 
-        const res = eventoStore.response.getResponse()
-        if (res.code === 200) {
-          if (deleteRascunhoAfter.value) limparRascunho()
-          resetarEvento()
-          modalStore.showSuccessModal("Evento editado com sucesso!")
-        } else if (res.code === 661) {
-          console.error(res.message)
-        } else {
-          modalStore.showErrorModal("Erro ao editar evento!")
-        }
+      await eventoStore.putEvent(evento.value)
+      sendingEvent.value = false
+
+      const res = eventoStore.response.getResponse()
+      if (res.code === 200) {
+        if (deleteRascunhoAfter.value) limparRascunho()
+        resetarEvento()
+        modalStore.showSuccessModal("Evento editado com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
       } else {
-        sendingEvent.value = true
+        modalStore.showErrorModal("Erro ao editar evento!")
+      }
+    } else {
+      sendingEvent.value = true
 
-        await eventoStore.postEvent(evento.value)
-        sendingEvent.value = false
+      await eventoStore.postEvent(evento.value)
+      sendingEvent.value = false
 
-        const res = eventoStore.response.getResponse()
-        if (res.code === 200) {
-          if (deleteRascunhoAfter.value) limparRascunho()
-          resetarEvento()
-          modalStore.showSuccessModal("Evento cadastrado com sucesso!")
-        } else if (res.code === 661) {
-          console.error(res.message)
-        } else {
-          modalStore.showErrorModal("Erro ao cadastrar evento!")
-        }
+      const res = eventoStore.response.getResponse()
+      console.dir(res)
+      if (res.code === 200) {
+        if (deleteRascunhoAfter.value) limparRascunho()
+        resetarEvento()
+        modalStore.showSuccessModal("Evento cadastrado com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
+      } else {
+        modalStore.showErrorModal("Erro ao cadastrar evento!")
       }
     }
   }
@@ -841,8 +834,7 @@
         evento.value,
         selectedValue.value,
         horaInicio.value,
-        horaFim.value,
-        termosDeUso.value
+        horaFim.value
       )
       localStorage.setItem("eventoRascunho", JSON.stringify(rascunho))
 
@@ -862,7 +854,6 @@
       evento.value.dataTermino = evento.value.dataTermino.substring(0, 10)
       horaInicio.value = rascunhoFinal.horaInicio
       horaFim.value = rascunhoFinal.horaTermino
-      termosDeUso.value = rascunhoFinal.termosDeUso
       alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!")
     }
     deleteRascunhoAfter.value = true
@@ -891,7 +882,7 @@
       responsavel: "",
       arquivo: File
     }
-    termosDeUso.value = false
+    selectedValue.value = null
     customEditor.value.setHTML("")
   }
 
@@ -923,8 +914,8 @@
     evento.value.tags.splice(index, 1)
   }
 
-  const addTag = (selectedTag: EventTag) => {
-    const tagFound = evento.value.tags.find((tag: EventTag) => {
+  const addTag = (selectedTag: CustomTag) => {
+    const tagFound = evento.value.tags.find((tag: CustomTag) => {
       return tag.descricao == selectedTag.descricao
     })
 

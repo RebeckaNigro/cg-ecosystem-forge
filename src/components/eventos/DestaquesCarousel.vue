@@ -44,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
 import { IUltimoEvento } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import {brDateString} from '../../utils/formatacao/datetime'

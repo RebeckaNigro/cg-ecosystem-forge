@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-5 pb-5">
+  <div class="pt-5 pb-5 container">
     <Spinner spinnerColorClass="text-dark" v-if="isLoadingContent" />
     <div class="noticia-breadcrumb">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
@@ -28,7 +28,11 @@
       </header>
       <img
         class="w-100"
-        :src="'data:image/png;base64, ' + noticia.arquivo"
+        :src="
+          noticia.arquivo
+            ? 'data:image/png;base64, ' + noticia.arquivo
+            : '/public/noticias/noticia-expandida/default-news-cover.jpeg'
+        "
         alt="capa da notícia"
       />
       <p id="first-paraghap">
@@ -51,7 +55,7 @@
           src="/public/noticias/noticia-expandida/arrow_up.svg"
           alt="Seta para cima"
         />
-        Subir pro topo
+        Subir ao topo
       </button>
     </div>
   </div>
@@ -93,13 +97,6 @@
 </script>
 
 <style scoped lang="scss">
-  .background {
-    background-image: url("/public/user/background.svg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-  }
-
   .btn-up-container {
     margin: 0 auto;
     display: flex;
@@ -175,129 +172,6 @@
       font-size: 1.25rem;
       margin-top: 1.5rem;
       margin-bottom: 3rem;
-    }
-  }
-
-  .noticia-breadcrumb {
-    display: flex;
-    width: fit-content;
-    margin-left: 15%;
-    font-size: 20px;
-
-    .active {
-      font-family: "Montserrat-Medium", sans-serif;
-    }
-
-    .unactive {
-      cursor: pointer;
-      font-family: "Montserrat-Light", sans-serif;
-    }
-
-    @media (max-width: 920px) {
-      font-size: 17px;
-    }
-  }
-
-  @media (max-width: 1200px) {
-    .noticia-expandida-banner {
-      .text-container {
-        h1 {
-          font-size: 2rem;
-        }
-
-        p {
-          font-size: 0.8rem;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 991px) {
-    .noticia-expandida-banner {
-      .text-container {
-        max-width: 300px;
-
-        h1 {
-          font-size: 1.5rem;
-        }
-
-        p {
-          max-height: 60px;
-        }
-      }
-    }
-    .noticia-expandida {
-      header {
-        margin-top: 2rem;
-
-        h1 {
-          font-size: 1.5rem;
-        }
-
-        p.dark-body-text {
-          font-size: 1.2rem;
-        }
-      }
-
-      .dark-body-text {
-        font-size: 1rem;
-        text-align: justify;
-      }
-
-      main {
-        h3 {
-          font-size: 1.5rem;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .noticia-expandida-banner {
-      .text-container {
-        max-width: 200px;
-
-        h1 {
-          font-size: 1rem;
-        }
-
-        p {
-          max-height: 40px;
-          font-size: 0.7rem;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 576px) {
-    .noticia-expandida-banner {
-      .text-container {
-        h1 {
-          font-size: 0.8rem;
-        }
-      }
-    }
-    .noticia-expandida {
-      header {
-        h1 {
-          font-size: 1.3rem;
-        }
-
-        p.dark-body-text {
-          font-size: 1rem;
-        }
-      }
-
-      .dark-body-text {
-        font-size: 1rem;
-        text-align: justify;
-      }
-
-      main {
-        h3 {
-          font-size: 1.3rem;
-        }
-      }
     }
   }
 </style>

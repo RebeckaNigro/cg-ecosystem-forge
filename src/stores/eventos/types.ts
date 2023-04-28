@@ -15,7 +15,7 @@ export interface IEvento {
   linkExterno: string
   exibirMaps: boolean
   responsavel: string
-  arquivo: File
+  arquivos: Array<IFile>
 }
 
 export class Evento implements IEvento {
@@ -33,7 +33,7 @@ export class Evento implements IEvento {
   linkExterno!: string
   exibirMaps!: boolean
   responsavel!: string
-  arquivo!: File
+  arquivos!: Array<IFile>
 
   constructor(
     id: number,
@@ -50,7 +50,7 @@ export class Evento implements IEvento {
     linkExterno: string,
     exibirMaps: boolean,
     responsavel: string,
-    arquivo: File
+    arquivos: File
   ) {
     ;[
       this.instituicaoId,
@@ -66,7 +66,7 @@ export class Evento implements IEvento {
       this.linkExterno,
       this.exibirMaps,
       this.responsavel,
-      this.arquivo
+      this.arquivos
     ] = arguments
   }
 }
@@ -147,6 +147,7 @@ export interface IEventoSimplificado {
   dataTermino: string
   local: string
   arquivo: string | null
+  ultimaAtualizacao: string
 }
 
 export class EventoSimplificado implements IEventoSimplificado {
@@ -157,6 +158,7 @@ export class EventoSimplificado implements IEventoSimplificado {
   dataTermino: string
   local: string
   arquivo: string | null
+  ultimaAtualizacao: string = ""
 
   constructor(
     id: number,
@@ -179,24 +181,28 @@ export class EventoSimplificado implements IEventoSimplificado {
   }
 }
 
+export interface IFile {
+  id: number
+  arquivo: string
+  extensao: string
+  nomeOriginal: string
+}
+
 export class EventoRascunho {
   evento: Evento
   instituicao: Instituicao
   horaInicio: string
   horaTermino: string
-  termosDeUso: boolean
 
   constructor(
     evento: Evento,
     instituicao: Instituicao,
     horaInicio: string,
-    horaTermino: string,
-    termosDeUso: boolean
+    horaTermino: string
   ) {
     this.evento = evento
     this.horaInicio = horaInicio
     this.horaTermino = horaTermino
     this.instituicao = instituicao
-    this.termosDeUso = termosDeUso
   }
 }

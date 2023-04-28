@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { INoticia, Noticia } from "../../stores/noticias/types"
 
 const titleIsValid = (t: string) => {

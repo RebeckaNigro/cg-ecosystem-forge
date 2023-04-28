@@ -28,6 +28,7 @@
   </div>
 </template>
 <script setup lang="ts">
+//@ts-nocheck
   import { ref, watch } from "vue"
   import { CustomTag } from "../../stores/tag/types"
 
@@ -76,7 +77,16 @@
   }
 
   const setResult = (result: any) => {
-    search.value = result
+    if (!result) return
+
+    const previousValue = result
+    emit("selected-value", result)
+    if (props.type == "Instituicao") {
+      search.value = result.razaoSocial
+    } else if (props.type == "CustomTag") {
+      search.value = result.descricao
+    }
+
     isOpen.value = false
   }
 

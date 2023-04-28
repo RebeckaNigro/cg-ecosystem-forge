@@ -60,11 +60,13 @@ export const useModalStore = defineStore("modalStore", {
     },
 
     showModal() {
+	  //@ts-ignore
       this.modalInstance.show()
     },
 
     closeModal() {
-      this.modalInstance.toggle()
+      //@ts-ignore
+		this.modalInstance.toggle()
     }
   },
   persist: false

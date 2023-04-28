@@ -11,7 +11,8 @@ import { useUserStore } from "../../stores/user/store"
 export const httpRequest: AxiosInstance = axios.create({
   baseURL: "http://dev-api.ecossistemadeinovacaocg.com.br",
   headers: {
-    "Content-type": "application/json"
+    "Content-type": "application/json",
+	"Access-Control-Allow-Origin": "*"
   }
 })
 

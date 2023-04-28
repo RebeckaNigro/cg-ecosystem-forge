@@ -36,8 +36,8 @@
   }>()
 
   const emit = defineEmits(["filter-result"])
-  const menuOptions = ref([])
-  const results = ref([])
+  const menuOptions = ref<FilterOption[]>([])
+  const results = ref<any[]>([])
   const selectedOption = ref("")
 
   onMounted(() => {
@@ -67,8 +67,6 @@
           dataReferencia.getDate() - Number(selectedOption.value)
         )
         dataReferencia.setHours(0, 0, 0)
-
-        console.log(`Data de referencia: ${dataReferencia}`)
 
         results.value = props.items.filter((noticia: NoticiaSimplificada) => {
           return adjustStringDateForTimezone(

@@ -34,23 +34,15 @@
       <label for="arquivo" class="form-label-primary">Imagem de capa*</label>
       <div class="imagem-divulgacao d-flex">
         <div>
-          <label
-            for="imagem-input"
-            class="borda-cinza"
-            :class="v$.arquivo.$error ? 'error-border' : ''"
-          />
+          <label for="imagem-input" class="borda-cinza" />
           <input
             class="form-input-primary"
-            :class="v$.arquivo.$error ? 'is-invalid' : ''"
             type="file"
             name="imagem-input"
             accept="image/png, image/jpg,image/jpeg"
             id="imagem-input"
             @change="(e) => onFileChanged(e)"
           />
-          <div v-if="v$.arquivo.$error" class="invalid-feedback">
-            {{ v$.arquivo.$errors[0].$message }}
-          </div>
         </div>
         <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
       </div>
@@ -99,11 +91,11 @@
           type="date"
           id="data"
           class="form-input-primary"
-          :class="v$.dataPublicacao.$error ? 'is-invalid' : ''"
+          :class="invalidData ? 'is-invalid' : ''"
           v-model="data"
         />
-        <div v-if="v$.dataPublicacao.$error" class="invalid-feedback">
-          {{ v$.dataPublicacao.$errors[0].$message }}
+        <div v-if="invalidData" class="invalid-feedback">
+          Data é obrigatória
         </div>
       </div>
       <div class="col-sm-1 d-flex justify-content-center align-items-center">
@@ -114,7 +106,7 @@
           type="time"
           id="hora"
           class="form-input-primary"
-          :class="!hora ? 'is-invalid' : ''"
+          :class="invalidHora ? 'is-invalid' : ''"
           v-model="hora"
         />
         <div v-if="invalidHora" class="invalid-feedback">
@@ -142,15 +134,10 @@
       </div>
     </div>
 
-    <div class="text-start my-3">
-      <input type="checkbox" id="concorda" class="mx-2" v-model="termosDeUso" />
-      <span>Li e concordo com todos os termos de uso.</span>
-    </div>
-
     <Spinner v-if="sendingNews" />
 
     <div class="row container-fluid">
-      <div class="col-sm-4">
+      <div class="col-sm-4" v-if="!editFlag">
         <button
           type="button"
           class="gray-btn-primary button-specific"
@@ -160,7 +147,7 @@
         </button>
       </div>
 
-      <div class="col-sm-4">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'">
         <button
           type="button"
           class="green-btn-outlined button-specific"
@@ -170,7 +157,7 @@
         </button>
       </div>
 
-      <div class="col-sm-4 fs-xs-1">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1">
         <button
           type="button"
           class="green-btn-primary button-specific"
@@ -217,7 +204,14 @@
       <div class="text-start mx-2">{{ dataFormatada }}</div>
       <div class="mb-5">
         <img
+          v-if="base64Image"
           :src="base64Image"
+          class="w-100 max-image-width"
+          alt="capa noticia"
+        />
+        <img
+          v-else
+          src="/public/noticias/noticia-expandida/default-news-cover.svg"
           class="w-100 max-image-width"
           alt="capa noticia"
         />
@@ -255,6 +249,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
   import useValidate from "@vuelidate/core"
@@ -286,11 +281,13 @@
 
   const sendingNews = ref(false)
   const invalidHora = ref(false)
+  const invalidData = ref(false)
   const customEditor = ref()
   const deleteRascunhoAfter = ref(false)
   const arquivo = ref<File | null>()
   const authorName = ref<string | null>()
   const termosDeUso = ref(false)
+  const editFlag = ref(false)
   const dataFormatada = ref<string | null>()
   const data = ref("")
   const hora = ref("")
@@ -301,9 +298,8 @@
     titulo: "",
     descricao: "",
     subTitulo: "",
-    tags: [],
+    tags: new Array<CustomTag>(),
     dataPublicacao: "",
-    hora: "",
     arquivo: File
   })
 
@@ -319,15 +315,6 @@
     },
     descricao: {
       required: helpers.withMessage("Corpo da notícia é obrigatório.", required)
-    },
-    dataPublicacao: {
-      required: helpers.withMessage("Data é obrigatória.", required)
-    },
-    arquivo: {
-      fileValidation: helpers.withMessage(
-        "Imagem obrigatória. (Deve ter no máximo 5MB)",
-        fileSizeValidation
-      )
     }
   })
 
@@ -393,6 +380,7 @@
     const id = route.params.noticiaId
 
     if (id) {
+      editFlag.value = true
       await noticiaStore.getNewsById(Number(id))
 
       if (noticiaStore.response.code == 200) {
@@ -415,14 +403,15 @@
 
   const confirmado = () => {
     confirmStore.closeConfirm()
-    let rascunho = new NoticiaRascunho(noticia.value, termosDeUso.value)
+    noticia.value.dataPublicacao = dateAndTimeToDatetime(data.value, hora.value)
+    let rascunho = new NoticiaRascunho(noticia.value)
     localStorage.setItem("noticiaRascunho", JSON.stringify(rascunho))
 
     modalStore.showSuccessModal("Rascunho salvo com sucesso!")
   }
 
-  const buscarTags = () => {
-    tagStore.getTags()
+  const buscarTags = async () => {
+    await tagStore.getTags()
     allTags.value = tagStore.allTags
   }
 
@@ -432,85 +421,83 @@
       arquivo.value = target.files[0]
       fileName.value = target.files[0].name
     }
+
+    if (!fileSizeValidation()) {
+      alertStore.showTimeoutWarningMessage("Imagem deve ter no máximo 5MB")
+      arquivo.value = null
+      fileName.value = ""
+      return
+    }
   }
 
   const cadastrar = async () => {
-    if (!termosDeUso.value) {
-      alertStore.showWarningMessage("Você precisa aceitar os termos de uso!")
-    } else {
-      noticia.value.dataPublicacao = dateAndTimeToDatetime(
-        data.value,
-        hora.value
+    const formValidation = await v$.value.$validate()
+
+    if (!hora.value) invalidHora.value = true
+    else invalidHora.value = false
+
+    if (!data.value) invalidData.value = true
+    else invalidData.value = false
+
+    if (!formValidation || invalidHora.value || invalidData.value) {
+      alertStore.showTimeoutErrorMessage(
+        "Preencha todos os campos obrigatórios."
       )
+      return
+    }
 
-      const formValidation = await v$.value.$validate()
-      if (!hora.value) invalidHora.value = true
-      else invalidHora.value = false
+    noticia.value.dataPublicacao = dateAndTimeToDatetime(data.value, hora.value)
 
-      if (!formValidation || invalidHora.value) {
-        alertStore.showTimeoutErrorMessage(
-          "Preencha todos os campos obrigatórios."
-        )
-        return
-      }
+    noticia.value.arquivo = arquivo.value
 
-      if (new Date(noticia.value.dataPublicacao) > new Date()) {
-        console.log("DATA MAIOR")
+    console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+    console.dir(noticia.value)
 
-        alertStore.showTimeoutErrorMessage(
-          "Data e hora não podem ser maior que as atuais!"
-        )
-        return
-      }
+    if (noticia.value.id > 0) {
+      sendingNews.value = true
 
-      noticia.value.arquivo = arquivo.value
+      await noticiaStore.putNews(noticia.value)
+      sendingNews.value = false
 
-      console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
-      console.dir(noticia.value)
-
-      if (noticia.value.id > 0) {
-        sendingNews.value = true
-
-        await noticiaStore.putNews(noticia.value)
-        sendingNews.value = false
-
-        const res = noticiaStore.response.getResponse()
-        if (res.code === 200) {
-          if (deleteRascunhoAfter.value) limparRascunho()
-          resetarNoticia()
-          modalStore.showSuccessModal("Notícia editada com sucesso!")
-        } else if (res.code === 661) {
-          console.error(res.message)
-        } else {
-          modalStore.showErrorModal("Erro ao editar notícia!")
-        }
+      const res = noticiaStore.response.getResponse()
+      if (res.code === 200) {
+        if (deleteRascunhoAfter.value) limparRascunho()
+        resetarNoticia()
+        modalStore.showSuccessModal("Notícia editada com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
       } else {
-        sendingNews.value = true
+        modalStore.showErrorModal("Erro ao editar notícia!")
+      }
+    } else {
+      sendingNews.value = true
 
-        await noticiaStore.postNews(noticia.value)
-        sendingNews.value = false
+      await noticiaStore.postNews(noticia.value)
+      sendingNews.value = false
 
-        const res = noticiaStore.response.getResponse()
-        if (res.code === 200) {
-          if (deleteRascunhoAfter.value) limparRascunho()
-          resetarNoticia()
-          modalStore.showSuccessModal("Notícia cadastrada com sucesso!")
-        } else if (res.code === 661) {
-          console.error(res.message)
-        } else {
-          modalStore.showErrorModal("Erro ao cadastrar notícia!")
-        }
+      const res = noticiaStore.response.getResponse()
+      if (res.code === 200) {
+        if (deleteRascunhoAfter.value) limparRascunho()
+        resetarNoticia()
+        modalStore.showSuccessModal("Notícia cadastrada com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
+      } else {
+        modalStore.showErrorModal("Erro ao cadastrar notícia!")
       }
     }
   }
 
   const visualizar = async () => {
+    dataFormatada.value = brDateString(data.value)
+
     if (arquivo.value) {
       const resultado = await fileToBase64(arquivo.value)
       base64Image.value = resultado as string
+    } else {
+      base64Image.value = ""
     }
 
-    dataFormatada.value = brDateString(noticia.value.dataPublicacao.toString())
     isVisualizacao.value = true
   }
 
@@ -525,7 +512,9 @@
         data.value,
         hora.value
       )
-      let rascunho = new NoticiaRascunho(noticia.value, termosDeUso.value)
+
+      let rascunho = new NoticiaRascunho(noticia.value)
+      console.dir(rascunho)
       localStorage.setItem("noticiaRascunho", JSON.stringify(rascunho))
 
       modalStore.showSuccessModal("Rascunho salvo com sucesso!")
@@ -543,7 +532,6 @@
         noticia.value.dataPublicacao.length - 13,
         noticia.value.dataPublicacao.length - 5
       )
-      termosDeUso.value = rascunhoFinal.termosDeUso
       alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!")
     }
     deleteRascunhoAfter.value = true

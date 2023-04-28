@@ -42,18 +42,21 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
   titulo!: string
   tags!: CustomTag[]
   dataPublicacao!: string
+  dataOperacao!: string
   arquivo: string
 
   constructor(
     id: number,
     titulo: string,
     tags: CustomTag[],
+    dataOperacao: string,
     dataPublicacao: string,
     arquivo: string
   ) {
     this.id = id
     this.titulo = titulo
     this.tags = tags
+    this.dataOperacao = dataOperacao
     this.dataPublicacao = dataPublicacao
     this.arquivo = arquivo
   }
@@ -61,11 +64,9 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
 
 export class NoticiaRascunho {
   noticia: Noticia
-  termosDeUso: boolean
 
-  constructor(noticia: Noticia, termosDeUso: boolean) {
+  constructor(noticia: Noticia) {
     this.noticia = noticia
-    this.termosDeUso = termosDeUso
   }
 }
 
@@ -74,5 +75,6 @@ export interface INoticiaSimplificada {
   titulo: string
   tags: CustomTag[]
   dataPublicacao: string
+  dataOperacao: string
   arquivo: string
 }

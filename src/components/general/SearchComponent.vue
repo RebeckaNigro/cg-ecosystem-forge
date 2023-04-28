@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+ //@ts-nocheck 
   import { onMounted, ref } from "vue"
   import { EventoSimplificado } from "../../stores/eventos/types"
   import { NoticiaSimplificada } from "../../stores/noticias/types"
@@ -38,6 +39,12 @@
   const searchWord = ref("")
 
   const search = () => {
+    if (!searchWord.value) {
+      results.value = props.items
+
+      sendSearchResult()
+      return
+    }
     switch (props.type) {
       case "noticia":
         results.value = props.items.filter((item: NoticiaSimplificada) => {

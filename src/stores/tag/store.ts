@@ -12,7 +12,7 @@ export const useTagStore = defineStore("tagStore", {
       allTags
     }
   },
-  persist: true,
+  persist: false,
   actions: {
     async getTags() {
       try {

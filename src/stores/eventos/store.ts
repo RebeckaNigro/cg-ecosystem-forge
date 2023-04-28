@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { IEvento, EnderecoExistente, IUltimoEvento, Evento } from "./types"
 import { defineStore } from "pinia"
 import { httpRequest, getLastContent } from "../../utils/http"
@@ -19,7 +20,7 @@ export const useEventoStore = defineStore("eventoStore", {
       loadRascunho: false
     }
   },
-  persist: true,
+  persist: false,
   actions: {
     async postEvent(novoEvento: IEvento) {
       try {
@@ -30,7 +31,7 @@ export const useEventoStore = defineStore("eventoStore", {
           formData.append(`tags[${index}].descricao`, tag.descricao)
         })
 
-        formData.append("arquivo", novoEvento.arquivo)
+        formData.append("arquivo", novoEvento.arquivos[0].arquivo)
 
         const response = await httpRequest.post(
           "/api/evento/incluir",
@@ -149,11 +150,14 @@ export const useEventoStore = defineStore("eventoStore", {
         const formData = new FormData()
         formData.append("evento", JSON.stringify(eventoEdicao))
 
-        eventoEdicao.tags.forEach((tag, index) => {
-          formData.append(`tags[${index}].descricao`, tag.descricao)
-        })
+        if (eventoEdicao.tags.length > 0) {
+          eventoEdicao.tags.forEach((tag, index) => {
+            formData.append(`tags[${index}].descricao`, tag.descricao)
+          })
+        }
 
-        formData.append("arquivo", eventoEdicao.arquivo)
+        formData.append("arquivo", eventoEdicao.arquivos[0].arquivo)
+
         const res = await httpRequest.put("/api/evento/editar", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
@@ -180,7 +184,7 @@ export const useEventoStore = defineStore("eventoStore", {
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
-            response.data.dado,
+            response.data.retorno,
             response.data.resposta
           )
         }

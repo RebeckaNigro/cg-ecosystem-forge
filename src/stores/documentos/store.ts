@@ -1,47 +1,52 @@
 import { defineStore } from "pinia"
-import { INoticia, INoticiaSimplificada } from "./types"
+import { IDocumento, IDocumentoSimplificado } from "../documentos/types"
 import { getLastContent, httpRequest } from "../../utils/http"
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 
-const lastNews: Array<INoticiaSimplificada> = []
-const allNews: Array<INoticiaSimplificada> = []
-const allUserNews: Array<INoticiaSimplificada> = []
-export const useNoticiaStore = defineStore("noticiaStore", {
+const lastDocs: Array<IDocumentoSimplificado> = []
+const allDocs: Array<IDocumentoSimplificado> = []
+const allUserDocs: Array<IDocumentoSimplificado> = []
+const allUserLastDocs: Array<IDocumentoSimplificado> = []
+export const useDocumentStore = defineStore("documentStore", {
   state: () => {
     return {
       response: new GeneralResponseHandler(0, "none", "no request made yet"),
-      lastNews,
-      allNews,
-      allUserNews,
-      loadRascunho: false
+      lastDocs,
+      allDocs,
+      allUserDocs,
+      allUserLastDocs
     }
   },
   persist: false,
   actions: {
-    async postNews(novaNoticia: INoticia) {
+    async postDocument(novoDocumento: IDocumento) {
       try {
         const formData = new FormData()
-        formData.append("titulo", novaNoticia.titulo)
-        formData.append("descricao", novaNoticia.descricao)
-        formData.append("subTitulo", novaNoticia.subTitulo)
-        formData.append("dataPublicacao", novaNoticia.dataPublicacao.toString())
-
-        if (novaNoticia.tags.length > 0) {
-          novaNoticia.tags.forEach((tag, index) => {
+        formData.append("nome", novoDocumento.nome)
+        formData.append("descricao", novoDocumento.descricao)
+        formData.append(
+          "tipoDocumentoId",
+          novoDocumento.tipoDocumentoId.toString()
+        )
+        formData.append(
+          "documentoAreaId",
+          novoDocumento.documentoAreaId.toString()
+        )
+        formData.append("instituicaoId", novoDocumento.instituicaoId.toString())
+        formData.append("data", novoDocumento.data.toString())
+        if (novoDocumento.tags.length > 0) {
+          novoDocumento.tags.forEach((tag, index) => {
             formData.append(`tags[${index}].descricao`, tag.descricao)
           })
         }
-
-        formData.append("arquivo", novaNoticia.arquivo)
-
+        formData.append("arquivo", novoDocumento.arquivo)
         const response = await httpRequest.post(
-          "/api/noticia/incluir",
+          "/api/documento/incluir",
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" }
           }
         )
-
         this.response.putResponse(
           response.data.codigo,
           response.data.dado,
@@ -55,24 +60,23 @@ export const useNoticiaStore = defineStore("noticiaStore", {
           console.error(error)
         }
       }
-
       return false
     },
 
-    async getLastNews() {
-      const response = await getLastContent("noticia")
+    async getLastDocs() {
+      const response = await getLastContent("documento")
       if (response.data.codigo === 200) {
-        this.lastNews = []
+        this.lastDocs = []
         for (const news of response.data.retorno) {
-          this.lastNews.push(news)
+          this.lastDocs.push(news)
         }
       }
     },
 
-    async getUserNews() {
+    async getUserDocs() {
       try {
         const response = await httpRequest.get(
-          "/api/noticia/listarPorUsuarioId"
+          "/api/documento/listarPorUsuarioId"
         )
         if (response.data.codigo === 200) {
           this.response.putResponse(
@@ -80,9 +84,9 @@ export const useNoticiaStore = defineStore("noticiaStore", {
             response.data.retorno,
             response.data.resposta
           )
-          this.allUserNews = []
-          for (const news of response.data.retorno) {
-            this.allUserNews.push(news)
+          this.allUserDocs = []
+          for (const docs of response.data.retorno) {
+            this.allUserDocs.push(docs)
           }
         }
       } catch (error) {
@@ -90,19 +94,20 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       }
     },
 
-    async getAllNews() {
+    async getUserLastDocs() {
       try {
-        const response = await httpRequest.get("api/noticia/listarTodas")
-
+        const response = await httpRequest.get(
+          "/api/documento/listarUltimosPorUsuarioId"
+        )
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.retorno,
             response.data.resposta
           )
-          this.allNews = []
-          for (const news of response.data.retorno) {
-            this.allNews.push(news)
+          this.allUserLastDocs = []
+          for (const docs of response.data.retorno) {
+            this.allUserLastDocs.push(docs)
           }
         }
       } catch (error) {
@@ -110,10 +115,29 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       }
     },
 
-    async deleteNews(noticiaId: number) {
+    async getAllDocs() {
+      try {
+        const response = await httpRequest.get("api/documento/listarTodas")
+        if (response.data.codigo === 200) {
+          this.response.putResponse(
+            response.data.codigo,
+            response.data.retorno,
+            response.data.resposta
+          )
+          this.allDocs = []
+          for (const docs of response.data.retorno) {
+            this.allDocs.push(docs)
+          }
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async deleteDoc(documentId: number) {
       try {
         const response = await httpRequest.delete(
-          `/api/noticia/excluir?id=${noticiaId}`
+          `/api/documento/excluir?id=${documentId}`
         )
         if (response.data.codigo === 200) {
           this.response.putResponse(
@@ -126,31 +150,36 @@ export const useNoticiaStore = defineStore("noticiaStore", {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message)
         } else {
-          this.response.putError(661, "Erro ao remover notícia.")
+          this.response.putError(661, "Erro ao remover documento.")
           console.error(error)
         }
       }
     },
 
-    async putNews(noticiaEdicao: INoticia) {
+    async putDoc(documentoEdicao: IDocumento) {
       try {
         const formData = new FormData()
-        formData.append("id", noticiaEdicao.id.toString())
-        formData.append("titulo", noticiaEdicao.titulo)
-        formData.append("descricao", noticiaEdicao.descricao)
-        formData.append("subTitulo", noticiaEdicao.subTitulo)
+        formData.append("nome", documentoEdicao.nome)
+        formData.append("descricao", documentoEdicao.descricao)
         formData.append(
-          "dataPublicacao",
-          noticiaEdicao.dataPublicacao.toString()
+          "tipoDocumentoId",
+          documentoEdicao.tipoDocumentoId.toString()
         )
-
-        if (noticiaEdicao.tags.length > 0) {
-          noticiaEdicao.tags.forEach((tag, index) => {
+        formData.append(
+          "documentoAreaId",
+          documentoEdicao.documentoAreaId.toString()
+        )
+        formData.append(
+          "instituicaoId",
+          documentoEdicao.instituicaoId.toString()
+        )
+        formData.append("data", documentoEdicao.data.toString())
+        if (documentoEdicao.tags.length > 0) {
+          documentoEdicao.tags.forEach((tag, index) => {
             formData.append(`tags[${index}].descricao`, tag.descricao)
           })
         }
-
-        formData.append("arquivo", noticiaEdicao.arquivo)
+        formData.append("arquivo", documentoEdicao.arquivo)
         const res = await httpRequest.put("/api/noticia/editar", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
@@ -169,10 +198,10 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       }
     },
 
-    async getNewsById(noticiaId: number) {
+    async getDocById(documentId: number, nome: string) {
       try {
         const response = await httpRequest.get(
-          `/api/noticia/detalhes?Id=${noticiaId}`
+          `/api/documento/downloadDocumento?id=${documentId}&nome=${nome}&origem=3`
         )
         if (response.data.codigo === 200) {
           this.response.putResponse(

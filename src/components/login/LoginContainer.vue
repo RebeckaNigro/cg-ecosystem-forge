@@ -46,7 +46,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row my-2">
           <div class="col-8 text-start">
             <input
               type="checkbox"
@@ -57,7 +57,7 @@
             <span>Lembrar meu usuário.</span>
           </div>
           <div class="col-4 text-end">
-            <a href="">Esqueceu sua senha?</a>
+            <a href="/esqueci-a-senha">Esqueceu sua senha?</a>
           </div>
         </div>
 
@@ -69,9 +69,7 @@
           >
             ENTRAR
           </button>
-          <div v-else class="spinner-border m-auto" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
+          <Spinner v-else />
         </div>
       </form>
     </div>
@@ -85,6 +83,7 @@
   import { useRouter } from "vue-router"
   import useValidate from "@vuelidate/core"
   import { required, email, helpers } from "@vuelidate/validators"
+  import Spinner from "../general/Spinner.vue"
 
   const router = useRouter()
 
@@ -99,7 +98,7 @@
   const waitingResponse = ref(false)
   const lembrarUsuario = ref(false)
   const passwordVisibility = ref(false)
-  const visibilityIconRef = ref("src/assets/icons/visibility-off.svg")
+  const visibilityIconRef = ref("/visibility-off.svg")
 
   const usuarioRules = computed(() => {
     return {
@@ -119,8 +118,8 @@
     passwordVisibility.value = !passwordVisibility.value
 
     visibilityIconRef.value = passwordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/visibility-on.svg"
+      : "/visibility-off.svg"
   }
 
   const callStoreLogin = async (e: string, p: string) => {

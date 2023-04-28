@@ -1,0 +1,406 @@
+<template>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="documento.id < 0">
+    ENVIE SEU DOCUMENTO!
+  </h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
+    EDITE SEU DOCUMENTO!
+  </h1>
+  <form class="mx-auto card-position box p-5 mb-5">
+    <!-- NOME -->
+    <div class="mb-3">
+      <label for="nome" class="form-label-primary">Nome*</label>
+      <input
+        type="text"
+        id="nome"
+        class="form-input-primary"
+        :class="v$.nome.$error ? 'is-invalid' : ''"
+        v-model="documento.nome"
+      />
+      <div v-if="v$.nome.$error" class="invalid-feedback">
+        {{ v$.nome.$errors[0].$message }}
+      </div>
+    </div>
+
+    <!-- DESCRIÇÃO -->
+    <div class="mb-3">
+      <label for="descricao" class="form-label-primary">Descrição</label>
+      <input
+        type="text"
+        id="descricao"
+        class="form-input-primary"
+        v-model="documento.descricao"
+      />
+    </div>
+
+    <!-- SESSÃO -->
+    <div class="mb-3">
+      <label for="descricao" class="form-label-primary">Sessão</label>
+      <select
+        class="form-input-primary"
+        id="descricao"
+        name="descricao"
+        v-model="documento.documentoAreaId"
+      >
+        <option value="1">Pesquisa</option>
+        <option value="2">Edital</option>
+        <option value="3">Lei</option>
+      </select>
+    </div>
+
+    <!-- INSTITUIÇÕES -->
+    <div class="mb-3">
+      <label for="tags" class="form-label-primary">Instituição*</label>
+      <AutocompleteComponent
+        type="Instituicao"
+        :items="instituicoes"
+        @selected-value="setInstituicao"
+        :class="v$.instituicaoId.$error ? 'is-invalid' : ''"
+      />
+      <div v-if="v$.instituicaoId.$error" class="invalid-feedback">
+        {{ v$.instituicaoId.$errors[0].$message }}
+      </div>
+    </div>
+
+    <div class="container-fluid text-start" v-if="selectedValue">
+      <div class="tag-element mx-1 mb-4">
+        <span>{{ selectedValue.razaoSocial }}</span>
+        <img
+          src="./../../../assets/icons/close-white.svg"
+          alt="Remover Instituicao"
+          @click="deleteSelectedInstituicao"
+        />
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="mb-3">
+      <label for="tags" class="form-label-primary">Tags (Opcional)</label>
+      <AutocompleteComponent
+        type="CustomTag"
+        :items="allTags"
+        @selected-value="addTag"
+      />
+    </div>
+
+    <div class="container-fluid text-start">
+      <div
+        class="tag-element mx-1 mb-4"
+        v-for="(tag, index) in documento.tags"
+        :key="index"
+      >
+        <span>{{ tag.descricao }}</span>
+        <img
+          src="./../../../assets/icons/close-white.svg"
+          alt="Remover tag"
+          @click="deleteTag(index)"
+        />
+      </div>
+    </div>
+
+    <!-- ARQUIVO -->
+    <div class="mb-3">
+      <label for="arquivo" class="form-label-primary">Arquivo*</label>
+      <div class="imagem-divulgacao d-flex">
+        <div>
+          <label for="imagem-input" class="borda-cinza" />
+          <input
+            class="form-input-primary"
+            type="file"
+            name="imagem-input"
+            accept="image/png, image/jpg,image/jpeg"
+            id="imagem-input"
+            @change="(e) => onFileChanged(e)"
+          />
+        </div>
+        <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
+      </div>
+    </div>
+
+    <Spinner v-if="sendingDocs" />
+
+    <div class="row container-fluid">
+      <div class="col-sm-6">
+        <button
+          type="button"
+          class="green-btn-outlined button-specific"
+          @click="resetarDocumento"
+        >
+          CANCELAR
+        </button>
+      </div>
+
+      <div class="col-sm-6 fs-xs-1">
+        <button
+          type="button"
+          class="green-btn-primary button-specific"
+          @click="cadastrar"
+        >
+          ENVIAR
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <ConfirmModal
+    v-show="confirmStore.visible"
+    @confirm-true="confirmado"
+    element-id="confirmModal"
+    id="confirmModal"
+  />
+</template>
+
+<script setup lang="ts">
+//@ts-nocheck
+  // import BlotFormatter from "quill-blot-formatter"
+  // import ImageUploader from "quill-image-uploader"
+  import useValidate from "@vuelidate/core"
+  import { ref, onMounted } from "vue"
+  import { useRoute } from "vue-router"
+  import { useDocumentStore } from "../../../stores/documentos/store"
+  import { useModalStore } from "../../../stores/modal/store"
+  import { useAlertStore } from "../../../stores/alert/store"
+  import { useUserStore } from "../../../stores/user/store"
+  import { useConfirmStore } from "../../../stores/confirm/store"
+  import { useTagStore } from "../../../stores/tag/store"
+  import { useInstituicaoStore } from "../../../stores/instituicao/store"
+  import { required, helpers, minValue } from "@vuelidate/validators"
+  import { brDateString } from "../../../utils/formatacao/datetime"
+  import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime"
+  import { fileToBase64 } from "../../../utils/image/converter"
+  import ConfirmModal from "../../general/ConfirmModal.vue"
+  import AutocompleteComponent from "../../general/AutocompleteComponent.vue"
+  import Spinner from "../../general/Spinner.vue"
+  import { NoticiaRascunho } from "../../../stores/noticias/types"
+  import { CustomTag } from "../../../stores/tag/types"
+  import { Instituicao } from "../../../stores/instituicao/types"
+
+  const documentStore = useDocumentStore()
+  const alertStore = useAlertStore()
+  const userStore = useUserStore()
+  const modalStore = useModalStore()
+  const confirmStore = useConfirmStore()
+  const tagStore = useTagStore()
+  const instituicaoStore = useInstituicaoStore()
+  const route = useRoute()
+
+  const sendingDocs = ref(false)
+  const arquivo = ref<File | null>()
+  const selectedValue = ref<Instituicao>()
+  const instituicoes = ref<Array<Instituicao>>()
+
+  const documento = ref({
+    id: -1,
+    nome: "",
+    descricao: "",
+    tags: new Array<CustomTag>(),
+    tipoDocumentoId: 1,
+    documentoAreaId: 1,
+    instituicaoId: -1,
+    data: "",
+    arquivo: File
+  })
+
+  const fileSizeValidation = () => {
+    if (!arquivo.value) return false
+    return arquivo.value.size < 5 * 1024 * 1024
+  }
+
+  const documentoRules = ref({
+    nome: {
+      required: helpers.withMessage("Título é obrigatório.", required)
+    },
+    instituicaoId: {
+      minValueValue: helpers.withMessage(
+        "Instituição é obrigatória.",
+        minValue(0)
+      )
+    }
+  })
+
+  const v$ = useValidate(documentoRules, documento)
+
+  const allTags = ref<CustomTag[]>()
+  const fileName = ref("")
+
+  onMounted(async () => {
+    const id = route.params.documentoId
+
+    if (id) {
+      // await documentStore.getNewsById(Number(id))
+      // if (noticiaStore.response.code == 200) {
+      //   noticia.value = noticiaStore.response.dado
+      //   data.value = noticia.value.dataPublicacao.substring(0, 10)
+      //   hora.value = noticia.value.dataPublicacao.substring(
+      //     noticia.value.dataPublicacao.length - 8,
+      //     noticia.value.dataPublicacao.length
+      //   )
+      // } else {
+      //   alertStore.showTimeoutErrorMessage("Erro ao carregar documento!")
+      // }
+    }
+
+    buscarTags()
+    buscarInstituicoes()
+  })
+
+  const confirmado = () => {
+    // confirmStore.closeConfirm()
+    // noticia.value.dataPublicacao = dateAndTimeToDatetime(data.value, hora.value)
+    // let rascunho = new NoticiaRascunho(noticia.value)
+    // localStorage.setItem("noticiaRascunho", JSON.stringify(rascunho))
+    // modalStore.showSuccessModal("Rascunho salvo com sucesso!")
+  }
+
+  const buscarTags = async () => {
+    await tagStore.getTags()
+    allTags.value = tagStore.allTags
+  }
+
+  const buscarInstituicoes = async () => {
+    await instituicaoStore.getInstituicoes()
+
+    if (instituicaoStore.response.code == 200) {
+      instituicoes.value = instituicaoStore.allInstituicoes
+    } else {
+      alertStore.showTimeoutErrorMessage("Erro ao carregar instituições!")
+    }
+  }
+
+  const onFileChanged = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target && target.files) {
+      arquivo.value = target.files[0]
+      fileName.value = target.files[0].name
+    }
+
+    if (!fileSizeValidation()) {
+      alertStore.showTimeoutWarningMessage("Imagem deve ter no máximo 5MB")
+      arquivo.value = null
+      fileName.value = ""
+      return
+    }
+  }
+
+  const cadastrar = async () => {
+    const formValidation = await v$.value.$validate()
+
+    documento.value.data = new Date().toISOString()
+    documento.value.arquivo = arquivo.value
+
+    console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+    console.dir(documento.value)
+
+    if (documento.value.id > 0) {
+      sendingDocs.value = true
+      await documentStore.putDoc(documento.value)
+      sendingDocs.value = false
+      const res = documentStore.response.getResponse()
+      if (res.code === 200) {
+        resetarDocumento()
+        modalStore.showSuccessModal("Documento editado com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
+      } else {
+        modalStore.showErrorModal("Erro ao editar documento!")
+      }
+    } else {
+      sendingDocs.value = true
+      await documentStore.postDocument(documento.value)
+      sendingDocs.value = false
+      const res = documentStore.response.getResponse()
+      if (res.code === 200) {
+        resetarDocumento()
+        modalStore.showSuccessModal("Documento cadastrado com sucesso!")
+      } else if (res.code === 661) {
+        console.error(res.message)
+      } else {
+        modalStore.showErrorModal("Erro ao cadastrar documento!")
+      }
+    }
+  }
+
+  const resetarDocumento = () => {
+    documento.value = {
+      id: -1,
+      nome: "",
+      descricao: "",
+      tags: [],
+      tipoDocumentoId: 1,
+      documentoAreaId: -1,
+      instituicaoId: -1,
+      data: "",
+      arquivo: File
+    }
+  }
+
+  const deleteTag = (index: number) => {
+    documento.value.tags.splice(index, 1)
+  }
+
+  const addTag = (selectedTag: CustomTag) => {
+    const tagFound = documento.value.tags.find((tag: CustomTag) => {
+      return tag.descricao == selectedTag.descricao
+    })
+
+    if (!tagFound) {
+      documento.value.tags.push(selectedTag)
+    }
+  }
+
+  const setInstituicao = (selectedInstituicao: Instituicao) => {
+    selectedValue.value = selectedInstituicao
+    if (selectedInstituicao)
+      documento.value.instituicaoId = selectedInstituicao.id
+  }
+
+  const deleteSelectedInstituicao = () => {
+    selectedValue.value = undefined
+    documento.value.instituicaoId = -1
+  }
+</script>
+
+<style scoped>
+  .button-specific {
+    width: 100%;
+    margin: 2rem 1rem;
+    box-sizing: border-box;
+  }
+
+  .align-correction {
+    margin-bottom: 0.2rem;
+  }
+
+  .icone-usuario {
+    width: 30px;
+  }
+
+  .imagem-divulgacao div {
+    margin-top: 0;
+    width: fit-content;
+  }
+  .imagem-divulgacao label {
+    height: 200px;
+    width: 100%;
+    max-width: 400px;
+    margin-left: 0;
+    background-color: #fff;
+    background-image: url("/user/eventos/cloud_icon.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  input#imagem-input {
+    height: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  span#nome-imagem {
+    align-self: center;
+    text-align: center;
+  }
+
+  .max-image-width {
+    max-width: 400px;
+  }
+</style>
