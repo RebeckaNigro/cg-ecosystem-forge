@@ -39,7 +39,7 @@
         class="form-input-primary"
         id="descricao"
         name="descricao"
-        v-model="documento.documentoAreaId"
+        v-model="documento.documentoAreaid"
       >
         <option value="1">Pesquisa</option>
         <option value="2">Edital</option>
@@ -193,8 +193,7 @@
     nome: "",
     descricao: "",
     tags: new Array<CustomTag>(),
-    tipoDocumentoId: 1,
-    documentoAreaId: 1,
+    documentoAreaid: 1,
     instituicaoId: -1,
     data: "",
     arquivo: File
@@ -225,22 +224,26 @@
   onMounted(async () => {
     const id = route.params.documentoId
 
+	await buscarTags()
+    await buscarInstituicoes()
+
     if (id) {
-      // await documentStore.getNewsById(Number(id))
-      // if (noticiaStore.response.code == 200) {
-      //   noticia.value = noticiaStore.response.dado
-      //   data.value = noticia.value.dataPublicacao.substring(0, 10)
-      //   hora.value = noticia.value.dataPublicacao.substring(
-      //     noticia.value.dataPublicacao.length - 8,
-      //     noticia.value.dataPublicacao.length
-      //   )
-      // } else {
-      //   alertStore.showTimeoutErrorMessage("Erro ao carregar documento!")
-      // }
+      await documentStore.getDocDetailsById(Number(id))
+      if (documentStore.response.code == 200) {
+        documento.value = documentStore.response.dado
+		documento.value.tags = [{id: 1, descricao: 'doc'}, {id: 2, descricao: 'documento'}]
+		
+		selectedValue.value = instituicoes.value?.find(
+          (item) => item.id == documento.value.instituicaoId
+        )
+		
+      } else {
+        alertStore.showTimeoutErrorMessage("Erro ao carregar documento!")
+      }
+
     }
 
-    buscarTags()
-    buscarInstituicoes()
+    
   })
 
   const confirmado = () => {
@@ -287,8 +290,8 @@
     documento.value.data = new Date().toISOString()
     documento.value.arquivo = arquivo.value
 
-    console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
-    console.dir(documento.value)
+     console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
+	 console.dir(documento.value)
 
     if (documento.value.id > 0) {
       sendingDocs.value = true
@@ -300,7 +303,7 @@
         modalStore.showSuccessModal("Documento editado com sucesso!")
       } else if (res.code === 661) {
         console.error(res.message)
-      } else {
+      } else{
         modalStore.showErrorModal("Erro ao editar documento!")
       }
     } else {
@@ -325,8 +328,7 @@
       nome: "",
       descricao: "",
       tags: [],
-      tipoDocumentoId: 1,
-      documentoAreaId: -1,
+      documentoAreaid: -1,
       instituicaoId: -1,
       data: "",
       arquivo: File
