@@ -11,7 +11,7 @@ namespace Ecossistema.Services.Interfaces
     {
         Task<RespostaPadrao> Incluir(EventoArquivosDto dado, string token);
         Task<RespostaPadrao> Editar(EventoArquivosDto dado, string token);
-        Task<RespostaPadrao> Excluir(int id);
+        Task<RespostaPadrao> Excluir(int id, string idLogin);
         //Task<RespostaPadrao> ListarUltimas();
         Task<RespostaPadrao> ListarEventos(string listagem, string id);
         Task<RespostaPadrao> Detalhes(int id);

@@ -59,8 +59,8 @@ namespace Ecossistema.API.Controllers
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
-            await _arquivoService.ExcluirArquivo(id, "evento");
-            return await _eventoService.Excluir(id);
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _eventoService.Excluir(id, idLogin);
         }
 
         

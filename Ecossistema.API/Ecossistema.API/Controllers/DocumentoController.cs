@@ -47,8 +47,8 @@ namespace Ecossistema.API.Controllers
         [HttpDelete("excluir")]
         public async Task<RespostaPadrao> Excluir(int id)
         {
-            await _arquivoService.ExcluirArquivo(id, "documento");
-            return await _documentoService.Excluir(id);
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _documentoService.Excluir(id, idLogin);
         }
 
         [Authorize(Roles = UserRolesDto.UsuarioComum)]
