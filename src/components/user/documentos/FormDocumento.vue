@@ -310,6 +310,8 @@
       await documentStore.postDocument(documento.value)
       sendingDocs.value = false
       const res = documentStore.response.getResponse()
+	  console.log(res);
+	  
       if (res.code === 200) {
         resetarDocumento()
         modalStore.showSuccessModal("Documento cadastrado com sucesso!")
