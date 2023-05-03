@@ -14,7 +14,11 @@
 				</div>
 			</Banner>
 
-			<div class="destaques-content ghp">
+			<div class="badge bg-success text-wrap fs-5 my-4" style="width: 8rem;">
+				<span>Em breve.</span>
+			</div>
+
+			<!--<div class="destaques-content ghp">
 				<ContainerDestaques />
 			</div>
 
@@ -47,7 +51,7 @@
 						content-to-download="none"
 					/>
 				</div>
-			</div>
+			</div>-->
 		</main>
 	</section>
 </template>
