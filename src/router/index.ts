@@ -22,6 +22,7 @@ import GerenciaDocumento from "../views/user/documentos/GerenciaDocumento.vue"
 import EsqueciSenha from "../components/esqueciSenha/EsqueciSenha.vue"
 import RedefinirSenha from "../components/esqueciSenha/RedefinirSenha.vue"
 import Perfil from "../views/perfil/Perfil.vue"
+import DocumentoExpandido from '../views/documentos/expandido/DocumentoExpandido.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -97,13 +98,21 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: "/documentos",
-    name: "Documentos",
-    component: Documentos,
-    meta: {
-      public: true
-    }
-  },
+	  path: "/documentos",
+	  name: "Documentos",
+	  component: Documentos,
+	  meta: {
+		  public: true
+		}
+	},
+	{
+	  path: "/documentos/:documentoId",
+	  name: "DocumentoExpandido",
+	  component: DocumentoExpandido,
+	  meta: {
+		public: true
+	  }
+	},
   {
     path: "/documentos/:tipoDocumento",
     name: "DocumentosPesquisa",
