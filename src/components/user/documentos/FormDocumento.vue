@@ -231,7 +231,6 @@
       await documentStore.getDocDetailsById(Number(id))
       if (documentStore.response.code == 200) {
         documento.value = documentStore.response.dado
-		documento.value.tags = [{id: 1, descricao: 'doc'}, {id: 2, descricao: 'documento'}]
 		
 		selectedValue.value = instituicoes.value?.find(
           (item) => item.id == documento.value.instituicaoId
