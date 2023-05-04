@@ -385,7 +385,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }*/
 
-        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao)
         {
             var resposta = new RespostaPadrao();
 
@@ -447,6 +447,8 @@ namespace Ecossistema.Services.Services
             }
             if (listagem == "todos")
             {
+                var fim = paginacao * 6;
+                var inicio = fim - 6;
                 var result = evento.Select(x => new
                 {
                     id = x.Id,
@@ -461,9 +463,15 @@ namespace Ecossistema.Services.Services
 
                 })
             .Distinct()
+            .Skip(inicio)
+            .Take(6)
             .OrderByDescending(x => x.id)
             .ToList();
                 resposta.Retorno = result;
+                if(result.Count == 0)
+                {
+                    resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                }
             }
             else if (listagem == "ultimos")
             {
