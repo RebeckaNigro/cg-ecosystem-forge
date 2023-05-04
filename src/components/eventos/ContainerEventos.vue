@@ -33,8 +33,13 @@
         id="know_more"
         @click="addEventsToView()"
 		class="mb-4"
-		:class="{'d-none': lastIndex > eventoStore.eventos.length }"
+		:class="{'d-none': (page*6) > eventoStore.eventos.length }"
+		
       />
+	  <Spinner
+		spinner-color-class="text-dark"
+		v-if="loadingMoreContent"
+	/>
     </footer>
 		
   
@@ -43,8 +48,8 @@
 </template>
 
 <script setup lang="ts">
-//@ts-nocheck
-import { onMounted, reactive, ref } from 'vue';
+
+import { onMounted, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { useEventoStore } from '../../stores/eventos/store';
@@ -55,35 +60,10 @@ const eventoStore = useEventoStore()
 const selectedPage = ref(0)
 const indicators = ref(3)
 const loadingContent = ref(false)
-
-const lastIndex = ref(3)
+const loadingMoreContent = ref(false)
+const page = ref(1)
 let eventos = ref<Array<IEventoSimplificado>>()
 
-const dummyContainer = reactive([
-  [
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Campo Grande, MS",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento 01",
-      dataEvento: "11/11/2023",
-      enderecoEvento: "Campo Grande, MS",
-    },
-    {
-      hasImage: false,
-      image: 'opa',
-      nomeEvento: "Evento abc",
-      dataEvento: "27/11/2023",
-      enderecoEvento: "Campo Grande, MS",
-    }
-  ]
-])
 const setSelfMargin = (num: number) => {
   if (num === 1) return 'm-auto'
   return num === 0 ? 'mr-auto' : 'ml-auto'
@@ -97,16 +77,20 @@ const setSelectedPage = (page: number) => {
     selectedPage.value = page
   }
 }
-const addEventsToView = () => {
-	lastIndex.value += 3
-	
-	eventos.value = eventoStore.eventos.slice(0, lastIndex.value)
+const addEventsToView = async () => {
+	page.value++
+	loadingMoreContent.value = true
+	await eventoStore.getAllEvents(page.value)
+	loadingMoreContent.value = false
+	for(const evento of eventoStore.eventos){
+		eventos.value?.push(evento)
+	}
 }
 
 onMounted(async () => {
 	loadingContent.value = true
-	await eventoStore.getAllEvents()
-	eventos.value = eventoStore.eventos.slice(0, 3)
+	await eventoStore.getAllEvents(page.value)
+	eventos.value = eventoStore.eventos
 	loadingContent.value = false
 })
 </script>
