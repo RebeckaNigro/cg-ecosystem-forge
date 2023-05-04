@@ -26,7 +26,7 @@
           :src="
             evento.arquivos[0]
               ? 'data:image/png;base64, ' + evento.arquivos[0].arquivo
-              : '/public/eventos/eventoExpandido/default-event-cover.jpeg'
+              : '/public/eventos/eventoExpandido/default-event-cover.svg'
           "
           alt="capa do evento"
         />

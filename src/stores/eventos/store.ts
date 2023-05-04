@@ -6,7 +6,7 @@ import { validateEventoInput } from "../../utils/eventos/validation"
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 
 const enderecosExistentes: Array<EnderecoExistente> = []
-const ultimosEventos: Array<IUltimoEvento> = []
+const ultimosEventos: Array<IEventoSimplificado> = []
 const eventos: Array<IUltimoEvento> = []
 const eventosUsuarioLogado: Array<IEventoSimplificado> = []
 const ultimosEventosUsuarioLogado: Array<IUltimoEvento> = []

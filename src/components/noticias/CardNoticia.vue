@@ -3,17 +3,23 @@
     class="card-noticia-content"
     :class="[isRelacionada ? 'is-relacionada' : 'not-relacionada']"
   >
-    <img src="/public/noticias/noticia.png" alt="" class="card-noticia-image" />
+    <img :src="
+		noticia.arquivo 
+		? 'data:image/png;base64, ' + noticia.arquivo
+		: '/public/noticias/noticia-expandida/default-news-cover.svg'	
+	
+	" alt="" class="card-noticia-image" />
     <span class="tags">#tecnologia #inovação</span>
     <p v-if="!isRelacionada">{{ noticia?.titulo }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { INoticiaSimplificada } from "../../stores/noticias/types"
+  import { not } from "@vuelidate/validators";
+import { INoticiaSimplificada } from "../../stores/noticias/types"
 
   const props = defineProps<{
-    noticia: INoticiaSimplificada | null
+    noticia: INoticiaSimplificada
     isRelacionada: boolean
   }>()
 </script>
