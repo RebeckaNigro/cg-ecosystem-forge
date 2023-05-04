@@ -1,15 +1,20 @@
 <template>
   <div class="card-evento">
     <div class="img-container">
-      <img :src='buildImageSrc(eventoId, nomeEvento, 5)' alt='Imagem do evento' v-if="hasImage">
-      <span v-else>{{nomeEvento}}</span>
+      <img :src="
+		evento.arquivo
+		? 'data:image/png;base64, ' + evento.arquivo
+		: '/public/eventos/eventoExpandido/default-event-cover.svg'
+	 
+	 " alt='Imagem do evento'>
+      
     </div>
     <div class="infos-container">
-      <h1 class="dark-title">{{ nomeEvento }}</h1>
-      <time class="data-evento">{{ brDateString(dataInicio) }} - {{ brDateString(dataTermino) }}</time>
-      <address class="endereco-evento">{{ enderecoEvento }}</address>
+      <h1 class="dark-title">{{ evento.titulo }}</h1>
+      <time class="data-evento">{{ brDateString(evento.dataInicio) }} - {{ brDateString(evento.dataTermino) }}</time>
+      <address class="endereco-evento">{{ evento.local }}</address>
 
-	  <a href="#" class="ver-detalhes" @click="$router.push({name: 'EventoExpandido', params: {eventoId: eventoId}})">Ver detalhes</a>
+	  <a href="#" class="ver-detalhes" @click="$router.push({name: 'EventoExpandido', params: {eventoId: evento.id}})">Ver detalhes</a>
     </div>
   </div>
 </template>
@@ -18,23 +23,18 @@
 import { onMounted, ref } from 'vue';
 import { brDateString } from '../../utils/formatacao/datetime';
 import {buildImageSrc} from '../../utils/constantes'
+import { IEventoSimplificado } from '../../stores/eventos/types';
 
   const props = defineProps<{
-    hasImage: boolean
-    image: string | null
-    nomeEvento: string
-    dataInicio: string
-	dataTermino: string
-    enderecoEvento: string
-	eventoId: number
+   evento: IEventoSimplificado
   }>()
 
   const imageSrc = ref('')
 
   onMounted(() => {
-	if(props.hasImage){
-		imageSrc.value= `http://dev-api.ecossistemadeinovacaocg.com.br/api/documento/downloadDocumento?id=${props.eventoId}&nome=${props.eventoId}&origem=5`
-	}
+	// if(props.hasImage){
+	// 	imageSrc.value= `http://dev-api.ecossistemadeinovacaocg.com.br/api/documento/downloadDocumento?id=${props.eventoId}&nome=${props.eventoId}&origem=5`
+	// }
   })
 </script>
 

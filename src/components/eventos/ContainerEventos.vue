@@ -11,13 +11,7 @@
 	<div class="card-evento-container pb-5">
 		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
 			<CardEvento
-			:hasImage="container.arquivo !== null"
-			:image="container.arquivo"
-			:nomeEvento="container.titulo"
-			:dataInicio="container.dataInicio"
-			:dataTermino="container.dataTermino"
-			:enderecoEvento="container.local"
-			:eventoId="container.id"
+			:evento="container"
 			/>
 		</nav>
 	</div>
@@ -54,7 +48,7 @@ import { onMounted, reactive, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { useEventoStore } from '../../stores/eventos/store';
-import { IUltimoEvento } from '../../stores/eventos/types';
+import { IEventoSimplificado } from '../../stores/eventos/types';
 import Spinner from '../general/Spinner.vue';
 
 const eventoStore = useEventoStore()
@@ -63,7 +57,7 @@ const indicators = ref(3)
 const loadingContent = ref(false)
 
 const lastIndex = ref(3)
-let eventos = ref<Array<IUltimoEvento>>()
+let eventos = ref<Array<IEventoSimplificado>>()
 
 const dummyContainer = reactive([
   [

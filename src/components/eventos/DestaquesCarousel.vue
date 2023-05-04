@@ -7,8 +7,10 @@
     </div>
     <div class="carousel-inner">
       <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
-        <img :src="buildImageSrc(data.id, data.titulo, 5)" class="d-block w-100" :alt="data.titulo" v-if="data.arquivo !== null">
-		<img src="/public/eventos/banner.png" alt="Foto do evento" v-else>
+        <img :src="data.arquivo 
+			? 'data:image/png;base64,' + data.arquivo
+			: '/public/eventos/eventoExpandido/default-event-cover.svg'" 
+			class="d-block w-100" :alt="data.titulo">
         <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
           <main>
             <h1 id="event-name" class="dark-title">{{ data.titulo }}</h1>
@@ -44,14 +46,19 @@
 </template>
 
 <script setup lang="ts">
-//@ts-nocheck
-import { IUltimoEvento } from '../../stores/eventos/types';
+import { IEventoSimplificado } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import {brDateString} from '../../utils/formatacao/datetime'
 import { buildImageSrc } from '../../utils/constantes';
+import { onMounted } from 'vue';
   const props = defineProps<{
-    carouselData: IUltimoEvento[]
+    carouselData: IEventoSimplificado[]
   }>()
+
+  onMounted(() => {
+	  console.log(props.carouselData);
+  })
+  
 </script>
 
 <style scoped lang="scss">

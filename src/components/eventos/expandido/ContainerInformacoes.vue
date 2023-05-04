@@ -1,8 +1,7 @@
 <template>
   <section class="d-flex infos position-relative">
     <header class="ghp mt-5">
-	  <img src="/public/eventos/banner.png" class="d-block w-100" alt="destaques-carousel" v-if="data.img == null"/>
-      <img :src="buildImageSrc(data.eventId, data.eventName, 5)" class="d-block w-100" alt="destaques" v-else>
+      <img :src="data." class="d-block w-100" alt="destaques">
     </header>
     <main class="ghp mb-5">
       <div>
