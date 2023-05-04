@@ -3,6 +3,7 @@ using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
 using Ecossistema.Util.Const;
+using Ecossistema.Util.Validacao;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -295,6 +296,11 @@ namespace Ecossistema.Services.Services
             RespostaPadrao resposta = new RespostaPadrao("Usuário cadastrado com sucesso!");
             try
             {
+                if (!ValidacaoUtil.ValidaCpf(model.Cpf))
+                {
+                    resposta.SetChamadaInvalida("Cpf inválido, insira novamente");
+                    return resposta;
+                }
                 var username = model.NomeCompleto.Replace(" ", "");
                 var emailExists = await _userManager.FindByEmailAsync(model.Email);
                 var nameExists = await _userManager.FindByNameAsync(username);
