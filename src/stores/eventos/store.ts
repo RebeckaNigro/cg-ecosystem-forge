@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { IEvento, EnderecoExistente, IUltimoEvento, Evento } from "./types"
+import { IEvento, EnderecoExistente, IUltimoEvento, Evento, IEventoSimplificado } from "./types"
 import { defineStore } from "pinia"
 import { httpRequest, getLastContent } from "../../utils/http"
 import { validateEventoInput } from "../../utils/eventos/validation"
@@ -8,7 +8,7 @@ import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 const enderecosExistentes: Array<EnderecoExistente> = []
 const ultimosEventos: Array<IUltimoEvento> = []
 const eventos: Array<IUltimoEvento> = []
-const eventosUsuarioLogado: Array<IUltimoEvento> = []
+const eventosUsuarioLogado: Array<IEventoSimplificado> = []
 const ultimosEventosUsuarioLogado: Array<IUltimoEvento> = []
 export const useEventoStore = defineStore("eventoStore", {
   state: () => {

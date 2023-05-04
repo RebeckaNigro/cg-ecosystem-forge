@@ -68,6 +68,7 @@
 
       case "evento":
         results.value = props.items.filter((item: EventoSimplificado) => {
+			
           if (
             item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
             0
@@ -75,7 +76,7 @@
             return true
 
           if (
-            item.local.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
+            item.local?.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
             0
           )
             return true
