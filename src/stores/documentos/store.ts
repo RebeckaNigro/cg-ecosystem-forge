@@ -20,16 +20,11 @@ export const useDocumentStore = defineStore("documentStore", {
 	persist: false,
 	actions: {
 		async postDocument(novoDocumento: IDocumento) {
-			console.log('postDocument');
-
 			try {
 				const formData = new FormData()
 				formData.append("nome", novoDocumento.nome)
 				formData.append("descricao", novoDocumento.descricao)
-				formData.append(
-					"tipoDocumentoId",
-					novoDocumento.tipoDocumentoId.toString()
-				)
+
 				formData.append(
 					"documentoAreaId",
 					novoDocumento.documentoAreaid.toString()
