@@ -78,8 +78,8 @@
   <ConfirmModal
     v-show="confirmStore.visible"
     @confirm-true="confirmado"
-    element-id="confirmDocModal"
-    id="confirmDocModal"
+    element-id="confirmModal"
+    id="confirmModal"
   />
 </template>
 
@@ -105,16 +105,20 @@
 
   const confirmado = async () => {
     confirmStore.closeConfirm()
+	
+	if(confirmStore.options.parameter != null){
+		await documentoStore.deleteDoc(confirmStore.options.parameter as number)
+		const res = documentoStore.response.getResponse()
+		
+		if (res.code === 200) {
+			loadLastDocs()
+			modalStore.showSuccessModal("Documento removido com sucesso!")
+		} else {
+			modalStore.showErrorModal("Erro ao remover documento!")
+		}
+	}
 
-    await documentoStore.deleteDoc(confirmStore.options.parameter as number)
-
-    const res = documentoStore.response.getResponse()
-    if (res.code === 200) {
-      loadLastDocs()
-      modalStore.showSuccessModal("Documento removido com sucesso!")
-    } else {
-      modalStore.showErrorModal("Erro ao remover documento!")
-    }
+	
   }
 
   const loadLastDocs = async () => {
