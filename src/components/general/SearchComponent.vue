@@ -25,6 +25,7 @@
   import { EventoSimplificado } from "../../stores/eventos/types"
   import { NoticiaSimplificada } from "../../stores/noticias/types"
   import { CustomTag } from "../../stores/tag/types"
+import { IDocumentoSimplificado } from "../../stores/documentos/types"
 
   const props = defineProps({
     items: {
@@ -92,6 +93,25 @@
           return tagMatch ? true : false
         })
         break
+		
+		case 'documento':
+			results.value = props.items.filter((item: IDocumentoSimplificado) => {
+				if(
+					item.nome.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0 
+				)
+					return true
+
+				const tagMatch = item.tags.find((tag: CustomTag) => {
+					return tag.descricao
+					.toLowerCase()
+					.indexOf(searchWord.value.toLowerCase()) >= 0
+					? true
+					: false
+				})
+
+				return tagMatch ? true : false
+			})
+
     }
 
     sendSearchResult()
