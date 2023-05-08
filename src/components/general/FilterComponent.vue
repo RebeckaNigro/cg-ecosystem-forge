@@ -9,7 +9,7 @@
         v-model="selectedOption"
         @change="doFilter($event)"
       >
-        <option value="">Todas</option>
+        <option value="">{{ (type == 'evento' || type == 'documento') ? 'Todos' : 'Todas' }}</option>
         <option
           v-for="(option, index) in menuOptions"
           :key="index"
@@ -54,6 +54,10 @@
         menuOptions.value.push(new FilterOption("Últimos 30 dias", "30"))
         menuOptions.value.push(new FilterOption("Últimos 90 dias", "90"))
         break
+	  case "documento":
+		menuOptions.value.push(new FilterOption("Pesquisa", "1"))
+		menuOptions.value.push(new FilterOption("Edital", "2"))
+		menuOptions.value.push(new FilterOption("Lei", "3"))
     }
   })
 
