@@ -435,6 +435,7 @@ namespace Ecossistema.Services.Services
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
+                documentoArea = x.DocumentoArea,
                 ultimaOperacao = x.DataOperacao,
                 autor = x.NomeUsuario,
                 tags = x.Tags,
@@ -540,12 +541,13 @@ namespace Ecossistema.Services.Services
                                 .FirstOrDefault();
 
                 var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.DocumentoId == item.Id);
-                
+                var documentoArea = await _unitOfWork.DocumentosAreas.FindAsync(x => x.Id == item.DocumentoAreaId);
 
                 DocumentoDto documento = new DocumentoDto();
                 documento.Id = item.Id;
                 documento.Nome = item.Nome;
                 documento.Descricao = item.Descricao;
+                documento.DocumentoArea = documentoArea.Descricao;
                 documento.Data = item.Data;
                 documento.DataOperacao = item.DataOperacao;
                 documento.NomeUsuario = pessoa.NomeCompleto;

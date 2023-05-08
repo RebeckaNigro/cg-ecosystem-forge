@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Ecossistema.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Ecossistema.Services.Dto
         public string? NomeUsuario { get; set; }
         public string? Descricao { get; set; }
         public int? DocumentoAreaId { get; set; }
+        public string? DocumentoArea { get; set; }
         public int? InstituicaoId { get; set; }
         public DateTime? Data { get; set; }
         public DateTime? DataOperacao { get; set; }
