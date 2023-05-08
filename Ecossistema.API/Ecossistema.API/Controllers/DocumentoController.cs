@@ -74,9 +74,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpGet("listarTodos")]
-        public async Task<RespostaPadrao> ListarTodos()
+        public async Task<RespostaPadrao> ListarTodos(int paginacao)
         {
-            return await _documentoService.ListarTodos();
+            return await _documentoService.ListarTodos(paginacao);
         }
 
         [HttpGet("detalhes")]

@@ -380,13 +380,16 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarTodos()
+        public async Task<RespostaPadrao> ListarTodos(int paginacao)
         {
             var resposta = new RespostaPadrao();
             try
             {
                 var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
+
+                var fim = paginacao * 6;
+                var inicio = fim - 6;
 
                 var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
                 {
@@ -399,10 +402,16 @@ namespace Ecossistema.Services.Services
                     data = x.Data
                 })
                 .Distinct()
+                .Skip(inicio)
+                .Take(6)
                 .OrderByDescending(x => x.data)
                 .ToList();
 
                 resposta.Retorno = result;
+                if (result.Count == 0)
+                {
+                    resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                }
 
                 return resposta;
             }
