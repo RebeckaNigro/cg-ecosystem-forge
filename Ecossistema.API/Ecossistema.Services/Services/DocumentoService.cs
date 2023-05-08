@@ -325,6 +325,7 @@ namespace Ecossistema.Services.Services
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
@@ -359,6 +360,7 @@ namespace Ecossistema.Services.Services
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
@@ -396,6 +398,7 @@ namespace Ecossistema.Services.Services
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
@@ -459,6 +462,11 @@ namespace Ecossistema.Services.Services
             var nome = doc.Nome.Replace(" ", "%20");
             var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+nome+"&origem=3";
             var tagItems = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == doc.UsuarioCriacaoId);
+            var pessoa = _unitOfWork.Pessoas.FindAll(x => x.Id == usuario.PessoaId)
+                            .Select(x => new { x.NomeCompleto })
+                            .FirstOrDefault();
+            var autor = pessoa != null ? pessoa.NomeCompleto : null;
             List<TagDto> tags = new List<TagDto>();
             foreach(var x in tagItems)
             {
@@ -471,6 +479,7 @@ namespace Ecossistema.Services.Services
                 download,
                 id = x.Id,
                 nome = x.Nome,
+                autor,
                 descricao = x.Descricao,
                 documentoAreaid = x.DocumentoAreaId,
                 documentoArea = x.DocumentoArea != null ? x.DocumentoArea.Descricao : null,
