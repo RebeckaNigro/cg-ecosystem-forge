@@ -16,7 +16,7 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> ListarUltimos();
         Task<RespostaPadrao> ListarUltimosPorUsuarioId(string idLogin);
         Task<RespostaPadrao> ListarPorUsuarioId(string idLogin);
-        Task<RespostaPadrao> ListarTodos();
+        Task<RespostaPadrao> ListarTodos(int paginacao);
         Task<RespostaPadrao> Detalhes(int id);
         //Task<RespostaPadrao> ListarTiposDocumentos();
         Task<RespostaPadrao> ListarDocumentosAreas();
