@@ -325,6 +325,7 @@ namespace Ecossistema.Services.Services
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
@@ -359,6 +360,7 @@ namespace Ecossistema.Services.Services
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
@@ -380,7 +382,7 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarTodos()
+        public async Task<RespostaPadrao> ListarTodos(int paginacao)
         {
             var resposta = new RespostaPadrao();
             try
@@ -388,21 +390,31 @@ namespace Ecossistema.Services.Services
                 var query = await _unitOfWork.Documentos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
+                var fim = paginacao * 6;
+                var inicio = fim - 6;
+
                 var result = (await BuscarNomeUsuarioEtags(query)).Select(x => new
                 {
                     id = x.Id,
                     nome = x.Nome,
                     descricao = x.Descricao,
+                    documentoArea = x.DocumentoArea,
                     ultimaOperacao = x.DataOperacao,
                     autor = x.NomeUsuario,
                     tags = x.Tags,
                     data = x.Data
                 })
                 .Distinct()
+                .Skip(inicio)
+                .Take(6)
                 .OrderByDescending(x => x.data)
                 .ToList();
 
                 resposta.Retorno = result;
+                if (result.Count == 0)
+                {
+                    resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                }
 
                 return resposta;
             }
@@ -426,6 +438,7 @@ namespace Ecossistema.Services.Services
                 id = x.Id,
                 nome = x.Nome,
                 descricao = x.Descricao,
+                documentoArea = x.DocumentoArea,
                 ultimaOperacao = x.DataOperacao,
                 autor = x.NomeUsuario,
                 tags = x.Tags,
@@ -449,6 +462,11 @@ namespace Ecossistema.Services.Services
             var nome = doc.Nome.Replace(" ", "%20");
             var download = _urlStrings.ApiUrl + "documento/downloadDocumento?id="+doc.Id+"&nome="+nome+"&origem=3";
             var tagItems = await _unitOfWork.TagsItens.FindAllAsync(x => x.DocumentoId == id);
+            var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == doc.UsuarioCriacaoId);
+            var pessoa = _unitOfWork.Pessoas.FindAll(x => x.Id == usuario.PessoaId)
+                            .Select(x => new { x.NomeCompleto })
+                            .FirstOrDefault();
+            var autor = pessoa != null ? pessoa.NomeCompleto : null;
             List<TagDto> tags = new List<TagDto>();
             foreach(var x in tagItems)
             {
@@ -461,6 +479,7 @@ namespace Ecossistema.Services.Services
                 download,
                 id = x.Id,
                 nome = x.Nome,
+                autor,
                 descricao = x.Descricao,
                 documentoAreaid = x.DocumentoAreaId,
                 documentoArea = x.DocumentoArea != null ? x.DocumentoArea.Descricao : null,
@@ -531,12 +550,13 @@ namespace Ecossistema.Services.Services
                                 .FirstOrDefault();
 
                 var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.DocumentoId == item.Id);
-                
+                var documentoArea = await _unitOfWork.DocumentosAreas.FindAsync(x => x.Id == item.DocumentoAreaId);
 
                 DocumentoDto documento = new DocumentoDto();
                 documento.Id = item.Id;
                 documento.Nome = item.Nome;
                 documento.Descricao = item.Descricao;
+                documento.DocumentoArea = documentoArea.Descricao;
                 documento.Data = item.Data;
                 documento.DataOperacao = item.DataOperacao;
                 documento.NomeUsuario = pessoa.NomeCompleto;

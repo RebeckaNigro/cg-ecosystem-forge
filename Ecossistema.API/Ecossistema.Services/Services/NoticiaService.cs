@@ -460,8 +460,11 @@ namespace Ecossistema.Services.Services
                     return resposta;
                 }
                 var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
-                NoticiaListaDto noticia = new NoticiaListaDto();
+                NoticiaDetalhesDto noticia = new NoticiaDetalhesDto();
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == item.UsuarioCriacaoId);
+                var pessoa = await _unitOfWork.Pessoas.FindAsync(x => x.Id == usuario.PessoaId);
                 noticia.Id = item.Id;
+                noticia.Autor = pessoa.NomeCompleto;
                 noticia.Titulo = item.Titulo;
                 noticia.Descricao = item.Descricao;
                 noticia.SubTitulo = item.SubTitulo;
