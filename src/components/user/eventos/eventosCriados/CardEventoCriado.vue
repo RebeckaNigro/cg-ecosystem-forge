@@ -122,8 +122,8 @@
     <ConfirmModal
       v-show="confirmStore.visible"
       @confirm-true="confirmado"
-      element-id="confirmModal"
-      id="confirmModal"
+      element-id="confirmEventModal"
+      id="confirmEventModal"
     />
   </div>
 </template>
@@ -137,6 +137,7 @@
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
   import { IEventoSimplificado } from "../../../../stores/eventos/types"
+import { Modal } from "bootstrap"
 
   const eventoStore = useEventoStore()
   const modalStore = useModalStore()
@@ -154,6 +155,9 @@
   const tagsFormatadas = ref("")
 
   const confirmDelete = () => {
+	const modalDOM: any = document.querySelector('#confirmEventModal')
+
+  	confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover este evento?",
       props.evento.id
@@ -161,6 +165,9 @@
   }
 
   const confirmDeleteRascunho = () => {
+	const modalDOM: any = document.querySelector('#confirmEventModal')
+
+   	confirmStore.setConfirmInstance(modalDOM)
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover este rascunho?",
       null

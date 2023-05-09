@@ -467,13 +467,13 @@
   <ConfirmModal
     v-show="confirmStore.visible"
     @confirm-true="confirmado"
-    element-id="confirmModal"
-    id="confirmModal"
+    element-id="confirmFormModal"
+    id="confirmFormModal"
   />
 </template>
 
 <script setup lang="ts">
-//@ts-nocheck
+// @ts-nocheck
   // import BlotFormatter from "quill-blot-formatter"
   // import ImageUploader from "quill-image-uploader"
 
@@ -503,7 +503,8 @@
   } from "../../../stores/eventos/types"
   import { Instituicao } from "../../../stores/instituicao/types"
   import { end } from "@popperjs/core"
-
+import { Modal } from "bootstrap"
+  
   const eventoStore = useEventoStore()
   const alertStore = useAlertStore()
   const userStore = useUserStore()
@@ -817,6 +818,8 @@
 
   const salvarRascunho = () => {
     if (localStorage.getItem("eventoRascunho")) {
+	  const modalDOM: any = document.querySelector('#confirmFormModal')
+	  confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
       confirmStore.showConfirmModal(
         "Rascunho já existente, ao prosseguir o rascunho anterior será perdido. Tem certeza?",
         null

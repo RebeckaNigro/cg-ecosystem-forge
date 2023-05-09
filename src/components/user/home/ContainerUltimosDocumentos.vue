@@ -78,8 +78,8 @@
   <ConfirmModal
     v-show="confirmStore.visible"
     @confirm-true="confirmado"
-    element-id="confirmModal"
-    id="confirmModal"
+    element-id="confirmLastsDocsModal"
+    id="confirmLastsDocsModal"
   />
 </template>
 
@@ -90,6 +90,7 @@
   import { useDocumentStore } from "../../../stores/documentos/store"
   import { useConfirmStore } from "../../../stores/confirm/store"
   import { useModalStore } from "../../../stores/modal/store"
+import { Modal } from "bootstrap"
 
   const documentoStore = useDocumentStore()
   const confirmStore = useConfirmStore()
@@ -97,6 +98,9 @@
   const loadingDocs = ref(false)
 
   const confirmDelete = (id: number) => {
+	const modalDOM: any = document.querySelector('#confirmLastsDocsModal')
+
+    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!)
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover este documento?",
       id

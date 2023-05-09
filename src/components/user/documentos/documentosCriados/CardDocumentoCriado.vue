@@ -55,8 +55,8 @@
     <ConfirmModal
       v-show="confirmStore.visible"
       @confirm-true="confirmado"
-      element-id="confirmModal"
-      id="confirmModal"
+      element-id="confirmDocModal"
+      id="confirmDocModal"
     />
   </div>
 </template>
@@ -71,6 +71,7 @@
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
   import { IDocumentoSimplificado } from "../../../../stores/documentos/types"
+import { Modal } from "bootstrap"
 
   const documentoStore = useDocumentStore()
   const modalStore = useModalStore()
@@ -86,6 +87,8 @@
   const tagsFormatadas = ref("")
 
   const confirmDelete = () => {
+	const modalDOM: any = document.querySelector('#confirmDocModal')
+	confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover este documento?",
       props.documento.id

@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { Modal } from "bootstrap"
 import { defineStore } from "pinia"
 export const useConfirmStore = defineStore("confirmStore", {
   state: () => {
@@ -27,7 +28,10 @@ export const useConfirmStore = defineStore("confirmStore", {
 
     closeConfirm() {
       this.confirmInstance.toggle()
-    }
+    },
+	setConfirmInstance(confirmInstance: Modal){
+		this.confirmInstance = confirmInstance
+	}
   },
   persist: false
 })

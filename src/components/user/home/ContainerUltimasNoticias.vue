@@ -90,6 +90,7 @@
   import { useNoticiaStore } from "../../../stores/noticias/store"
   import { useConfirmStore } from "../../../stores/confirm/store"
   import { useModalStore } from "../../../stores/modal/store"
+import { Modal } from "bootstrap"
 
   const noticiaStore = useNoticiaStore()
   const confirmStore = useConfirmStore()
@@ -97,6 +98,10 @@
   const loadingNews = ref(false)
 
   const confirmDelete = (id: number) => {
+	const modalDOM: any = document.querySelector('#confirmNewsModal')
+
+    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!)
+    
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover esta notícia?",
       id

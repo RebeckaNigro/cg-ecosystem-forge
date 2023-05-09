@@ -243,8 +243,8 @@
   <ConfirmModal
     v-show="confirmStore.visible"
     @confirm-true="confirmado"
-    element-id="confirmModal"
-    id="confirmModal"
+    element-id="confirmFormNewsModal"
+    id="confirmFormNewsModal"
   />
 </template>
 
@@ -503,6 +503,9 @@
 
   const salvarRascunho = () => {
     if (localStorage.getItem("noticiaRascunho")) {
+	  const modalDOM: any = document.querySelector('#confirmFormNewsModal')
+
+      confirmStore.setConfirmInstance(modalDOM)
       confirmStore.showConfirmModal(
         "Rascunho já existente, ao prosseguir o rascunho anterior será perdido. Tem certeza?",
         null

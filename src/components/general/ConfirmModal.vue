@@ -60,7 +60,7 @@
     const modalDOM: any = document.querySelector(`#${props.elementId}`)
 
     bsConfirmModal.value = Modal.getOrCreateInstance(modalDOM)!
-    confirmStore.confirmInstance = bsConfirmModal.value
+    confirmStore.setConfirmInstance(bsConfirmModal.value)
   })
 
   const sendConfirmEvent = () => {

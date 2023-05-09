@@ -99,8 +99,8 @@
     <ConfirmModal
       v-show="confirmStore.visible"
       @confirm-true="confirmado"
-      element-id="confirmModal"
-      id="confirmModal"
+      element-id="confirmNewsModal"
+      id="confirmNewsModal"
     />
   </div>
 </template>
@@ -114,6 +114,7 @@
   import { ref, onMounted, onUpdated } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
+  import { Modal } from "bootstrap"
 
   const noticiaStore = useNoticiaStore()
   const modalStore = useModalStore()
@@ -131,6 +132,9 @@
   const tagsFormatadas = ref("")
 
   const confirmDelete = () => {
+	const modalDOM: any = document.querySelector('#confirmNewsModal')
+
+    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover esta notícia?",
       props.noticia.id
@@ -138,6 +142,9 @@
   }
 
   const confirmDeleteRascunho = () => {
+	const modalDOM: any = document.querySelector('#confirmNewsModal')
+
+    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
     confirmStore.showConfirmModal(
       "Tem certeza que desesja remover este rascunho?",
       null
