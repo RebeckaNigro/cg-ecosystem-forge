@@ -47,9 +47,7 @@
   const noticiaStore = useNoticiaStore()
   const loadingNews = ref(true)
   const lastIndex = ref(4)
-  let noticias = ref<Array<INoticiaSimplificada>>(
-    noticiaStore.allNews.slice(0, lastIndex.value)
-  )
+  let noticias = ref<Array<INoticiaSimplificada>>()
 
   const addNewsToView = () => {
     lastIndex.value += 4
@@ -57,8 +55,10 @@
     noticias.value = noticiaStore.allNews.slice(0, lastIndex.value)
   }
 
-  onMounted(() => {
-    noticiaStore.getLastNews()
+  onMounted(async () => {
+	loadingNews.value = true
+	await noticiaStore.getAllNews()
+	noticias.value = noticiaStore.allNews.slice(0, 4)
     loadingNews.value = false
   })
 </script>
