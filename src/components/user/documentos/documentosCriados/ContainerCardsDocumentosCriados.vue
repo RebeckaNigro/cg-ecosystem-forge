@@ -12,7 +12,7 @@
     <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
       <div class="col-xs-12 col-sm-6 col-md-4 my-2">
         <FilterComponent
-          field="data"
+          field="sessão"
           :items="documentoStore.allUserDocs"
           type="documento"
           @filter-result="filtrarDocumentos"
@@ -103,8 +103,8 @@
 
   onMounted(async () => {
     loadingDocs.value = true
-    await documentoStore.getUserLastDocs()
-    documentos.value = documentoStore.allUserLastDocs
+    await documentoStore.getUserDocs()
+    documentos.value = documentoStore.allUserDocs
     documentosExibidos.value = documentos.value.slice(0, lastIndex.value)
     loadingDocs.value = false
   })

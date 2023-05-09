@@ -9,7 +9,7 @@
         v-model="selectedOption"
         @change="doFilter($event)"
       >
-        <option value="">Todas</option>
+        <option value="">{{ (type == 'evento' || type == 'documento') ? 'Todos' : 'Todas' }}</option>
         <option
           v-for="(option, index) in menuOptions"
           :key="index"
@@ -28,6 +28,7 @@
   import { NoticiaSimplificada } from "./../../stores/noticias/types"
   import { FilterOption } from "../../stores/general/types"
   import { EventoSimplificado } from "../../stores/eventos/types"
+import { IDocumentoSimplificado } from "../../stores/documentos/types"
 
   const props = defineProps<{
     field: string
@@ -54,6 +55,10 @@
         menuOptions.value.push(new FilterOption("Últimos 30 dias", "30"))
         menuOptions.value.push(new FilterOption("Últimos 90 dias", "90"))
         break
+	  case "documento":
+		menuOptions.value.push(new FilterOption("Pesquisa", "pesquisa"))
+		menuOptions.value.push(new FilterOption("Edital", "edital"))
+		menuOptions.value.push(new FilterOption("Lei", "lei"))
     }
   })
 
@@ -90,7 +95,14 @@
             : false
         })
         sendSearchResult()
-      }
+      }else if(props.type == "documento"){
+			results.value = props.items.filter((documento: IDocumentoSimplificado) => {
+				return documento.documentoArea.toLowerCase() == selectedOption.value.toLowerCase()
+				? true
+				: false
+			})
+			sendSearchResult()
+		}
     } else {
       results.value = props.items
       sendSearchResult()

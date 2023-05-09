@@ -49,11 +49,11 @@ export interface IDocumentoSimplificado {
   id: number
   nome: string
   descricao: string
+  documentoArea: string
   ultimaOperacao: string
   autor: string
   tags: CustomTag[]
   data: string
-
 }
 
 // export class NoticiaSimplificada implements INoticiaSimplificada {
