@@ -103,8 +103,8 @@
 
   onMounted(async () => {
     loadingDocs.value = true
-    await documentoStore.getUserLastDocs()
-    documentos.value = documentoStore.allUserLastDocs
+    await documentoStore.getUserDocs()
+    documentos.value = documentoStore.allUserDocs
     documentosExibidos.value = documentos.value.slice(0, lastIndex.value)
     loadingDocs.value = false
   })

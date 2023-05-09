@@ -28,6 +28,7 @@
   import { NoticiaSimplificada } from "./../../stores/noticias/types"
   import { FilterOption } from "../../stores/general/types"
   import { EventoSimplificado } from "../../stores/eventos/types"
+import { IDocumentoSimplificado } from "../../stores/documentos/types"
 
   const props = defineProps<{
     field: string
@@ -55,9 +56,9 @@
         menuOptions.value.push(new FilterOption("Últimos 90 dias", "90"))
         break
 	  case "documento":
-		menuOptions.value.push(new FilterOption("Pesquisa", "1"))
-		menuOptions.value.push(new FilterOption("Edital", "2"))
-		menuOptions.value.push(new FilterOption("Lei", "3"))
+		menuOptions.value.push(new FilterOption("Pesquisa", "pesquisa"))
+		menuOptions.value.push(new FilterOption("Edital", "edital"))
+		menuOptions.value.push(new FilterOption("Lei", "lei"))
     }
   })
 
@@ -94,7 +95,14 @@
             : false
         })
         sendSearchResult()
-      }
+      }else if(props.type == "documento"){
+			results.value = props.items.filter((documento: IDocumentoSimplificado) => {
+				return documento.documentoArea.toLowerCase() == selectedOption.value.toLowerCase()
+				? true
+				: false
+			})
+			sendSearchResult()
+		}
     } else {
       results.value = props.items
       sendSearchResult()
