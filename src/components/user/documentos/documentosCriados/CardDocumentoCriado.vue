@@ -9,7 +9,7 @@
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end">
+          <div class="col-md-4 text-end d-flex">
             <img
               src="/public/view_icon.svg"
               alt=""
@@ -42,9 +42,18 @@
         </div>
       </div>
 
-      <p class="fs-3 display-3 mt-2 text-start p-2">
+      <p class="fs-3 display-3 mt-2 mb-0 text-start p-2">
         {{ documento.nome }}
       </p>
+
+	  <p class="fs-5 display-3 text-start p-2 my-0">
+        {{ documento.autor }}
+      </p>
+
+	  <p class="fs-6 display-3 mt-2 text-start p-2 text-truncate">
+        {{ documento.descricao }}
+      </p>
+
 
       <div class="text-start mt-4">
         <span class="text-secondary px-1"
@@ -114,10 +123,10 @@ import { Modal } from "bootstrap"
   onMounted(() => {
     dataFormatada.value = brDateString(props.documento.data.toString())
 
-    // const prependHashtag = props.documento.tags.map(
-    //   (tag) => "#" + tag.descricao
-    // )
-    // tagsFormatadas.value = prependHashtag.join("  ")
+    const prependHashtag = props.documento.tags.map(
+      (tag) => "#" + tag.descricao
+    )
+    tagsFormatadas.value = prependHashtag.join("  ")
   })
 
   onUpdated(() => {
