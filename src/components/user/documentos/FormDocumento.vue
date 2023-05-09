@@ -107,7 +107,7 @@
             class="form-input-primary"
             type="file"
             name="imagem-input"
-            accept=".pdf, .doc, .docx"
+            accept=".pdf"
             id="imagem-input"
             @change="(e) => onFileChanged(e)"
           />

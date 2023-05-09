@@ -38,7 +38,7 @@
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end" v-if="!props.isRascunho">
+          <div class="col-md-4 text-end d-flex" v-if="!props.isRascunho">
             <img
               src="/public/view_icon.svg"
               alt=""

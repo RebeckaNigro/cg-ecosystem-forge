@@ -24,7 +24,7 @@
           class="green-btn-outlined"
           @click="
             $router.push({
-              name: 'eventosCriados'
+              name: 'EventosCriados'
             })
           "
         >
