@@ -19,8 +19,8 @@
         </div>
       </nav>
     </div>
-
-    <Spinner v-else :spinner-color-class="'text-dark'" />
+	<Spinner v-else :spinner-color-class="'text-dark'" />
+    
     <GeneralBtn
       btnText="VER MAIS"
       :isExternalLink="false"
@@ -31,8 +31,9 @@
       height="40px"
       id="know_more"
       @click="addNewsToView()"
-      :class="{ 'd-none': lastIndex > noticiaStore.allNews.length }"
+      :class="{ 'd-none': (page*6) > noticiaStore.allNews.length }"
     />
+	<Spinner v-if="loadingMoreNews" :spinner-color-class="'text-dark'" />
   </div>
 </template>
 
@@ -46,19 +47,22 @@
 
   const noticiaStore = useNoticiaStore()
   const loadingNews = ref(true)
-  const lastIndex = ref(4)
+  const loadingMoreNews = ref(false)
+  const page = ref(1)
   let noticias = ref<Array<INoticiaSimplificada>>()
 
-  const addNewsToView = () => {
-    lastIndex.value += 4
-
-    noticias.value = noticiaStore.allNews.slice(0, lastIndex.value)
+  const addNewsToView = async () => {
+    page.value++
+	loadingMoreNews.value = true
+	await noticiaStore.getAllNews(page.value)
+	noticias.value = noticiaStore.allNews
+	loadingMoreNews.value = false
   }
 
   onMounted(async () => {
 	loadingNews.value = true
-	await noticiaStore.getAllNews()
-	noticias.value = noticiaStore.allNews.slice(0, 4)
+	await noticiaStore.getAllNews(page.value)
+	noticias.value = noticiaStore.allNews
     loadingNews.value = false
   })
 </script>

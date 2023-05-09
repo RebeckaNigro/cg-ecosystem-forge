@@ -81,10 +81,8 @@ const addEventsToView = async () => {
 	page.value++
 	loadingMoreContent.value = true
 	await eventoStore.getAllEvents(page.value)
+	eventos.value = eventoStore.eventos
 	loadingMoreContent.value = false
-	for(const evento of eventoStore.eventos){
-		eventos.value?.push(evento)
-	}
 }
 
 onMounted(async () => {
@@ -92,6 +90,7 @@ onMounted(async () => {
 	await eventoStore.getAllEvents(page.value)
 	eventos.value = eventoStore.eventos
 	loadingContent.value = false
+	
 })
 </script>
 

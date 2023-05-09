@@ -113,9 +113,9 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       }
     },
 
-    async getAllNews() {
+    async getAllNews(page: number) {
       try {
-        const response = await httpRequest.get("api/noticia/listarTodas")
+        const response = await httpRequest.get(`api/noticia/listarTodas?paginacao=${page}`)
 
         if (response.data.codigo === 200) {
           this.response.putResponse(
@@ -123,7 +123,7 @@ export const useNoticiaStore = defineStore("noticiaStore", {
             response.data.retorno,
             response.data.resposta
           )
-          this.allNews = []
+
           for (const news of response.data.retorno) {
             this.allNews.push(news)
           }
