@@ -110,7 +110,7 @@
   import { useNoticiaStore } from "../../../../stores/noticias/store"
   import { useModalStore } from "../../../../stores/modal/store"
   import { useConfirmStore } from "../../../../stores/confirm/store"
-  import { brDateString } from "./../../../../utils/formatacao/datetime"
+  import { brDateString, friendlyDateTime } from "./../../../../utils/formatacao/datetime"
   import { ref, onMounted, onUpdated } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
@@ -174,7 +174,7 @@
   onMounted(() => {
     dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
     if (props.noticia.dataOperacao)
-      dataOperacaoFormatada.value = brDateString(props.noticia.dataOperacao)
+      dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao)
 
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
@@ -184,7 +184,7 @@
     dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
 
     if (props.noticia.dataOperacao)
-      dataOperacaoFormatada.value = brDateString(props.noticia.dataOperacao)
+      dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao)
     const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
     tagsFormatadas.value = prependHashtag.join("  ")
   })

@@ -5,22 +5,32 @@ export interface IDocumento {
   descricao: string
   tags: CustomTag[]
   tipoDocumentoId: number
+  documentoArea: string
   documentoAreaid: number
   instituicaoId: number
+  instituicao: string
   data: string
+  download: string
+  aprovado: boolean
+  autor: string
   arquivo: File
 }
 
 export class Documento implements IDocumento {
-  id: number
-  nome: string
-  descricao: string
-  tags: CustomTag[]
-  tipoDocumentoId: number
-  documentoAreaid: number
-  instituicaoId: number
-  data: string
-  arquivo: File
+	id: number
+	nome: string
+	descricao: string
+	tags: CustomTag[]
+	tipoDocumentoId: number
+	documentoArea: string
+	documentoAreaid: number
+	instituicaoId: number
+	instituicao: string
+	data: string
+	download: string
+	arquivo: File
+	aprovado: boolean
+	autor: string
 
   constructor(
     id: number,
@@ -29,9 +39,14 @@ export class Documento implements IDocumento {
     tags: CustomTag[],
     tipoDocumentoId: number,
     documentoAreaid: number,
+	documentoArea: string,
     instituicaoId: number,
+	instituicao: string,
     data: string,
-    arquivo: File
+    download: string,
+	aprovado: boolean,
+	autor: string,
+	arquivo: File 
   ) {
     this.id = id
     this.nome = nome
@@ -42,7 +57,12 @@ export class Documento implements IDocumento {
     this.instituicaoId = instituicaoId
     this.documentoAreaid = documentoAreaid
     this.data = data
-    this.arquivo = arquivo
+    this.download = download
+	this.documentoArea = documentoArea
+	this.instituicao = instituicao
+	this.aprovado = aprovado
+	this.autor = autor 
+	this.arquivo = arquivo
   }
 }
 export interface IDocumentoSimplificado {
