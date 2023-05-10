@@ -49,7 +49,7 @@
 import { IEventoSimplificado } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import {brDateString} from '../../utils/formatacao/datetime'
-import { buildImageSrc } from '../../utils/constantes';
+import { buildImageSrc } from '../../utils/functions';
 import { onMounted } from 'vue';
   const props = defineProps<{
     carouselData: IEventoSimplificado[]

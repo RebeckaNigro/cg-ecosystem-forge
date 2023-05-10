@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
 import { faleConosco, SetorInterface } from "./types";
-import { CONSTANTES } from '../../utils/constantes'
 import { validateFaleConoscoInput } from "../../utils/faleConosco/validation";
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
-// import headers from "../../utils/headers";
 import axios from "axios";
+import { httpRequest } from "../../utils/http";
 
 export const useComunicacaoStore = defineStore('comunicacaoStore', {
   state: () => {
@@ -18,7 +17,7 @@ export const useComunicacaoStore = defineStore('comunicacaoStore', {
       try {
         const faleConoscoInput = validateFaleConoscoInput({nome, emailCorporativo, telefone, empresa, cargo, setorId, mensagem})
         if (faleConoscoInput instanceof faleConosco) {
-          const response = await axios.post(CONSTANTES.defaultUrl + '/api/faleConosco/registrar',
+          const response = await httpRequest.post('/api/faleConosco/registrar',
           faleConoscoInput
           )
           this.faleConoscoResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta);
@@ -36,8 +35,9 @@ export const useComunicacaoStore = defineStore('comunicacaoStore', {
     },
     async getFaleConoscoSetores() {
       try {
-        const response = await axios.get(CONSTANTES.defaultUrl + '/api/faleConoscoSetor/ObterFaleConoscoSetores');
-        this.faleConoscoResponse.putResponse(response.data.codigo, response.data.dado, response.data.resposta);
+        const response = await httpRequest.get('/api/faleConoscoSetor/ObterFaleConoscoSetores');
+        this.faleConoscoResponse.putResponse(response.data.codigo, response.data.retorno, response.data.resposta);
+		
         if (response.data.codigo === 200) {
           this.faleConoscoSetores = []
           this.faleConoscoResponse.dado.forEach((e: SetorInterface) => {
