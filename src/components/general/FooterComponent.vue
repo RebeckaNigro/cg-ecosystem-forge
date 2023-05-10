@@ -83,7 +83,7 @@
           >FALE CONOSCO</router-link
         >
         <h5 class="light-body-text">Contato:</h5>
-        <p class="light-body-text">contato@ecossistemadeinovacaocg.com.br</p>
+        <p class="light-body-text">startupsuporte@sesims.com.br</p>
       </div>
     </nav>
   </footer>
