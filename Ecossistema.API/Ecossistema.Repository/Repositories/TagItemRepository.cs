@@ -1,0 +1,20 @@
+﻿using Ecossistema.Data.Interfaces;
+using Ecossistema.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ecossistema.Data.Repositories
+{
+    public class TagItemRepository : BaseRepository<FaleConosco>, ITagItemRepository
+    {
+        private readonly EcossistemaContext _context;
+
+        public TagItemRepository(EcossistemaContext context) : base(context)
+        {
+            _context = context;
+        }
+    }
+}

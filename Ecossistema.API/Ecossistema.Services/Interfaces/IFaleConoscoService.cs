@@ -1,9 +1,4 @@
-﻿using Ecossistema.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecossistema.Services.Dto;
 
 namespace Ecossistema.Services.Interfaces
 {
@@ -11,6 +6,7 @@ namespace Ecossistema.Services.Interfaces
     {
         Task<object> ObterFaleConosco();
 
-        Task<object> ObterContatosSetor(int faleConoscoSetorId);        
+        Task<object> ObterContatosSetor(int faleConoscoSetorId);
+        Task<RespostaPadrao> Registrar(FaleConoscoDTO obj);
     }
 }

@@ -17,5 +17,13 @@ namespace Ecossistema.Domain.Entities
         public int FaleConoscoSetorId { get; set; }
         public virtual FaleConoscoSetor FaleConoscoSetor { get; set; }
         public string Descricao { get; set; }
+        public bool Ativo { get; set; } = true;
+        public DateTime DataCriacao { get; set; }
+        public int UsuarioCriacaoId { get; set; }
+        public virtual Usuario UsuarioCriacao { get; set; }
+        public string NaturezaOperacao { get; set; }
+        public DateTime DataOperacao { get; set; }
+        public int UsuarioOperacaoId { get; set; }
+        public virtual Usuario UsuarioOperacao { get; set; }
     }
 }
