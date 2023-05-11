@@ -42,6 +42,7 @@ namespace Ecossistema.Services.Services
             using var client = new SmtpClient();
             try
             {
+                //client.CheckCertificateRevocation = false; Habilitar apenas localmente para realizar testes
                 await client.ConnectAsync(configEmail.SmtpServer, configEmail.Port, SecureSocketOptions.StartTls);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 await client.AuthenticateAsync(configEmail.UserName, configEmail.Password);
