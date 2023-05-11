@@ -79,7 +79,7 @@ const logosParceiros: string[] = [
   '/chumbado/home_parceiros/faculdades/UNIGRAN.png',
   '/chumbado/home_parceiros/governo-ms/agraer.png',
   '/chumbado/home_parceiros/governo-ms/fundect.png',
-  '/chumbado/home_parceiros/governo-ms/semagro.png',
+  '/chumbado/home_parceiros/governo-ms/semadesc.png',
   '/chumbado/home_parceiros/ifms/ifms.png',
   '/chumbado/home_parceiros/pmcg-e-incubadora/incubadora-municipal.png',
   '/chumbado/home_parceiros/pmcg-e-incubadora/sidagro.png',

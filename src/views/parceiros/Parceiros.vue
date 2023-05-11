@@ -130,7 +130,7 @@ const parceirosContainers = reactive([
             },
             {
                 hasLogo: true,
-                logo: '/chumbado/home_parceiros/governo-ms/semagro.png',
+                logo: '/chumbado/home_parceiros/governo-ms/semadesc.png',
                 logoAlt: 'Semagro',
                 parceiroId: 11
             }
