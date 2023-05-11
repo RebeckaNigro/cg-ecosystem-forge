@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userStore.loggedUser.token">
+  <div v-if="userStore.loggedUser.token" class="me-3">
     <button
       class="navbar-toggler"
       type="button"
