@@ -75,7 +75,7 @@
   import { useDocumentStore } from "../../../../stores/documentos/store"
   import { useModalStore } from "../../../../stores/modal/store"
   import { useConfirmStore } from "../../../../stores/confirm/store"
-  import { brDateString } from "../../../../utils/formatacao/datetime"
+  import { brDateString, friendlyDateTime } from "../../../../utils/formatacao/datetime"
   import { ref, onMounted, onUpdated } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
@@ -121,7 +121,7 @@ import { Modal } from "bootstrap"
   }
 
   onMounted(() => {
-    dataFormatada.value = brDateString(props.documento.data.toString())
+    dataFormatada.value = friendlyDateTime(props.documento.data.toString())
 
     const prependHashtag = props.documento.tags.map(
       (tag) => "#" + tag.descricao
@@ -130,7 +130,7 @@ import { Modal } from "bootstrap"
   })
 
   onUpdated(() => {
-    dataFormatada.value = brDateString(props.documento.data.toString())
+    dataFormatada.value = friendlyDateTime(props.documento.data.toString())
     // const prependHashtag = props.documento.tags.map(
     //   (tag) => "#" + tag.descricao
     // )

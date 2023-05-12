@@ -46,7 +46,7 @@
     <NavBar />
     <router-view />
     <Cookies />
-    <FooterComponent class="navbar-fixed-bottom" />
+    <FooterComponent/>
   </div>
 </template>
 

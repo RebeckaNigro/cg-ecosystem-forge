@@ -132,7 +132,7 @@
   import { useEventoStore } from "../../../../stores/eventos/store"
   import { useModalStore } from "../../../../stores/modal/store"
   import { useConfirmStore } from "../../../../stores/confirm/store"
-  import { brDateString } from "./../../../../utils/formatacao/datetime"
+  import { brDateString, friendlyDateTime } from "./../../../../utils/formatacao/datetime"
   import { ref, onMounted, onUpdated } from "vue"
   import ConfirmModal from "../../../general/ConfirmModal.vue"
   import router from "../../../../router"
@@ -207,7 +207,7 @@ import { Modal } from "bootstrap"
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
 
     if (props.evento.ultimaAtualizacao) {
-      dataAtualizacaoFormatada.value = ` ${brDateString(
+      dataAtualizacaoFormatada.value = ` ${friendlyDateTime(
         props.evento.ultimaAtualizacao
       )} `
     }
@@ -222,7 +222,7 @@ import { Modal } from "bootstrap"
     )} -  ${brDateString(props.evento.dataTermino.toString())}`
 
     if (props.evento.ultimaAtualizacao) {
-      dataAtualizacaoFormatada.value = ` ${brDateString(
+      dataAtualizacaoFormatada.value = ` ${friendlyDateTime(
         props.evento.ultimaAtualizacao
       )} `
     }
