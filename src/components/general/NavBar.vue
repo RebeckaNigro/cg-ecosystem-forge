@@ -14,7 +14,7 @@
 			</section>
 
 			<div class="d-flex align-items-center">
-				<button type="button" class="light-title npm me-3" id="login" @click="$router.push({ name: 'Login' })"
+				<button type="button" class="light-title  me-3" id="login" @click="$router.push({ name: 'Login' })"
 					v-if="!userStore.loggedUser.token">
 					LOGIN
 				</button>
