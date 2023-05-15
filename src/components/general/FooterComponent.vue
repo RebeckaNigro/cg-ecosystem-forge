@@ -122,7 +122,7 @@ import { onMounted, reactive, ref } from "vue"
 const selectedItem = ref(0)
 const menusFooter = reactive(new Array())
 
-function showItems(index: number) {
+/*function showItems(index: number) {
 	selectedItem.value = index
 
 	menusFooter.forEach((item) => {
@@ -134,9 +134,9 @@ function showItems(index: number) {
 			item.classList.add("highlight")
 		}
 	})
-}
+}*/
 
-onMounted(() => {
+/*onMounted(() => {
 	// popula uma array com os elementos do footer para mudar seu background, indicando ao usuário onde clicou
 	for (const item in info) {
 		const el: HTMLElement = document.querySelector("#topico" + item)!
@@ -147,7 +147,7 @@ onMounted(() => {
 
 		menusFooter.push(el)
 	}
-})
+})*/
 
 const info = [
 	{

@@ -361,11 +361,13 @@
         await perfilStore.postPerfil(perfil.value)
         sendingPerfil.value = false
         const resposta = perfilStore.perfilResponse.getResponse()
-
+		
         if (resposta.code === 200) {
           alertStore.showTimeoutSuccessMessage("Perfil cadastrado com sucesso!")
           resetForm()
-        } else {
+        }else if(resposta.code === 661){
+			alertStore.showTimeoutErrorMessage(resposta.message)
+		} else {
           alertStore.showTimeoutErrorMessage("Erro ao cadastrar perfil!")
         }
       }

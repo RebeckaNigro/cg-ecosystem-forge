@@ -4,9 +4,9 @@
     :class="[isRelacionada ? 'is-relacionada' : 'not-relacionada']"
   >
     <img :src="
-		noticia.arquivo 
-		? 'data:image/png;base64, ' + noticia.arquivo
-		: '/public/noticias/noticia-expandida/default-news-cover.svg'	
+		noticia?.arquivo 
+		? 'data:image/png;base64, ' + noticia?.arquivo
+		: '/noticias/noticia-expandida/default-news-cover.svg'	
 	
 	" alt="" class="card-noticia-image" />
     <span class="tags">#tecnologia #inovação</span>
@@ -19,7 +19,7 @@
 import { INoticiaSimplificada } from "../../stores/noticias/types"
 
   const props = defineProps<{
-    noticia: INoticiaSimplificada
+    noticia: INoticiaSimplificada | null
     isRelacionada: boolean
   }>()
 </script>

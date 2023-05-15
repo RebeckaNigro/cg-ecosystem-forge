@@ -4,7 +4,7 @@
       <img :src="
 		evento.arquivo
 		? 'data:image/png;base64, ' + evento.arquivo
-		: '/public/eventos/eventoExpandido/default-event-cover.svg'
+		: '/eventos/eventoExpandido/default-event-cover.svg'
 	 
 	 " alt='Imagem do evento'>
       
