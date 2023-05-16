@@ -68,13 +68,17 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <label for="telefone" class="form-label-primary">Telefone</label>
+          <label for="telefone" class="form-label-primary">Telefone*</label>
           <input
             type="text"
             id="telefone"
             class="form-input-primary"
             v-model="perfil.telefone"
+			:class="v$.telefone.$error ? 'is-invalid' : ''"
           />
+		  <div v-if="v$.telefone.$error" class="invalid-feedback">
+			{{ v$.telefone.$errors[0].$message }}
+		  </div>
         </div>
       </div>
 
@@ -95,7 +99,7 @@
       <div class="mb-3">
         <div class="text-start">
           <label for="cep" class="form-label-primary d-inline"
-            >CEP
+            >CEP*
             <a
               href="https://buscacepinter.correios.com.br/app/endereco/index.php"
               >(Não sabe o CEP?)</a
@@ -144,7 +148,7 @@
           />
         </div>
         <div class="col-sm-3">
-          <label for="numero" class="form-label-primary">Número</label>
+          <label for="numero" class="form-label-primary">Número*</label>
           <input
             type="text"
             id="numero"
@@ -169,7 +173,7 @@
       </div>
 
       <div class="input-icon-container mb-3">
-        <label for="password" class="form-label-primary">Senha</label>
+        <label for="password" class="form-label-primary">Senha*</label>
 
         <i class="icon">
           <img
@@ -193,7 +197,7 @@
 
       <div class="input-icon-container mb-3">
         <label for="confirmPassword" class="form-label-primary"
-          >Confirmar Senha</label
+          >Confirmar Senha*</label
         >
 
         <i class="icon">
@@ -251,6 +255,7 @@
     required,
     email,
     minLength,
+	maxLength,
     sameAs,
     helpers
   } from "@vuelidate/validators"
@@ -297,7 +302,11 @@
         )
       },
       email: { required, email },
-      telefone: {},
+      telefone: {
+		required: helpers.withMessage('Telefone é obrigatório.', required),
+		minLength: minLength(10),
+		maxLength: maxLength(11)
+	  },
       cargo: {
         required: helpers.withMessage("Cargo é obrigatório.", required)
       },
