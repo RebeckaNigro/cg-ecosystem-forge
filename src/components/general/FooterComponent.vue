@@ -6,7 +6,7 @@
 			</div>
 	
 			<div class="d-flex flex-column text-start">
-				<a href="/privacidade_ecossistemacg.pdf" download="POLITICA DE PRIVACIDADE ECOSSISTEMA"
+				<a href="/politica-privacidade.pdf"
 					class="light-title text-uppercase mb-3 fs-6">Termo de privacidade</a>
 				<router-link class="light-title text-uppercase fs-6" to="/quem-somos">Quem somos</router-link>
 			</div>
@@ -49,7 +49,7 @@
 
 		<div class="d-flex flex-column">
 			<a
-			  href="/privacidade_ecossistemacg.pdf"
+			  href="/politica-privacidade.pdf"
 			  download="POLITICA DE PRIVACIDADE ECOSSISTEMA"
 			  class="light-title d-lg-show text-uppercase mb-3"
 			  >Termo de privacidade</a
@@ -60,7 +60,7 @@
 		</div>
       <div class="d-lg-none d-flex">
         <a
-          href="/privacidade_ecossistemacg.pdf"
+          href="/politica-privacidade.pdf"
           download="POLITICA DE PRIVACIDADE ECOSSISTEMA"
           class="light-title"
           >Termo de privacidade</a

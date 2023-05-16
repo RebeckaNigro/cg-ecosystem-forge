@@ -227,7 +227,11 @@
           class="mx-2"
           v-model="termosDeUso"
         />
-        <span>Li e concordo com todos os termos de uso.</span>
+        <span>Eu li e concordo com os 
+			<a href="/politica-privacidade.pdf">
+				Termos de Uso e Políticas de Privacidade.
+			</a>
+		</span>
       </div>
 
       <Spinner v-if="sendingPerfil" />
