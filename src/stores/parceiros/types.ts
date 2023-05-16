@@ -14,3 +14,13 @@ export interface PartnerInterface {
   linkedinLink: string
   wppLink: string
 }
+
+export interface IPartnerSimplificado{
+	logo: string | null
+	id: number
+}
+
+export interface IPartnerSeccionado{
+	tipoInstituicao: string
+	parceiros: IPartnerSimplificado[]
+}
