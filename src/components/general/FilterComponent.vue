@@ -29,6 +29,7 @@
   import { FilterOption } from "../../stores/general/types"
   import { EventoSimplificado } from "../../stores/eventos/types"
 import { IDocumentoSimplificado } from "../../stores/documentos/types"
+import { IPartnerSeccionado } from "../../stores/parceiros/types"
 
   const props = defineProps<{
     field: string
@@ -59,6 +60,15 @@ import { IDocumentoSimplificado } from "../../stores/documentos/types"
 		menuOptions.value.push(new FilterOption("Pesquisa", "pesquisa"))
 		menuOptions.value.push(new FilterOption("Edital", "edital"))
 		menuOptions.value.push(new FilterOption("Lei", "lei"))
+		break
+	 case 'parceiro':
+		menuOptions.value.push(new FilterOption('ICTIs', 'ictis'))
+		menuOptions.value.push(new FilterOption('Empresas', 'empresas'))
+		menuOptions.value.push(new FilterOption('Mecanismos de inovação', 'mecanismos de inovação'))
+		menuOptions.value.push(new FilterOption('Governo', 'governo'))
+		menuOptions.value.push(new FilterOption('Sociedade organizada', 'sociedade organizada'))
+		break
+			
     }
   })
 
@@ -102,7 +112,15 @@ import { IDocumentoSimplificado } from "../../stores/documentos/types"
 				: false
 			})
 			sendSearchResult()
-		}
+	  }else if(props.type == "parceiro"){
+		const item: IPartnerSeccionado[] = props.items.filter((item: IPartnerSeccionado) => {
+			return item.tipoInstituicao.toLowerCase() == selectedOption.value.toLowerCase()
+			? true 
+			: false
+		})
+		results.value = item
+		sendSearchResult()
+	  }
     } else {
       results.value = props.items
       sendSearchResult()

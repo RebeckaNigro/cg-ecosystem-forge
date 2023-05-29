@@ -15,17 +15,13 @@
         </div>
     </Banner>
     <section class="parceiros ghp">
-        <ContainerCardsParceiro v-for="(container, index) in parceirosContainers" :key="index"
-                                :tipo-de-instituicao="container.tipoInstituicao"
-                                :parceiros="container.parceiros"
-                                :container-id="index"
+        <ContainerCardsParceiro
+            :items="parceirosContainers"
         />
     </section>
 </template>
 
 <script setup lang="ts">
-import NavBar from '../../components/general/NavBar.vue';
-import FooterComponent from '../../components/general/FooterComponent.vue';
 import ContainerCardsParceiro from '../../components/parceiros/ContainerCardsParceiro.vue';
 import Banner from '../../components/general/Banner.vue';
 import {useParceirosStore} from '../../stores/parceiros/store';
@@ -36,21 +32,18 @@ const parceirosContainers = reactive([
         tipoInstituicao: 'ICTIs',
         parceiros: [
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/uems-e-incubadoras/uems.png',
-                logoAlt: 'Uems',
                 parceiroId: 2
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/ufms.png',
-                logoAlt: 'Ufms',
                 parceiroId: 3
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/eli-cgde/ICT-INOVA-BR.png',
-                logoAlt: 'ICT Inova BR',
                 parceiroId: 8
             },
         ]
@@ -59,15 +52,13 @@ const parceirosContainers = reactive([
         tipoInstituicao: 'EMPRESAS',
         parceiros: [
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/eli-cgde/RdasArteiras.png',
-                logoAlt: 'República das arteiras',
                 parceiroId: 16
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/eli-cgde/eng.png',
-                logoAlt: 'ENG',
                 parceiroId: 9
             }
         ]
@@ -76,45 +67,38 @@ const parceirosContainers = reactive([
         tipoInstituicao: 'MECANISMOS DE INOVAÇÃO',
         parceiros: [
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/sistema-s/Startup.png',
-                logoAlt: 'Startup Sesi Fiems',
                 parceiroId: 19
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/aginova.png',
-                logoAlt: 'Aginova',
                 parceiroId: 4
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/ucdb-e-incubadoras/ucdb.jpg',
-                logoAlt: 'UCDB',
                 parceiroId: 1
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/pmcg-e-incubadora/incubadora-municipal.png',
-                logoAlt: 'Incubadora Municipal',
                 parceiroId: 13
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/eli-cgde/ecoinova_oficial.png',
-                logoAlt: 'EcoInova MS',
                 parceiroId: 14
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/livinglab.png',
-                logoAlt: 'Livinglab',
                 parceiroId: 15
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
-                logoAlt: 'Pime',
                 parceiroId: 10
             }
         ]
@@ -123,15 +107,12 @@ const parceirosContainers = reactive([
         tipoInstituicao: 'GOVERNO',
         parceiros: [
             {
-                hasLogo: true,
                 logo: '/chumbado/home_parceiros/governo-ms/fundect.png',
-                logoAlt: 'Fundect',
                 parceiroId: 7
             },
             {
-                hasLogo: true,
+
                 logo: '/chumbado/home_parceiros/governo-ms/semadesc.png',
-                logoAlt: 'Semagro',
                 parceiroId: 11
             }
         ]
@@ -140,27 +121,23 @@ const parceirosContainers = reactive([
         tipoInstituicao: 'SOCIEDADE ORGANIZADA',
         parceiros: [
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/sistema-s/Sistema-Fiems.jpg',
-                logoAlt: 'Sistema Fiems',
                 parceiroId: 18
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/sistema-s/SENAR-MS.png',
-                logoAlt: 'Senar',
                 parceiroId: 5
             },
             {
-                hasLogo: true,
+                
                 logo: '/chumbado/home_parceiros/sistema-s/SENAC.png',
-                logoAlt: 'SENAC',
                 parceiroId: 6
             },
             {
-                hasLogo: true,
+    
                 logo: '/chumbado/home_parceiros/sistema-s/SENAI.png',
-                logoAlt: 'SENAI',
                 parceiroId: 12
             }
         ]
