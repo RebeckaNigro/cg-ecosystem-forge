@@ -65,7 +65,7 @@
       <div class="tag-element mx-1 mb-4">
         <span>{{ selectedValue.razaoSocial }}</span>
         <img
-          src="./../../../assets/icons/close-white.svg"
+          src="/icons/close-white.svg"
           alt="Remover Instituicao"
           @click="deleteSelectedInstituicao"
         />
@@ -90,7 +90,7 @@
       >
         <span>{{ tag.descricao }}</span>
         <img
-          src="./../../../assets/icons/close-white.svg"
+          src="/icons/close-white.svg"
           alt="Remover tag"
           @click="deleteTag(index)"
         />

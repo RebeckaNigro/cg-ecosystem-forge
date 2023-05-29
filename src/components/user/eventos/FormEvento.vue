@@ -83,7 +83,7 @@
       <div class="tag-element mx-1 mb-4">
         <span>{{ selectedValue.razaoSocial }}</span>
         <img
-          src="./../../../assets/icons/close-white.svg"
+          src="/icons/close-white.svg"
           alt="Remover Instituicao"
           @click="deleteSelectedInstituicao"
         />
@@ -198,7 +198,7 @@
       >
         <span>{{ tag.descricao }}</span>
         <img
-          src="./../../../assets/icons/close-white.svg"
+          src="/icons/close-white.svg"
           alt="Remover tag"
           @click="deleteTag(index)"
         />
@@ -405,7 +405,7 @@
       <h1 class="text-start">{{ evento.titulo }}</h1>
       <div class="d-flex mt-4 mb-2">
         <img
-          src="./../../../assets/icons/user-circle.svg"
+          src="/icons/user-circle.svg"
           alt="icone usuario"
           class="icone-usuario"
         />
@@ -416,7 +416,7 @@
 
       <div class="d-flex mt-4 mb-2">
         <img
-          src="./../../../assets/icons/calendar-icon.svg"
+          src="/icons/calendar-icon.svg"
           alt="icone pino de endereço"
           class="icone-usuario"
         />
@@ -427,7 +427,7 @@
 
       <div class="d-flex mt-4 mb-2">
         <img
-          src="./../../../assets/icons/pin-icon.svg"
+          src="/icons/pin-icon.svg"
           alt="icone pino de endereço"
           class="icone-usuario"
         />

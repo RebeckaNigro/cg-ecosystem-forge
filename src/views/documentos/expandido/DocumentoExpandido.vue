@@ -26,7 +26,7 @@
 				</div>
 				<h1 class="text-start">{{ documento?.nome }}</h1>
 				<div class="d-flex mt-4 mb-2">
-					<img src="./../../../assets/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
+					<img src="/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
 					<div class="d-flex align-items-center mx-2 fw-bold">
 						{{ documento.instituicao }}
 					</div>
@@ -35,7 +35,7 @@
 					<div class="col-sm-6">
 	
 						<div class="d-flex mt-4 mb-2">
-							<img src="./../../../assets/icons/calendar-icon.svg" alt="icone pino de endereço"
+							<img src="/icons/calendar-icon.svg" alt="icone pino de endereço"
 								class="icone-usuario" />
 							<div class="d-flex align-items-center mx-2 fw-bold">
 								{{ dataFormatada }}

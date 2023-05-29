@@ -76,7 +76,7 @@
       >
         <span>{{ tag.descricao }}</span>
         <img
-          src="./../../../assets/icons/close-white.svg"
+          src="/icons/close-white.svg"
           alt="Remover tag"
           @click="deleteTag(index)"
         />
@@ -193,7 +193,7 @@
       <h5 class="text-start mx-3">{{ noticia.subTitulo }}</h5>
       <div class="d-flex mt-4 mb-2">
         <img
-          src="./../../../assets/icons/user-circle.svg"
+          src="/icons/user-circle.svg"
           alt="icone usuario"
           class="icone-usuario"
         />

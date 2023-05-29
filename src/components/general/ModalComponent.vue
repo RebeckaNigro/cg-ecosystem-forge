@@ -16,7 +16,7 @@
           <img
             :src="
               modalStore.options.status
-                ? `./../src/assets/icons/${modalStore.options.status}-icon.svg`
+                ? `/icons/${modalStore.options.status}-icon.svg`
                 : ''
             "
             :alt="modalStore.options.status"

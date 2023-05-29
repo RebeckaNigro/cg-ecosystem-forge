@@ -142,16 +142,16 @@
     passwordVisibility.value = !passwordVisibility.value
 
     visibilityIconRef.value = passwordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/icons/visibility-on.svg"
+      : "/icons/visibility-off.svg"
   }
 
   const changeConfirmPasswordVisibility = () => {
     confirmPasswordVisibility.value = !confirmPasswordVisibility.value
 
     confirmVisibilityIconRef.value = confirmPasswordVisibility.value
-      ? "src/assets/icons/visibility-on.svg"
-      : "src/assets/icons/visibility-off.svg"
+      ? "/icons/visibility-on.svg"
+      : "/icons/visibility-off.svg"
   }
 
   const enviar = async () => {
