@@ -142,7 +142,6 @@
     eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingEvents.value = false
-	console.log(eventos.value);
 	
   })
 </script>
