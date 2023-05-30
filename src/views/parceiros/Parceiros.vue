@@ -34,17 +34,17 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/uems-e-incubadoras/uems.png',
-                parceiroId: 2
+                id: 2
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/ufms.png',
-                parceiroId: 3
+                id: 3
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/ICT-INOVA-BR.png',
-                parceiroId: 8
+                id: 8
             },
         ]
     },
@@ -54,12 +54,12 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/RdasArteiras.png',
-                parceiroId: 16
+                id: 16
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/eng.png',
-                parceiroId: 9
+                id: 9
             }
         ]
     },
@@ -69,37 +69,37 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/Startup.png',
-                parceiroId: 19
+                id: 19
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/aginova.png',
-                parceiroId: 4
+                id: 4
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ucdb-e-incubadoras/ucdb.jpg',
-                parceiroId: 1
+                id: 1
             },
             {
                 
                 logo: '/chumbado/home_parceiros/pmcg-e-incubadora/incubadora-municipal.png',
-                parceiroId: 13
+                id: 13
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/ecoinova_oficial.png',
-                parceiroId: 14
+                id: 14
             },
             {
                 
                 logo: '/chumbado/home_parceiros/livinglab.png',
-                parceiroId: 15
+                id: 15
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
-                parceiroId: 10
+                id: 10
             }
         ]
     },
@@ -108,12 +108,12 @@ const parceirosContainers = reactive([
         parceiros: [
             {
                 logo: '/chumbado/home_parceiros/governo-ms/fundect.png',
-                parceiroId: 7
+                id: 7
             },
             {
 
                 logo: '/chumbado/home_parceiros/governo-ms/semadesc.png',
-                parceiroId: 11
+                id: 11
             }
         ]
     },
@@ -123,22 +123,22 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/Sistema-Fiems.jpg',
-                parceiroId: 18
+                id: 18
             },
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/SENAR-MS.png',
-                parceiroId: 5
+                id: 5
             },
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/SENAC.png',
-                parceiroId: 6
+                id: 6
             },
             {
     
                 logo: '/chumbado/home_parceiros/sistema-s/SENAI.png',
-                parceiroId: 12
+                id: 12
             }
         ]
     }

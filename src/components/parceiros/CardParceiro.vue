@@ -5,11 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import { PartnerSimplificado } from '../../stores/parceiros/types';
+import { IPartnerSimplificado } from '../../stores/parceiros/types';
 
 
 const props = defineProps<{
-  cardParceiro: PartnerSimplificado
+  cardParceiro: IPartnerSimplificado
 }>()
 
 </script>
