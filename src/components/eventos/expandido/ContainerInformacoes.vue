@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { buildImageSrc } from '../../../utils/functions';
 import { friendlyDateTime } from '../../../utils/formatacao/datetime';
 import GeneralBtn from '../../buttons/GeneralBtn.vue';
   // import GeneralBtn from '../../buttons/GeneralBtn.vue'

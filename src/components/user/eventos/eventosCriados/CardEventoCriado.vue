@@ -6,7 +6,7 @@
           :src="
             evento.arquivo
               ? 'data:image/png;base64, ' + evento.arquivo
-              : '/public/eventos/eventoExpandido/default-event-cover.svg'
+              : '/eventos/eventoExpandido/default-event-cover.svg'
           "
           alt="event-image"
           class="image-limiter"
@@ -16,7 +16,7 @@
         <div class="container-mascara-rascunho">
           <div class="mascara-rascunho">
             <img
-              src="/public/eventos/eventoExpandido/default-event-cover.svg"
+              src="/eventos/eventoExpandido/default-event-cover.svg"
               alt="event-image"
               class="rascunho-img"
             />
@@ -39,7 +39,7 @@
 
           <div class="col-md-4 text-end p-0" v-if="!props.isRascunho">
             <img
-              src="/public/view_icon.svg"
+              src="/view_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -50,7 +50,7 @@
               "
             />
             <img
-              src="/public/edit_icon.svg"
+              src="/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -61,7 +61,7 @@
               "
             />
             <img
-              src="/public/delete_icon.svg"
+              src="/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"
@@ -70,13 +70,13 @@
 
           <div class="col-md-4 text-end" v-else>
             <img
-              src="/public/edit_icon.svg"
+              src="/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="loadFormComRascunho"
             />
             <img
-              src="/public/delete_icon.svg"
+              src="/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDeleteRascunho"

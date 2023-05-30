@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { brDateString } from '../../utils/formatacao/datetime';
-import {buildImageSrc} from '../../utils/functions'
 import { IEventoSimplificado } from '../../stores/eventos/types';
 
   const props = defineProps<{
