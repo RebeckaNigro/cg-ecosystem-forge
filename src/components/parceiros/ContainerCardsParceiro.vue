@@ -2,8 +2,12 @@
 	<div class="d-flex justify-content-between align-items-center">
 		<FilterComponent field="área" :items="items" type="parceiro" class="w-25" @filter-result="filtrarParceiros" />
 
-		<div>
-			Search component
+		<div class="w-25 align-self-end">
+			<SearchComponent
+			:items="items"
+			type="parceiro"
+			@search-result="filtrarParceiros"
+			/>
 		</div>
 	</div>
 	<section class="container-cards-parceiros" v-for="item, index in partners" :key="index">
@@ -23,6 +27,7 @@ import CardParceiro from './CardParceiro.vue';
 import FilterComponent from '../general/FilterComponent.vue';
 import { IPartnerSeccionado } from '../../stores/parceiros/types';
 import { onMounted, ref } from 'vue';
+import SearchComponent from '../general/SearchComponent.vue';
 
 const props = defineProps<{
 	items: IPartnerSeccionado[]

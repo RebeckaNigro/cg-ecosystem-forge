@@ -17,7 +17,8 @@ export interface PartnerInterface {
 
 export interface IPartnerSimplificado{
 	logo: string | null
-	id: number
+	id: number,
+	nome: string
 }
 
 export interface IPartnerSeccionado{
