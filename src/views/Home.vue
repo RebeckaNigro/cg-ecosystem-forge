@@ -9,12 +9,14 @@
 		maxHeight="650px"
       >
 
-	  <div class="header-content d-flex h-100 position-absolute top-0 ghp">
+	  <div class="header-content d-flex h-100 position-absolute top-0">
 		  <h1 class="dark-title">ECOSSISTEMA LOCAL DE INOVAÇÃO</h1>
 		  <p class="subtitle">Campo Grande - MS</p>
 		  <p>Uma comunidade pronta para contribuir com o seu desenvolvimento!</p>
 	  </div>
 	  </Banner>
+
+	
       <GeneralContainer
         title="CONHEÇA O ECOSSISTEMA"
         :dark-title="false"
@@ -31,7 +33,24 @@
       <Partners
         :logos-url-array="logosParceiros"
       />
-      <GeneralContainer
+	  <div class="more-info-container p-5">
+		<p class="light-title fs-3 text-uppercase">Mais sobre o ecossistema</p>
+		<div class="row">
+			<div class="col-lg-6 d-none d-lg-block">
+				<img src="/home/white_logo.png" alt="Logo Ecossistema" class="img-fluid w-50 p-5">
+			</div>
+
+			<div class="col-lg-6 d-flex flex-column justify-content-center">
+				<p class="text mb-2">
+					A comunidade de Inovação em Campo Grande-MS está reunida para ajudar você a se qualificar, estruturar o seu projeto, abrir o seu negócio, facilitar processos e estimular o desenvolvimento socioeconômico local.
+				</p>
+				<p class="text mt-0">Quer fazer parte? </p>
+				<button type="button" class="white-btn-primary text-uppercase fs-5" @click="$router.push('/fale-conosco')">Fale conosco</button>
+			</div>
+		</div>
+
+	  </div>
+      <!--<GeneralContainer
         title="MAIS SOBRE O ECOSSISTEMA"
         :dark-title="false"
         :content-array="['/home/white_logo.png', 'A comunidade de Inovação em Campo Grande – MS está reunida para ajudar você a se qualificar, estruturar o seu projeto, abrir o seu negócio, facilitar processos e estimular o desenvolvimento socioeconômico local. Quer fazer parte?']"
@@ -43,7 +62,7 @@
 	  	:has-contact-btn="true"
 		:has-circle-top-border="true"
 		:has-circle-bottom-border="false"
-      />
+      />-->
     </main>
   </section>
 </template>
@@ -106,6 +125,25 @@ const logosParceiros: string[] = [
 </script>
 
 <style scoped lang="scss">
+
+	.more-info-container{
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), #639280;
+
+		p.text{
+			font-family: 'Montserrat-SemiBold', sans-serif;
+			color: #fff;
+			text-align: justify;
+			max-width: 560px;
+		}
+
+		button{
+			width: 35%;
+		}
+
+		@media screen and (max-width: ) {
+			
+		}
+	}
   section.container-fluid {
     padding: 0;
 
@@ -113,11 +151,14 @@ const logosParceiros: string[] = [
 		justify-content: center;
 
 		flex-direction: column;
+		margin-left: 7rem;
+
 
 		h1 {
 
 			text-align: start;
 			font-size: 2rem;
+			margin-bottom: 0;
 		}
 
 		.subtitle{
@@ -144,23 +185,32 @@ const logosParceiros: string[] = [
 			color: #000;
 		}
 
-		@media(max-width: 580px){
+		
+		
+	}
+}
+@media(max-width: 580px){
+	section.container-fluid {
+    	padding: 0;
+
+		.header-content {
+			margin-left: 1rem;
+			padding-top: 1rem;
 			h1{
-				font-size: 1.5rem;
+				font-size: 1.2rem;
 			}
-
+		
 			.subtitle{
-				font-size: 1.3rem;
+				font-size: 1rem;
 			}
-
-
+		
+		
 			p {
 				font-size: 1.1rem;
 				text-align: start;
 			}
+			
 		}
-
-
 	}
-  }
+}
 </style>
