@@ -260,8 +260,13 @@ namespace Ecossistema.Services.Services
 
         private bool ValidarTelefone(FaleConoscoDTO obj, RespostaPadrao resposta)
         {
-            if (!ValidarStringTelefone(obj, resposta)) return false;
-            if (!ValidarTamanhoTelefone(obj, resposta)) return false;
+            if (!ValidacaoUtil.ValidaTelefone(obj.Telefone))
+            {
+                resposta.SetCampoIncorreto("Telefone com formato inválido. Insira um número de telefone nos padrões (XX)XXXX-XXXX para fixo ou (XX)XXXXX-XXXX para celular");
+                return false;
+            }
+            //if (!ValidarStringTelefone(obj, resposta)) return false;
+            //if (!ValidarTamanhoTelefone(obj, resposta)) return false;
 
             return true;
         }
