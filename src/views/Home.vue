@@ -132,19 +132,15 @@ const logosParceiros: string[] = [
 }
 
 .circle-bottom {
-	top: 0;
+	top: -0.1rem;
 	background: #81A799;
 
 }
 
 .circle-top {
-	top: -3rem;
+	top: -3.1rem;
 	background: #fbfbfb;
 
-}
-
-.w-70 {
-	width: 60%;
 }
 
 .meet-eco-container,
@@ -392,4 +388,5 @@ section.container-fluid {
 	}
 
 
-}</style>
+}
+</style>
