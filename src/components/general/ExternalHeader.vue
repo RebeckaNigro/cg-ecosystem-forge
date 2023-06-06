@@ -39,9 +39,9 @@ const props = defineProps<{
 	p {
 		font-size: 1.5rem;
 		font-weight: 500;
-		max-width: 500px;
+		max-width: 520px;
 		width: 100%;
-		text-align: justify;
+		text-align: start;
 		margin-bottom: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;

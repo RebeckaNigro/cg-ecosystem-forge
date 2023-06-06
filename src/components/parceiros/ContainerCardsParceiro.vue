@@ -1,13 +1,18 @@
 <template>
 	<div class="d-flex justify-content-between align-items-center">
-		<FilterComponent field="área" :items="items" type="parceiro" class="w-25" @filter-result="filtrarParceiros" />
-
-		<div class="w-25 align-self-end">
-			<SearchComponent
-			:items="items"
-			type="parceiro"
-			@search-result="filtrarParceiros"
-			/>
+		<div class="row w-100 justify-content-between">
+			<div class="col-12 col-md-6 filter-container">
+				<FilterComponent field="área" :items="items" type="parceiro" @filter-result="filtrarParceiros" />
+			</div>
+			<div class="col-12 col-md-6 justify-content-end align-self-end filter-container">
+				
+				<SearchComponent
+				:items="items"
+				type="parceiro"
+				@search-result="filtrarParceiros"
+				/>
+				
+			</div>
 		</div>
 	</div>
 	<section class="container-cards-parceiros" v-for="item, index in partners" :key="index">
@@ -46,6 +51,10 @@ const filtrarParceiros = (
 </script>
 
 <style scoped lang="scss">
+
+.filter-container{
+	width: 25%;
+}
 .container-cards-parceiros {
 	header {
 		display: flex;
@@ -68,7 +77,10 @@ const filtrarParceiros = (
 	}
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+	.filter-container{
+		width: 40%;
+	}
 	section.container-cards-parceiros {
 		header {
 			h1 {
@@ -78,7 +90,12 @@ const filtrarParceiros = (
 	}
 }
 
-@media (max-width: 576px) {
+@media (max-width: 580px) {
+	
+	.filter-container{
+		width: 100%;
+		margin-bottom: 1.5rem;
+	}
 	.container-cards-parceiros {
 		main {
 			justify-items: center;
