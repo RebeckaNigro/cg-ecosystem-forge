@@ -3,12 +3,12 @@
 		<main>
 			<Banner path="/home/fundo.png" figcaption="workspace_image" img-alt="workspace_image" :imgOverlay="true"
 				maxHeight="650px">
-
-				<div class="header-content d-flex h-100 position-absolute top-0">
-					<h1 class="dark-title">ECOSSISTEMA LOCAL DE INOVAÇÃO</h1>
-					<p class="subtitle">Campo Grande - MS</p>
-					<p>Uma comunidade pronta para contribuir com o seu desenvolvimento!</p>
-				</div>
+				<ExternalHeader
+					title="ECOSSISTEMA LOCAL DE INOVAÇÃO"
+					subtitle="Campo Grande - MS"
+					paragraph="Uma comunidade pronta para contribuir com o seu desenvolvimento!"
+				/>
+		
 			</Banner>
 
 			<div class="meet-eco-container p-5 border-0">
@@ -67,6 +67,7 @@
 import GeneralContainer from '../components/general/GeneralContainer.vue';
 import Banner from '../components/general/Banner.vue'
 import Partners from '../components/parceiros/Partners.vue';
+import ExternalHeader from '../components/general/ExternalHeader.vue';
 const logosParceiros: string[] = [
 	'/chumbado/home_parceiros/embrapa.png',
 	'/chumbado/home_parceiros/INCT-Inst-Nacionais.png',
@@ -121,78 +122,6 @@ const logosParceiros: string[] = [
 </script>
 
 <style scoped lang="scss">
-.circle-bottom,
-.circle-top {
-	height: 25px;
-	width: 50px;
-	border-bottom-left-radius: 8rem;
-	border-bottom-right-radius: 8rem;
-	margin: 0 auto;
-	position: relative;
-}
-
-.circle-bottom {
-	top: -0.1rem;
-	background: #81A799;
-
-}
-
-.circle-top {
-	top: -3.1rem;
-	background: #fbfbfb;
-
-}
-
-.meet-eco-container,
-.more-info-container {
-	h2.light-title {
-		font-size: 1.8rem;
-	}
-
-	p.text {
-		font-family: 'Montserrat-SemiBold', sans-serif;
-		color: #fff;
-		text-align: justify;
-		font-size: 1.2rem;
-	}
-}
-
-.meet-eco-container {
-	background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #639280;
-
-
-	p.text {
-		max-width: 300px;
-	}
-
-	button {
-		width: 70%;
-		font-size: 1.1rem;
-	}
-
-	.meet-img {
-		border-radius: 10px;
-		width: 70%;
-	}
-}
-
-.more-info-container {
-	background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), #639280;
-
-	p.text {
-		max-width: 560px;
-	}
-
-	button {
-		width: 35%;
-		font-size: 1.1rem;
-	}
-
-	.eco-logo {
-		width: 50%;
-	}
-}
-
 section.container-fluid {
 	padding: 0;
 
@@ -234,6 +163,78 @@ section.container-fluid {
 
 
 	}
+
+	.meet-eco-container,
+	.more-info-container {
+		h2.light-title {
+			font-size: 1.8rem;
+		}
+
+		p.text {
+			font-family: 'Montserrat-SemiBold', sans-serif;
+			color: #fff;
+			text-align: justify;
+			font-size: 1.2rem;
+		}
+	}
+
+	.meet-eco-container {
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #639280;
+
+
+		p.text {
+			max-width: 300px;
+		}
+
+		button {
+			width: 70%;
+			font-size: 1.1rem;
+		}
+
+		.meet-img {
+			border-radius: 10px;
+			width: 70%;
+		}
+	}
+
+	.more-info-container {
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), #639280;
+
+		p.text {
+			max-width: 560px;
+		}
+
+		button {
+			width: 35%;
+			font-size: 1.1rem;
+		}
+
+		.eco-logo {
+			width: 50%;
+		}
+	}
+}
+
+.circle-bottom,
+.circle-top {
+	height: 25px;
+	width: 50px;
+	border-bottom-left-radius: 8rem;
+	border-bottom-right-radius: 8rem;
+	margin: 0 auto;
+	position: relative;
+}
+
+.circle-bottom {
+	top: -0.1rem;
+	background: #81A799;
+
+}
+
+.circle-top {
+	top: -3.1rem;
+	background: #fbfbfb;
+
 }
 
 /* NOTEBOOKS E AFINS */
@@ -244,7 +245,7 @@ section.container-fluid {
 
 		.header-content {
 			margin-left: 2.5rem;
-	
+
 
 			h1 {
 				font-size: 2.5rem;
@@ -263,33 +264,36 @@ section.container-fluid {
 
 		}
 
+		.meet-eco-container {
+			p.text {
+				max-width: 450px;
+			}
+		}
+
+		.more-info-container,
+		.meet-eco-container {
+			h2.light-title {
+				font-size: 2.6rem;
+			}
+
+			p.text {
+				font-size: 1.8rem;
+			}
+
+			button {
+				font-size: 1.5rem;
+			}
+		}
+
 	}
+
 	.circle-bottom,
 	.circle-top {
 		height: 45px;
 		width: 70px;
 	}
 
-	.meet-eco-container {
-		p.text {
-			max-width: 450px;
-		}
-	}
 
-	.more-info-container,
-	.meet-eco-container {
-		h2.light-title {
-			font-size: 2.6rem;
-		}
-
-		p.text {
-			font-size: 1.8rem;
-		}
-
-		button {
-			font-size: 1.5rem;
-		}
-	}
 }
 
 /* TABLETS */
