@@ -47,7 +47,7 @@ import Formulario from '../../components/faleConosco/Formulario.vue';
   p {
     text-align: start;
     font-size: 1.5rem;
-    font-family: 'Montserrat-Medium', sans-serif;
+    font-weight: 500;
   }
 
 }

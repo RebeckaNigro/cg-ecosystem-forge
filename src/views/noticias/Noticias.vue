@@ -207,7 +207,7 @@
       max-width: 500px;
 
       p {
-        font-family: "Montserrat-Medium", sans-serif;
+        font-weight: 500;
         text-align: start;
         max-height: 100px;
         height: 100%;

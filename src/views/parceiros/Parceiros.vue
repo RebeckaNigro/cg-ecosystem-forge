@@ -196,7 +196,7 @@ section.parceiros {
 
   p {
     font-size: 1.5rem;
-    font-family: 'Montserrat-Medium', sans-serif;
+    font-weight: 500;
     max-width: 700px;
     width: 100%;
     text-align: start;

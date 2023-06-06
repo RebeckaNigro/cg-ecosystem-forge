@@ -1,6 +1,6 @@
 <template>
 	<footer class="container-fluid sticky-bottom justify-content-center">
-		<div class="row align-items-center w-100">
+		<div class="row align-items-center justify-content-center w-100">
 			<div class="col-11 col-md-2 col-lg-auto ms-2 mx-lg-4 my-3 d-flex ">
 				<img src="/logo_with_text.png" alt="white_logo" width="200" class="img-fluid" />
 			</div>
@@ -120,19 +120,24 @@ ul {
 }
 
 
-.light-title {
-	font-size: 1rem !important;
-}
-
-
 .light-body-text {
 	font-size: 0.8rem;
 }
 
-.light-title {
-	font-size: 0.6rem;
-}
 
+@media screen and (min-width: 2550px) {
+	.light-title {
+		font-size: 1.4rem !important;
+	}
+
+	.light-body-text {
+		font-size: 1rem;
+	}
+
+	.img-fluid{
+		width: 90%;
+	}
+}
 
 @media (max-width: 991px) {
 

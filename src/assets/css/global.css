@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 /* CARD */
 /********/
 
@@ -21,7 +22,7 @@
   width: fit-content;
   margin-left: 15%;
   font-size: 20px;
-  font-family: "Montserrat-Medium", sans-serif;
+  font-weight: 500;
 }
 
 .breadcrumb-container .unactive {
@@ -58,7 +59,7 @@
 /* BUTTONS */
 
 .green-btn-primary {
-  font-family: "Montserrat-Bold";
+  font-weight: 700;
   background-color: #49907f;
   border: none;
   color: white;
@@ -75,7 +76,7 @@
 }
 
 .green-btn-outlined {
-  font-family: "Montserrat-Bold";
+  font-weight: 700;
   background-color: white;
   color: #49907f;
   border: 1px solid #49907f;
@@ -92,7 +93,7 @@
 }
 
 .gray-btn-primary {
-  font-family: "Montserrat-Bold";
+  font-weight: 700;
   background-color: gray;
   border: none;
   color: white;
@@ -109,7 +110,7 @@
 }
 
 .white-btn-primary{
-	font-family: "Montserrat-Bold";
+	font-weight: 700;
 	border: none;
 	color: #639280;
 	border-radius: 25px;

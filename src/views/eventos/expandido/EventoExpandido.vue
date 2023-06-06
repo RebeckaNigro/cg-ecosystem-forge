@@ -180,7 +180,7 @@
       padding: 0.7rem;
       border: 1px solid #505050;
       border-radius: 10px;
-      font-family: "Montserrat-SemiBold", sans-serif;
+      font-weight: 600;
     }
 
     .btn-up:hover {

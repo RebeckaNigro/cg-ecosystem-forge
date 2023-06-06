@@ -79,7 +79,7 @@ import GeneralBtn from '../../buttons/GeneralBtn.vue';
       }
 
 	  .nome-autor{
-		font-family: 'Montserrat-Medium', sans-serif;
+		font-weight: 500;
 		font-size: 1rem;
 		color: #000;
 		background: url('/public/noticias/noticia-expandida/user.svg');
@@ -97,7 +97,8 @@ import GeneralBtn from '../../buttons/GeneralBtn.vue';
       }
       time, address {
         font-size: 1rem;
-		font-family: 'Montserrat-Medium', sans-serif;
+
+		font-weight: 500;
 		margin: 1rem 0;
       }
     }

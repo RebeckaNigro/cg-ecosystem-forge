@@ -29,14 +29,14 @@
 	cursor: pointer;
 
 	p{
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		font-size: 1.2rem;
 		margin-bottom: .3rem;
 		
 	}
 
 	span{
-		font-family: 'Montserrat-Regular', sans-serif;
+		font-weight: 400;
 		font-size: .8rem;
 	}
 

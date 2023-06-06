@@ -51,7 +51,7 @@
     align-items: flex-start;
 
 	h3{
-		font-family: 'Montserrat-Medium', sans-serif;
+		font-weight: 500;
 	}
     .box-contato {
       background-color: #fff;

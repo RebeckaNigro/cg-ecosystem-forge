@@ -14,7 +14,7 @@
       >
         <div class="row g-0 px-2">
           <div
-            class="col-lg-10 fw-bold d-flex align-items-center py-2 hover-pointer"
+            class="col-lg-10  d-flex align-items-center py-2 hover-pointer"
             @click="
               $router.push({
                 name: 'DocumentoExpandido',

@@ -80,7 +80,7 @@ import {brDateString} from '../../utils/formatacao/datetime'
 		box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
 
 		#event-name{
-			font-family: 'Montserrat-Medium';
+			font-weight: 500;
 			margin: 1rem;
 		}
 

@@ -40,7 +40,7 @@ const props = defineProps<{
     main > article {
 	margin: 1.8rem 0;
       font-size: 1rem;
-	  font-family: 'Montserrat-Regular', sans-serif;
+	  font-weight: 400;
       text-align: justify;
     }
   }

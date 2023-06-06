@@ -125,44 +125,6 @@ const logosParceiros: string[] = [
 section.container-fluid {
 	padding: 0;
 
-	.header-content {
-		justify-content: center;
-		flex-direction: column;
-		margin-left: 7rem;
-
-		h1 {
-			text-align: start;
-			font-size: 2rem;
-			margin-bottom: 0;
-		}
-
-		.subtitle {
-			font-size: 1.8rem;
-			font-family: 'Montserrat-SemiBold', sans-serif;
-		}
-
-
-		p {
-			font-size: 1.5rem;
-			font-family: 'Montserrat-Medium', sans-serif;
-			max-width: 500px;
-			width: 100%;
-			text-align: justify;
-			margin-top: 10px;
-			margin-bottom: 0;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: -webkit-box;
-			-webkit-line-clamp: 4;
-			/* number of lines to show */
-			line-clamp: 4;
-			-webkit-box-orient: vertical;
-			color: #000;
-		}
-
-
-
-	}
 
 	.meet-eco-container,
 	.more-info-container {
@@ -171,7 +133,7 @@ section.container-fluid {
 		}
 
 		p.text {
-			font-family: 'Montserrat-SemiBold', sans-serif;
+			font-weight: 600;
 			color: #fff;
 			text-align: justify;
 			font-size: 1.2rem;
@@ -237,32 +199,12 @@ section.container-fluid {
 
 }
 
-/* NOTEBOOKS E AFINS */
+/* MONITORES 4K E AFINS */
 @media screen and (min-width: 2550px) {
 
 	section.container-fluid {
 		padding: 0;
 
-		.header-content {
-			margin-left: 2.5rem;
-
-
-			h1 {
-				font-size: 2.5rem;
-			}
-
-			.subtitle {
-				font-size: 2.3rem;
-			}
-
-
-			p {
-				font-size: 2rem;
-				text-align: start;
-				max-width: 700px;
-			}
-
-		}
 
 		.meet-eco-container {
 			p.text {
@@ -302,26 +244,6 @@ section.container-fluid {
 	section.container-fluid {
 		padding: 0;
 
-		.header-content {
-			margin-left: 1.5rem;
-			padding-top: 1rem;
-
-			h1 {
-				font-size: 1.5rem;
-			}
-
-			.subtitle {
-				font-size: 1.3rem;
-			}
-
-
-			p {
-				font-size: 1.1rem;
-				text-align: start;
-			}
-
-		}
-
 		.more-info-container,
 		.meet-eco-container {
 			p.text {
@@ -348,25 +270,6 @@ section.container-fluid {
 	section.container-fluid {
 		padding: 0;
 
-		.header-content {
-			margin-left: 1rem;
-			padding-top: 1rem;
-
-			h1 {
-				font-size: 1.2rem;
-			}
-
-			.subtitle {
-				font-size: 1rem;
-			}
-
-
-			p {
-				font-size: 1.1rem;
-				text-align: start;
-			}
-
-		}
 
 		.meet-eco-container {
 			height: 380px;

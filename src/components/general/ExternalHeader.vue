@@ -31,14 +31,14 @@ const props = defineProps<{
 		color: #000;
 		text-align: start;
 		font-size: 1.8rem;
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		margin-top: 5px;
 	}
 
 
 	p {
 		font-size: 1.5rem;
-		font-family: 'Montserrat-Medium', sans-serif;
+		font-weight: 500;
 		max-width: 500px;
 		width: 100%;
 		text-align: justify;

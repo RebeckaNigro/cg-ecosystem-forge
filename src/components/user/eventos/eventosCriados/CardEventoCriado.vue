@@ -55,14 +55,14 @@
 			<div>
 				<div class="d-flex mt-2 mb-2">
 					<img src="/icons/calendar-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
-					<div class="d-flex align-items-center mx-2 fw-bold">
+					<div class="d-flex align-items-center mx-2">
 						{{ dataFormatada }}
 					</div>
 				</div>
 
 				<div class="d-flex mt-2 mb-2">
 					<img src="/icons/pin-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
-					<div class="d-flex align-items-center mx-2 fw-bold">
+					<div class="d-flex align-items-center mx-2">
 						{{ evento.local }}
 					</div>
 				</div>
@@ -227,7 +227,7 @@ onUpdated(() => {
 }
 
 .titulo-evento{
-	font-family: 'Montserrat-SemiBold', sans-serif;
+	font-weight: 600;
 }
 
 .evento-encerrado{

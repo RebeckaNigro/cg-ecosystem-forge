@@ -14,7 +14,7 @@
 				</div>
 			</Banner>
 
-			<div class="badge bg-success text-wrap fs-5 my-4" style="width: 8rem;">
+			<div class="badge bg-success text-wrap fs-6 my-4" style="width: 8rem;">
 				<span>Em breve.</span>
 			</div>
 
@@ -88,7 +88,7 @@ section.container-fluid {
 		}
 
 		p {
-			font-family: 'Montserrat-Medium', sans-serif;
+			font-weight: 500;
 			text-align: start;
 			font-size: 1.5rem;
 			max-width: 60%;

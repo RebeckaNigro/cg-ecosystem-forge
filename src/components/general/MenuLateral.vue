@@ -169,7 +169,7 @@
       background-color: #6b6a64;
     }
     .nav-item {
-      font-family: "Montserrat-Medium", sans-serif;
+	  font-weight: 500;
       font-size: 1.2rem;
       padding-left: 1.5rem;
 

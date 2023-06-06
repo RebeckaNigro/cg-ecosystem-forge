@@ -108,7 +108,7 @@
       padding: 0.7rem;
       border: 1px solid #505050;
       border-radius: 10px;
-      font-family: "Montserrat-SemiBold", sans-serif;
+      font-weight: 600;
     }
 
     .btn-up:hover {
@@ -133,11 +133,11 @@
         color: #000;
         font-size: 2rem;
         text-align: start;
-        font-family: "Montserrat-SemiBold", sans-serif;
+        font-weight: 600;
       }
 
       p {
-        font-family: "Montserrat-Regular", sans-serif;
+        font-weight: 400;
         text-align: start;
         font-size: 1.2rem;
       }
@@ -149,7 +149,7 @@
       }
 
       .nome-autor {
-        font-family: "Montserrat-SemiBold", sans-serif;
+        font-weight: 600;
         font-size: 1rem;
         color: #000;
         background: url("/public/noticias/noticia-expandida/user.svg");
@@ -161,13 +161,13 @@
     }
 
     #first-paraghap {
-      font-family: "Montserrat-Medium", sans-serif;
+      font-weight: 500;
       text-align: start;
       font-size: 0.8rem;
     }
 
     .news-body {
-      font-family: "Montserrat-Regular", sans-serif;
+      font-weight: 400;
       text-align: start;
       font-size: 1.25rem;
       margin-top: 1.5rem;

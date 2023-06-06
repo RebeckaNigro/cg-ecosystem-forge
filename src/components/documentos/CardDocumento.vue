@@ -42,30 +42,30 @@ const props = defineProps<{
 		width: 100%;
 
 		span{
-			font-family: 'Montserrat-Light', sans-serif;
+			font-weight: 300;
 			font-size: 0.8rem;
 		}
 	  }
 
 	  .nome-documento{
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		font-size: 1.5rem;
 		text-align: start;
 	  }
 
 	  .nome-autor{
-		font-family: 'Montserrat-Regular', sans-serif;
+		font-weight: 400;
 		font-size: 1rem;
 	  }
 
 	  .descricao-documento{
-		font-family: 'Montserrat-Regular', sans-serif;
+		font-weight: 400;
 		font-size: .8rem;	
 		text-align: start;  
 	   }
 
 	   .atualizacao{
-		font-family: 'Montserrat-Regular', sans-serif;
+		font-weight: 400;
 		font-size: .7rem;
 	   }
   }

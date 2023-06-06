@@ -64,7 +64,7 @@
       margin-left: 12px;
       font-weight: bold;
       font-size: 1.4rem;
-      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-weight: 600;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -93,7 +93,7 @@
     align-self: center;
     border-radius: 20px;
     border: 0;
-	font-family: 'Montserrat-Bold', sans-serif;
+	font-weight: 700;
     background-color: #639280;
     color: #ffffff;
     font-weight: 600;
