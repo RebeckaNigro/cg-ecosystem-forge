@@ -41,6 +41,7 @@
           name="phone"
           id="phone"
           maxlength="11"
+		  placeholder="Ex.: (99)999999999 ou (99)33338888"
           :class="v$.telefone.$error ? 'is-invalid' : ''"
         />
 		<div v-if="v$.telefone.$error" class="invalid-feedback">
