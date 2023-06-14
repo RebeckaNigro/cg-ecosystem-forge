@@ -9,7 +9,7 @@
       <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
         <img :src="data.arquivo 
 			? 'data:image/png;base64,' + data.arquivo
-			: '/public/eventos/eventoExpandido/default-event-cover.svg'" 
+			: '/eventos/eventoExpandido/default-event-cover.svg'" 
 			class="d-block w-100" :alt="data.titulo" :class="{ 'img-evento-encerrado' : checaEventoEncerrado(data)}">
         <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
           <main>
