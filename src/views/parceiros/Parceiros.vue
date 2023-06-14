@@ -6,15 +6,13 @@
             imgAlt="ecosystem partners"
             maxHeight="unset"
     >
-        <div class="header-content d-flex h-100 position-absolute top-0 ghp">
-            <h1 class="dark-title">PARCEIROS</h1>
-            <p>
-                Confira os parceiros atuais do Ecossistema Local de Inovação - Campo Grande - MS
-            </p>
-
-        </div>
+        <ExternalHeader
+			title="Parceiros"
+			subtitle=""
+			paragraph="Confira os parceiros atuais do Ecossistema Local de Inovação - Campo Grande - MS"
+		/>
     </Banner>
-    <section class="parceiros ghp">
+    <section class="parceiros">
         <ContainerCardsParceiro
             :items="parceirosContainers"
         />
@@ -26,6 +24,7 @@ import ContainerCardsParceiro from '../../components/parceiros/ContainerCardsPar
 import Banner from '../../components/general/Banner.vue';
 import {useParceirosStore} from '../../stores/parceiros/store';
 import {onMounted, reactive} from 'vue';
+import ExternalHeader from '../../components/general/ExternalHeader.vue';
 
 const parceirosContainers = reactive([
     {
@@ -34,17 +33,20 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/uems-e-incubadoras/uems.png',
-                id: 2
+                id: 2,
+				nome: "UEMS"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/ufms.png',
-                id: 3
+                id: 3,
+				nome: "UFMS"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/ICT-INOVA-BR.png',
-                id: 8
+                id: 8,
+				nome: "ICT Inova Brasil"
             },
         ]
     },
@@ -54,12 +56,14 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/RdasArteiras.png',
-                id: 16
+                id: 16,
+				nome: "República das Arteiras"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/eng.png',
-                id: 9
+                id: 9,
+				nome: "ENG Soluções Tecnológicas"
             }
         ]
     },
@@ -69,37 +73,44 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/Startup.png',
-                id: 19
+                id: 19,
+				nome: "Startup Sesi Fiems"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/aginova.png',
-                id: 4
+                id: 4,
+				nome: "AGINOVA"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ucdb-e-incubadoras/ucdb.jpg',
-                id: 1
+                id: 1,
+				nome: "UCDB"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/pmcg-e-incubadora/incubadora-municipal.png',
-                id: 13
+                id: 13,
+				nome: "Incubadora Municipal"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/eli-cgde/ecoinova_oficial.png',
-                id: 14
+                id: 14,
+				nome: "ECOINOVA"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/livinglab.png',
-                id: 15
+                id: 15,
+				nome: "Living Lab MS"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
-                id: 10
+                id: 10,
+				nome: "PIME"
             }
         ]
     },
@@ -108,12 +119,14 @@ const parceirosContainers = reactive([
         parceiros: [
             {
                 logo: '/chumbado/home_parceiros/governo-ms/fundect.png',
-                id: 7
+                id: 7,
+				nome: "FUNDECT"
             },
             {
 
                 logo: '/chumbado/home_parceiros/governo-ms/semadesc.png',
-                id: 11
+                id: 11,
+				nome: "SEMADESC"
             }
         ]
     },
@@ -123,22 +136,26 @@ const parceirosContainers = reactive([
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/Sistema-Fiems.jpg',
-                id: 18
+                id: 18,
+				nome: "Sistema Fiems"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/SENAR-MS.png',
-                id: 5
+                id: 5,
+				nome: "SENAR MS"
             },
             {
                 
                 logo: '/chumbado/home_parceiros/sistema-s/SENAC.png',
-                id: 6
+                id: 6,
+				nome: "SENAC"
             },
             {
     
                 logo: '/chumbado/home_parceiros/sistema-s/SENAI.png',
-                id: 12
+                id: 12,
+				nome: "SENAI"
             }
         ]
     }
@@ -162,111 +179,16 @@ section.parceiros {
   background-color: #f6f6f6;
   padding-top: 3rem !important;
   padding-bottom: 3rem !important;
+  padding: 3rem 9.3rem;
 
 }
 
-.header-content {
-  justify-content: center;
-
-  flex-direction: column;
-
-  h1 {
-
-    text-align: start;
-    font-size: 2rem;
-  }
-
-  p {
-    font-size: 1.5rem;
-    font-family: 'Montserrat-Medium', sans-serif;
-    max-width: 700px;
-    width: 100%;
-    text-align: start;
-    margin-top: 10px;
-    margin-bottom: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    /* number of lines to show */
-    line-clamp: 4;
-    -webkit-box-orient: vertical;
-    color: #000;
-  }
-
-  @media(max-width: 580px) {
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-      text-align: start;
-    }
-  }
-
-
-}
 
 @media (max-width: 1200px) {
-  .header-content {
-    h1 {
-      font-size: 2rem;
-      text-align: start;
-    }
-
-    p {
-      font-size: 0.8rem;
-      max-width: 350px;
-    }
-  }
+	section.parceiros{
+		padding: 3rem 2rem;
+	}
 }
 
-@media (max-width: 991px) {
-  .header-content {
-    padding: 0 100px;
 
-    h1 {
-      font-size: 1.5rem;
-      text-align: start;
-    }
-
-    p {
-      max-width: 200px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .header-content {
-    padding: 0 50px;
-
-    h1 {
-      font-size: 1rem;
-      text-align: start;
-    }
-
-    p {
-      font-size: 0.7rem;
-    }
-  }
-}
-
-@media (max-width: 576px) {
-  .header-content {
-    h1 {
-      font-size: 0.8rem;
-      text-align: start;
-      margin-bottom: 0;
-    }
-
-    p {
-      max-width: 200px;
-      text-align: start;
-      margin-top: 0;
-      -webkit-line-clamp: 3; /* number of lines to show */
-      line-clamp: 3;
-    }
-  }
-}
 </style>

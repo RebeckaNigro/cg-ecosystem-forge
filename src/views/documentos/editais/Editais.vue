@@ -102,7 +102,7 @@ const novosEditaisToggle = () => {
 	.dropdown-toggle{
 		text-decoration: none;
 		color: #000;
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		font-size: 1.4rem;
 	}
 }

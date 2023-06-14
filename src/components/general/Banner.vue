@@ -36,11 +36,24 @@ import { onMounted } from 'vue';
   figure.banner {
     position: relative;
     margin: 0;
-	
     img {
       width: -webkit-fill-available;
       height: -webkit-fill-available;
 	  z-index: 1;
     }
+  }
+
+  @media(max-width: 580px){
+	.overlay{
+		opacity: 0.3;
+	}
+
+	figure.banner {
+		height: 300px;
+
+		img{
+			object-fit: cover;
+		}
+	}
   }
 </style>

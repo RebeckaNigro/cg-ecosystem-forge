@@ -253,7 +253,7 @@ minValue
 
     margin: 5rem auto;
 
-    font-family: "Montserrat-SemiBold", sans-serif;
+    font-weight: 600;
     color: #6b6a64;
     font-size: 1.2rem;
     label {

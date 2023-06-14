@@ -52,36 +52,13 @@
 
 <style lang="scss">
   #app {
-    font-family: "Montserrat-Regular", Avenir, Helvetica, Arial, sans-serif;
+    font-family: "Montserrat", Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-  }
-
-  @font-face {
-    font-family: "Montserrat-Bold";
-    src: url(/fonts/Montserrat-Bold.ttf);
-  }
-
-  @font-face {
-    font-family: "Montserrat-Regular";
-    src: url(/fonts/Montserrat-Regular.ttf);
-  }
-
-  @font-face {
-    font-family: "Montserrat-SemiBold";
-    src: url(/fonts/Montserrat-SemiBold.ttf);
-  }
-
-  @font-face {
-    font-family: "Montserrat-Medium";
-    src: url(/fonts/Montserrat-Medium.ttf);
-  }
-
-  @font-face {
-    font-family: "Montserrat-Light";
-    src: url(/fonts/Montserrat-Light.ttf);
+	overflow-x: hidden;
+	font-weight: 400;
   }
 
   .background {
@@ -93,7 +70,7 @@
 
   .dark-title,
   .light-title {
-    font-family: "Montserrat-Bold";
+    font-weight: 700;
     font-size: 1.5rem;
   }
 
@@ -111,18 +88,18 @@
   }
 
   .dark-body-text {
-    font-family: "Montserrat-SemiBold";
+    font-weight: 600;
     color: #000;
   }
 
   .light-body-text {
-    font-family: "Montserrat-Regular";
+    font-weight: 400;
     color: #fff;
   }
 
   .green-btn {
     border: none;
-    font-family: "Montserrat-Bold";
+    font-weight: 700;
     background-color: #49907f;
   }
 

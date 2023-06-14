@@ -37,7 +37,7 @@ import { INoticiaSimplificada } from "../../stores/noticias/types"
     align-items: flex-start;
     max-height: 400px;
     padding: 10px;
-    font-family: "Montserrat-Medium", sans-serif;
+    font-weight: 500;
     min-width: 260px;
 
     > p {

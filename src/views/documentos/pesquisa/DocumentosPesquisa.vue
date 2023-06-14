@@ -225,7 +225,7 @@ onMounted(async () => {
   }
 
   p {
-    font-family: 'Montserrat-Medium', sans-serif;
+    font-weight: 500;
     font-size: 1.5rem;
     text-align: start;
     max-width: 70%;

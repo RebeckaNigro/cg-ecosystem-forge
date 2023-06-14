@@ -47,7 +47,7 @@ onMounted(() => {
 	margin-top: 48px;
 
 	> h1 {
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		font-size: 2rem;
 		margin: 2rem 0;
 	}

@@ -84,21 +84,21 @@ import { IEventoSimplificado } from '../../stores/eventos/types';
         text-overflow: ellipsis;
         width: 100%;
         text-align: start;
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
 		font-size: 1.2rem;
       }
 
 	  .data-evento{
-		font-family: 'Montserrat-Medium', sans-serif;
+		font-weight: 500;
 	  }
 
 	  .endereco-evento{
-		font-family: 'Montserrat-Regular', sans-serif;
+		font-weight: 400;
 	  }
 
 	  .ver-detalhes{
 		color: #1E1E1E;
-		font-family: 'Montserrat-Medium', sans-serif;
+		font-weight: 500;
 		font-size: 0.8rem;
 		align-self: center;
 		margin: 0.3rem;

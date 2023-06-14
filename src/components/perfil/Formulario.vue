@@ -438,7 +438,7 @@
 
 <style scoped>
   .titulo-principal {
-    font-family: Montserrat-Bold;
+    font-weight: 700;
     font-size: 1.5rem;
     color: black;
     margin: 5rem 0 1rem 0;

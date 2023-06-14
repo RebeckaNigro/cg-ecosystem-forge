@@ -34,7 +34,7 @@ onMounted(async() => {
   section.destaques {
     
     h1 {
-	  font-family: 'Montserrat-SemiBold', sans-serif;
+	  font-weight: 600;
       font-size: 2rem;
     }
     padding-top: 50px !important;

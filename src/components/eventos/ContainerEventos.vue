@@ -101,7 +101,7 @@ onMounted(async () => {
     header {
       h1 {
         font-size: 2rem;
-		font-family: 'Montserrat-SemiBold', sans-serif;
+		font-weight: 600;
         margin-bottom: 3rem;
       }
 	

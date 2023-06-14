@@ -46,7 +46,7 @@ const props = defineProps({
     align-items: center;
     justify-content: center;
     background-color: #f6f6f6;
-	font-family: 'Montserrat-Medium', sans-serif;
+	font-weight: 500;
     span {
       color: gray;
       margin-top: 8rem;

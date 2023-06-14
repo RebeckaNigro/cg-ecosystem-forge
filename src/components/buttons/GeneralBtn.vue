@@ -49,7 +49,7 @@ onMounted(() => {
   .general-btn {
     border-radius: 25px;
     border: unset;
-    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: 700;
     font-weight: 1000;
     font-size: 1rem;
     margin: auto;

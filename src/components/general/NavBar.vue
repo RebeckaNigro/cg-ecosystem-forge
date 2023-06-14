@@ -152,7 +152,7 @@ a {
 	.dropdown-menu{
 		
 		background-color: #efefef;
-		font-family: "Montserrat-Medium", sans-serif;
+		font-weight: 500;
 		border: 1px solid #505050;
 		border-top: none;
 		border-radius: 0 0 10px 10px;
@@ -186,7 +186,7 @@ button#login {
 	border-radius: 25px;
 	font-size: 0.8rem;
 	border: 0;
-	font-family: "Montserrat-Bold", sans-serif;
+	font-weight: 700;
 }
 
 .profile {
@@ -194,7 +194,7 @@ button#login {
 	justify-content: center;
 	align-items: center;
 	margin-right: 1rem;
-	font-family: "Montserrat-Medium", sans-serif;
+	font-weight: 500;
 	cursor: pointer;
 
 	span {
@@ -213,7 +213,7 @@ button#login {
 	flex-direction: column;
 	justify-content: center;
 	background: #efefef;
-	font-family: "Montserrat-Medium", sans-serif;
+	font-weight: 500;
 	border: 1px solid #505050;
 	border-top: none;
 	border-radius: 0 0 10px 10px;
@@ -225,7 +225,7 @@ button#login {
 	.profile-dropdown-text {
 		text-decoration: none;
 		color: #1e1e1e;
-		font-family: "Montserrat-Medium", sans-serif;
+		font-weight: 500;
 		margin-bottom: 1rem;
 		padding-bottom: 0.6rem;
 		border-bottom: 1px solid #1e1e1e;
@@ -234,7 +234,7 @@ button#login {
 	span {
 		color: #1e1e1e;
 		font-size: 1rem;
-		font-family: "Montserrat-Medium", sans-serif;
+		font-weight: 500;
 	}
 }
 

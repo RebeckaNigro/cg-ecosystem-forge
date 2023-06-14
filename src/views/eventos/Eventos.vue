@@ -110,7 +110,7 @@ section {
 
     p {
       font-size: 1.5rem;
-      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-weight: 600;
       max-width: 450px;
       width: 100%;
       text-align: justify;
