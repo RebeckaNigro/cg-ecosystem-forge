@@ -14,7 +14,7 @@
             Destaques
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            {{ evento.titulo }}
+            {{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}
           </li>
         </ol>
       </nav>
@@ -32,7 +32,7 @@
         />
       </div>
 
-      <h1 class="text-start">{{ evento.titulo }}</h1>
+      <h1 class="text-start">{{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}</h1>
       <div class="row container-fluid">
         <div class="col-sm-8">
           <div class="d-flex mt-4 mb-2">
@@ -126,7 +126,7 @@
   const enderecoFormatado = ref("")
   const generatedLink = ref("")
   const isLoadingContent = ref(false)
-
+  const encerrado = ref(false)
   const handleNavigateUp = () => {
     window.scrollTo(0, 0)
   }
@@ -140,6 +140,10 @@
 
     evento.value = store.response.dado
     isLoadingContent.value = false
+
+	if(new Date(evento.value.dataTermino) < new Date()){
+		encerrado.value = true
+	}
 
     if (
       evento.value.linkExterno.startsWith("http://") ||

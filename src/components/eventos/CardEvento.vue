@@ -6,11 +6,11 @@
 		? 'data:image/png;base64, ' + evento.arquivo
 		: '/eventos/eventoExpandido/default-event-cover.svg'
 	 
-	 " alt='Imagem do evento'>
+	 " alt='Imagem do evento' :class="{ 'img-evento-encerrado' : encerrado}">
       
     </div>
     <div class="infos-container">
-      <h1 class="dark-title">{{ evento.titulo }}</h1>
+      <h1 class="dark-title" :class="{ 'texto-evento-encerrado' : encerrado}">{{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}</h1>
       <time class="data-evento">{{ brDateString(evento.dataInicio) }} - {{ brDateString(evento.dataTermino) }}</time>
       <address class="endereco-evento">{{ evento.local }}</address>
 
@@ -22,23 +22,31 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { brDateString } from '../../utils/formatacao/datetime';
-import {buildImageSrc} from '../../utils/functions'
 import { IEventoSimplificado } from '../../stores/eventos/types';
 
   const props = defineProps<{
    evento: IEventoSimplificado
   }>()
 
-  const imageSrc = ref('')
+  const encerrado = ref(false)
+
 
   onMounted(() => {
-	// if(props.hasImage){
-	// 	imageSrc.value= `http://dev-api.ecossistemadeinovacaocg.com.br/api/documento/downloadDocumento?id=${props.eventoId}&nome=${props.eventoId}&origem=5`
-	// }
+	// verifica se o evento já foi encerrado
+	if(new Date(props.evento.dataTermino) < new Date()){
+		encerrado.value = true	
+	}
   })
 </script>
 
 <style scoped lang="scss">
+	.img-evento-encerrado{
+		opacity: 0.5;
+	}
+
+	.texto-evento-encerrado{
+		color: #6B6A64;
+	}
   .card-evento {
     display: flex;
     flex-direction: column;

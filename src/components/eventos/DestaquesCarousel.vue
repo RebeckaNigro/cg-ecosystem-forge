@@ -10,10 +10,10 @@
         <img :src="data.arquivo 
 			? 'data:image/png;base64,' + data.arquivo
 			: '/public/eventos/eventoExpandido/default-event-cover.svg'" 
-			class="d-block w-100" :alt="data.titulo">
+			class="d-block w-100" :alt="data.titulo" :class="{ 'img-evento-encerrado' : checaEventoEncerrado(data)}">
         <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
           <main>
-            <h1 id="event-name" class="dark-title">{{ data.titulo }}</h1>
+            <h1 id="event-name" class="dark-title" :class="{ 'texto-evento-encerrado' : checaEventoEncerrado(data)}">{{ checaEventoEncerrado(data) ? data.titulo + ' (ENCERRADO)' : data.titulo }}</h1>
             <time class="light-body-text calendar-icon">{{ data.dataInicio ? brDateString(data.dataInicio) : ''}}</time>
             <address class="light-body-text pin-icon">{{ data.local }}</address>
           </main>
@@ -49,19 +49,27 @@
 import { IEventoSimplificado } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import {brDateString} from '../../utils/formatacao/datetime'
-import { buildImageSrc } from '../../utils/functions';
-import { onMounted } from 'vue';
   const props = defineProps<{
     carouselData: IEventoSimplificado[]
   }>()
 
-  onMounted(() => {
-	  console.log(props.carouselData);
-  })
-  
+  function checaEventoEncerrado(evento: IEventoSimplificado){
+	if(new Date(evento.dataTermino) < new Date()){
+		return true	
+	}
+	return false
+  }
+
 </script>
 
 <style scoped lang="scss">
+	.img-evento-encerrado{
+		opacity: 0.5;
+	}
+
+	.texto-evento-encerrado{
+		color: #6B6A64!important;
+	}
   #destaquesCarousel {
     h1 {
       font-size: 1.5rem;
