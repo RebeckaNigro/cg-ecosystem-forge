@@ -72,6 +72,16 @@
           <Spinner v-else />
         </div>
       </form>
+
+	  <!-- <div class="d-flex align-items-center justify-content-around my-4">
+		  <hr class="divider">
+		  <span>OU</span>
+		  <hr class="divider">
+	  </div>
+
+	  <button class="green-btn-outlined text-uppercase" type="button" @click="$router.push({name: 'Perfil'})">
+		Cadastre-se
+	  </button> -->
     </div>
   </div>
 </template>
@@ -163,10 +173,24 @@
     width: 50%;
     margin: 12% auto;
     transition: width 0.8s;
+
+	.divider{
+		background: #505050;
+		height: 2px;
+		width: 45%;
+	}
   }
 
   .button-container {
     margin: 3rem 0 1rem 0;
+  }
+
+  @media (max-width: 580px){
+	.card-form{
+		.divider{
+			width: 35%;
+		}
+	}
   }
 
   @media (max-width: 768px) {
