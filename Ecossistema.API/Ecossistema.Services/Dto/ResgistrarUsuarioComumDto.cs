@@ -10,6 +10,7 @@ namespace Ecossistema.Services.Dto
         public string? Cpf { get; set; }
         [Required(ErrorMessage = "Data de nascimento é obrigatório")]
         public DateTime DataNascimento { get; set; }
+        [Required(ErrorMessage = "Telefone é obrigatório")]
         public string? Telefone { get; set; }
         [Required(ErrorMessage = "Cargo é obrigatório")]
         public string? Cargo { get; set; }
