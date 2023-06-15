@@ -74,6 +74,16 @@ namespace Ecossistema.Util.Validacao
             }
         }
 
+        public static bool ValidaTelefone(string telefone)
+        {
+            Regex Rgx = new Regex(@"^(\(?\d{2}\)?) ?9?\d{4}-?\d{4}$"); //Regex(@"^\(\d{2}\)\d{5}-\d{4}$"); //formato (XX)XXXXX-XXXX
+
+            if (!Rgx.IsMatch(telefone))
+                return false;
+            else
+                return true;
+        }
+
         public static bool ValidaCpf(string cpf)
         {
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
