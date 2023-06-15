@@ -1,21 +1,19 @@
 <template>
-  <NavBar :is-transparent="false"/>
-  <Banner 
-    path="/fale-conosco/fale-conosco-banner.png"
-    figcaption="costumer-service"
-    img-alt="costumer-service"
-  >
-    <div class="d-flex h-100">
-      <img src="/fale-conosco/fale-conosco-icon.png" alt="Fale Conosco">
-      <h1 class="dark-title">FALE<br>CONOSCO
-        <p class="dark-body-text">
-          contato@ecossistemadeinovacaocg.com.br
-        </p>
-      </h1>
-    </div>
-  </Banner>
-  <Formulario />
-  <FooterComponent />
+    <Banner
+            path="/fale-conosco/fale-conosco-banner.png"
+            figcaption="costumer-service"
+            img-alt="costumer-service"
+    >
+        <div class="banner-fale-conosco ghp">
+
+            <h1 class="dark-title">FALE CONOSCO</h1>
+            <p>
+                Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo
+                Grande - MS
+            </p>
+        </div>
+    </Banner>
+    <Formulario/>
 </template>
 
 <script setup lang="ts">
@@ -24,67 +22,81 @@ import Formulario from '../../components/faleConosco/Formulario.vue';
 </script>
 
 <style scoped lang="scss">
+
+.banner-fale-conosco {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding-left: 64px;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+
+
+  .dark-title {
+    font-size: 2rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    text-align: start;
+  }
+
+  p {
+    text-align: start;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+}
+
+@media (max-width: 1200px) {
   div.d-flex {
-    position: absolute;
-    top: 0;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 150px;
-    img {
-      max-width: 120px;
-      min-width: 20px;
-      width: 20%;
-    }
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       text-align: start;
-      margin-bottom: 2.5rem !important;
-      margin-left: 2rem;
-      p.dark-body-text {
-        font-size: 1rem;
-      }
+      margin-bottom: 2rem !important;
+      margin-left: 1.5rem;
     }
   }
-  @media (max-width: 1200px) {
-    div.d-flex {
-      h1 {
-        font-size: 2rem;
-        text-align: start;
-        margin-bottom: 2rem !important;
-        margin-left: 1.5rem;
-      }
+}
+
+@media (max-width: 991px) {
+  div.d-flex {
+    padding: 0 100px;
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: start;
+      margin-bottom: 2rem !important;
+      margin-left: 1.5rem;
     }
   }
-  @media (max-width: 991px) {
-    div.d-flex {
-      padding: 0 100px;
-      h1 {
-        font-size: 1.5rem;
-        text-align: start;
-        margin-bottom: 2rem !important;
-        margin-left: 1.5rem;
-      }
-    }
-  }
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
   div.d-flex {
     padding: 0 50px;
-      h1 {
-        font-size: 1rem;
-        text-align: start;
-        margin-bottom: 2rem !important;
-        margin-left: 1rem;
-      }
+
+    h1 {
+      font-size: 1rem;
+      text-align: start;
+      margin-bottom: 2rem !important;
+      margin-left: 1rem;
     }
   }
-  @media (max-width: 576px) {
+}
+
+@media (max-width: 576px) {
   div.d-flex {
-      h1 {
-        font-size: 0.8rem;
-        text-align: start;
-        margin-bottom: 1rem !important;
-        margin-left: 1rem;
-      }
+    h1 {
+      font-size: 0.8rem;
+      text-align: start;
+      margin-bottom: 1rem !important;
+      margin-left: 1rem;
     }
   }
+}
 </style>

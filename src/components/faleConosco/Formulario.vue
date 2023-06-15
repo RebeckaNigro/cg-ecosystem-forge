@@ -1,81 +1,244 @@
 <template>
-  <form action="submit" class="fale-conosco ghp">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.nome" type="text" name="person-name" id="name-input" placeholder="Nome">
-    <select class="half-size form-control form-select boring-gray-border" v-model="contactForm.setorId" aria-label="Default select example" :disabled="waitingSetores">
-      <option v-for="(setor, index) in comunicacaoStore.faleConoscoSetores" :key="setor.id" :value="setor.id">{{ setor.descricao }}</option>
-      <option value="0" selected>Selecione um setor</option>
-    </select>
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.emailCorporativo" type="text" name="corporate-email" id="email-input" placeholder="E-mail corporativo">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.telefone" type="tel" name="phone" id="phone" placeholder="Telefone (Cód área + Número)" maxlength="11" @keyup="evalNumberInput($event)">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.empresa" type="text" name="company" id="company-input" placeholder="Empresa">
-    <input class="half-size form-control boring-gray-border" v-model="contactForm.cargo" type="text" name="job-position" id="cargo-input" placeholder="Cargo">
-    <textarea class="form-control boring-gray-border" v-model="contactForm.mensagem" name="message" id="message" cols="30" rows="10" placeholder="Mensagem"></textarea>
-    <button v-if="!sendingEmail" type="button" @click="sendEmail()" class="green-btn">ENVIAR</button>
-    <div v-else class="spinner-border text-success ml-auto mt-2" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <form action="submit" class="fale-conosco ghp box">
+	<!-- NOME-->
+    <div class="nome fs-6">
+      <label  class="form-label-primary" for="name-input">Nome</label>
+      <input
+	  	class="form-input-primary"
+        v-model="contactForm.nome"
+        type="text"
+        name="person-name"
+        id="name-input"
+		:class="v$.nome.$error ? 'is-invalid' : ''"
+      />
+	  <div v-if="v$.nome.$error" class="invalid-feedback">
+          {{ v$.nome.$errors[0].$message }}
+        </div>
     </div>
+
+	<!--EMAIL E TELEFONE-->
+    <div class="two-columns fs-6">
+      <div class="email">
+        <label for="email-input"  class="form-label-primary">Email corporativo</label>
+        <input
+		class="form-input-primary"
+          v-model="contactForm.emailCorporativo"
+          type="text"
+          name="corporate-email"
+          id="email-input"
+		  :class="v$.emailCorporativo.$error ? 'is-invalid' : ''"
+        />
+		<div v-if="v$.emailCorporativo.$error" class="invalid-feedback">
+          {{ v$.emailCorporativo.$errors[0].$message }}
+        </div>
+      </div>
+      <div class="telefone">
+        <label for="phone"  class="form-label-primary">Telefone</label>
+        <input
+		class="form-input-primary"
+          v-model="contactForm.telefone"
+          type="tel"
+          name="phone"
+          id="phone"
+          maxlength="11"
+          :class="v$.telefone.$error ? 'is-invalid' : ''"
+        />
+		<div v-if="v$.telefone.$error" class="invalid-feedback">
+          {{ v$.telefone.$errors[0].$message }}
+        </div>
+      </div>
+    </div>
+
+	<!--EMPRESA E CARGO -->
+    <div class="two-columns fs-6">
+      <div class="empresa">
+        <label class="form-label-primary" for="company-input">Empresa</label>
+        <input
+		 class="form-input-primary"
+          v-model="contactForm.empresa"
+          type="text"
+          name="company"
+          id="company-input"
+		  :class="v$.empresa.$error ? 'is-invalid' : ''"
+        />
+		<div v-if="v$.empresa.$error" class="invalid-feedback">
+          {{ v$.empresa.$errors[0].$message }}
+        </div>
+      </div>
+      <div class="cargo">
+        <label class="form-label-primary" for="cargo-input">Cargo</label>
+        <input
+		  class="form-input-primary"
+          v-model="contactForm.cargo"
+          type="text"
+          name="job-position"
+          id="cargo-input"
+		  :class="v$.cargo.$error ? 'is-invalid' : ''"
+        />
+		<div v-if="v$.cargo.$error" class="invalid-feedback">
+          {{ v$.cargo.$errors[0].$message }}
+        </div>
+      </div>
+    </div>
+
+	<!--SETOR-->
+    <div class="setor fs-6">
+      <label class="form-label-primary">Setor do destinatário</label>
+      <select
+	    class="form-input-primary fs-6"
+        v-model="contactForm.setorId"
+        aria-label="Default select example"
+        :disabled="waitingSetores"
+		:class="v$.setorId.$error ? 'is-invalid' : ''"
+      >
+        <option value="0" selected>Selecione um setor</option>
+        <option
+          v-for="(setor, index) in comunicacaoStore.faleConoscoSetores"
+          :key="setor.id"
+          :value="setor.id"
+        >
+          {{ setor.descricao }}
+        </option>
+      </select>
+	  <div v-if="v$.setorId.$error" class="invalid-feedback">
+          {{ v$.setorId.required.$message }}
+        </div>
+    </div>
+
+	<!--MENSAGEM-->
+    <div class="mensagem fs-6">
+      <label class="form-label-primary" for="message">Mensagem</label>
+      <textarea
+	    class="form-input-primary"
+        v-model="contactForm.mensagem"
+        name="message"
+        id="message"
+        cols="30"
+        rows="10"
+		:class="v$.mensagem.$error ? 'is-invalid' : ''"
+      ></textarea>
+	  <div v-if="v$.mensagem.$error" class="invalid-feedback">
+          {{ v$.mensagem.$errors[0].$message }}
+        </div>
+    </div>
+
+    <button
+      v-if="!sendingEmail"
+      type="button"
+      @click="sendEmail()"
+      class="green-btn"
+    >
+      ENVIAR
+    </button>
+
+	<Spinner v-else/>
+  
   </form>
-<ModalComponent
-  :title="modalSettings.title"
-  :message="modalSettings.message"
-  :status="modalSettings.status"
-  :modal-id="modalSettings.id"
-/>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
-import { useComunicacaoStore } from '../../stores/comunicacao/store';
-import ModalComponent from '../general/ModalComponent.vue'
-import { Modal } from 'bootstrap';
+  import { computed, onMounted, reactive, ref } from "vue"
+  import { useComunicacaoStore } from "../../stores/comunicacao/store"
+  import useValidate from "@vuelidate/core"
+  import {
+    required,
+    email,
+    minLength,
+    sameAs,
+    helpers,
+between,
+maxLength,
+minValue
+  } from "@vuelidate/validators"
 
-  const comunicacaoStore = useComunicacaoStore();
-  const sendingEmail = ref(false);
+  import { useModalStore } from "../../stores/modal/store"
+  import Spinner from "../general/Spinner.vue"
+
+  const comunicacaoStore = useComunicacaoStore()
+  const modalStore = useModalStore()
+  const sendingEmail = ref(false)
+  const waitingSetores = ref(false)
   const contactForm = ref({
-    nome: '',
-    emailCorporativo: '',
-    telefone: '',
-    empresa: '',
-    cargo: '',
+    nome: "",
+    emailCorporativo: "",
+    telefone: "",
+    empresa: "",
+    cargo: "",
     setorId: 0,
-    mensagem: ''
-  });
-  const sendEmail = async () => {
-    sendingEmail.value = true
-    sendingEmail.value = await comunicacaoStore.sendFaleConosco(contactForm.value.nome, contactForm.value.emailCorporativo, contactForm.value.telefone, contactForm.value.empresa, contactForm.value.cargo, contactForm.value.setorId, contactForm.value.mensagem)
-    const res = comunicacaoStore.faleConoscoResponse.getResponse()
-    if (res.code === 200) {
-      openModal('faleConoscoRes', 'Sucesso', res.message, 'success')
-    } else if (res.code === 661 || res.code === 666) {
-        console.error(res.message)
-    } else {
-      openModal('faleConoscoRes', 'Falha', res.message, 'warning')
-    }
-  }
-  const evalNumberInput = (e: KeyboardEvent) => {
-    if (isNaN(parseInt(e.key))) {
-      contactForm.value.telefone = contactForm.value.telefone.slice(0, contactForm.value.telefone.indexOf(e.key))
-    }
-  }
-  const modalSettings = reactive({
-    title: '',
-    message: '',
-    status: '',
-    id: 'faleConoscoRes'
+    mensagem: ""
   })
-  const openModal = (modalId: string, mt: string, mm: string, ms: string) => {
-    modalSettings.id = modalId
-    modalSettings.title = mt
-    modalSettings.message = mm
-    modalSettings.status = ms
-    const modalDOM: any = document.querySelector('#' + modalId)
-    const bsModal = Modal.getOrCreateInstance(modalDOM)!
-    bsModal.show()
+
+  const formularioRules = computed(() => {
+	return {
+		nome: {
+			required: helpers.withMessage("Nome é obrigatório.", required)
+		},
+		emailCorporativo: {
+			required: helpers.withMessage('Email é obrigatório.', required), email
+		},
+		telefone: {
+			required: helpers.withMessage('Telefone é obrigatório.', required),
+			minLength: minLength(10),
+			maxLength: maxLength(11)
+		},
+		empresa: {
+			required: helpers.withMessage('Empresa é obrigatório.', required)
+		},
+		cargo: {
+			required: helpers.withMessage('Cargo é obrigatório.', required)
+		},
+		setorId: {
+			required: helpers.withMessage('Selecione um setor.', required),
+			minValue: minValue(1)
+		},
+		mensagem: {
+			required: helpers.withMessage('Mensagem é obrigatório.', required)
+		},
+	}
+  })
+
+  const v$ = useValidate(formularioRules, contactForm)
+
+  const sendEmail = async () => {
+	v$.value.$validate()
+
+	console.log(v$.value);
+	
+	if(!v$.value.$error){
+		sendingEmail.value = true
+	
+		sendingEmail.value = await comunicacaoStore.sendFaleConosco(
+		  contactForm.value.nome,
+		  contactForm.value.emailCorporativo,
+		  contactForm.value.telefone,
+		  contactForm.value.empresa,
+		  contactForm.value.cargo,
+		  contactForm.value.setorId,
+		  contactForm.value.mensagem
+		)
+		const res = comunicacaoStore.faleConoscoResponse.getResponse()
+		if (res.code === 200) {
+		  modalStore.showSuccessModal("Mensagem enviada com sucesso!")
+		} else if (res.code === 661 || res.code === 666) {
+		  console.error(res.message)
+		} else {
+		  modalStore.showWarningModal("Erro ao enviar mensagem. " + res.message)
+		}
+	}
   }
-  const waitingSetores = ref(true)
-  onMounted( async () => {
-    waitingSetores.value = true;
-    waitingSetores.value = await comunicacaoStore.getFaleConoscoSetores();
+//   const evalNumberInput = (e: KeyboardEvent) => {
+//     if (isNaN(parseInt(e.key))) {
+//       contactForm.value.telefone = contactForm.value.telefone.slice(
+//         0,
+//         contactForm.value.telefone.indexOf(e.key)
+//       )
+//     }
+//   }
+  
+  onMounted(async () => {
+    waitingSetores.value = true
+    waitingSetores.value = await comunicacaoStore.getFaleConoscoSetores()
+	waitingSetores.value = false
   })
 </script>
 
@@ -86,7 +249,42 @@ import { Modal } from 'bootstrap';
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    input.half-size, select.half-size {
+    max-width: 1100px;
+
+    margin: 5rem auto;
+
+    font-weight: 600;
+    color: #6b6a64;
+    font-size: 1.2rem;
+    label {
+      margin-left: 2rem;
+      margin-top: 0.6rem;
+    }
+    input {
+      color: #000;
+    }
+    div {
+      margin-top: 1rem;
+    }
+
+    .two-columns {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 2rem;
+    }
+
+    .nome,
+    .email,
+    .telefone,
+    .empresa,
+    .cargo,
+    .setor,
+    .mensagem {
+      width: 100%;
+    }
+    input.half-size,
+    select.half-size {
       width: 48%;
       margin-right: 1%;
       margin-left: 1%;
@@ -108,21 +306,27 @@ import { Modal } from 'bootstrap';
     }
     .green-btn {
       margin-left: auto;
-      margin-top: 10px;
+      margin-top: 1rem;
       color: #fff;
       border-radius: 25px;
-      width: 130px;
+      width: 250px;
       height: 40px;
       line-height: 40px;
       text-align: center;
     }
-    .spinner-border, button.green-btn {
+
+    .green-btn:hover {
+      background-color: #aacbc3;
+    }
+    .spinner-border,
+    button.green-btn {
       margin-right: 1%;
     }
   }
   @media (max-width: 768px) {
     form.fale-conosco {
-      input.half-size, select.half-size {
+      input.half-size,
+      select.half-size {
         margin-right: 0;
         margin-left: 0;
         width: 100%;
@@ -131,7 +335,8 @@ import { Modal } from 'bootstrap';
         margin-left: 0;
         margin-right: 0;
       }
-      .spinner-border, button.green-btn {
+      .spinner-border,
+      button.green-btn {
         margin-right: 0;
       }
     }

@@ -1,23 +1,30 @@
 <template>
   <section class="contatos-parceiro ghp">
     <header>
-      <h3 class="dark-title">
+      <h3 class="dark-title ms-3">
         Contato
       </h3>
     </header>
-    <main class="boring-gray-border box">
+    <main class="box-contato">
       <nav id="anchors">
         <a class="light-body-text letter">{{ emailContato }}</a>
         <a class="light-body-text phone">{{ telefone }}</a>
-        <a class="light-body-text world">{{ website }}</a>
-        <a class="light-body-text pin">{{ endereco }}</a>
+		<div class="pin">
+			<img src="/parceiros/parceiro-expandido/pin_icon.svg" alt="">
+			<a class="light-body-text">{{ endereco }}</a>
+
+		</div>
+        <a class="light-body-text world" :href="website" target="_blank">{{ website }}</a>
       </nav>
       <nav id="social">
-        <a :href="instaLink" target="blank">
-          <img src="/insta_icon.png" alt="">
+        <a :href="instaLink" target="blank" class="ms-0">
+          <img src="/instagram_icon.svg" alt="Instagram">
+        </a>
+		<a :href="instaLink" target="blank">
+          <img src="/facebook_icon.svg" alt="Facebook">
         </a>
         <a :href="linkedinLink" target="blank">
-          <img src="/linkedin_icon.png" alt="">
+          <img src="/linkedin_icon.svg" alt="Linkedin">
         </a>
       </nav>
     </main>
@@ -42,15 +49,21 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    .box {
-      background-color: #28353e;
+
+	h3{
+		font-weight: 500;
+	}
+    .box-contato {
+      background-color: #fff;
       min-height: 300px;
       height: 100%;
-      width: 600px;
-      padding: 10px;
+      max-width: 600px;
+      padding: 1rem;
       margin-bottom: 3rem;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+	  border: 1px solid #6B6A64;
+	  border-radius: 10px;
       #anchors {
         width: 90%;
         display: flex;
@@ -60,36 +73,41 @@
           font-size: 1rem;
           margin: 10px 0;
           text-align: justify;
+		  color: #000;
         }
       }
       #social {
         width: 10%;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         a {
-          margin: 10px 0;
-        }
-        a > img {
-          width: 40px;
+          margin: 10px 1rem;
         }
       }
-      .pin, .world, .letter, .phone {
+      .world, .letter, .phone {
+		width: 100%;
         padding-left: 35px;
         background-repeat: no-repeat;
         background-position: center left;
         background-size: contain
       }
-      .pin {
-        background-image: url('/parceiros/parceiro-expandido/pin_icon.png');
-      }
+	  .pin{
+		display: flex;
+		justify-content: start;
+		align-content: flex-start;
+		align-items: flex-start;
+		img{
+			margin-top: .7rem;
+		}
+	  }
       .world {
-        background-image: url('/parceiros/parceiro-expandido/www_icon.png');
+        background-image: url('/parceiros/parceiro-expandido/www_icon.svg');
       }
       .letter {
-        background-image: url('/parceiros/parceiro-expandido/letter_icon.png');
+        background-image: url('/parceiros/parceiro-expandido/letter_icon.svg');
       }
       .phone {
-        background-image: url('/parceiros/parceiro-expandido/phone_icon.png');
+        background-image: url('/parceiros/parceiro-expandido/phone_icon.svg');
       }
     }
   }

@@ -1,213 +1,177 @@
 <template>
-  <NavBar 
-    :is-transparent="false"
-  />
-  <Banner
-    path="/noticias/banner.png"
-    figcaption="workspace_image"
-    img-alt="workspace_image"
-  >
-    <div class="noticia-expandida-banner ghp">
-      <img src="/noticias/icone-noticia.png" alt="icon">
-      <div class="text-container">
-        <h1 class="dark-title">Notícias</h1>
-        <p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
-      </div>
+  <div class="pt-5 pb-5 container">
+    <Spinner spinnerColorClass="text-dark" v-if="isLoadingContent" />
+    <div class="noticia-breadcrumb">
+      <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li
+            class="breadcrumb-item unactive"
+            @click="$router.push({ name: 'NoticiasCriadas' })"
+          >
+            Notícias
+          </li>
+          <li class="breadcrumb-item unactive" aria-current="page">
+            Destaques
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ noticia.titulo }}
+          </li>
+        </ol>
+      </nav>
     </div>
-  </Banner>
-  <section class="noticia-expandida ghp">
-    <header class="d-flex">
-      <h1 class="dark-title">NOME DA NOTÍCIA</h1>
-      <p class="dark-body-text">RESUMO DA NOTÍCIA</p>
-      <time>dd/mm/yy ndpvnp</time>
-    </header>
-    <img class="w-100" src="/noticias/noticia-expandida/cover.png" alt="capa da notícia">
-    <p id="first-paraghap" class="dark-body-text">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores maxime quo fugit. Numquam delectus nobis consequatur maxime quidem corporis laborum! Quasi architecto beatae veritatis autem harum exercitationem consequatur sint consequuntur.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores maxime quo fugit. Numquam delectus nobis consequatur maxime quidem corporis laborum! Quasi architecto beatae veritatis autem harum exercitationem consequatur sint consequuntur.
-    </p>
-    <main>
-      <h3 class="dark-title">LOREM IPSUM</h3>
-      <article class="dark-body-text">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis rerum quos exercitationem nobis, nemo autem molestiae! Deserunt cupiditate vel impedit a quaerat ut nobis asperiores deleniti, nostrum minima ea obcaecati.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis rerum quos exercitationem nobis, nemo autem molestiae! Deserunt cupiditate vel impedit a quaerat ut nobis asperiores deleniti, nostrum minima ea obcaecati.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis rerum quos exercitationem nobis, nemo autem molestiae! Deserunt cupiditate vel impedit a quaerat ut nobis asperiores deleniti, nostrum minima ea obcaecati.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis rerum quos exercitationem nobis, nemo autem molestiae! Deserunt cupiditate vel impedit a quaerat ut nobis asperiores deleniti, nostrum minima ea obcaecati.
-      </article>
-      <h3 class="dark-title">LOREM IPSUM</h3>
-      <img src="/noticias/noticia-expandida/fakevideo.png" alt="fake-video" class="w-100">
-    </main>
-  </section>
-  <footer class="ghp">
-    <NoticiasRelacionadas />
-  </footer>
-  <FooterComponent/>
+    <section class="noticia-expandida ghp box pt-3">
+      <header class="d-flex">
+        <h1>{{ noticia.titulo }}</h1>
+        <p>{{ noticia.subTitulo }}</p>
+        <!--<p class="nome-autor">Nome do autor</p>-->
+        <time>{{ friendlyDateTime(noticia.dataPublicacao) }}</time>
+      </header>
+      <img
+        class="w-100"
+        :src="
+          noticia.arquivo
+            ? 'data:image/png;base64, ' + noticia.arquivo
+            : '/public/noticias/noticia-expandida/default-news-cover.svg'
+        "
+        alt="capa da notícia"
+      />
+      <p id="first-paraghap">
+        {{ noticia.subTitulo }}
+      </p>
+      <main>
+        <article
+          class="news-body ql-editor"
+          v-html="noticia.descricao"
+        ></article>
+
+        <!--<img src="/noticias/noticia-expandida/fakevideo.png" alt="fake-video" class="w-100">-->
+      </main>
+      <!--<NoticiasRelacionadas />-->
+    </section>
+
+    <div class="btn-up-container" @click="handleNavigateUp">
+      <button class="btn-up">
+        <img
+          src="/public/noticias/noticia-expandida/arrow_up.svg"
+          alt="Seta para cima"
+        />
+        Subir ao topo
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import Banner from '../../../components/general/Banner.vue'
-  import NoticiasRelacionadas from '../../../components/noticias/NoticiasRelacionadas.vue';
+  import { onMounted, ref } from "vue"
+  import router from "../../../router"
+  import { useNoticiaStore } from "../../../stores/noticias/store"
+  import { INoticia } from "../../../stores/noticias/types"
+  import { friendlyDateTime } from "../../../utils/formatacao/datetime"
+  import Spinner from "../../../components/general/Spinner.vue"
+
+  const store = useNoticiaStore()
+  const noticia = ref<INoticia>({
+    id: 0,
+    titulo: "",
+    descricao: "",
+    tags: [],
+    subTitulo: "",
+    dataPublicacao: "",
+    arquivo: {} as File
+  })
+
+  const isLoadingContent = ref(false)
+  const handleNavigateUp = () => {
+    window.scrollTo(0, 0)
+  }
+
+  onMounted(async () => {
+    isLoadingContent.value = true
+    await store.getNewsById(
+      parseInt(router.currentRoute.value.params.noticiaId.toString())
+    )
+
+    noticia.value = store.response.dado
+    isLoadingContent.value = false
+  })
 </script>
 
 <style scoped lang="scss">
-  .noticia-expandida-banner{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    padding-left: 64px;
-
+  .btn-up-container {
+    margin: 0 auto;
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
+    max-width: 1300px;
 
-    .text-container {
-      width: 100%;
-      max-width: 500px;
-      h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0;
-      }
-      p {
-        margin-bottom: 0;
-        font-size: 1rem;
-        max-height: 100px;
-        height: 100%;
-        overflow-y: auto;
-      }
+    .btn-up {
+      background-color: #fff;
+      padding: 0.7rem;
+      border: 1px solid #505050;
+      border-radius: 10px;
+      font-weight: 600;
     }
 
-    > img {
-      width: 10%;
-      min-width: 60px;
-      max-width: 128px;
-      margin-right: 24px;
-    }
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      width: 400px;
-
-      p {
-        text-align: start;
-        font-size: 12px;
-      }
+    .btn-up:hover {
+      background-color: rgb(232, 229, 229);
     }
   }
+
   .noticia-expandida {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    margin: 3rem auto;
+    max-width: 1300px;
+
     header {
       flex-direction: column;
       margin-top: 3rem;
+      margin-bottom: 3rem;
+      width: 100%;
+
       h1 {
+        color: #000;
         font-size: 2rem;
-      }
-      p.dark-body-text {
-        font-weight: bolder;
-        text-align: center;
-        font-size: 1.2rem;
-      }
-    }
-    .dark-body-text {
-      font-size: 1rem;
-      text-align: justify;
-    }
-    main {
-      h3 {
         text-align: start;
-        margin-top: 2rem;
+        font-weight: 600;
       }
-    }
-  }
-  @media (max-width: 1200px) {
-  .noticia-expandida-banner{
-    .text-container {
-      h1 {
-        font-size: 2rem;
-      }
+
       p {
-        font-size: 0.8rem;
-      }
-    }
-  }
-  }
-  @media (max-width: 991px) {
-    .noticia-expandida-banner{
-      .text-container {
-        max-width: 300px;
-        h1 {
-          font-size: 1.5rem;
-        }
-        p {
-          max-height: 60px;
-        }
-      }
-    }
-  .noticia-expandida {
-    header {
-      margin-top: 2rem;
-      h1 {
-        font-size: 1.5rem;
-      }
-      p.dark-body-text {
+        font-weight: 400;
+        text-align: start;
         font-size: 1.2rem;
       }
-    }
-    .dark-body-text {
-      font-size: 1rem;
-      text-align: justify;
-    }
-    main {
-      h3 {
-        font-size: 1.5rem;
-      }
-    }
-  }
-  }
-  @media (max-width: 768px) {
-    .noticia-expandida-banner{
-      .text-container {
-        max-width: 200px;
-        h1 {
-          font-size: 1rem;
-        }
-        p {
-          max-height: 40px;
-          font-size: 0.7rem;
-        }
-      }
-    }
-  }
-  @media (max-width: 576px) {
-    .noticia-expandida-banner{
-      .text-container {
-        h1 {
-          font-size: 0.8rem;
-        }
-      }
-    }
-    .noticia-expandida {
-      header {
-        h1 {
-          font-size: 1.3rem;
-        }
-        p.dark-body-text {
-          font-size: 1rem;
-        }
-      }
-      .dark-body-text {
+
+      time {
+        color: #6b6a64;
         font-size: 1rem;
-        text-align: justify;
+        text-align: start;
       }
-      main {
-        h3 {
-          font-size: 1.3rem;
-        }
+
+      .nome-autor {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #000;
+        background: url("/public/noticias/noticia-expandida/user.svg");
+        background-repeat: no-repeat;
+        background-position-y: center;
+        background-size: contain;
+        padding-left: 2rem;
       }
+    }
+
+    #first-paraghap {
+      font-weight: 500;
+      text-align: start;
+      font-size: 0.8rem;
+    }
+
+    .news-body {
+      font-weight: 400;
+      text-align: start;
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 3rem;
     }
   }
 </style>

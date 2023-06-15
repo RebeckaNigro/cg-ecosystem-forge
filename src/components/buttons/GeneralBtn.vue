@@ -35,7 +35,7 @@ const applyCss = (bgColor: string, w: string, h: string, textColor: string) => {
   `
 }
 const glowBg = (element: any) => {
-  element.style.backgroundColor = '#4dcd63'
+  element.style.backgroundColor = '#8eb0a5'
 }
 const unglowBg = (element: any) => {
   element.style.backgroundColor = props.bgColor
@@ -49,16 +49,16 @@ onMounted(() => {
   .general-btn {
     border-radius: 25px;
     border: unset;
-    font-family: 'Gotham-Book';
+    font-weight: 700;
     font-weight: 1000;
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin: auto;
     margin-top: 10px;
     .text {
       text-decoration: none;
     }
     .general-btn:hover {
-      background-color: #61d3ad;
+      background-color: #8eb0a5;
       outline: none;
     }
   }

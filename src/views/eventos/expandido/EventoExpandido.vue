@@ -1,126 +1,194 @@
 <template>
-  <NavBar 
-    :is-transparent="false"
-  />
-  <Banner
-    path="/eventos/banner.png"
-    img-alt="evento do hub"
-    figcaption="ilustração de evento"
-  >
-  <div class="d-flex h-100 position-absolute top-0 ghp">
-    <img src="/eventos/banner_icon.png" alt="icon">
-    <h1 class="dark-title">EVENTOS
-      <p class="dark-body-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia saepe ex alias consectetur, nulla, in neque iure praesentium, modi eveniet consequuntur quaerat dolorum officiis vel. Dolores nihil quo eveniet vel.</p>
-    </h1>
+  <div class="pt-5 pb-5 container">
+    <Spinner spinnerColorClass="text-dark" v-if="isLoadingContent" />
+    <div class="evento-breadcrumb">
+      <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li
+            class="breadcrumb-item unactive"
+            @click="$router.push({ name: 'EventosCriados' })"
+          >
+            Eventos
+          </li>
+          <li class="breadcrumb-item unactive" aria-current="page">
+            Destaques
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <section class="evento-expandido ghp box pt-3">
+      <div class="mb-5">
+        <img
+          class="w-100"
+          :src="
+            evento.arquivos[0]
+              ? 'data:image/png;base64, ' + evento.arquivos[0].arquivo
+              : '/public/eventos/eventoExpandido/default-event-cover.svg'
+          "
+          alt="capa do evento"
+        />
+      </div>
+
+      <h1 class="text-start">{{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}</h1>
+      <div class="row container-fluid">
+        <div class="col-sm-8">
+          <div class="d-flex mt-4 mb-2">
+            <img
+              src="/icons/user-circle.svg"
+              alt="icone usuario"
+              class="icone-usuario"
+            />
+            <div class="d-flex align-items-center mx-2 fw-bold">
+              {{ evento.responsavel }}
+            </div>
+          </div>
+
+          <div class="d-flex mt-4 mb-2">
+            <img
+              src="/icons/calendar-icon.svg"
+              alt="icone pino de endereço"
+              class="icone-usuario"
+            />
+            <div class="d-flex align-items-center mx-2 fw-bold">
+              {{ dataFormatada }}
+            </div>
+          </div>
+
+          <div class="d-flex mt-4 mb-2">
+            <img
+              src="/icons/pin-icon.svg"
+              alt="icone pino de endereço"
+              class="icone-usuario"
+            />
+            <div class="d-flex align-items-center mx-2 fw-bold">
+              {{
+                evento.tipoEventoId == 1
+                  ? enderecoFormatado
+                  : `Online: ${evento.linkExterno}`
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="d-flex col-sm-4 align-items-end justify-content-end">
+          <button type="button" class="green-btn-primary mx-2">
+            <a :href="generatedLink" class="link-btn">Acessar Link</a>
+          </button>
+        </div>
+      </div>
+
+      <hr class="w-100 my-4" />
+
+      <div id="corpo" class="content ql-editor" v-html="evento.descricao"></div>
+    </section>
+
+    <div class="btn-up-container" @click="handleNavigateUp">
+      <button class="btn-up">
+        <img src="/public/arrow_up.svg" alt="Seta para cima" />
+        Subir ao topo
+      </button>
+    </div>
   </div>
-  </Banner>
-  <ContainerInformacoes
-    :data="{
-      eventDate: '22/12/22',
-      eventId: 'kk',
-      eventLocation: 'acapulco',
-      eventName: 'Challenge',
-      img: '/eventos/event_img.png'
-    }"
-  />
-  <ContainerDescricao />
-  <ContainerOrganizador />
-  <FooterComponent />
 </template>
 
 <script setup lang="ts">
-import NavBar from '../../../components/general/NavBar.vue'
-import Banner from '../../../components/general/Banner.vue';
-import ContainerInformacoes from '../../../components/eventos/expandido/ContainerInformacoes.vue';
-import ContainerDescricao from '../../../components/eventos/expandido/ContainerDescricao.vue';
-import ContainerOrganizador from '../../../components/eventos/expandido/ContainerOrganizador.vue';
-import FooterComponent from '../../../components/general/FooterComponent.vue';
+//@ts-nocheck
+  import { onMounted, ref } from "vue"
+  import router from "../../../router"
+  import { useEventoStore } from "../../../stores/eventos/store"
+  import { IEvento } from "../../../stores/eventos/types"
+  import { brDateString } from "../../../utils/formatacao/datetime"
+  import Spinner from "../../../components/general/Spinner.vue"
 
+  const store = useEventoStore()
+  const evento = ref<IEvento>({
+    id: -1,
+    instituicaoId: -1,
+    tags: [],
+    tipoEventoId: 1,
+    titulo: "",
+    descricao: "",
+    dataInicio: "",
+    dataTermino: "",
+    local: "",
+    enderecoId: null,
+    endereco: null,
+    linkExterno: "",
+    exibirMaps: false,
+    responsavel: "",
+    arquivos: []
+  })
+  const dataInicioFormatada = ref("")
+  const dataTerminoFormatada = ref("")
+  const dataFormatada = ref("")
+  const enderecoFormatado = ref("")
+  const generatedLink = ref("")
+  const isLoadingContent = ref(false)
+  const encerrado = ref(false)
+  const handleNavigateUp = () => {
+    window.scrollTo(0, 0)
+  }
+
+  onMounted(async () => {
+    isLoadingContent.value = true
+
+    await store.getEventById(
+      parseInt(router.currentRoute.value.params.eventoId.toString())
+    )
+
+    evento.value = store.response.dado
+    isLoadingContent.value = false
+
+	if(new Date(evento.value.dataTermino) < new Date()){
+		encerrado.value = true
+	}
+
+    if (
+      evento.value.linkExterno.startsWith("http://") ||
+      evento.value.linkExterno.startsWith("https://")
+    ) {
+      generatedLink.value = evento.value.linkExterno
+    } else {
+      generatedLink.value = `http://${evento.value.linkExterno}`
+    }
+
+    dataInicioFormatada.value = brDateString(evento.value.dataInicio.toString())
+    dataTerminoFormatada.value = brDateString(
+      evento.value.dataTermino.toString()
+    )
+
+    dataFormatada.value = `${dataInicioFormatada.value} - ${dataTerminoFormatada.value}`
+    enderecoFormatado.value = `${evento.value.endereco.logradouro}, ${evento.value.endereco.numero} - ${evento.value.endereco.bairro}, ${evento.value.endereco.uf}, ${evento.value.endereco.cep}`
+  })
 </script>
 
 <style scoped lang="scss">
-  div.d-flex {
-    justify-content: flex-start;
-    align-items: center;
-    img {
-      max-width: 120px;
-      min-width: 20px;
-      width: 20%;
+  .link-btn {
+    text-decoration: none;
+    color: white;
+  }
+  .btn-up-container {
+    margin: 20px auto;
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1300px;
+
+    .btn-up {
+      background-color: #fff;
+      padding: 0.7rem;
+      border: 1px solid #505050;
+      border-radius: 10px;
+      font-weight: 600;
     }
-    h1 {
-      font-size: 2.5rem;
-      text-align: start;
-      margin-left: 2rem;
-      p {
-        font-size: 1rem;
-        max-width: 450px;
-        width: 100%;
-        text-align: justify;
-        margin-top: 10px;
-        margin-bottom: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 4; /* number of lines to show */
-                  line-clamp: 4; 
-          -webkit-box-orient: vertical;
-      }
+
+    .btn-up:hover {
+      background-color: rgb(232, 229, 229);
     }
   }
-  @media (max-width: 1200px) {
-    div.d-flex {
-      h1 {
-        font-size: 2rem;
-        text-align: start;
-        margin-left: 1.5rem;
-        p {
-          font-size: 0.8rem;
-          max-width: 350px;
-        }
-      }
-    }
-  }
-  @media (max-width: 991px) {
-    div.d-flex {
-      padding: 0 100px;
-      h1 {
-        font-size: 1.5rem;
-        text-align: start;
-        margin-left: 1.5rem;
-        p {
-          max-width: 200px;
-        }
-      }
-    }
-  }
-  @media (max-width: 768px) {
-  div.d-flex {
-    padding: 0 50px;
-      h1 {
-        font-size: 1rem;
-        text-align: start;
-        margin-left: 1rem;
-        p {
-          font-size: 0.7rem;
-        }
-      }
-    }
-  }
-  @media (max-width: 576px) {
-  div.d-flex {
-      h1 {
-        font-size: 0.8rem;
-        text-align: start;
-        margin-left: 0.8rem;
-        margin-bottom: 0;
-        p {
-          max-width: 100px;
-          text-align: start;
-          margin-top: 0;
-          -webkit-line-clamp: 3; /* number of lines to show */
-                  line-clamp: 3; 
-        }
-      }
-    }
+
+  .icone-usuario {
+    width: 30px;
   }
 </style>

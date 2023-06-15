@@ -1,55 +1,41 @@
 <template>
   <section class="destaques ghp">
     <header>
-      <h1 class="dark-title">DESTAQUES</h1>
+      <h1 class="dark-title my-4">DESTAQUES</h1>
     </header>
     <main>
+		<Spinner
+		spinnerColorClass="text-dark"
+		v-if="loadingContent"
+		/>
       <DestaquesCarousel
-        :carousel-data="dummyCarouselData"
+        :carousel-data="eventoStore.ultimosEventos"
       />
     </main>
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { useEventoStore } from '../../stores/eventos/store';
+import Spinner from '../general/Spinner.vue';
 import DestaquesCarousel from './DestaquesCarousel.vue';
+const eventoStore = useEventoStore()
+const loadingContent = ref(false)
 
-const dummyCarouselData = reactive([
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 1
-  },
-  
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO 2',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 2
-  },
-  
-  {
-    img: '/eventos/event_img.png',
-    eventName: 'NOME DO EVENTO 3',
-    eventDate: '01/01/2022',
-    eventLocation: 'R.LOREM IPSUM DOLOR SIT, 2000',
-    detailLink: '#',
-    eventId: 3
-  }
-])
+onMounted(async() => {
+	loadingContent.value = true
+	await eventoStore.getLastEvents()
+	loadingContent.value = false
+})
 </script>
 
 <style scoped lang="scss">
   section.destaques {
-    background-color: #f6f6f6;
+    
     h1 {
-      font-size: 1.5rem;
+	  font-weight: 600;
+      font-size: 2rem;
     }
     padding-top: 50px !important;
     padding-bottom: 50px !important;

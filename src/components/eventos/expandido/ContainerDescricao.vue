@@ -1,21 +1,15 @@
 <template>
   <section id="descricao-evento" class="ghp">
-    <header class="mt-5">
-      <h1 class="dark-title">DESCRIÇÃO DO EVENTO</h1>
-    </header>
     <main>
-      <article class="dark-body-text">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, qui! Placeat veniam neque provident illo similique vero quod dolores. Maxime accusantium eveniet accusamus. Minus ut inventore, dolor commodi amet provident.
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusantium iste illum mollitia, vitae nemo animi earum sint nam rerum adipisci voluptatibus, odio ex tempore pariatur qui minima autem dolor. Possimus.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, quam eum dolorum, quod cumque quibusdam nulla dolorem in laborum consequatur porro commodi ex esse praesentium a nam officia incidunt aut!
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quas facilis amet doloribus id enim, velit, deserunt quasi deleniti pariatur nam exercitationem earum fugiat aliquam architecto tempora maiores, recusandae magni.
+      <article>
+       {{descricaoEvento}}
       </article>
     </main>
     <footer class="mb-5">
       <GeneralBtn
-        btnText="ACESSAR LINK DO EVENTO"
-        :isExternalLink="true"
-        link="#"
+        btnText="ACESSAR LINK"
+        :isExternalLink="linkEvento !== null"
+        :link="linkEvento!"
         bgColor="#48947d"
         width="250px"
         textColor="#fff"
@@ -29,6 +23,11 @@
 
 <script setup lang="ts">
 import GeneralBtn from '../../buttons/GeneralBtn.vue';
+
+const props = defineProps<{
+	descricaoEvento: string,
+	linkEvento: string | null
+}>()
 </script>
 
 <style scoped lang="scss">
@@ -39,7 +38,9 @@ import GeneralBtn from '../../buttons/GeneralBtn.vue';
     align-items: center;
     justify-content: space-between;
     main > article {
+	margin: 1.8rem 0;
       font-size: 1rem;
+	  font-weight: 400;
       text-align: justify;
     }
   }

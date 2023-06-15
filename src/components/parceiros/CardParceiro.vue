@@ -1,19 +1,15 @@
 <template>
-  <div class="card-parceiro" @click="$router.push({ name: 'ParceiroExpandido', params: { parceiroId: cardParceiro.parceiroId }})">
-    <img v-if="cardParceiro.hasLogo" :src="cardParceiro.logo" :alt="cardParceiro.logoAlt">
-    <span v-else>{{ cardParceiro.parceiroId }}</span>
+  <div class="card-parceiro" @click="$router.push({ name: 'ParceiroExpandido', params: { parceiroId: cardParceiro.id }})">
+    <img :src="cardParceiro.logo ? cardParceiro.logo : ''" alt="Logo do parceiro">
   </div>
 </template>
 
 <script setup lang="ts">
+import { IPartnerSimplificado } from '../../stores/parceiros/types';
+
 
 const props = defineProps<{
-  cardParceiro: {
-    hasLogo: boolean
-    logo: string
-    logoAlt: string
-    parceiroId: number
-  }
+  cardParceiro: IPartnerSimplificado
 }>()
 
 </script>

@@ -1,33 +1,59 @@
 <template>
-  <div class="card-evento boring-gray-border">
+  <div class="card-evento">
     <div class="img-container">
-      <img :src="image" alt="event-image" v-if="hasImage">
-      <span v-else class="dark-body-text">{{ nomeEvento }}</span>
+      <img :src="
+		evento.arquivo
+		? 'data:image/png;base64, ' + evento.arquivo
+		: '/eventos/eventoExpandido/default-event-cover.svg'
+	 
+	 " alt='Imagem do evento' :class="{ 'img-evento-encerrado' : encerrado}">
+      
     </div>
     <div class="infos-container">
-      <h1 class="dark-title">{{ nomeEvento }}</h1>
-      <time class="dark-body-text">{{ dataEvento }}</time>
-      <address class="dark-body-text">{{ enderecoEvento }}</address>
+      <h1 class="dark-title" :class="{ 'texto-evento-encerrado' : encerrado}">{{ encerrado ? evento.titulo + ' (ENCERRADO)' : evento.titulo }}</h1>
+      <time class="data-evento">{{ brDateString(evento.dataInicio) }} - {{ brDateString(evento.dataTermino) }}</time>
+      <address class="endereco-evento">{{ evento.local }}</address>
+
+	  <a href="#" class="ver-detalhes" @click="$router.push({name: 'EventoExpandido', params: {eventoId: evento.id}})">Ver detalhes</a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { brDateString } from '../../utils/formatacao/datetime';
+import { IEventoSimplificado } from '../../stores/eventos/types';
+
   const props = defineProps<{
-    hasImage: boolean
-    image: string
-    nomeEvento: string
-    dataEvento: string
-    enderecoEvento: string
+   evento: IEventoSimplificado
   }>()
+
+  const encerrado = ref(false)
+
+
+  onMounted(() => {
+	// verifica se o evento já foi encerrado
+	if(new Date(props.evento.dataTermino) < new Date()){
+		encerrado.value = true	
+	}
+  })
 </script>
 
 <style scoped lang="scss">
+	.img-evento-encerrado{
+		opacity: 0.5;
+	}
+
+	.texto-evento-encerrado{
+		color: #6B6A64;
+	}
   .card-evento {
     display: flex;
     flex-direction: column;
     width: 300px;
     height: 400px;
+	border-radius: 10px;
+	background-color: #fff;
     .dark-body-text {
       font-size: 1rem;
     }
@@ -38,6 +64,9 @@
       align-items: center;
       img {
         width: -webkit-fill-available;
+		height: -webkit-fill-available;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
       }
     }
     .infos-container {
@@ -46,7 +75,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      height: 35%;
+      height: 50%;
       padding: 10px;
 
       h1 {
@@ -55,7 +84,25 @@
         text-overflow: ellipsis;
         width: 100%;
         text-align: start;
+		font-weight: 600;
+		font-size: 1.2rem;
       }
+
+	  .data-evento{
+		font-weight: 500;
+	  }
+
+	  .endereco-evento{
+		font-weight: 400;
+	  }
+
+	  .ver-detalhes{
+		color: #1E1E1E;
+		font-weight: 500;
+		font-size: 0.8rem;
+		align-self: center;
+		margin: 0.3rem;
+	  }
 
       time, address {
         background-repeat: no-repeat;
@@ -65,10 +112,10 @@
         margin: 5px 0;
       }
       time {
-        background-image: url('/eventos/calendar_icon.png')
+        background-image: url('/public/calendar_icon.svg')
       }
       address {
-        background-image: url('/eventos/pin_icon.png')
+        background-image: url('/public/location_icon.svg')
       }
     }
   }

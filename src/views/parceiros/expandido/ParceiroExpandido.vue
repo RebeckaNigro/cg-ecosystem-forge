@@ -1,7 +1,4 @@
 <template>
-    <NavBar 
-      :is-transparent="false"
-    />
     <Banner
       :path="parceiroSelecionado.coverPath"
       figcaption="graphs"
@@ -30,7 +27,6 @@
       :website="parceiroSelecionado.website"
       :endereco="parceiroSelecionado.endereco"
     />
-    <FooterComponent />
 </template>
 
 <script setup lang="ts">
