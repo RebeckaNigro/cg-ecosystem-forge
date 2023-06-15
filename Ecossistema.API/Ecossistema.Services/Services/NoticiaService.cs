@@ -413,13 +413,15 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin)
+        public async Task<RespostaPadrao> ListarPorUsuarioId(string idLogin, int paginacao)
         {
             var resposta = new RespostaPadrao();
             try
             {
                 var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 var query = await _unitOfWork.Noticias.FindAllAsync(x => x.UsuarioCriacaoId == usuario.Id && x.Ativo && x.Aprovado);
+                var fim = paginacao * 6;
+                var inicio = fim - 6;
                 var result = (await BuscarTagsArquivos(query)).Select(x => new
                 {
                     x.Id,
@@ -430,14 +432,23 @@ namespace Ecossistema.Services.Services
                     x.Arquivo
                 })
                 .Distinct()
+                .Skip(inicio)
+                .Take(6)
                 .OrderByDescending(x => x.DataPublicacao)
                 .ToList();
        
-                if (result == null)
+                if (result.Count == 0 && inicio == 0)
                 {
                     resposta.SetNaoEncontrado("Você não tem notícias cadastradas");
                     return resposta;
                 }
+                else
+                    if(result.Count == 0 && inicio > 0)
+                    {
+                        resposta.SetNaoEncontrado("Página sem notícias cadastradas");
+                        return resposta;
+                    }
+
                 resposta.Retorno = result;
 
             }
