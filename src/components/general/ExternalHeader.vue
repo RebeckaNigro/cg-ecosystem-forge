@@ -39,7 +39,7 @@ const props = defineProps<{
 	p {
 		font-size: 1.5rem;
 		font-weight: 500;
-		max-width: 520px;
+		max-width: 550px;
 		width: 100%;
 		text-align: start;
 		margin-bottom: 0;
@@ -121,6 +121,7 @@ const props = defineProps<{
 		p {
 			font-size: 1.1rem;
 			text-align: start;
+			line-height: 32px;
 		}
 
 	}

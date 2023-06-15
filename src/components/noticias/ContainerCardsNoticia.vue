@@ -1,9 +1,10 @@
 <template>
-  <div class="noticias-content ghp">
-    <div v-if="!loadingNews" class="card-noticia-container dark-body-text">
-      <nav
+  <div class="mt-5 container">
+    <div v-if="!loadingNews" class="row my-4 mx-auto dark-body-text">
+      <div
         v-for="(container, containerIndex) in noticias"
         :key="containerIndex"
+		class="col mb-4"
       >
         <div class="card-noticia">
           <CardNoticia
@@ -17,7 +18,7 @@
             "
           />
         </div>
-      </nav>
+      </div>
     </div>
 	<Spinner v-else :spinner-color-class="'text-dark'" />
     
@@ -68,31 +69,5 @@
 </script>
 
 <style scoped lang="scss">
-  .noticias-content {
-    width: 100%;
-    margin: 0 auto;
-    margin-top: 48px;
-  }
 
-  .card-noticia-container {
-    width: 100%;
-    display: grid;
-    margin: 1rem auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 48px 32px;
-
-    .card-notitcia {
-      width: 200px;
-    }
-
-    @media (max-width: 1300px) {
-      max-width: 520px;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (max-width: 580px) {
-      max-width: 280px;
-      grid-template-columns: 1fr;
-    }
-  }
 </style>

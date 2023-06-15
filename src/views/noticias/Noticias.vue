@@ -1,32 +1,12 @@
 <template>
-  <section class="container-fluid">
-    <main>
-      <Banner
-        path="/noticias/banner.png"
-        figcaption="workspace_image"
-        img-alt="workspace_image"
-      >
-        <div class="banner-noticia-content ghp">
-          <div>
-            <h1 class="dark-title">NOTÍCIAS</h1>
-            <p class="fs-5">
-              Confira as principais notícias do Ecossistema Local de Inovação -
-              Campo Grande - MS
-            </p>
-          </div>
-        </div>
-      </Banner>
+	<section class="mb-5">
+		<Banner path="/noticias/banner.png" figcaption="workspace_image" img-alt="workspace_image">
+			<ExternalHeader title="Notícias" subtitle="" paragraph="Confira as principais notícias do Ecossistema Local de Inovação -
+				Campo Grande - MS" />
+		</Banner>
 
       <div class="container mt-5">
         <div class="filters row justify-content-end align-items-end">
-          <!--<div class="filtrar-area col">
-            <FilterComponent content-type="área" :datas="[]" class="mx-4" />
-          </div>
-
-          <div class="filtrar-organizador col">
-            <FilterComponent content-type="organizador" :datas="[]" class="mx-4" />
-
-          </div>-->
           <div class="pesquisar col">
             <input
               type="text"
@@ -67,7 +47,6 @@
         <ContainerUltimasNoticias />
         <ContainerCardsNoticia />
       </div>
-    </main>
   </section>
 </template>
 
@@ -79,6 +58,7 @@
   import { useNoticiaStore } from "../../stores/noticias/store"
   import { INoticiaSimplificada } from "../../stores/noticias/types"
   import CardNoticia from "../../components/noticias/CardNoticia.vue"
+  import ExternalHeader from "../../components/general/ExternalHeader.vue"
 
   const noticiaStore = useNoticiaStore()
   const searchResults = ref<Array<INoticiaSimplificada>>()
@@ -104,10 +84,6 @@
 </script>
 
 <style scoped lang="scss">
-  section.container-fluid {
-    padding: 0;
-    margin-bottom: 40px;
-    overflow: hidden;
 
     .filtrar-area,
     .filtrar-organizador {
@@ -176,7 +152,7 @@
         grid-template-columns: 1fr;
       }
     }
-  }
+  
 
   .banner-noticia-content {
     position: absolute;
