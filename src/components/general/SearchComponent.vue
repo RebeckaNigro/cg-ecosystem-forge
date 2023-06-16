@@ -28,11 +28,12 @@ const props = defineProps({
 const emit = defineEmits(["search-result"])
 const results = ref([])
 const searchWord = ref("")
+let emptyInput = false
 
 const search = () => {
 	if (!searchWord.value) {
 		results.value = props.items
-
+		emptyInput = true
 		sendSearchResult()
 		return
 	}
@@ -131,7 +132,7 @@ const search = () => {
 }
 
 const sendSearchResult = () => {
-	emit("search-result", results.value)
+	emit("search-result", results.value, emptyInput)
 }
 
 onMounted(() => { })
