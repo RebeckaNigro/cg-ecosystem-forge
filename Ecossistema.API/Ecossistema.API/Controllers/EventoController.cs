@@ -90,12 +90,12 @@ namespace Ecossistema.API.Controllers
 
         [Authorize(Roles = "UsuarioComum")]
         [HttpGet("listarPorUsuarioId")]
-        public async Task<RespostaPadrao> ListarPorUsuarioId()
+        public async Task<RespostaPadrao> ListarPorUsuarioId(int paginacao)
         {
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
             var listagem = "id";
-            return await _eventoService.ListarEventos(listagem, idLogin, 0);
+            return await _eventoService.ListarEventos(listagem, idLogin, paginacao);
         }
 
         [HttpGet("detalhes")]
