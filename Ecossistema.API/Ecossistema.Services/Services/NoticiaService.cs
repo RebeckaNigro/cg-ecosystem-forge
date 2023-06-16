@@ -301,6 +301,10 @@ namespace Ecossistema.Services.Services
             foreach (var item in query)
             {
                 var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.NoticiaId == item.Id);
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.Id == item.UsuarioCriacaoId);
+                var pessoa = _unitOfWork.Pessoas.FindAll(x => x.Id == usuario.PessoaId)
+                                .Select(x => new { x.NomeCompleto })
+                                .FirstOrDefault();
 
                 NoticiaListaDto noticia = new NoticiaListaDto();
                 noticia.Id = item.Id;
@@ -308,6 +312,7 @@ namespace Ecossistema.Services.Services
                 noticia.DataPublicacao = item.DataPublicacao;
                 noticia.DataOperacao = item.DataOperacao;
                 noticia.Tags = new List<TagDto>();
+                noticia.NomeUsuario = pessoa.NomeCompleto;
                 foreach (var x in tagsItens)
                 {
                     Tag tag = new Tag();
@@ -337,6 +342,7 @@ namespace Ecossistema.Services.Services
             {
                 x.Id,
                 x.Titulo,
+                x.NomeUsuario,
                 x.DataPublicacao,
                 x.DataOperacao,
                 x.Tags,
@@ -346,7 +352,10 @@ namespace Ecossistema.Services.Services
             .OrderByDescending(x => x.DataPublicacao)
             .Take(3)
             .ToList();
-
+            if (result.Count == 0)
+            {
+                resposta.SetNaoEncontrado("Nenhuma notícia encontrada");
+            }
             resposta.Retorno = result;
 
             return resposta;
@@ -364,6 +373,7 @@ namespace Ecossistema.Services.Services
             {
                 x.Id,
                 x.Titulo,
+                x.NomeUsuario,
                 x.DataPublicacao,
                 x.DataOperacao,
                 x.Tags,
@@ -393,6 +403,7 @@ namespace Ecossistema.Services.Services
             {
                 x.Id,
                 x.Titulo,
+                x.NomeUsuario,
                 x.DataPublicacao,
                 x.DataOperacao,
                 x.Tags,
@@ -407,7 +418,7 @@ namespace Ecossistema.Services.Services
             resposta.Retorno = result;
             if (result.Count == 0)
             {
-                resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                resposta.SetNaoEncontrado("Nenhuma notícia encontrada");
             }
 
             return resposta;
@@ -426,6 +437,7 @@ namespace Ecossistema.Services.Services
                 {
                     x.Id,
                     x.Titulo,
+                    x.NomeUsuario,
                     x.DataPublicacao,
                     x.DataOperacao,
                     x.Tags,
