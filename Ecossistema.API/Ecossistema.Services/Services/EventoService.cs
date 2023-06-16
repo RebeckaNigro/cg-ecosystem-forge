@@ -424,7 +424,7 @@ namespace Ecossistema.Services.Services
             .Distinct()
             .Skip(inicio)
             .Take(6)
-            .OrderByDescending(x => x.id)
+            .OrderByDescending(x => x.dataInicio)
             .ToList();
                 resposta.Retorno = result;
                 if(result.Count == 0)
@@ -489,9 +489,9 @@ namespace Ecossistema.Services.Services
 
                 }).Where(x => x.usuarioId == id).ToList()
             .Distinct()
+            .OrderByDescending(x => x.dataInicio)
             .Skip(inicio)
             .Take(6)
-            .OrderByDescending(x => x.dataInicio)
             .ToList();
                 if (result.Count == 0)
                     resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
