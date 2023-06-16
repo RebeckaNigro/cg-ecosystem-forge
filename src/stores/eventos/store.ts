@@ -62,16 +62,15 @@ export const useEventoStore = defineStore("eventoStore", {
       return false
     },
 
-    async getUserEvents() {
+    async getUserEvents(page: number) {
       try {
-        const response = await httpRequest.get("/api/evento/listarPorUsuarioId")
+        const response = await httpRequest.get(`/api/evento/listarPorUsuarioId?paginacao=${page}`)
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.retorno,
             response.data.resposta
           )
-          this.eventosUsuarioLogado = []
           for (const event of response.data.retorno) {
             this.eventosUsuarioLogado.push(event)
           }
