@@ -6,10 +6,15 @@
 		</Banner>
 
 		<div class="container mt-5">
-			<div class="row justify-content-end align-items-end">
+			<div class="row justify-content-between align-items-end">
+				<div class="col-3">
+					<FilterComponent :items="noticiaStore.allNews" type="noticiaExterna" @filter-result="filtrarNoticias" />
+				</div>
 				<div class="col-3">
 					<SearchComponent :items="noticiaStore.allNews" type="noticia" @search-result="filtrarNoticias" />
 				</div>
+
+				
 
 			</div>
 		</div>
@@ -42,6 +47,7 @@ import { INoticiaSimplificada } from "../../stores/noticias/types"
 import CardNoticia from "../../components/noticias/CardNoticia.vue"
 import ExternalHeader from "../../components/general/ExternalHeader.vue"
 import SearchComponent from "../../components/general/SearchComponent.vue"
+import FilterComponent from "../../components/general/FilterComponent.vue"
 
 const noticiaStore = useNoticiaStore()
 const searchResults = ref<Array<INoticiaSimplificada>>()

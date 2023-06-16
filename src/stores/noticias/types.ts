@@ -44,6 +44,7 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
   dataPublicacao!: string
   dataOperacao!: string
   arquivo: string
+  nomeUsuario: string
 
   constructor(
     id: number,
@@ -51,7 +52,8 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
     tags: CustomTag[],
     dataOperacao: string,
     dataPublicacao: string,
-    arquivo: string
+    arquivo: string,
+	nomeUsuario: string
   ) {
     this.id = id
     this.titulo = titulo
@@ -59,6 +61,7 @@ export class NoticiaSimplificada implements INoticiaSimplificada {
     this.dataOperacao = dataOperacao
     this.dataPublicacao = dataPublicacao
     this.arquivo = arquivo
+	this.nomeUsuario = nomeUsuario
   }
 }
 
@@ -77,4 +80,5 @@ export interface INoticiaSimplificada {
   dataPublicacao: string
   dataOperacao: string
   arquivo: string
+  nomeUsuario: string
 }

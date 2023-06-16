@@ -68,7 +68,10 @@ import { IPartnerSeccionado } from "../../stores/parceiros/types"
 		menuOptions.value.push(new FilterOption('Governo', 'governo'))
 		menuOptions.value.push(new FilterOption('Sociedade organizada', 'sociedade organizada'))
 		break
-			
+	 case 'noticiaExterna':
+		for(const item of props.items){
+			console.log(item.autor);
+		}	
     }
   })
 
