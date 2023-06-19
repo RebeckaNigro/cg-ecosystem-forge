@@ -25,7 +25,7 @@ namespace Ecossistema.Services.Services
             _enderecoService = enderecoService;
         }
 
-        public async Task<RespostaPadrao> Incluir(InstituicaoDto dado, int usuarioId)
+        public async Task<RespostaPadrao> Incluir(InstituicaoDto dado, string idLogin)
         {
             var resposta = new RespostaPadrao();
 
@@ -33,6 +33,7 @@ namespace Ecossistema.Services.Services
 
             try
             {
+                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
                 #region Instituição
 
                 var obj = new Instituicao(dado.RazaoSocial,
@@ -45,7 +46,7 @@ namespace Ecossistema.Services.Services
                                           dado.Missao,
                                           dado.Visao,
                                           dado.Valores,
-                                          usuarioId,
+                                          usuario.Id,
                                           DateTime.Now);
 
                 await _unitOfWork.Instituicoes.AddAsync(obj);

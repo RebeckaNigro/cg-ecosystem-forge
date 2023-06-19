@@ -1,5 +1,6 @@
 ﻿using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecossistema.API.Controllers
@@ -30,11 +31,13 @@ namespace Ecossistema.API.Controllers
         {
             _instituicaoService = instituicaoService;
         }
-
+        [Authorize(Roles = UserRolesDto.AdminGeral)]
         [HttpPost("incluir")]
         public async Task<RespostaPadrao> Incluir([FromBody] InstituicaoDto obj)
         {
-            return await _instituicaoService.Incluir(obj, UsuarioId);
+            var token = Request.Headers["Authorization"];
+            var idLogin = User.Claims.FirstOrDefault().Value;
+            return await _instituicaoService.Incluir(obj, idLogin);
         }
 
         [HttpPut("editar")]
