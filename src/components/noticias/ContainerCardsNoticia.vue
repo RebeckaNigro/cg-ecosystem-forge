@@ -6,18 +6,18 @@
         :key="containerIndex"
 		class="col mb-4"
       >
-        <div class="card-noticia">
-          <CardNoticia
-            :is-relacionada="false"
-            :noticia="container"
-            @click="
-              $router.push({
-                name: 'NoticiaExpandida',
-                params: { noticiaId: container.id }
-              })
-            "
-          />
-        </div>
+       
+		<CardNoticia
+			:is-relacionada="false"
+			:noticia="container"
+			@click="
+				$router.push({
+				name: 'NoticiaExpandida',
+				params: { noticiaId: container.id }
+				})
+			"
+		/>
+       
       </div>
     </div>
 	<Spinner v-else :spinner-color-class="'text-dark'" />

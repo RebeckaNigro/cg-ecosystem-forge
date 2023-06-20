@@ -7,14 +7,18 @@
 
 		<div class="container mt-5">
 			<div class="row justify-content-between align-items-end">
-				<div class="col-3">
-					<FilterComponent :items="noticiaStore.allNews" type="noticiaExterna" @filter-result="filtrarNoticias" />
+				<div class="col-sm-12 col-md-4 col-lg-3 mb-4 mb-md-0">
+					<!-- <FilterComponent 
+						:items="noticiaStore.allNews" 
+						type="noticiaExterna" 
+						field="autor"
+						@filter-result="filtrarNoticias" /> -->
 				</div>
-				<div class="col-3">
+				<div class="col-sm-12 col-md-4 col-lg-3">
 					<SearchComponent :items="noticiaStore.allNews" type="noticia" @search-result="filtrarNoticias" />
 				</div>
 
-				
+		
 
 			</div>
 		</div>
@@ -64,56 +68,6 @@ const filtrarNoticias = (noticiasFiltradas: INoticiaSimplificada[], inputVazio: 
 </script>
 
 <style scoped lang="scss">
-.filtrar-area,
-.filtrar-organizador {
-	max-width: 300px;
-}
-
-.filters {
-	margin: 0 auto;
-}
-
-.pesquisar {
-	max-width: 400px;
-
-	#pesquisar {
-		border-radius: 40px 0px 0px 40px;
-		border: 1px solid #6b6a64;
-		border-right: unset;
-		padding: 0.35rem 0.7rem 0.52rem 0.7rem;
-		width: 300px;
-
-		@media (max-width: 1000px) {
-			width: 200px;
-		}
-	}
-
-	#btn-pesquisar {
-		border: 1px solid #6b6a64;
-
-		border-radius: 0 40px 40px 0;
-		background-color: #fff;
-		height: 100%;
-
-		img {
-			max-width: 26px;
-		}
-	}
-
-	#pesquisar:focus {
-		border-color: #86b7fe;
-		outline: 0;
-		box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-	}
-
-	@media (max-width: 1000px) {
-		margin: 0 auto;
-	}
-
-	@media (max-width: 580px) {
-		margin-top: 1.5rem;
-	}
-}
 
 .search-results-container {
 	width: 100%;
@@ -134,103 +88,4 @@ const filtrarNoticias = (noticiasFiltradas: INoticiaSimplificada[], inputVazio: 
 }
 
 
-.banner-noticia-content {
-	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	padding-left: 64px;
-
-	display: flex;
-	align-items: center;
-
-	.dark-title {
-		font-size: 2rem;
-	}
-
-	>img {
-		width: 10%;
-		min-width: 60px;
-		max-width: 128px;
-		margin-right: 24px;
-	}
-
-	>div {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		width: 100%;
-		max-width: 500px;
-
-		p {
-			font-weight: 500;
-			text-align: start;
-			max-height: 100px;
-			height: 100%;
-			overflow-y: auto;
-		}
-	}
-}
-
-@media (max-width: 1200px) {
-	.banner-noticia-content {
-		.dark-title {
-			font-size: 2rem;
-		}
-
-		.dark-body-text {
-			font-size: 0.8rem;
-		}
-	}
-}
-
-@media (max-width: 991px) {
-	.banner-noticia-content {
-		.dark-title {
-			margin-bottom: 0;
-			font-size: 1.5rem;
-		}
-
-		>div {
-			max-width: 300px;
-
-			p {
-				max-height: 60px;
-				margin-bottom: 0;
-			}
-		}
-	}
-}
-
-@media (max-width: 768px) {
-	.banner-noticia-content {
-		.dark-title {
-			font-size: 1rem;
-		}
-
-		>div {
-			max-width: 200px;
-
-			p {
-				max-height: 40px;
-			}
-		}
-
-		.dark-body-text {
-			font-size: 0.7rem;
-		}
-	}
-}
-
-@media (max-width: 576px) {
-	.banner-noticia-content {
-		.dark-title {
-			font-size: 0.8rem;
-		}
-
-		.dark-body-text {
-			font-size: 0.8rem;
-		}
-	}
-}
 </style>
