@@ -347,155 +347,164 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao)
         {
             var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
+            try
+            {
+                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
 
-            var id = 0;
+                var id = 0;
 
-            if (idLogin != null)
-            {
-                var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
-                id = usuario.Id;
-            }
-
-            List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
-            //evento.Add(new EventoGetImagenDto());
-            foreach (var item in query)
-            {
-                //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
-                //var temp = arquivoDto[cont].Arquivo;
-                //item.Arquivo = temp;
-                evento.Add(new EventoGetImagenDto());
-                evento[evento.Count - 1].Id = item.Id;
-                evento[evento.Count - 1].Titulo = item.Titulo;
-                evento[evento.Count - 1].DataInicio = item.DataInicio;
-                evento[evento.Count - 1].DataTermino = item.DataTermino;
-                evento[evento.Count - 1].Local = item.Local;
-                evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
-                var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
-                evento[evento.Count - 1].DataOperacao = item.DataOperacao;
-                evento[evento.Count - 1].Tags = new List<TagDto>();
-                var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.EventoId == item.Id);
-                if(tagsItens != null)
+                if (idLogin != null)
                 {
-                    foreach (var x in tagsItens)
-                    {
-                        Tag tag = new Tag();
-                        TagDto tagDto = new TagDto();
-                        tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
-                        tagDto.Descricao = tag.Descricao;
-                        evento[evento.Count - 1].Tags.Add(tagDto);
-                    }
+                    var usuario = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == idLogin);
+                    id = usuario.Id;
                 }
-                
-                if (temp.Count > 0)
+
+                List<EventoGetImagenDto> evento = new List<EventoGetImagenDto>();
+                //evento.Add(new EventoGetImagenDto());
+                foreach (var item in query)
                 {
-                    evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
-                    if (evento[evento.Count - 1].Arquivo != null)
+                    //arquivoDto = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                    //var temp = arquivoDto[cont].Arquivo;
+                    //item.Arquivo = temp;
+                    evento.Add(new EventoGetImagenDto());
+                    evento[evento.Count - 1].Id = item.Id;
+                    evento[evento.Count - 1].Titulo = item.Titulo;
+                    evento[evento.Count - 1].DataInicio = item.DataInicio;
+                    evento[evento.Count - 1].DataTermino = item.DataTermino;
+                    evento[evento.Count - 1].Local = item.Local;
+                    evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
+                    var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
+                    evento[evento.Count - 1].DataOperacao = item.DataOperacao;
+                    evento[evento.Count - 1].Tags = new List<TagDto>();
+                    var tagsItens = _unitOfWork.TagsItens.FindAll(x => x.EventoId == item.Id);
+                    if (tagsItens != null)
                     {
-                        var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
-                        if (aux != null)
-                            evento[evento.Count - 1].LinkImagem = aux.ToString();
+                        foreach (var x in tagsItens)
+                        {
+                            Tag tag = new Tag();
+                            TagDto tagDto = new TagDto();
+                            tag = await _unitOfWork.Tags.FindAsync(y => y.Id == x.TagId);
+                            tagDto.Descricao = tag.Descricao;
+                            evento[evento.Count - 1].Tags.Add(tagDto);
+                        }
                     }
 
-                    //
+                    if (temp.Count > 0)
+                    {
+                        evento[evento.Count - 1].Arquivo = temp[temp.Count - 1].Arquivo;
+                        if (evento[evento.Count - 1].Arquivo != null)
+                        {
+                            var aux = await _arquivoService.DownloadArquivo(item.Id, item.Titulo, EOrigem.Evento);
+                            if (aux != null)
+                                evento[evento.Count - 1].LinkImagem = aux.ToString();
+                        }
+
+                        //
+                    }
+                    else
+                        evento[evento.Count - 1].Arquivo = null;
                 }
-                else
-                    evento[evento.Count - 1].Arquivo = null;
-            }
-            var fim = paginacao * 6;
-            var inicio = fim - 6;
-            if (listagem == "todos")
-            {
-                var result = evento.Select(x => new
+                var fim = paginacao * 6;
+                var inicio = fim - 6;
+                if (listagem == "todos")
                 {
-                    id = x.Id,
-                    titulo = x.Titulo,
-                    dataInicio = x.DataInicio,
-                    dataTermino = x.DataTermino,
-                    local = x.Local,
-                    arquivo = x.Arquivo,
-                    link = x.LinkImagem,
-                    tags = x.Tags,
-                    ultimaAtualizacao = x.DataOperacao
+                    var result = evento.Select(x => new
+                    {
+                        id = x.Id,
+                        titulo = x.Titulo,
+                        dataInicio = x.DataInicio,
+                        dataTermino = x.DataTermino,
+                        local = x.Local,
+                        arquivo = x.Arquivo,
+                        link = x.LinkImagem,
+                        tags = x.Tags,
+                        ultimaAtualizacao = x.DataOperacao
 
-                })
-            .Distinct()
-            .Skip(inicio)
-            .Take(6)
-            .OrderByDescending(x => x.dataInicio)
-            .ToList();
-                resposta.Retorno = result;
-                if(result.Count == 0)
-                {
-                    resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                    })
+                .Distinct()
+                .Skip(inicio)
+                .Take(6)
+                .OrderByDescending(x => x.dataInicio)
+                .ToList();
+                    resposta.Retorno = result;
+                    if (result.Count == 0)
+                    {
+                        resposta.SetNaoEncontrado("Nenhum evento encontrado");
+                    }
                 }
-            }
-            else if (listagem == "ultimos")
-            {
-                var result = evento.Select(x => new
+                else if (listagem == "ultimos")
                 {
-                    id = x.Id,
-                    titulo = x.Titulo,
-                    dataInicio = x.DataInicio,
-                    dataTermino = x.DataTermino,
-                    local = x.Local,
-                    arquivo = x.Arquivo,
-                    tags = x.Tags,
-                    ultimaAtualizacao = x.DataOperacao
+                    var result = evento.Select(x => new
+                    {
+                        id = x.Id,
+                        titulo = x.Titulo,
+                        dataInicio = x.DataInicio,
+                        dataTermino = x.DataTermino,
+                        local = x.Local,
+                        arquivo = x.Arquivo,
+                        tags = x.Tags,
+                        ultimaAtualizacao = x.DataOperacao
 
-                })
-            .Distinct()
-            .OrderByDescending(x => x.dataInicio)
-            .Take(3)
-            .ToList();
-                resposta.Retorno = result;
-            }
-            else if (listagem == "ultimosPorUsuarioId")
-            {
-                var result = evento.Select(x => new
+                    })
+                .Distinct()
+                .OrderByDescending(x => x.dataInicio)
+                .Take(3)
+                .ToList();
+                    resposta.Retorno = result;
+                }
+                else if (listagem == "ultimosPorUsuarioId")
                 {
-                    id = x.Id,
-                    titulo = x.Titulo,
-                    dataInicio = x.DataInicio,
-                    dataTermino = x.DataTermino,
-                    local = x.Local,
-                    arquivo = x.Arquivo,
-                    tags = x.Tags,
-                    usuarioId = x.UsuarioId,
-                    ultimaAtualizacao = x.DataOperacao
+                    var result = evento.Select(x => new
+                    {
+                        id = x.Id,
+                        titulo = x.Titulo,
+                        dataInicio = x.DataInicio,
+                        dataTermino = x.DataTermino,
+                        local = x.Local,
+                        arquivo = x.Arquivo,
+                        tags = x.Tags,
+                        usuarioId = x.UsuarioId,
+                        ultimaAtualizacao = x.DataOperacao
 
-                }).Where(x => x.usuarioId == id)
-            .Distinct()
-            .OrderByDescending(x => x.dataInicio)
-            .Take(3)
-            .ToList();
-                resposta.Retorno = result;
-            }
-            else if (listagem == "id" && id != 0)
-            {
-                var result = evento.Select(x => new
+                    }).Where(x => x.usuarioId == id)
+                .Distinct()
+                .OrderByDescending(x => x.dataInicio)
+                .Take(3)
+                .ToList();
+                    resposta.Retorno = result;
+                }
+                else if (listagem == "id" && id != 0)
                 {
-                    id = x.Id,
-                    titulo = x.Titulo,
-                    dataInicio = x.DataInicio,
-                    dataTermino = x.DataTermino,
-                    local = x.Local,
-                    arquivo = x.Arquivo,
-                    tags = x.Tags,
-                    usuarioId = x.UsuarioId,
-                    ultimaAtualizacao = x.DataOperacao
+                    var result = evento.Select(x => new
+                    {
+                        id = x.Id,
+                        titulo = x.Titulo,
+                        dataInicio = x.DataInicio,
+                        dataTermino = x.DataTermino,
+                        local = x.Local,
+                        arquivo = x.Arquivo,
+                        tags = x.Tags,
+                        usuarioId = x.UsuarioId,
+                        ultimaAtualizacao = x.DataOperacao
 
-                }).Where(x => x.usuarioId == id).ToList()
-            .Distinct()
-            .OrderByDescending(x => x.dataInicio)
-            .Skip(inicio)
-            .Take(6)
-            .ToList();
-                if (result.Count == 0)
-                    resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
-                resposta.Retorno = result;
+                    }).Where(x => x.usuarioId == id).ToList()
+                .Distinct()
+                .OrderByDescending(x => x.dataInicio)
+                .Skip(inicio)
+                .Take(6)
+                .ToList();
+                    if (result.Count == 0)
+                        resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
+                    resposta.Retorno = result;
+                }
+            
+            }
+            catch(Exception ex)
+            {
+                resposta.SetBadRequest(ex.Message);
+                return resposta;
+
             }
             return resposta;
         }
