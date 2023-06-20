@@ -5,13 +5,11 @@
 				path="/documentos/banner.png"
 				pixels-bg-height="710px"
 			>
-				<div class="banner-documentos-content ghp">
-
-					<div>
-						<h1 class="dark-title">DOCUMENTOS & EDITAIS</h1>
-						<p>Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS</p>
-					</div>
-				</div>
+				<ExternalHeader
+					title="Documentos & editais"
+					paragraph="Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS"
+				/>
+				
 			</Banner>
 
 			<div class="badge bg-success text-wrap fs-6 my-4" style="width: 8rem;">
@@ -60,40 +58,13 @@
 import Banner from '../../components/general/Banner.vue';
 import CardSessao from '../../components/documentos/CardSessao.vue';
 import ContainerDestaques from '../../components/documentos/ContainerDestaques.vue'
+import ExternalHeader from '../../components/general/ExternalHeader.vue';
 
 </script>
 
 <style scoped lang="scss">
 section.container-fluid {
 	padding: 0;
-}
-
-.banner-documentos-content {
-	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 100%;
-
-	display: flex;
-	align-items: center;
-
-
-	> div {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-
-		h1{
-			font-size: 2rem;
-		}
-
-		p {
-			font-weight: 500;
-			text-align: start;
-			font-size: 1.5rem;
-			max-width: 60%;
-		}
-	}
 }
 
 .destaques-content {
@@ -134,11 +105,7 @@ section.container-fluid {
   }
 }
 @media (max-width: 576px) {
-  .banner-documentos-content {
-    img {
-      min-width: 35px;
-    }
-  }
+ 
   .noticias-content {
     > h1 {
       font-size: 1.2rem;
