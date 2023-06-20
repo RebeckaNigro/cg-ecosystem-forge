@@ -1,5 +1,5 @@
 <template>
-	<form action="submit" class="fale-conosco container p-5 box d-flex flex-wrap justify-content-between ">
+	<form action="submit" class="fale-conosco container px-5 pb-5  box d-flex flex-wrap justify-content-between ">
 		
 	<!-- NOME-->
 	<div class="row w-100">
@@ -134,7 +134,7 @@
 	<div class="row w-100">
 
 		<div class="col">
-			<button type="button" class="green-btn-outlined" @click="$router.back()">
+			<button type="button" class="col green-btn-outlined" @click="$router.back()">
 				VOLTAR
 			</button>
 		</div>
@@ -144,7 +144,7 @@
 			  v-if="!sendingEmail"
 			  type="button"
 			  @click="sendEmail()"
-			  class="green-btn-primary"
+			  class="col green-btn-primary"
 			>
 			  ENVIAR
 			</button>
