@@ -7,11 +7,14 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-	title: string
-	subtitle: string
-	paragraph: string
-}>()
+const props = defineProps({
+	title: String,
+	subtitle: {
+		type: String,
+		default: ""
+	},
+	paragraph: String
+})
 </script>
 
 <style scoped lang="scss">

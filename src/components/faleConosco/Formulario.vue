@@ -1,57 +1,62 @@
 <template>
-  <form action="submit" class="fale-conosco ghp box">
+	<form action="submit" class="fale-conosco container p-5 box d-flex flex-wrap justify-content-between ">
+		
 	<!-- NOME-->
-    <div class="nome fs-6">
-      <label  class="form-label-primary" for="name-input">Nome</label>
-      <input
-	  	class="form-input-primary"
-        v-model="contactForm.nome"
-        type="text"
-        name="person-name"
-        id="name-input"
-		:class="v$.nome.$error ? 'is-invalid' : ''"
-      />
-	  <div v-if="v$.nome.$error" class="invalid-feedback">
-          {{ v$.nome.$errors[0].$message }}
-        </div>
-    </div>
+	<div class="row w-100">
+		<div class="col-12">
+		  <label  class="form-label-primary" for="name-input">Nome</label>
+		  <input
+			  class="form-input-primary"
+			v-model="contactForm.nome"
+			type="text"
+			name="person-name"
+			id="name-input"
+			:class="v$.nome.$error ? 'is-invalid' : ''"
+		  />
+		  <div v-if="v$.nome.$error" class="invalid-feedback">
+			  {{ v$.nome.$errors[0].$message }}
+			</div>
+		</div>
+	</div>
 
 	<!--EMAIL E TELEFONE-->
-    <div class="two-columns fs-6">
-      <div class="email">
-        <label for="email-input"  class="form-label-primary">Email corporativo</label>
-        <input
-		class="form-input-primary"
-          v-model="contactForm.emailCorporativo"
-          type="text"
-          name="corporate-email"
-          id="email-input"
-		  :class="v$.emailCorporativo.$error ? 'is-invalid' : ''"
-        />
-		<div v-if="v$.emailCorporativo.$error" class="invalid-feedback">
-          {{ v$.emailCorporativo.$errors[0].$message }}
-        </div>
-      </div>
-      <div class="telefone">
-        <label for="phone"  class="form-label-primary">Telefone</label>
-        <input
-		class="form-input-primary"
-          v-model="contactForm.telefone"
-          type="tel"
-          name="phone"
-          id="phone"
-          maxlength="11"
-          :class="v$.telefone.$error ? 'is-invalid' : ''"
-        />
-		<div v-if="v$.telefone.$error" class="invalid-feedback">
-          {{ v$.telefone.$errors[0].$message }}
-        </div>
-      </div>
-    </div>
+	<div class="row w-100">
+		
+		<div class="col-md-6 col-12">
+			<label for="email-input"  class="form-label-primary">Email corporativo</label>
+			<input
+			class="form-input-primary"
+				v-model="contactForm.emailCorporativo"
+				type="text"
+				name="corporate-email"
+				id="email-input"
+				:class="v$.emailCorporativo.$error ? 'is-invalid' : ''"
+			/>
+			<div v-if="v$.emailCorporativo.$error" class="invalid-feedback">
+				{{ v$.emailCorporativo.$errors[0].$message }}
+			</div>
+		</div>
+		<div class="col-md-6 col-12">
+			<label for="phone"  class="form-label-primary">Telefone</label>
+			<input
+			class="form-input-primary"
+				v-model="contactForm.telefone"
+				type="tel"
+				name="phone"
+				id="phone"
+				maxlength="11"
+				:class="v$.telefone.$error ? 'is-invalid' : ''"
+			/>
+			<div v-if="v$.telefone.$error" class="invalid-feedback">
+				{{ v$.telefone.$errors[0].$message }}
+			</div>
+		</div>
+	
+	</div>
 
 	<!--EMPRESA E CARGO -->
-    <div class="two-columns fs-6">
-      <div class="empresa">
+    <div class="row w-100">
+      <div class="col-md-6 col-12">
         <label class="form-label-primary" for="company-input">Empresa</label>
         <input
 		 class="form-input-primary"
@@ -65,7 +70,7 @@
           {{ v$.empresa.$errors[0].$message }}
         </div>
       </div>
-      <div class="cargo">
+      <div class="col-md-6 col-12">
         <label class="form-label-primary" for="cargo-input">Cargo</label>
         <input
 		  class="form-input-primary"
@@ -82,56 +87,74 @@
     </div>
 
 	<!--SETOR-->
-    <div class="setor fs-6">
-      <label class="form-label-primary">Setor do destinatário</label>
-      <select
-	    class="form-input-primary fs-6"
-        v-model="contactForm.setorId"
-        aria-label="Default select example"
-        :disabled="waitingSetores"
-		:class="v$.setorId.$error ? 'is-invalid' : ''"
-      >
-        <option value="0" selected>Selecione um setor</option>
-        <option
-          v-for="(setor, index) in comunicacaoStore.faleConoscoSetores"
-          :key="setor.id"
-          :value="setor.id"
-        >
-          {{ setor.descricao }}
-        </option>
-      </select>
-	  <div v-if="v$.setorId.$error" class="invalid-feedback">
-          {{ v$.setorId.required.$message }}
-        </div>
-    </div>
+	<div class="row w-100">
+		<div class="col-12">
+		  <label class="form-label-primary">Setor do destinatário</label>
+		  <select
+			class="form-input-primary "
+			v-model="contactForm.setorId"
+			aria-label="Default select example"
+			:disabled="waitingSetores"
+			:class="v$.setorId.$error ? 'is-invalid' : ''"
+		  >
+			<option value="0" selected>Selecione um setor</option>
+			<option
+			  v-for="(setor, index) in comunicacaoStore.faleConoscoSetores"
+			  :key="setor.id"
+			  :value="setor.id"
+			>
+			  {{ setor.descricao }}
+			</option>
+		  </select>
+		  <div v-if="v$.setorId.$error" class="invalid-feedback">
+			  {{ v$.setorId.required.$message }}
+			</div>
+		</div>
+	</div>
 
 	<!--MENSAGEM-->
-    <div class="mensagem fs-6">
-      <label class="form-label-primary" for="message">Mensagem</label>
-      <textarea
-	    class="form-input-primary"
-        v-model="contactForm.mensagem"
-        name="message"
-        id="message"
-        cols="30"
-        rows="10"
-		:class="v$.mensagem.$error ? 'is-invalid' : ''"
-      ></textarea>
-	  <div v-if="v$.mensagem.$error" class="invalid-feedback">
-          {{ v$.mensagem.$errors[0].$message }}
-        </div>
-    </div>
+	<div class="row w-100">
+		<div class="col">
+		  <label class="form-label-primary" for="message">Mensagem</label>
+		  <textarea
+			class="form-input-primary"
+			v-model="contactForm.mensagem"
+			name="message"
+			id="message"
+			cols="30"
+			rows="10"
+			:class="v$.mensagem.$error ? 'is-invalid' : ''"
+		  ></textarea>
+		  <div v-if="v$.mensagem.$error" class="invalid-feedback">
+			  {{ v$.mensagem.$errors[0].$message }}
+			</div>
+		</div>
+	</div>
 
-    <button
-      v-if="!sendingEmail"
-      type="button"
-      @click="sendEmail()"
-      class="green-btn"
-    >
-      ENVIAR
-    </button>
+	<div class="row w-100">
 
-	<Spinner v-else/>
+		<div class="col">
+			<button type="button" class="green-btn-outlined" @click="$router.back()">
+				VOLTAR
+			</button>
+		</div>
+
+		<div class="col">
+			<button
+			  v-if="!sendingEmail"
+			  type="button"
+			  @click="sendEmail()"
+			  class="green-btn-primary"
+			>
+			  ENVIAR
+			</button>
+		
+			<Spinner v-if="sendingEmail"/>
+		</div>
+
+
+
+	</div>
   
   </form>
 </template>
@@ -244,101 +267,17 @@ minValue
 
 <style scoped lang="scss">
   form.fale-conosco {
-    padding-top: 50px !important;
-    padding-bottom: 50px !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: 1100px;
-
+    max-width: 1000px;
     margin: 5rem auto;
-
-    font-weight: 600;
     color: #6b6a64;
-    font-size: 1.2rem;
+ 
     label {
-      margin-left: 2rem;
       margin-top: 0.6rem;
-    }
-    input {
-      color: #000;
     }
     div {
       margin-top: 1rem;
     }
-
-    .two-columns {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      gap: 2rem;
-    }
-
-    .nome,
-    .email,
-    .telefone,
-    .empresa,
-    .cargo,
-    .setor,
-    .mensagem {
-      width: 100%;
-    }
-    input.half-size,
-    select.half-size {
-      width: 48%;
-      margin-right: 1%;
-      margin-left: 1%;
-    }
-    .half-size:nth-child(even) {
-      margin-left: 0 !important;
-    }
-    .half-size:nth-child(odd) {
-      margin-right: 0 !important;
-    }
-    .form-control {
-      margin-top: 10px;
-      height: 50px;
-    }
-    textarea.form-control {
-      min-height: 150px;
-      margin-left: 1%;
-      margin-right: 1%;
-    }
-    .green-btn {
-      margin-left: auto;
-      margin-top: 1rem;
-      color: #fff;
-      border-radius: 25px;
-      width: 250px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    .green-btn:hover {
-      background-color: #aacbc3;
-    }
-    .spinner-border,
-    button.green-btn {
-      margin-right: 1%;
-    }
+    
   }
-  @media (max-width: 768px) {
-    form.fale-conosco {
-      input.half-size,
-      select.half-size {
-        margin-right: 0;
-        margin-left: 0;
-        width: 100%;
-      }
-      textarea.form-control {
-        margin-left: 0;
-        margin-right: 0;
-      }
-      .spinner-border,
-      button.green-btn {
-        margin-right: 0;
-      }
-    }
-  }
+
 </style>

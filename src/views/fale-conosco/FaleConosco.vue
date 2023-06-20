@@ -4,14 +4,11 @@
             figcaption="costumer-service"
             img-alt="costumer-service"
     >
-        <div class="banner-fale-conosco ghp">
-
-            <h1 class="dark-title">FALE CONOSCO</h1>
-            <p>
-                Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo
-                Grande - MS
-            </p>
-        </div>
+		<ExternalHeader
+			title="Fale conosco"
+			paragraph="Tenha acesso aos principais documentos disponibilizados pelo Ecossistema Local de Inovação - Campo
+                Grande - MS"
+		/>
     </Banner>
     <Formulario/>
 </template>
@@ -19,84 +16,9 @@
 <script setup lang="ts">
 import Banner from '../../components/general/Banner.vue';
 import Formulario from '../../components/faleConosco/Formulario.vue';
+import ExternalHeader from '../../components/general/ExternalHeader.vue';
 </script>
 
 <style scoped lang="scss">
 
-.banner-fale-conosco {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  padding-left: 64px;
-  display: flex;
-  align-items: start;
-  justify-content: center;
-  flex-direction: column;
-
-
-  .dark-title {
-    font-size: 2rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-    text-align: start;
-  }
-
-  p {
-    text-align: start;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-
-}
-
-@media (max-width: 1200px) {
-  div.d-flex {
-    h1 {
-      font-size: 2rem;
-      text-align: start;
-      margin-bottom: 2rem !important;
-      margin-left: 1.5rem;
-    }
-  }
-}
-
-@media (max-width: 991px) {
-  div.d-flex {
-    padding: 0 100px;
-
-    h1 {
-      font-size: 1.5rem;
-      text-align: start;
-      margin-bottom: 2rem !important;
-      margin-left: 1.5rem;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  div.d-flex {
-    padding: 0 50px;
-
-    h1 {
-      font-size: 1rem;
-      text-align: start;
-      margin-bottom: 2rem !important;
-      margin-left: 1rem;
-    }
-  }
-}
-
-@media (max-width: 576px) {
-  div.d-flex {
-    h1 {
-      font-size: 0.8rem;
-      text-align: start;
-      margin-bottom: 1rem !important;
-      margin-left: 1rem;
-    }
-  }
-}
 </style>
