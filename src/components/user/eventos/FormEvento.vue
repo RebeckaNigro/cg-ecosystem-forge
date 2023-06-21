@@ -68,8 +68,8 @@
 		</div>
 
 		<!-- DATAS -->
+		<!-- DATA E HORA DE INICIO -->
 		<div class="row mb-3">
-			<!-- DATA E HORA DE INICIO -->
 			<div class="col-sm-6">
 				<label for="dataInicio" class="form-label-primary mb-2">Data de início*:</label>
 				<div class="row px-2">
@@ -89,8 +89,8 @@
 				</div>
 			</div>
 
+			<!-- DATA E HORA DE FIM -->
 			<div class="col-sm-6 mt-3 mt-md-0">
-				<!-- DATA E HORA DE FIM -->
 				<label for="dataFim" class="form-label-primary mb-2">Data de término*:</label>
 				<div class="row px-2">
 					<input type="date" id="dataFim" class="form-input-primary col-sm-6"
@@ -209,28 +209,29 @@
 		<!-- LOADING SPINNER -->
 		<Spinner v-if="sendingEvent" />
 
-		<!-- PREVIEW -->
-		<div class="row container-fluid">
-			<div class="col-sm-4" v-if="!editFlag">
-				<button type="button" class="gray-btn-primary button-specific" @click="salvarRascunho">
+		
+		<div class="row">
+			<div class="col-sm-4 mt-md-3" v-if="!editFlag">
+				<button type="button" class="gray-btn-primary w-100 mt-4 mb-3 my-md-4" @click="salvarRascunho">
 					SALVAR RASCUNHO
 				</button>
 			</div>
 
-			<div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'">
-				<button type="button" class="green-btn-outlined button-specific" @click="visualizar">
+			<div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="mt-md-3">
+				<button type="button" class="green-btn-outlined w-100 my-3 my-md-4" @click="visualizar">
 					PRÉ-VISUALIZAR
 				</button>
 			</div>
 
-			<div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1">
-				<button type="button" class="green-btn-primary button-specific" @click="cadastrar">
+			<div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1 mt-md-3">
+				<button type="button" class="green-btn-primary w-100 my-3 my-md-4" @click="cadastrar">
 					ENVIAR
 				</button>
 			</div>
 		</div>
 	</form>
-
+	
+	<!-- PREVIEW -->
 	<div v-if="isVisualizacao">
 		<div class="breadcrumb-container">
 			<nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
@@ -765,20 +766,10 @@ const deleteSelectedInstituicao = () => {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 
 form{
 	max-width: 1000px;
-}
-.button-specific {
-	width: 100%;
-	margin: 2rem 1rem;
-	box-sizing: border-box;
-}
-
-.align-correction {
-	margin-bottom: 0.2rem;
 }
 
 .icone-usuario {
