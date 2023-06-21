@@ -8,7 +8,7 @@
 	<form class="container box p-5 mb-5" v-if="!isVisualizacao">
 		<!-- TIPO -->
 		<div class="mb-3 text-start">
-			<label for="titulo" class="form-label-primary">Tipo de evento</label>
+			<label class="form-label-primary">Tipo de evento</label>
 			<div class="my-2 px-3">
 				<input type="radio" name="tipoEvento" id="tipoEventoPresencial" value="1" v-model="evento.tipoEventoId" />
 				<label for="tipoEventoPresencial" class="form-label-primary d-inline mx-3">Presencial</label>
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 
-		<!-- NOME -->
+		<!-- TITULO -->
 		<div class="mb-3">
 			<label for="titulo" class="form-label-primary">Nome do evento*</label>
 			<input type="text" id="titulo" class="form-input-primary" :class="v$.titulo.$error ? 'is-invalid' : ''"
@@ -29,7 +29,7 @@
 
 		<!-- RESPONSÁVEL -->
 		<div class="mb-3">
-			<label for="local" class="form-label-primary">Responsável*</label>
+			<label for="responsavel" class="form-label-primary">Responsável*</label>
 			<input type="text" id="responsavel" class="form-input-primary"
 				:class="v$.responsavel.$error ? 'is-invalid' : ''" v-model="evento.responsavel" />
 			<div v-if="v$.responsavel.$error" class="invalid-feedback">
@@ -137,7 +137,7 @@
 		
 		<!--LOCAL DO EVENTO E CPF-->
 		<div class="row">
-			<div class="col-12 col-md-6 mb-3 mb-md-0">
+			<div class="col-12 col-md-6 mb-3 mb-md-0" :class="evento.tipoEventoId == 2 ? 'col-md-12': ''">
 				<!-- LOCAL DO EVENTO -->
 				<div class="mb-3">
 					<label for="local" class="form-label-primary">Nome do Local</label>
@@ -209,7 +209,7 @@
 		<!-- LOADING SPINNER -->
 		<Spinner v-if="sendingEvent" />
 
-		
+		<!--BOTOES-->
 		<div class="row">
 			<div class="col-sm-4 mt-md-3" v-if="!editFlag">
 				<button type="button" class="gray-btn-primary w-100 mt-4 mb-3 my-md-4" @click="salvarRascunho">
@@ -287,8 +287,8 @@
 			<Spinner v-if="sendingEvent" />
 
 			<div class="row container-fluid justify-content-center my-5">
-				<button type="button" class="green-btn-outlined col-sm-5 mx-2" @click="isVisualizacao = false">
-					Voltar
+				<button type="button" class="green-btn-outlined col-sm-5 mx-2 mb-3" @click="isVisualizacao = false">
+					VOLTAR
 				</button>
 				<button type="button" class="green-btn-primary col-sm-5 mx-2" @click="cadastrar">
 					ENVIAR

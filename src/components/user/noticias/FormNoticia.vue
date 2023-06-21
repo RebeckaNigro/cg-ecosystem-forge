@@ -5,7 +5,8 @@
   <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
     EDITE SUA NOTÍCIA!
   </h1>
-  <form class="mx-auto card-position box p-5 mb-5" v-if="!isVisualizacao">
+  <form class="container box p-5 mb-5" v-if="!isVisualizacao">
+	<!--TITULO-->
     <div class="mb-3">
       <label for="titulo" class="form-label-primary">Título*</label>
       <input
@@ -20,6 +21,7 @@
       </div>
     </div>
 
+	<!--SUBTITULO-->
     <div class="mb-3">
       <label for="subtitulo" class="form-label-primary">Subtitulo</label>
       <input
@@ -30,6 +32,7 @@
       />
     </div>
 
+	<!--IMAGEM-->
     <div class="mb-3">
       <label for="arquivo" class="form-label-primary">Imagem de capa*</label>
       <div class="imagem-divulgacao d-flex">
@@ -48,17 +51,7 @@
       </div>
     </div>
 
-    <!-- <div class="mb-3">
-      <input
-        type="text"
-        id="tags"
-        class="form-input-primary"
-        :class="v$.tags.$error ? 'is-invalid' : ''"
-        v-model="newTag"
-        @keyup.enter="addTag"
-      />
-    </div> -->
-
+    <!--TAGS-->
     <div class="mb-3">
       <label for="tags" class="form-label-primary">Tags</label>
       <AutocompleteComponent
@@ -83,8 +76,8 @@
       </div>
     </div>
 
+	<!--DATA-->
     <label for="data" class="form-label-primary mb-2">PUBLICADA EM:</label>
-
     <div class="row mb-3">
       <div class="col-sm-4">
         <input
@@ -114,11 +107,11 @@
         </div>
       </div>
     </div>
-
+	
+	<!--CORPO DA NOTICIA-->
     <label for="data" class="form-label-primary mt-5 mb-2"
       >CORPO DO TEXTO*</label
     >
-
     <div>
       <QuillEditor
         ref="customEditor"
@@ -135,32 +128,32 @@
     </div>
 
     <Spinner v-if="sendingNews" />
-
-    <div class="row container-fluid">
-      <div class="col-sm-4" v-if="!editFlag">
+	<!--BOTOES-->
+    <div class="row">
+      <div class="col-sm-4 mt-md-3" v-if="!editFlag">
         <button
           type="button"
-          class="gray-btn-primary button-specific"
+          class="gray-btn-primary w-100 mt-4 mb-3 my-md-4"
           @click="salvarRascunho"
         >
           SALVAR RASCUNHO
         </button>
       </div>
 
-      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="mt-md-3">
         <button
           type="button"
-          class="green-btn-outlined button-specific"
+          class="green-btn-outlined w-100 my-3 my-md-4"
           @click="visualizar"
         >
           PRÉ-VISUALIZAR
         </button>
       </div>
 
-      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1 mt-md-3">
         <button
           type="button"
-          class="green-btn-primary button-specific"
+          class="green-btn-primary w-100 my-3 my-md-4"
           @click="cadastrar"
         >
           ENVIAR
@@ -169,7 +162,8 @@
     </div>
   </form>
 
-  <div v-else>
+  <!--PREVIEW-->
+  <div v-if="isVisualizacao">
     <div class="breadcrumb-container">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -576,15 +570,9 @@
 </script>
 
 <style scoped>
-  .button-specific {
-    width: 100%;
-    margin: 2rem 1rem;
-    box-sizing: border-box;
-  }
-
-  .align-correction {
-    margin-bottom: 0.2rem;
-  }
+ form{
+	max-width: 1000px;
+ }
 
   .icone-usuario {
     width: 30px;
