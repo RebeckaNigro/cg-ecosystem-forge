@@ -36,18 +36,26 @@
     <div class="mb-3">
       <label for="arquivo" class="form-label-primary">Imagem de capa*</label>
       <div class="imagem-divulgacao d-flex">
-        <div>
-          <label for="imagem-input" class="borda-cinza" />
-          <input
-            class="form-input-primary"
-            type="file"
-            name="imagem-input"
-            accept="image/png, image/jpg,image/jpeg"
-            id="imagem-input"
-            @change="(e) => onFileChanged(e)"
-          />
+        <div class="row align-items-center">
+			<div class="col-12 col-md">
+				<label for="imagem-input" class="borda-cinza">
+					Dimensão recomendada: 1090x460
+				</label>
+				<input
+				  class="form-input-primary"
+				  type="file"
+				  name="imagem-input"
+				  accept="image/png, image/jpg,image/jpeg"
+				  id="imagem-input"
+				  @change="(e) => onFileChanged(e)"
+				/>
+			</div>
+
+			<div class="col-12 col-md">
+				<span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
+
+			</div>
         </div>
-        <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
       </div>
     </div>
 
@@ -587,10 +595,12 @@
     width: 100%;
     max-width: 400px;
     margin-left: 0;
+	padding-top: 120px;
     background-color: #fff;
     background-image: url("/user/eventos/cloud_icon.svg");
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 50% 40%;
+	cursor: pointer;
   }
 
   input#imagem-input {

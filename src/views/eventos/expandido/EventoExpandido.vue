@@ -21,7 +21,7 @@
     <section class="evento-expandido box">
       <div class="mb-5">
         <img
-          class="img-fluid"
+          class="img-fluid w-100"
           :src="
             evento.arquivos[0]
               ? 'data:image/png;base64, ' + evento.arquivos[0].arquivo

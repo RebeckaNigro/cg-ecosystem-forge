@@ -58,12 +58,19 @@
 		<div class="mb-3">
 			<label for="arquivo" class="form-label-primary">Imagem de divulgação</label>
 			<div class="imagem-divulgacao d-flex">
-				<div>
-					<label for="imagem-input" class="borda-cinza" />
-					<input class="form-input-primary" type="file" name="imagem-input"
-						accept="image/png, image/jpg,image/jpeg" id="imagem-input" @change="(e) => onFileChanged(e)" />
+				<div class="row align-items-center">
+					<div class="col-md col-12">
+						<label for="imagem-input" class="borda-cinza" >
+							Dimensão recomendada: 1090x460
+						</label>
+						<input class="form-input-primary" type="file" name="imagem-input"
+							accept="image/png, image/jpg,image/jpeg" id="imagem-input" @change="(e) => onFileChanged(e)" />
+					</div>
+
+					<div class="col-md col-12">
+						<span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
+					</div>
 				</div>
-				<span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
 			</div>
 		</div>
 
@@ -256,7 +263,7 @@
 
 			<h1 class="text-start">{{ evento.titulo }}</h1>
 			<div class="d-flex mt-4 mb-2">
-				<img src="/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
+				<img src="." alt="icone usuario" class="icone-usuario" />
 				<div class="d-flex align-items-center mx-2 fw-bold">
 					{{ evento.responsavel }}
 				</div>
@@ -785,11 +792,13 @@ form{
 	height: 200px;
 	width: 100%;
 	max-width: 400px;
+	padding-top: 120px;
 	margin-left: 0;
 	background-color: #fff;
 	background-image: url("/user/eventos/cloud_icon.svg");
 	background-repeat: no-repeat;
-	background-position: center;
+	background-position: 50% 40%;
+	cursor: pointer;
 }
 
 input#imagem-input {
