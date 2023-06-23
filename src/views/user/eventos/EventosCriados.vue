@@ -1,6 +1,6 @@
 <template>
   <div class="pb-5 pt-5">
-    <div class="breadcrumb-container mb-4 mb-lg-0">
+    <div class="breadcrumb-container mb-4 mb-lg-3 container ps-lg-5">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li

@@ -146,11 +146,7 @@
   })
 </script>
 
-<style scoped>
-  .external-card {
-    width: 80%;
-    position: relative;
-  }
+<style scoped lang="scss">
 
   .fab {
     position: absolute;

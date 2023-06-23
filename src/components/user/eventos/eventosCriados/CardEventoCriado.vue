@@ -21,11 +21,11 @@
 
 			<div class="container px-0 py-1">
 				<div class="row mt-2 mx-2 justify-content-between align-items-center d-flex">
-					<div class="col-6 col-md-8 text-start p-0">
+					<div class="col-6 col-lg-8 text-start p-0">
 						<span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
 					</div>
 
-					<div class="col-6 col-md-4 text-end p-0" v-if="!props.isRascunho">
+					<div class="col-6 col-lg-4 text-end p-0" v-if="!props.isRascunho">
 						<img src="/view_icon.svg" alt="" class="image-icon-button" @click="
 							$router.push({
 								name: 'EventoExpandido',
