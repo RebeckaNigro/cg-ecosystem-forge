@@ -34,11 +34,11 @@
         <div
           class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
         >
-          <div class="col-md-8 text-start">
+          <div class="col-6 col-md-8 text-start p-0">
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end d-flex" v-if="!props.isRascunho">
+          <div class="col-6 col-md-4 text-end p-0" v-if="!props.isRascunho">
             <img
               src="/public/view_icon.svg"
               alt=""
@@ -69,7 +69,7 @@
             />
           </div>
 
-          <div class="col-md-4 text-end" v-else>
+          <div class="col-6 col-md-4 text-end" v-else>
             <img
               src="/public/edit_icon.svg"
               alt=""
@@ -209,6 +209,8 @@
 
   .rascunho-img {
     height: 300px;
+	max-width: 60%;
+	object-fit: contain;
   }
 
   .mascara-rascunho {
@@ -220,7 +222,7 @@
   }
 
   .container-mascara-rascunho {
-    display: flex;
+	display: flex;
     justify-content: center;
     align-items: center;
   }
