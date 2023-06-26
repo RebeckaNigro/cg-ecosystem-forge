@@ -45,7 +45,7 @@
 
       <!-- CARDS DO USUÁRIO -->
       <CardEventoCriado
-        v-for="(evento, index) in eventosExibidos"
+        v-for="(evento, index) in eventos"
         :key="index"
         :evento="evento"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -89,31 +89,29 @@
   } from "../../../../stores/eventos/types"
 
   const eventoStore = useEventoStore()
-  const lastIndex = ref(6)
+  const page = ref(1)
   const loadingEvents = ref(false)
   let eventos = ref<Array<IEventoSimplificado>>()
-  let eventosExibidos = ref<Array<IEventoSimplificado>>()
 
   const rascunho = ref<EventoSimplificado>()
 
   const filtrarEventos = (eventosFiltrados: Array<IEventoSimplificado>) => {
-    lastIndex.value = 6
     eventos.value = eventosFiltrados
-    eventosExibidos.value = eventosFiltrados.slice(0, lastIndex.value)
   }
 
-  const addEventsToView = () => {
-    lastIndex.value += 3
-    eventosExibidos.value = eventos.value?.slice(0, lastIndex.value)
+  const addEventsToView = async () => {
+    page.value++
+	loadingEvents.value = true
+	await eventoStore.getUserEvents(page.value)
+	eventos.value = eventoStore.eventosUsuarioLogado
+	loadingEvents.value = false
   }
 
   const reloadEventos = async () => {
     loadingEvents.value = true
-    lastIndex.value = 6
     if (!localStorage.getItem("eventoRascunho")) rascunho.value = undefined
-    await eventoStore.getUserEvents()
+    await eventoStore.getUserEvents(page.value)
     eventos.value = eventoStore.eventosUsuarioLogado
-    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     loadingEvents.value = false
   }
 
@@ -137,9 +135,8 @@
 
   onMounted(async () => {
     loadingEvents.value = true
-    await eventoStore.getUserEvents()
+    await eventoStore.getUserEvents(page.value)
     eventos.value = eventoStore.eventosUsuarioLogado
-    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingEvents.value = false
 	
