@@ -143,6 +143,7 @@
     padding: 0.5rem 0;
 
     a {
+      font-weight: 500;
       padding-left: 0;
     }
   }

@@ -58,7 +58,7 @@
     text-align: center;
     color: #2c3e50;
 	overflow-x: hidden;
-	font-weight: 400;
+	font-weight: 500;
   }
 
   .background {

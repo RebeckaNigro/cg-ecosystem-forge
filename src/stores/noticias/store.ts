@@ -92,10 +92,10 @@ export const useNoticiaStore = defineStore("noticiaStore", {
 		}
 	  },
 
-    async getUserNews() {
+    async getUserNews(page: number) {
       try {
         const response = await httpRequest.get(
-          "/api/noticia/listarPorUsuarioId"
+          `/api/noticia/listarPorUsuarioId?paginacao=${page}`
         )
         if (response.data.codigo === 200) {
           this.response.putResponse(

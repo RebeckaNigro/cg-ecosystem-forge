@@ -39,7 +39,7 @@
         :isRascunho="true"
       />
       <CardNoticiaCriada
-        v-for="(noticia, index) in noticiasExibidas"
+        v-for="(noticia, index) in noticias"
         :key="noticia.id"
         :noticia="noticia"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -85,28 +85,30 @@
   const noticiaStore = useNoticiaStore()
   const lastIndex = ref(6)
   const loadingNews = ref(false)
+  const page = ref(1)
   let noticias = ref<Array<INoticiaSimplificada>>()
   let noticiasExibidas = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
 
   const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
-    lastIndex.value = 6
     noticias.value = noticiasFiltradas
     noticiasExibidas.value = noticiasFiltradas.slice(0, lastIndex.value)
   }
 
-  const addNewsToView = () => {
-    lastIndex.value += 3
-    noticiasExibidas.value = noticias.value?.slice(0, lastIndex.value)
+  const addNewsToView = async () => {
+	page.value++
+	loadingNews.value = true
+	await noticiaStore.getUserNews(page.value)
+	noticias.value = noticiaStore.allUserNews
+	loadingNews.value = false
   }
 
   const reloadNoticias = async () => {
     loadingNews.value = true
-    lastIndex.value = 6
 
     if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
-    await noticiaStore.getUserNews()
+    await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
     noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     loadingNews.value = false
@@ -132,7 +134,7 @@
 
   onMounted(async () => {
     loadingNews.value = true
-    await noticiaStore.getUserNews()
+    await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
     noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     verificaRascunho()
