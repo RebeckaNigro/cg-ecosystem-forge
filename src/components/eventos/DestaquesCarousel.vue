@@ -1,44 +1,48 @@
 <template>
-	<div id="destaquesCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel">
-		<div class="carousel-indicators">
-			<button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="0" class="active"
-				aria-current="true" aria-label="Slide 1"></button>
-			<button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-			<button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-		</div>
-		<div class="carousel-inner">
-			<div v-for="(data, index) in carouselData" :key="index" class="carousel-item"
-				:class="{ 'active': index === 0 }">
-				<img :src="data.arquivo
-					? 'data:image/png;base64,' + data.arquivo
-					: '/public/eventos/eventoExpandido/default-event-cover.svg'" class="img-fluid w-100" :alt="data.titulo"
-					:class="{ 'img-evento-encerrado': checaEventoEncerrado(data) }">
-				<section class="d-flex infos mt-2 py-3 px-4 py-md-4 px-md-5 align-items-center">
-					<main>
-						<h1 id="event-name" class="dark-title"
-							:class="{ 'texto-evento-encerrado': checaEventoEncerrado(data) }">{{ checaEventoEncerrado(data)
-								? data.titulo + ' (ENCERRADO)' : data.titulo }}</h1>
-						<time class="light-body-text calendar-icon">{{ data.dataInicio ? brDateString(data.dataInicio) :
-							'' }}</time>
-						<address class="light-body-text pin-icon">{{ data.local }}</address>
-					</main>
-					<GeneralBtn btnText="VER DETALHES" :isExternalLink="false" link="#" bgColor="#639280" width="250px"
-						textColor="#fff" height="40px" :id="'ver-mais' + data.id" class="details"
-						@click="$router.push({ name: 'EventoExpandido', params: { eventoId: data.id } })" />
-				</section>
-			</div>
-		</div>
-		<div class="indicators-container mt-4">
-			<button class="carousel-control-prev" type="button" data-bs-target="#destaquesCarousel" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#destaquesCarousel" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
-		</div>
-	</div>
+  <div id="destaquesCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
+        <img :src="data.arquivo 
+			? 'data:image/png;base64,' + data.arquivo
+			: '/eventos/eventoExpandido/default-event-cover.svg'" 
+			class="d-block w-100" :alt="data.titulo" :class="{ 'img-evento-encerrado' : checaEventoEncerrado(data)}">
+        <section class="d-flex infos mt-2 pt-4 ps-5 pb-4 pe-5 align-items-center">
+          <main>
+            <h1 id="event-name" class="dark-title" :class="{ 'texto-evento-encerrado' : checaEventoEncerrado(data)}">{{ checaEventoEncerrado(data) ? data.titulo + ' (ENCERRADO)' : data.titulo }}</h1>
+            <time class="light-body-text calendar-icon">{{ data.dataInicio ? brDateString(data.dataInicio) : ''}}</time>
+            <address class="light-body-text pin-icon">{{ data.local }}</address>
+          </main>
+          <GeneralBtn
+            btnText="VER DETALHES"
+            :isExternalLink="false"
+            link="#"
+            bgColor="#639280"
+            width="250px"
+            textColor="#fff"
+            height="40px"
+            :id="'ver-mais' + data.id"
+            class="details"
+			@click="$router.push({name: 'EventoExpandido', params: {eventoId: data.id}})"
+          />
+        </section>
+      </div>
+    </div>
+    <div class="indicators-container mt-4">
+      <button class="carousel-control-prev" type="button" data-bs-target="#destaquesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#destaquesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>      
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
