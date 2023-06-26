@@ -32,7 +32,7 @@
       height="40px"
       id="know_more"
       @click="addNewsToView()"
-      :class="{ 'd-none': (page*6) > noticiaStore.allNews.length }"
+      
     />
 	<Spinner v-if="loadingMoreNews" :spinner-color-class="'text-dark'" />
   </div>

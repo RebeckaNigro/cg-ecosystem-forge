@@ -123,10 +123,14 @@ export const useNoticiaStore = defineStore("noticiaStore", {
             response.data.retorno,
             response.data.resposta
           )
-
-          for (const news of response.data.retorno) {
-            this.allNews.push(news)
-          }
+		  if(page === 1){
+			this.allNews = response.data.retorno
+		  }else{
+			this.allNews = this.allNews.concat(response.data.retorno)
+		  }
+		  console.log(this.allNews);
+		  
+       
         }
       } catch (error) {
         console.error(error)

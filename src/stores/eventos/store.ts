@@ -135,8 +135,10 @@ export const useEventoStore = defineStore("eventoStore", {
       try {
         const response = await httpRequest.get(`/api/evento/listarTodos?paginacao=${page.toString()}`)
         if(response.data.codigo === 200) {
-			for (const evento of response.data.retorno) {
-				this.eventos.push(evento)
+			if(page === 1){
+				this.eventos = response.data.retorno
+			}else{
+				this.eventos = this.eventos.concat(response.data.retorno)
 			}
 
 		  }

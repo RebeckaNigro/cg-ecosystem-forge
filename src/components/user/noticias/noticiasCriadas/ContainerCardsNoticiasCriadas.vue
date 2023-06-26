@@ -87,13 +87,11 @@
   const loadingNews = ref(false)
   const page = ref(1)
   let noticias = ref<Array<INoticiaSimplificada>>()
-  let noticiasExibidas = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
 
   const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
     noticias.value = noticiasFiltradas
-    noticiasExibidas.value = noticiasFiltradas.slice(0, lastIndex.value)
   }
 
   const addNewsToView = async () => {
@@ -110,7 +108,6 @@
     if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
     await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
-    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     loadingNews.value = false
   }
 
@@ -136,7 +133,6 @@
     loadingNews.value = true
     await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
-    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingNews.value = false
   })
