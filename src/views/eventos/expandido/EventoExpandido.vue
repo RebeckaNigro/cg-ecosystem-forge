@@ -74,7 +74,7 @@
 			  <!--BOTAO-->
 			  <div class="d-flex col-md-4 mt-md-0 mt-4 justify-content-end">
 				<button type="button" class="green-btn-primary mx-2">
-				  <a :href="generatedLink" class="link-btn">Acessar Link</a>
+				  <a :href="generatedLink" class="link-btn" target="_blank">Acessar Link</a>
 				</button>
 			  </div>
 		  </div>

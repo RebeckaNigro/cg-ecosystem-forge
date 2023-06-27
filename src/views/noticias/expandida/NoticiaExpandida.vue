@@ -105,7 +105,7 @@ onMounted(async () => {
 .noticia-expandida {
 	margin: 3rem auto;
 	max-width: 1300px;
-	padding: 64px;
+	padding: 82px;
 
 	.noticia-header {
 		margin-bottom: 3rem;
