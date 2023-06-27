@@ -7,6 +7,7 @@ export interface INoticia {
   subTitulo: string
   dataPublicacao: string
   arquivo: File
+  autor: string
 }
 
 export class Noticia implements INoticia {
@@ -17,6 +18,7 @@ export class Noticia implements INoticia {
   subTitulo!: string
   dataPublicacao!: string
   arquivo!: File
+  autor: string
 
   constructor(
     id: number,
@@ -25,7 +27,8 @@ export class Noticia implements INoticia {
     descricao: string,
     subTitulo: string,
     dataPublicacao: string,
-    arquivo: File
+    arquivo: File,
+	autor: string
   ) {
     this.id = id
     this.titulo = titulo
@@ -34,6 +37,7 @@ export class Noticia implements INoticia {
     this.subTitulo = subTitulo
     this.dataPublicacao = dataPublicacao
     this.arquivo = arquivo
+	this.autor = autor
   }
 }
 
