@@ -19,7 +19,7 @@
             <img
               src="/public/noticias/noticia-expandida/default-news-cover.svg"
               alt="news-image"
-              class="rascunho-img"
+              class="image-limiter"
             />
           </div>
           <div
@@ -86,11 +86,11 @@
         </div>
       </div>
 
-      <p class="fs-3 display-3 mt-2 text-start p-2">
+      <p class="fs-3 font-semibold mt-2 text-start p-2">
         {{ noticia.titulo }}
       </p>
 
-      <div class="text-start mt-4">
+      <div class="text-start mt-4 font-normal">
         <span class="text-secondary px-1" v-if="noticia.dataOperacao"
           >Atualizada em: {{ dataOperacaoFormatada }}</span
         >
@@ -205,12 +205,7 @@
   .image-limiter {
     width: 100%;
     height: 300px;
-  }
-
-  .rascunho-img {
-    height: 300px;
-	max-width: 60%;
-	object-fit: contain;
+	object-fit: cover;
   }
 
   .mascara-rascunho {

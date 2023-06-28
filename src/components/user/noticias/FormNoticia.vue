@@ -177,7 +177,6 @@
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'Noticias' })"
           >
             Notícias
           </li>
@@ -190,20 +189,20 @@
         </ol>
       </nav>
     </div>
-    <div class="mx-auto card-position box p-5 mb-5">
+    <div class="mx-auto card-position box p-5 mb-5 align-items-start">
       <h1 class="text-start">{{ noticia.titulo }}</h1>
-      <h5 class="text-start mx-3">{{ noticia.subTitulo }}</h5>
+      <h5 class="text-start font-normal">{{ noticia.subTitulo }}</h5>
       <div class="d-flex mt-4 mb-2">
         <img
           src="/icons/user-circle.svg"
           alt="icone usuario"
           class="icone-usuario"
         />
-        <div class="d-flex align-items-center mx-2 fw-bold">
+        <div class="d-flex align-items-center mx-2 font-semibold">
           {{ authorName }}
         </div>
       </div>
-      <div class="text-start mx-2">{{ dataFormatada }}</div>
+      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(noticia.dataPublicacao) }}</time>
       <div class="mb-5">
         <img
           v-if="base64Image"
@@ -214,7 +213,7 @@
         <img
           v-else
           src="/public/noticias/noticia-expandida/default-news-cover.svg"
-          class="w-100 max-image-width"
+          class="w-100 mt-5 img-fluid"
           alt="capa noticia"
         />
       </div>
@@ -264,7 +263,7 @@
   import { useConfirmStore } from "../../../stores/confirm/store"
   import { useTagStore } from "../../../stores/tag/store"
   import { required, helpers } from "@vuelidate/validators"
-  import { brDateString } from "../../../utils/formatacao/datetime"
+  import { brDateString, friendlyDateTime } from "../../../utils/formatacao/datetime"
   import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime"
   import { fileToBase64 } from "../../../utils/image/converter"
   import ConfirmModal from "../../general/ConfirmModal.vue"
@@ -586,6 +585,10 @@
     width: 30px;
   }
 
+  	time {
+		color: #6b6a64;
+		font-size: .9rem;
+	}
   .imagem-divulgacao div {
     margin-top: 0;
     width: fit-content;

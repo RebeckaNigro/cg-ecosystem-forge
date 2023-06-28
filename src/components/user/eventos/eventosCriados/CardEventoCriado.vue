@@ -11,7 +11,7 @@
 				<div class="container-mascara-rascunho">
 					<div class="mascara-rascunho">
 						<img src="/eventos/eventoExpandido/default-event-cover.svg" alt="event-image"
-							class="rascunho-img" />
+							class="image-limiter" />
 					</div>
 					<div class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text">
 						(Rascunho)
@@ -208,11 +208,6 @@ onUpdated(() => {
 	justify-content: center;
 	align-items: center;
 }
-
-.rascunho-img {
-	height: 300px;
-}
-
 .container-mascara-rascunho {
 	display: flex;
 	justify-content: center;
