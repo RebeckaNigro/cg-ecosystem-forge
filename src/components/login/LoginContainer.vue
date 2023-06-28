@@ -1,58 +1,60 @@
 <template>
-	<div class="mx-auto card-form box p-5">
-		<div class="text-center mt-3 mb-2">
-			<h1 class="titulo-principal">LOGIN</h1>
+	<div>
+		<div class="mx-auto card-form box p-5">
+			<div class="text-center mt-3 mb-2">
+				<h1 class="titulo-principal">LOGIN</h1>
+			</div>
+			<form id="login-form" @submit.prevent="callStoreLogin(user.email, user.password)">
+				<div>
+					<label for="email" class="form-label-primary">E-mail</label>
+					<input type="text" id="email" class="form-input-primary" :class="v$.email.$error ? 'is-invalid' : ''"
+						v-model="user.email" placeholder="e-maildousuario@email.com" />
+					<div v-if="v$.email.$error" class="invalid-feedback">
+						{{ v$.email.$errors[0].$message }}
+					</div>
+				</div>
+	
+				<div class="input-icon-container">
+					<label for="password" class="form-label-primary">Senha</label>
+	
+					<i class="icon">
+						<img :src="visibilityIconRef" class="input-icon-image" @click="changePasswordVisibility" />
+					</i>
+					<input :type="passwordVisibility ? 'text' : 'password'" id="password" class="form-input-primary"
+						:class="v$.password.$error ? 'is-invalid' : ''" placeholder="*****" v-model="user.password" />
+					<div v-if="v$.password.$error" class="invalid-feedback">
+						{{ v$.password.$errors[0].$message }}
+					</div>
+				</div>
+	
+				<div class="row my-2 variable-font-size">
+					<div class="col-6 col-md-8 text-start">
+						<input type="checkbox" id="lembrarUsuario" class="mx-2" v-model="lembrarUsuario" />
+						<span>Lembrar meu usuário.</span>
+					</div>
+					<div class="col-6 col-md-4 text-end" >
+						<a href="/esqueci-a-senha">Esqueceu sua senha?</a>
+					</div>
+				</div>
+	
+				<div class="button-container">
+					<button type="submit" class="green-btn-primary full-size" v-if="!waitingResponse">
+						ENTRAR
+					</button>
+					<Spinner v-else />
+				</div>
+			</form>
+	
+			<!-- <div class="d-flex align-items-center justify-content-around my-4">
+			<hr class="divider">
+			<span>OU</span>
+			<hr class="divider">
 		</div>
-		<form id="login-form" @submit.prevent="callStoreLogin(user.email, user.password)">
-			<div>
-				<label for="email" class="form-label-primary">E-mail</label>
-				<input type="text" id="email" class="form-input-primary" :class="v$.email.$error ? 'is-invalid' : ''"
-					v-model="user.email" placeholder="e-maildousuario@email.com" />
-				<div v-if="v$.email.$error" class="invalid-feedback">
-					{{ v$.email.$errors[0].$message }}
-				</div>
-			</div>
-
-			<div class="input-icon-container">
-				<label for="password" class="form-label-primary">Senha</label>
-
-				<i class="icon">
-					<img :src="visibilityIconRef" class="input-icon-image" @click="changePasswordVisibility" />
-				</i>
-				<input :type="passwordVisibility ? 'text' : 'password'" id="password" class="form-input-primary"
-					:class="v$.password.$error ? 'is-invalid' : ''" placeholder="*****" v-model="user.password" />
-				<div v-if="v$.password.$error" class="invalid-feedback">
-					{{ v$.password.$errors[0].$message }}
-				</div>
-			</div>
-
-			<div class="row my-2 variable-font-size">
-				<div class="col-6 col-md-8 text-start">
-					<input type="checkbox" id="lembrarUsuario" class="mx-2" v-model="lembrarUsuario" />
-					<span>Lembrar meu usuário.</span>
-				</div>
-				<div class="col-6 col-md-4 text-end" >
-					<a href="/esqueci-a-senha">Esqueceu sua senha?</a>
-				</div>
-			</div>
-
-			<div class="button-container">
-				<button type="submit" class="green-btn-primary full-size" v-if="!waitingResponse">
-					ENTRAR
-				</button>
-				<Spinner v-else />
-			</div>
-		</form>
-
-		<!-- <div class="d-flex align-items-center justify-content-around my-4">
-		<hr class="divider">
-		<span>OU</span>
-		<hr class="divider">
-	</div>
-
-	<button class="green-btn-outlined text-uppercase" type="button" @click="$router.push({name: 'Perfil'})">
-	Cadastre-se
-	</button> -->
+	
+		<button class="green-btn-outlined text-uppercase" type="button" @click="$router.push({name: 'Perfil'})">
+		Cadastre-se
+		</button> -->
+		</div>
 	</div>
 </template>
 

@@ -24,10 +24,10 @@
 
         <div class="button-container">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6 mb-4 mb-md-0">
               <button
                 type="button"
-                class="green-btn-outlined mx-2"
+                class="green-btn-outlined"
                 @click="$router.push({ name: 'Login' })"
               >
                 VOLTAR
@@ -58,18 +58,10 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, ref, computed } from "vue"
-  import { useUserStore } from "../../stores/user/store"
-  import { useAlertStore } from "../../stores/alert/store"
-  import { useRouter } from "vue-router"
+  import { ref, computed } from "vue"
   import useValidate from "@vuelidate/core"
   import { required, email, helpers } from "@vuelidate/validators"
   import Spinner from "../general/Spinner.vue"
-
-  const router = useRouter()
-
-  const alertStore = useAlertStore()
-  const userStore = useUserStore()
 
   const usuario = ref({
     email: ""
@@ -123,43 +115,4 @@
     }
   }
 
-  //  section#login {
-  //    background-color: #fff;
-  //    border-radius: 10px;
-  //    border: 1px solid black;
-  //    max-width: 500px;
-  //    width: 100%;
-  //    height: 500px;
-  //    padding: 40px 60px 60px 60px;
-  //    margin: 5rem auto;
-  //
-  //    header > h1 {
-  //      text-align: center;
-  //      margin-bottom: 5rem;
-  //    }
-  //    main {
-  //      font-family: 'Gotham-Book';
-  //      font-size: 1rem;
-  //      form {
-  //        height: 250px;
-  //        display: flex;
-  //        flex-direction: column;
-  //        align-items: flex-start;
-  //        button {
-  //          width: 100%;
-  //          box-shadow: 1px 1px 5px black;
-  //        }
-  //        input {
-  //          width: 100%;
-  //          margin-bottom: 2rem;
-  //          font-family: 'Gotham-Book';
-  //        }
-  //      }
-  //    }
-  //  }
-  //  @media (max-width: 468px) {
-  //    section#login {
-  //      border: 0;
-  //    }
-  //  }
 </style>
