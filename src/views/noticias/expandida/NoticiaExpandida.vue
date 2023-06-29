@@ -4,7 +4,7 @@
 		<div class="noticia-breadcrumb">
 			<nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item unactive">
+					<li class="breadcrumb-item unactive hover-pointer" @click="$router.back()">
 						Notícias
 					</li>
 					<li class="breadcrumb-item unactive" aria-current="page">
@@ -53,6 +53,7 @@ import { useNoticiaStore } from "../../../stores/noticias/store"
 import { INoticia } from "../../../stores/noticias/types"
 import { friendlyDateTime } from "../../../utils/formatacao/datetime"
 import Spinner from "../../../components/general/Spinner.vue"
+import { useUserStore } from "../../../stores/user/store"
 
 const store = useNoticiaStore()
 const noticia = ref<INoticia>({

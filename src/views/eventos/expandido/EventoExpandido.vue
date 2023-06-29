@@ -5,7 +5,8 @@
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li
-            class="breadcrumb-item unactive"
+            class="breadcrumb-item unactive hover-pointer"
+			@click="$router.back()"
           >
             Eventos
           </li>

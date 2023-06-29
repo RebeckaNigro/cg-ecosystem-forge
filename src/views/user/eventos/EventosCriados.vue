@@ -5,7 +5,7 @@
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'EventosCriados' })"
+            @click="$router.push({ name: 'Eventos' })"
           >
             Eventos
           </li>

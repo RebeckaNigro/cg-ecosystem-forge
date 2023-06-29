@@ -4,7 +4,7 @@
 		<div class="container">
 			<nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item unactive" @click="$router.push({ name: 'DocumentosCriados' })">
+					<li class="breadcrumb-item unactive hover-pointer" @click="$router.back()">
 						Documentos
 					</li>
 					<li class="breadcrumb-item unactive" aria-current="page">

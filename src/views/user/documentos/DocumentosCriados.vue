@@ -5,7 +5,7 @@
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'DocumentosCriados' })"
+            @click="$router.push({ name: 'Documentos' })"
           >
             Documentos
           </li>
