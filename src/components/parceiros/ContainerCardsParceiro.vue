@@ -5,25 +5,26 @@
 				<FilterComponent field="área" :items="items" type="parceiro" @filter-result="filtrarParceiros" />
 			</div>
 			<div class="col-12 col-md-6 justify-content-end align-self-end filter-container">
-				
-				<SearchComponent
-				:items="items"
-				type="parceiro"
-				@search-result="filtrarParceiros"
-				/>
-				
+
+				<SearchComponent :items="items" type="parceiro" @search-result="filtrarParceiros" />
+
 			</div>
 		</div>
 	</div>
 	<section class="container-cards-parceiros" v-for="item, index in partners" :key="index">
 		<header>
-			<h1 class="dark-title me-3">{{ item.tipoInstituicao }}</h1>
+			<div @click="item.toggle = !item.toggle" class="d-flex hover-pointer">
+				<h1 class="dark-title">{{ item.tipoInstituicao }}</h1>
+				<img src="/parceiros/arrow-down.svg" alt="Mostrar parceiros" class="align-self-start mx-2" :class="item.toggle ? 'reverse': ''" >
+			</div>
 			<hr class="w-100">
 		</header>
-		<main>
+		<main v-if="item.toggle">
 			<!-- TODO: fix card distance based on amount of cards -->
 			<CardParceiro v-for="(parceiro, index) in item.parceiros" :key="index" :card-parceiro="parceiro" />
 		</main>
+
+		
 	</section>
 </template>
 
@@ -41,20 +42,25 @@ const partners = ref<IPartnerSeccionado[]>()
 
 onMounted(() => {
 	partners.value = props.items
+	
 })
 
 const filtrarParceiros = (
-    parceirosFiltrados: Array<IPartnerSeccionado>
-  ) => {
+	parceirosFiltrados: Array<IPartnerSeccionado>
+) => {
 	partners.value = parceirosFiltrados
 }
 </script>
 
 <style scoped lang="scss">
-
-.filter-container{
+.filter-container {
 	width: 25%;
 }
+
+.reverse{
+	transform: scaleY(-1);
+}
+
 .container-cards-parceiros {
 	header {
 		display: flex;
@@ -78,9 +84,10 @@ const filtrarParceiros = (
 }
 
 @media (max-width: 1200px) {
-	.filter-container{
+	.filter-container {
 		width: 40%;
 	}
+
 	section.container-cards-parceiros {
 		header {
 			h1 {
@@ -91,11 +98,12 @@ const filtrarParceiros = (
 }
 
 @media (max-width: 580px) {
-	
-	.filter-container{
+
+	.filter-container {
 		width: 100%;
 		margin-bottom: 1.5rem;
 	}
+
 	.container-cards-parceiros {
 		main {
 			justify-items: center;
@@ -113,5 +121,4 @@ const filtrarParceiros = (
 			}
 		}
 	}
-}
-</style>
+}</style>

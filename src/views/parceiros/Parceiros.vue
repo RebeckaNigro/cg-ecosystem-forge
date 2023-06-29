@@ -48,7 +48,8 @@ const parceirosContainers = reactive([
                 id: 8,
 				nome: "ICT Inova Brasil"
             },
-        ]
+        ],
+		toggle: true
     },
     {
         tipoInstituicao: 'EMPRESAS',
@@ -65,7 +66,8 @@ const parceirosContainers = reactive([
                 id: 9,
 				nome: "ENG Soluções Tecnológicas"
             }
-        ]
+        ],
+		toggle: true
     },
     {
         tipoInstituicao: 'MECANISMOS DE INOVAÇÃO',
@@ -112,7 +114,8 @@ const parceirosContainers = reactive([
                 id: 10,
 				nome: "PIME"
             }
-        ]
+        ],
+		toggle: true
     },
     {
         tipoInstituicao: 'GOVERNO',
@@ -128,7 +131,8 @@ const parceirosContainers = reactive([
                 id: 11,
 				nome: "SEMADESC"
             }
-        ]
+        ],
+		toggle: true
     },
     {
         tipoInstituicao: 'SOCIEDADE ORGANIZADA',
@@ -157,7 +161,8 @@ const parceirosContainers = reactive([
                 id: 12,
 				nome: "SENAI"
             }
-        ]
+        ],
+		toggle: true
     }
 ])
 const parceirosStore = useParceirosStore()
