@@ -135,9 +135,9 @@ const parceirosContainers = reactive([
         parceiros: [
             {
                 
-                logo: '/chumbado/home_parceiros/sistema-s/Sistema-Fiems.jpg',
+                logo: '/chumbado/home_parceiros/sistema-s/SESI.png',
                 id: 18,
-				nome: "Sistema Fiems"
+				nome: "SESI"
             },
             {
                 

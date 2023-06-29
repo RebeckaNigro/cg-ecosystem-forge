@@ -1,18 +1,20 @@
 <template>
-  <section class="partner-body ghp">
-    <span class="dark-title">PARCEIRO DO ECOSSISTEMA</span>
-    <main>
-      <h1 class="dark-title">{{ partnerName }}</h1>
-      <article>
-        {{ firstParagraph }}
-      </article>
-    </main>
-    <h2>
-      {{ subTitle }}
-    </h2>
-    <article class="second-paragraph">
-      {{ secondParagraph }}
-    </article>
+  <section class="partner-body w-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="container px-lg-5">
+		<span>PARCEIRO DO ECOSSISTEMA</span>
+		<main>
+		  <h1>{{ partnerName }}</h1>
+		  <article class="px-md-5 px-4">
+			&nbsp&nbsp&nbsp{{ firstParagraph }}
+		  </article>
+		</main>
+		<h2>
+		  {{ subTitle }}
+		</h2>
+		<article class="second-paragraph px-md-5 px-4">
+			&nbsp&nbsp&nbsp{{ secondParagraph }}
+		</article>
+	</div>
   </section>
 </template>
 
@@ -41,36 +43,35 @@ const props = defineProps({
 
 <style scoped lang="scss">
   section.partner-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f6f6f6;
+    background-color: #FBFBFB;
 	font-weight: 500;
+	font-family: 'Inter', sans-serif;
+
+	padding-top: 130px;
+	
     span {
       color: gray;
       margin-top: 8rem;
-      font-size: 1.2rem;
+      font-size: 16px;
+	  
     }
     main {
       h1 {
-        font-size: 2rem;
+		font-size: 30px;
         margin-top: 1rem;
+		font-weight: 600;
       }
       article {
         margin-top: 3rem;
         margin-bottom: 2rem;
+		text-align: justify;
+		font-size: 17px;
       }
     }
     article.second-paragraph {
       padding-bottom: 3rem;
-    }
-    h2[class="dark-title"] {
-      margin-right: auto;
-    }
-    .dark-body-text {
-      font-size: 1rem;
-      text-align: justify;
+	  text-align: justify;
+	  font-size: 17px;
     }
   }
   @media (max-width: 991px) {
@@ -86,17 +87,24 @@ const props = defineProps({
       }
     }
   }
-  @media (max-width: 576px) {
+  @media (max-width: 580px) {
     section.partner-body {
       span {
         font-size: 0.7rem;
       }
       main {
         h1 {
-          font-size: 1.2rem;
           margin-top: 1rem;
         }
+
+		article{
+			font-size: 15px;
+		}
       }
+
+	  article.second-paragraph{
+			font-size: 15px;
+	  }
     }
   }
 </style>
