@@ -29,7 +29,7 @@
 	
 				<div class="row my-2 variable-font-size">
 					<div class="col-6 col-md-8 text-start">
-						<input type="checkbox" id="lembrarUsuario" class="mx-2" v-model="lembrarUsuario" />
+						<input type="checkbox" id="lembrarUsuario" class="mx-2" v-model="lembrarUsuario" @change="salvarUsuario"/>
 						<span>Lembrar meu usuário.</span>
 					</div>
 					<div class="col-6 col-md-4 text-end" >
@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue"
+import { reactive, ref, computed, onMounted } from "vue"
 import { useUserStore } from "../../stores/user/store"
 import { useAlertStore } from "../../stores/alert/store"
 import { useRouter } from "vue-router"
@@ -131,6 +131,26 @@ const callStoreLogin = async (e: string, p: string) => {
 		waitingResponse.value = false
 	}
 }
+
+const salvarUsuario = () => {
+	if(lembrarUsuario.value){
+		if(user.value.email !== ''){
+			localStorage.setItem('email', user.value.email)
+		}else{
+			lembrarUsuario.value = false
+		}
+	}else{
+		if(localStorage.getItem('email')){
+			localStorage.removeItem('email')
+		}
+	}
+}
+onMounted(() => {
+	if(localStorage.getItem('email')){
+		user.value.email = localStorage.getItem('email')!
+		lembrarUsuario.value = true
+	}
+})
 </script>
 
 <style scoped lang="scss">
