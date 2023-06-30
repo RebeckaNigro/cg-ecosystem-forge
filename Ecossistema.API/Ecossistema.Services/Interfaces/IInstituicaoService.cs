@@ -15,5 +15,6 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> VincularEndereco(EnderecoDto dado, int instituicaoId, int usuarioId);
         Task<RespostaPadrao> BuscarInstituicoes();
         Task<RespostaPadrao> BuscarParceirosPorArea(int idArea);
+        Task<RespostaPadrao> BuscarInstituicaoPorId(int id);
     }
 }
