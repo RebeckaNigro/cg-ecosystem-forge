@@ -263,7 +263,7 @@
 
 			<h1 class="text-start">{{ evento.titulo }}</h1>
 			<div class="d-flex mt-4 mb-2">
-				<img src="." alt="icone usuario" class="icone-usuario" />
+				<img src="/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
 				<div class="d-flex align-items-center mx-2 fw-bold">
 					{{ evento.responsavel }}
 				</div>
