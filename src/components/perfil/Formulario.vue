@@ -160,9 +160,9 @@
 </template>
 
 <script setup lang="ts">
-//@ts-nocheck
+
 import { onMounted, ref, computed } from "vue"
-import { getFromCEP } from "../../utils/http"
+import { getFromCEP, httpRequest } from "../../utils/http"
 import { usePerfilStore } from "../../stores/perfil/store"
 import { useAlertStore } from "../../stores/alert/store"
 import useValidate from "@vuelidate/core"
@@ -176,6 +176,8 @@ import {
 } from "@vuelidate/validators"
 import { isPasswordValid } from "./../../utils/validator/validations"
 import Spinner from "../general/Spinner.vue"
+import { ID_SEM_INSTITUICAO } from "../../utils/constantes"
+import { IPerfil } from "../../stores/perfil/types"
 
 const perfilStore = usePerfilStore()
 const alertStore = useAlertStore()
@@ -186,10 +188,11 @@ const visibilityIconRef = ref("/visibility-off.svg")
 const confirmVisibilityIconRef = ref("/visibility-off.svg")
 let termosDeUso = ref(false)
 let sendingPerfil = ref(false)
-let perfil = ref({
+let perfil = ref<IPerfil>({
+	id: -1,
 	nomeCompleto: "",
 	cpf: "",
-	dataNascimento: "",
+	dataNascimento: new Date(),
 	email: "",
 	telefone: "",
 	cargo: "",
@@ -199,7 +202,7 @@ let perfil = ref({
 	bairro: "",
 	numero: "",
 	cep: "",
-	instituicaoId: "5",
+	instituicaoId: ID_SEM_INSTITUICAO,
 	password: "",
 	confirmPassword: ""
 })
@@ -300,9 +303,10 @@ const cadastrar = async () => {
 
 const resetForm = () => {
 	perfil.value = {
+		id: -1,
 		nomeCompleto: "",
 		cpf: "",
-		dataNascimento: "",
+		dataNascimento: new Date(),
 		email: "",
 		telefone: "",
 		cargo: "",
@@ -312,7 +316,7 @@ const resetForm = () => {
 		bairro: "",
 		numero: "",
 		cep: "",
-		instituicaoId: "5",
+		instituicaoId: ID_SEM_INSTITUICAO,
 		password: "",
 		confirmPassword: ""
 	}
@@ -344,6 +348,8 @@ const buscarCEP = async () => {
 
 onMounted(async () => {
 	getInstituicoes()
+	console.log(perfil.value);
+	
 })
 </script>
 
