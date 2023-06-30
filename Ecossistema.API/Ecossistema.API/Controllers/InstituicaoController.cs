@@ -64,6 +64,12 @@ namespace Ecossistema.API.Controllers
             return await _instituicaoService.BuscarInstituicoes();
         }
 
+        [HttpGet("buscarInstituicaoPorId")]
+        public async Task<RespostaPadrao> BuscarInstituicaoPorId(int id)
+        {
+            return await _instituicaoService.BuscarInstituicaoPorId(id);
+        }
+
         [HttpGet("buscarParceirosPorArea")]
         public async Task<RespostaPadrao> BuscarParceirosPorArea(int idArea)
         {
