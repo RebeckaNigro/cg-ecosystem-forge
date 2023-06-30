@@ -215,10 +215,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
+    if (to.name == 'EventoExpandido' || to.name == 'NoticiaExpandida' || to.name == 'DocumentoExpandido') {
+      return {top: 0}
     }
   },
 })
