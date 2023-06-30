@@ -48,11 +48,10 @@ section.partners-container {
 .carousel-item {
 
 	img {
+		object-fit: scale-down;
+		width: 80%;
 		margin: auto;
-		object-fit: cover;
-		width: auto;
-		max-width: 100%;
-		height: 190px;
+		height: 170px;
 	}
 }
 

@@ -1,18 +1,18 @@
 <template>
-  <div class="mx-auto box p-5 mb-5">
+  <div class="mx-auto box p-lg-5 py-4 px-3 mb-5">
     <div class="text-center">
       <h1 class="fs-5 fw-bold">Últimos eventos enviados</h1>
     </div>
 
     <Spinner v-if="loadingEvents" />
 
-    <div class="container-fluid row justify-content-between g-0">
+    <div class="row container-fluid justify-content-between g-0">
       <!-- ÚLTIMOS CARDS DO USUÁRIO -->
       <CardEventoCriado
         v-for="(evento, index) in eventoStore.ultimosEventosUsuarioLogado"
         :key="index"
         :evento="evento"
-        class="col-xs-12 col-sm-6 col-lg-4 p-2"
+        class="col-12 col-xl-4 p-2 p-xl-2 p-md-4"
         @update-list="loadLastEvents"
         :isRascunho="false"
       />
@@ -65,4 +65,4 @@
   })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

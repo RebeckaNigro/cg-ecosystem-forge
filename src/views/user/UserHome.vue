@@ -1,16 +1,17 @@
 <template>
-  <div class="containers-container">
-    <div class="row container-fluid g-3">
-      <div class="col-sm-6">
+  <div class="container mt-5">
+	<h1 class="fs-4 text-start ms-5 mb-4">Home</h1>
+    <div class="row g-3">
+      <div class="col-12 col-lg-6">
         <ContainerUltimosDocumentos />
       </div>
 
-      <div class="col-sm-6">
+      <div class="col-12 col-lg-6">
         <ContainerUltimasNoticias />
       </div>
     </div>
 
-    <div class="row container-fluid justify-content-between g-3">
+    <div class="row g-3">
       <ContainerUltimosEventos />
     </div>
   </div>
@@ -23,8 +24,7 @@
 </script>
 
 <style scoped lang="scss">
-  .containers-container {
-    width: 80%;
-    margin: 30px auto;
-  }
+h1{
+	font-weight: 600!important;
+}
 </style>

@@ -213,7 +213,12 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name == 'EventoExpandido' || to.name == 'NoticiaExpandida' || to.name == 'DocumentoExpandido') {
+      return {top: 0}
+    }
+  },
 })
 
 router.beforeEach((to, from, next) => {

@@ -1,11 +1,11 @@
 <template>
   <div class="pb-5 pt-5">
-    <div class="breadcrumb-container">
+    <div class="breadcrumb-container mb-4 mb-lg-3 container ps-md-5">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'DocumentosCriados' })"
+            @click="$router.push({ name: 'Documentos' })"
           >
             Documentos
           </li>
