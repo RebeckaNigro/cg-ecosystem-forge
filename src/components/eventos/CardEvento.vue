@@ -54,9 +54,7 @@ import { IEventoSimplificado } from '../../stores/eventos/types';
     height: 400px;
 	border-radius: 10px;
 	background-color: #fff;
-    .dark-body-text {
-      font-size: 1rem;
-    }
+    
     .img-container {
       height: 65%;
       display: flex;
@@ -121,15 +119,10 @@ import { IEventoSimplificado } from '../../stores/eventos/types';
   }
   @media (max-width: 1230px) {
     .card-evento {
-      .dark-body-text {
-        font-size: 1rem;
-      }
+    
       .infos-container {
         h1 {
           font-size: 1rem;
-        }
-        time.dark-body-text, address.dark-body-text {
-          font-size: 0.8rem;
         }
       }
     }

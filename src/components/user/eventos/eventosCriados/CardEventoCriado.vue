@@ -11,7 +11,7 @@
 				<div class="container-mascara-rascunho">
 					<div class="mascara-rascunho">
 						<img src="/eventos/eventoExpandido/default-event-cover.svg" alt="event-image"
-							class="rascunho-img" />
+							class="image-limiter" />
 					</div>
 					<div class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text">
 						(Rascunho)
@@ -21,11 +21,11 @@
 
 			<div class="container px-0 py-1">
 				<div class="row mt-2 mx-2 justify-content-between align-items-center d-flex">
-					<div class="col-md-8 text-start p-0">
+					<div class="col-6 col-lg-8 text-start p-0">
 						<span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
 					</div>
 
-					<div class="col-md-4 text-end p-0" v-if="!props.isRascunho">
+					<div class="col-6 col-lg-4 text-end p-0" v-if="!props.isRascunho">
 						<img src="/view_icon.svg" alt="" class="image-icon-button" @click="
 							$router.push({
 								name: 'EventoExpandido',
@@ -41,7 +41,7 @@
 						<img src="/delete_icon.svg" alt="" class="image-icon-button" @click="confirmDelete" />
 					</div>
 
-					<div class="col-md-4 text-end" v-else>
+					<div class="col-6 col-md-4 text-end" v-else>
 						<img src="/edit_icon.svg" alt="" class="image-icon-button" @click="loadFormComRascunho" />
 						<img src="/delete_icon.svg" alt="" class="image-icon-button" @click="confirmDeleteRascunho" />
 					</div>
@@ -198,6 +198,7 @@ onUpdated(() => {
 .image-limiter {
 	width: 100%;
 	height: 300px;
+	object-fit: cover;
 }
 
 .mascara-rascunho {
@@ -207,11 +208,6 @@ onUpdated(() => {
 	justify-content: center;
 	align-items: center;
 }
-
-.rascunho-img {
-	height: 300px;
-}
-
 .container-mascara-rascunho {
 	display: flex;
 	justify-content: center;

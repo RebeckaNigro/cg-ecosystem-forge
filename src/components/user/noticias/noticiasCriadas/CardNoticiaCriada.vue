@@ -19,7 +19,7 @@
             <img
               src="/public/noticias/noticia-expandida/default-news-cover.svg"
               alt="news-image"
-              class="rascunho-img"
+              class="image-limiter"
             />
           </div>
           <div
@@ -34,11 +34,11 @@
         <div
           class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
         >
-          <div class="col-md-8 text-start">
+          <div class="col-6 col-md-8 text-start p-0">
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
 
-          <div class="col-md-4 text-end d-flex" v-if="!props.isRascunho">
+          <div class="col-6 col-md-4 text-end p-0" v-if="!props.isRascunho">
             <img
               src="/public/view_icon.svg"
               alt=""
@@ -69,7 +69,7 @@
             />
           </div>
 
-          <div class="col-md-4 text-end" v-else>
+          <div class="col-6 col-md-4 text-end" v-else>
             <img
               src="/public/edit_icon.svg"
               alt=""
@@ -86,11 +86,11 @@
         </div>
       </div>
 
-      <p class="fs-3 display-3 mt-2 text-start p-2">
+      <p class="fs-3 font-semibold mt-2 text-start p-2">
         {{ noticia.titulo }}
       </p>
 
-      <div class="text-start mt-4">
+      <div class="text-start mt-4 font-normal">
         <span class="text-secondary px-1" v-if="noticia.dataOperacao"
           >Atualizada em: {{ dataOperacaoFormatada }}</span
         >
@@ -205,10 +205,7 @@
   .image-limiter {
     width: 100%;
     height: 300px;
-  }
-
-  .rascunho-img {
-    height: 300px;
+	object-fit: cover;
   }
 
   .mascara-rascunho {
@@ -220,7 +217,7 @@
   }
 
   .container-mascara-rascunho {
-    display: flex;
+	display: flex;
     justify-content: center;
     align-items: center;
   }

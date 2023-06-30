@@ -1,5 +1,5 @@
 <template>
-  <section class="destaques ghp">
+  <section class="destaques container">
     <header>
       <h1 class="dark-title my-4">DESTAQUES</h1>
     </header>
@@ -44,7 +44,7 @@ onMounted(async() => {
     section.destaques {
       header {
         h1.dark-title {
-          font-size: 1.2rem;
+          font-size: 1.5rem;
         }
       }   
     }

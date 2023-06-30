@@ -24,4 +24,5 @@ export interface IPartnerSimplificado{
 export interface IPartnerSeccionado{
 	tipoInstituicao: string
 	parceiros: IPartnerSimplificado[]
+	toggle: boolean
 }

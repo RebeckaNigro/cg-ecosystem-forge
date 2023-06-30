@@ -1,16 +1,16 @@
 <template>
-  <div class="box mx-auto external-card p-5 container-fluid">
+  <div class="box mx-auto py-5 px-4 p-lg-5 container position-relative">
     <h1 class="dark-title fs-4 text-start">Notícias criadas</h1>
 
     <button
-      class="fab green-btn-primary max-w-25"
+      class="fab green-btn-primary"
       @click="$router.push({ name: 'GerenciaNoticia' })"
     >
       + CRIAR NOVA NOTÍCIA
     </button>
 
     <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
-      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+      <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 my-2">
         <FilterComponent
           field="data"
           :items="noticiaStore.allUserNews"
@@ -19,7 +19,7 @@
         />
       </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+      <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 my-2">
         <SearchComponent
           :items="noticiaStore.allUserNews"
           type="noticia"
@@ -39,7 +39,7 @@
         :isRascunho="true"
       />
       <CardNoticiaCriada
-        v-for="(noticia, index) in noticiasExibidas"
+        v-for="(noticia, index) in noticias"
         :key="noticia.id"
         :noticia="noticia"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -85,30 +85,29 @@
   const noticiaStore = useNoticiaStore()
   const lastIndex = ref(6)
   const loadingNews = ref(false)
+  const page = ref(1)
   let noticias = ref<Array<INoticiaSimplificada>>()
-  let noticiasExibidas = ref<Array<INoticiaSimplificada>>()
 
   const rascunho = ref<NoticiaSimplificada>()
 
   const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
-    lastIndex.value = 6
     noticias.value = noticiasFiltradas
-    noticiasExibidas.value = noticiasFiltradas.slice(0, lastIndex.value)
   }
 
-  const addNewsToView = () => {
-    lastIndex.value += 3
-    noticiasExibidas.value = noticias.value?.slice(0, lastIndex.value)
+  const addNewsToView = async () => {
+	page.value++
+	loadingNews.value = true
+	await noticiaStore.getUserNews(page.value)
+	noticias.value = noticiaStore.allUserNews
+	loadingNews.value = false
   }
 
   const reloadNoticias = async () => {
     loadingNews.value = true
-    lastIndex.value = 6
 
     if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
-    await noticiaStore.getUserNews()
+    await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
-    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     loadingNews.value = false
   }
 
@@ -124,36 +123,53 @@
         noticiaRascunho.noticia.tags,
         "",
         noticiaRascunho.noticia.dataPublicacao,
-        noticiaRascunho.noticia.arquivo
+        noticiaRascunho.noticia.arquivo,
+		noticiaRascunho.nomeUsuario
       )
     }
   }
 
   onMounted(async () => {
     loadingNews.value = true
-    await noticiaStore.getUserNews()
+    await noticiaStore.getUserNews(page.value)
     noticias.value = noticiaStore.allUserNews
-    noticiasExibidas.value = noticias.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingNews.value = false
   })
 </script>
 
-<style scoped>
-  .external-card {
-    width: 80%;
-    position: relative;
-  }
+<style scoped lang="scss">
 
   .fab {
     position: absolute;
     top: -1.2rem;
     right: 3rem;
+	width: 25%;
   }
 
   .button-specific {
     width: 100%;
     margin: 1rem 1rem;
     box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 2550px) {
+	.fab{
+		width: 20%;
+	}
+  }
+
+  @media screen and (max-width: 1200px) {
+	.fab{
+		width: 35%;
+	}
+  }
+
+  @media screen and (max-width: 580px){
+	.fab{
+		width: 40%;
+		font-size: 12px;
+		right: 1rem;
+	}
   }
 </style>

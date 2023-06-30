@@ -1,16 +1,16 @@
 <template>
-  <div class="box mx-auto external-card p-5 container-fluid">
+  <div class="box mx-auto py-5 px-4 p-lg-5 container position-relative">
     <h1 class="dark-title fs-4 text-start">Eventos criados</h1>
 
     <button
-      class="fab green-btn-primary max-w-25"
+      class="fab green-btn-primary"
       @click="$router.push({ name: 'GerenciaEvento' })"
     >
       + CRIAR NOVO EVENTO
     </button>
 
     <div class="row align-items-end mt-4 mb-5 justify-content-between px-2">
-      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+      <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 my-2">
         <!-- COMPONENTE DE FILTRO -->
         <FilterComponent
           field="data"
@@ -20,7 +20,7 @@
         />
       </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+      <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 my-2">
         <!-- COMPONENTE DE BUSCA -->
         <SearchComponent
           :items="eventoStore.eventosUsuarioLogado"
@@ -45,7 +45,7 @@
 
       <!-- CARDS DO USUÁRIO -->
       <CardEventoCriado
-        v-for="(evento, index) in eventosExibidos"
+        v-for="(evento, index) in eventos"
         :key="index"
         :evento="evento"
         class="col-xs-12 col-sm-6 col-lg-4 p-2"
@@ -89,31 +89,29 @@
   } from "../../../../stores/eventos/types"
 
   const eventoStore = useEventoStore()
-  const lastIndex = ref(6)
+  const page = ref(1)
   const loadingEvents = ref(false)
   let eventos = ref<Array<IEventoSimplificado>>()
-  let eventosExibidos = ref<Array<IEventoSimplificado>>()
 
   const rascunho = ref<EventoSimplificado>()
 
   const filtrarEventos = (eventosFiltrados: Array<IEventoSimplificado>) => {
-    lastIndex.value = 6
     eventos.value = eventosFiltrados
-    eventosExibidos.value = eventosFiltrados.slice(0, lastIndex.value)
   }
 
-  const addEventsToView = () => {
-    lastIndex.value += 3
-    eventosExibidos.value = eventos.value?.slice(0, lastIndex.value)
+  const addEventsToView = async () => {
+    page.value++
+	loadingEvents.value = true
+	await eventoStore.getUserEvents(page.value)
+	eventos.value = eventoStore.eventosUsuarioLogado
+	loadingEvents.value = false
   }
 
   const reloadEventos = async () => {
     loadingEvents.value = true
-    lastIndex.value = 6
     if (!localStorage.getItem("eventoRascunho")) rascunho.value = undefined
-    await eventoStore.getUserEvents()
+    await eventoStore.getUserEvents(page.value)
     eventos.value = eventoStore.eventosUsuarioLogado
-    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     loadingEvents.value = false
   }
 
@@ -137,30 +135,46 @@
 
   onMounted(async () => {
     loadingEvents.value = true
-    await eventoStore.getUserEvents()
+    await eventoStore.getUserEvents(page.value)
     eventos.value = eventoStore.eventosUsuarioLogado
-    eventosExibidos.value = eventos.value.slice(0, lastIndex.value)
     verificaRascunho()
     loadingEvents.value = false
 	
   })
 </script>
 
-<style scoped>
-  .external-card {
-    width: 80%;
-    position: relative;
-  }
+<style scoped lang="scss">
 
   .fab {
     position: absolute;
     top: -1.2rem;
     right: 3rem;
+	width: 25%;
   }
 
   .button-specific {
     width: 100%;
     margin: 1rem 1rem;
     box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 2550px) {
+	.fab{
+		width: 20%;
+	}
+  }
+
+  @media screen and (max-width: 1200px) {
+	.fab{
+		width: 35%;
+	}
+  }
+
+  @media screen and (max-width: 580px){
+	.fab{
+		width: 40%;
+		font-size: 12px;
+		right: 1rem;
+	}
   }
 </style>

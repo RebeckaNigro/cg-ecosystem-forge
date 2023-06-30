@@ -1,10 +1,10 @@
 <template>
 	<div class="pt-5 pb-5 container">
 
-		<div class="evento-breadcrumb">
+		<div class="container">
 			<nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item unactive" @click="$router.push({ name: 'DocumentosCriados' })">
+					<li class="breadcrumb-item unactive hover-pointer" @click="$router.back()">
 						Documentos
 					</li>
 					<li class="breadcrumb-item unactive" aria-current="page">
@@ -17,8 +17,8 @@
 			</nav>
 		</div>
 		<Spinner spinnerColorClass="text-dark" v-if="loadingContent" />
-		<section class="evento-expandido ghp box pt-3" v-else>
-			<div class="row container-fluid">
+		<section class="box p-5 container" v-else>
+			<div class="row p-md-4">
 				<div class="d-flex mt-4 mb-2">
 					<div class="d-flex align-items-center mx-2">
 						{{ tagsFormatadas }}
@@ -31,8 +31,8 @@
 						{{ documento.instituicao }}
 					</div>
 				</div>
-				<div class="row container-fluid">
-					<div class="col-sm-6">
+				<div class="row w-100 ms-3 justify-content-between g-0">
+					<div class="col-md-9 col-12">
 	
 						<div class="d-flex mt-4 mb-2">
 							<img src="/icons/calendar-icon.svg" alt="icone pino de endereço"
@@ -43,12 +43,12 @@
 						</div>
 	
 					</div>
-					<div class="d-flex col-sm-6 align-items-end justify-content-end">
-						<div class="d-flex col-sm-4 align-items-end justify-content-end">
-							<button type="button" class="green-btn-primary">
-								<a :href="documento.download" class="link-btn">Download</a>
-							</button>
-						</div>
+					<div class="col-md-3 col-12 mt-3 mt-md-0 align-items-end justify-content-end ">
+						
+						<button type="button" class="green-btn-primary">
+							<a :href="documento.download" class="link-btn">Download</a>
+						</button>
+						
 					</div>
 				</div>
 
