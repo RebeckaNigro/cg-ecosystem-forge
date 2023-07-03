@@ -2,6 +2,7 @@
 using Ecossistema.Domain.Entities;
 using Ecossistema.Services.Dto;
 using Ecossistema.Services.Interfaces;
+using Ecossistema.Util;
 using Ecossistema.Util.Const;
 using Ecossistema.Util.Validacao;
 using Microsoft.AspNetCore.Http;
@@ -301,7 +302,8 @@ namespace Ecossistema.Services.Services
                     resposta.SetChamadaInvalida("Cpf inválido, insira novamente");
                     return resposta;
                 }
-                var username = model.NomeCompleto.Replace(" ", "");
+                string name = model.NomeCompleto.Replace(" ", "");
+                string username = name.RemoverAcentos();
                 var emailExists = await _userManager.FindByEmailAsync(model.Email);
                 var nameExists = await _userManager.FindByNameAsync(username);
                 var cargo = model.Cargo;
