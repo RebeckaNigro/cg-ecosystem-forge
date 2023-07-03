@@ -1,72 +1,73 @@
 <template>
-
-	<div class="useless-box">
-			<div class="header-card">
-				<span>{{tags}}</span>
-				<img src="/public/view_icon.svg" alt="Visualizar documento">
-			</div>
-			
-			<div class="nome-documento">{{ nomeDocumento }}</div>
-			<div class="nome-autor">Nome do autor</div>
-			<div class="descricao-documento">{{descricao}}</div>
-			<div class="atualizacao">Atualizado em: 01/01/2000 às 12:00</div>
-      	</div>
+	<div class="card-container d-flex flex-column justify-content-evenly align-items-start p-3">
+		<div class="d-flex justify-content-between w-100">
+			<span v-for="tag, index in documento.tags" :key="index" class="font-light">
+				#{{ tag.descricao }}
+			</span>
+			<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer"
+				@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
+		</div>
+		<div class="nome-documento">{{ documento.nome }}</div>
+		<div class="nome-autor font-normal">{{ documento.autor }}</div>
+		<div class="descricao-documento font-normal text-start">{{ documento.descricao }}</div>
+		<div class="atualizacao text-start font-normal">Atualizado em: {{ friendlyDateTime(documento.ultimaOperacao) }}
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
+import { IDocumentoSimplificado } from '../../stores/documentos/types';
+import { friendlyDateTime } from '../../utils/formatacao/datetime';
 
 const props = defineProps<{
-	nomeDocumento: string
-	descricao: string
-	tags: string
+	documento: IDocumentoSimplificado
 }>()
 </script>
 
-<style lang="scss">
-.useless-box {
-    background-color: #fff;
+<style scoped lang="scss">
+.card-container {
+	background-color: #fff;
 	border: 1px solid #6B6A64;
 	border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    height: 300px;
-    width: 300px;
-    margin: 10px 0;
-	padding: 1rem;
+	height: 270px;
+	margin: 10px 0;
 
-	.header-card{
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
 
-		span{
-			font-weight: 300;
-			font-size: 0.8rem;
-		}
-	  }
-
-	  .nome-documento{
+	.nome-documento {
 		font-weight: 600;
-		font-size: 1.5rem;
+		font-size: 28px;
 		text-align: start;
-	  }
+	}
 
-	  .nome-autor{
-		font-weight: 400;
-		font-size: 1rem;
-	  }
+	.nome-autor {
+		font-size: 20px;
+	}
 
-	  .descricao-documento{
-		font-weight: 400;
-		font-size: .8rem;	
-		text-align: start;  
-	   }
+	.descricao-documento {
+		font-size: 16px;
+	}
 
-	   .atualizacao{
-		font-weight: 400;
-		font-size: .7rem;
-	   }
-  }
-</style>
+	.atualizacao {
+		font-size: 15px;
+	}
+}
+
+@media screen and (max-width: 580px) {
+	.card-container {
+		.nome-documento {
+			font-size: 24px;
+		}
+
+		.nome-autor {
+			font-size: 18px;
+		}
+
+		.descricao-documento {
+			font-size: 14px;
+		}
+
+		.atualizacao {
+			font-size: 13px;
+		}
+	}
+}</style>
