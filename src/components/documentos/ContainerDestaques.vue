@@ -11,6 +11,7 @@
 				:documento="doc"
 				:key="index" 
 				class="col-8 col-md-6 col-lg-3"
+				:has-download-option="false"
 				/>
 
 		</main>

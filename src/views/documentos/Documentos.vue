@@ -29,6 +29,7 @@
 							:has-download="false"
 							content-to-download="none"
 							class="col-9 col-md-7 col-lg-3"
+							@click="$router.push({ name: 'Pesquisas'})"
 						/>
 							<CardSessao
 							title="Editais"

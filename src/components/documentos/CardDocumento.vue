@@ -4,8 +4,14 @@
 			<span v-for="tag, index in documento.tags" :key="index" class="font-light">
 				#{{ tag.descricao }}
 			</span>
-			<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer"
-				@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
+			<div>
+				<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer me-3"
+					@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
+	
+					<a :href="downloadLink" class="hover-pointer" v-if="hasDownloadOption">
+						<img src="/icons/download-icon.svg" alt="Download" >
+					</a>
+			</div>
 		</div>
 		<div class="nome-documento">{{ documento.nome }}</div>
 		<div class="nome-autor font-normal">{{ documento.autor }}</div>
@@ -16,12 +22,26 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { useDocumentStore } from '../../stores/documentos/store';
 import { IDocumentoSimplificado } from '../../stores/documentos/types';
 import { friendlyDateTime } from '../../utils/formatacao/datetime';
 
 const props = defineProps<{
 	documento: IDocumentoSimplificado
+	hasDownloadOption: boolean
 }>()
+
+const downloadLink = ref('')
+const documentoStore = useDocumentStore()
+
+onMounted(async () => {
+	if(props.hasDownloadOption){
+		await documentoStore.getDocDetailsById(props.documento.id)
+		downloadLink.value = documentoStore.response.dado.download
+	}
+})
+
 </script>
 
 <style scoped lang="scss">
