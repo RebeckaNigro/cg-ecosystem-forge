@@ -10,7 +10,7 @@ import EventoExpandido from "../views/eventos/expandido/EventoExpandido.vue"
 import Noticias from "../views/noticias/Noticias.vue"
 import NoticiaExpandida from "../views/noticias/expandida/NoticiaExpandida.vue"
 import Documentos from "../views/documentos/Documentos.vue"
-import DocumentosPesquisa from "../views/documentos/pesquisa/DocumentosPesquisa.vue"
+import Pesquisa from "../views/documentos/pesquisa/Pesquisa.vue"
 import Login from "../views/login/Login.vue"
 import UserHome from "../views/user/UserHome.vue"
 import GerenciaNoticia from "../views/user/noticias/GerenciaNoticia.vue"
@@ -114,9 +114,9 @@ const routes: RouteRecordRaw[] = [
 	  }
 	},
   {
-    path: "/documentos/:tipoDocumento",
-    name: "DocumentosPesquisa",
-    component: DocumentosPesquisa,
+    path: "/pesquisas",
+    name: "Pesquisas",
+    component: Pesquisa,
     meta: {
       public: true
     }

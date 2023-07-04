@@ -114,7 +114,7 @@ export const useDocumentStore = defineStore("documentStore", {
 
 		async getAllDocs() {
 			try {
-				const response = await httpRequest.get("api/documento/listarTodas")
+				const response = await httpRequest.get("api/documento/listarTodos")
 				if (response.data.codigo === 200) {
 					this.response.putResponse(
 						response.data.codigo,
@@ -192,25 +192,6 @@ export const useDocumentStore = defineStore("documentStore", {
 				}
 			}
 		},
-
-		async downloadDoc(documentId: number, nome: string) {
-			try {
-				const response = await httpRequest.get(
-					`/api/documento/downloadDocumento?id=${documentId}&nome=${nome}&origem=3`
-				)
-				if (response.data.codigo === 200) {
-					this.response.putResponse(
-						response.data.codigo,
-						response.data.retorno,
-						response.data.resposta
-					)
-				} else {
-					console.log(response.data.codigo)
-				}
-			} catch (error) {
-				console.error(error)
-			}
-		},
 		async getDocDetailsById(documentId: number) {
 			try {
 				const response = await httpRequest.get(
@@ -228,6 +209,15 @@ export const useDocumentStore = defineStore("documentStore", {
 			} catch (error) {
 				console.error(error)
 			}
+		},
+		async getResearches(){
+			await this.getAllDocs()
+			const researches = this.response.dado.filter((doc: IDocumentoSimplificado) => {
+				return doc.documentoArea.toLowerCase() === 'pesquisa' ? true : false
+				
+			})
+
+			return researches
 		}
 
 	},

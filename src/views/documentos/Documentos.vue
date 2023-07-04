@@ -1,5 +1,5 @@
 <template>
-	<section class="container-fluid">
+	<section>
 		<main>
 			<Banner
 				path="/documentos/banner.png"
@@ -12,44 +12,46 @@
 				
 			</Banner>
 
-			<div class="badge bg-success text-wrap fs-6 my-4" style="width: 8rem;">
-				<span>Em breve.</span>
-			</div>
-
-			<!--<div class="destaques-content ghp">
+			<div class="destaques-content container">
 				<ContainerDestaques />
 			</div>
 
-			<div class="documentos-content">
-				<h1 class="dark-title">SESSÕES</h1>
-
-				<div class="card-documentos-container ghp">
-					<CardSessao
-						title="Pesquisas"
-						text="Em breve."
-						:has-icon="true"
-						iconPath="../../public/search_icon_2.svg"
-						:has-download="false"
-						content-to-download="none"
-					/>
+			<div class="linear-bg">
+				<div class="documentos-content w-100 container">
+					<h1 class="font-semibold">SESSÕES</h1>
+	
+					<div class="row mt-4 justify-content-center gap-5">
 						<CardSessao
-						title="Editais"
-						text="Em breve."
-						:has-icon="true"
-						iconPath="../../public/list_icon.svg"
-						:has-download="false"
-						content-to-download="none"
-					/>
-						<CardSessao
-						title="Leis"
-						text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul."
-						:has-icon="true"
-						iconPath=".././public/paper_fold_icon.svg"
-						:has-download="false"
-						content-to-download="none"
-					/>
+							title="Pesquisas"
+							text="Em breve."
+							:has-icon="true"
+							iconPath="../../public/search_icon_2.svg"
+							:has-download="false"
+							content-to-download="none"
+							class="col-9 col-md-7 col-lg-3"
+							@click="$router.push({ name: 'Pesquisas'})"
+						/>
+							<CardSessao
+							title="Editais"
+							text="Em breve."
+							:has-icon="true"
+							iconPath="../../public/list_icon.svg"
+							:has-download="false"
+							content-to-download="none"
+							class="col-9 col-md-7 col-lg-3"
+						/>
+							<CardSessao
+							title="Leis"
+							text="Leis que apoiam o desenvolvimento e inovação em Campo Grande e Mato Grosso do Sul."
+							:has-icon="true"
+							iconPath=".././public/paper_fold_icon.svg"
+							:has-download="false"
+							content-to-download="none"
+							class="col-9 col-md-7 col-lg-3"
+						/>
+					</div>
 				</div>
-			</div>-->
+			</div>
 		</main>
 	</section>
 </template>
@@ -63,53 +65,21 @@ import ExternalHeader from '../../components/general/ExternalHeader.vue';
 </script>
 
 <style scoped lang="scss">
-section.container-fluid {
-	padding: 0;
+.linear-bg{
+	background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #F8F9FA;
 }
-
 .destaques-content {
-	width: 100%;
 	padding-bottom: 24px;
-	background: #FBFBFB
-;
-
-	> h1 {
-		font-weight: bold !important;
-		text-transform: uppercase;
-	}
+	background: #FBFBFB;
 }
 
 .documentos-content {
-  width: 100%;
-
   padding: 2rem 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #F8F9FA;
 
-	> h1 {
-		font-weight: bold !important;
-		text-transform: uppercase;
-    	font-size: 1.5rem;
+	h1{
+		color: #1E1E1E;
+		font-size: 28px;	
 	}
 }
 
-.card-documentos-container {
-	display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 2rem;
-}
-@media (max-width: 1045px) {
-  .card-documentos-container {
-    justify-content: space-around;
-  }
-}
-@media (max-width: 576px) {
- 
-  .noticias-content {
-    > h1 {
-      font-size: 1.2rem;
-    }
-  }
-}
 </style>
