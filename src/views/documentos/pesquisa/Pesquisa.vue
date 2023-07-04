@@ -40,15 +40,20 @@
 
 			<div class="row">
 
-				<div v-for="(doc, index) in researches" class="col-4">
+				<div v-for="(doc, index) in documentoStore.researches" class="col-4">
 					<CardDocumento
 						:documento="doc"
 						class="col w-75"
 						:has-download-option="true"
+						:key="index"
 					/>
 				</div>
 			</div>
 		</div>
+
+		<button class="green-btn-primary w-25 my-5" @click="addMoreResearchs">
+			Ver mais
+		</button>
     </section>
 </template>
 
@@ -62,73 +67,24 @@ import SearchComponent from '../../../components/general/SearchComponent.vue';
 import { IDocumentoSimplificado } from '../../../stores/documentos/types';
 import { useDocumentStore } from '../../../stores/documentos/store';
 
-const dummyResearchs = reactive([
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    }
-])
-
 const documentoStore = useDocumentStore()
 const researches = ref<IDocumentoSimplificado[]>([])
-const documento = ref<IDocumentoSimplificado>({
-	id: 1,
-	nome: "Alo",
-	descricao: "Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam.",
-	documentoArea: "Pesquisa",
-	ultimaOperacao: "2023-07-03T10:58:54.14",
-	autor: "Genilsin",
-	tags: [{descricao: 'inovacao', id: 7}],
-	data: '2023-07-03T14:58:54.067'
-})
-
+const page = ref(1)
 
 onMounted(async () => {
-    researches.value = await documentoStore.getResearches()
+    await documentoStore.getResearches(page.value)
+	researches.value = documentoStore.researches
 	console.log(researches.value);
 	
 })
+
+const addMoreResearchs = async () => {
+	page.value++
+	await documentoStore.getResearches(page.value)
+	researches.value.concat(documentoStore.researches)
+	console.log(researches.value);
+	
+}
 </script>
 
 <style scoped lang="scss">

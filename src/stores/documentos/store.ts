@@ -7,6 +7,7 @@ const lastDocs: Array<IDocumentoSimplificado> = []
 const allDocs: Array<IDocumentoSimplificado> = []
 const allUserDocs: Array<IDocumentoSimplificado> = []
 const allUserLastDocs: Array<IDocumentoSimplificado> = []
+const researches: Array<IDocumentoSimplificado> = []
 export const useDocumentStore = defineStore("documentStore", {
 	state: () => {
 		return {
@@ -14,7 +15,8 @@ export const useDocumentStore = defineStore("documentStore", {
 			lastDocs,
 			allDocs,
 			allUserDocs,
-			allUserLastDocs
+			allUserLastDocs,
+			researches
 		}
 	},
 	persist: false,
@@ -112,9 +114,9 @@ export const useDocumentStore = defineStore("documentStore", {
 			}
 		},
 
-		async getAllDocs() {
+		async getAllDocs(page: number) {
 			try {
-				const response = await httpRequest.get("api/documento/listarTodos")
+				const response = await httpRequest.get(`api/documento/listarTodos?paginacao=${page.toString()}`)
 				if (response.data.codigo === 200) {
 					this.response.putResponse(
 						response.data.codigo,
@@ -122,9 +124,13 @@ export const useDocumentStore = defineStore("documentStore", {
 						response.data.resposta
 					)
 					this.allDocs = []
-					for (const docs of response.data.retorno) {
-						this.allDocs.push(docs)
-					}
+					this.allDocs.concat(response.data.retorno)
+
+					
+				}else{
+					this.response.putError(response.data.codigo, response.data.resposta)
+					
+					
 				}
 			} catch (error) {
 				console.error(error)
@@ -210,14 +216,13 @@ export const useDocumentStore = defineStore("documentStore", {
 				console.error(error)
 			}
 		},
-		async getResearches(){
-			await this.getAllDocs()
-			const researches = this.response.dado.filter((doc: IDocumentoSimplificado) => {
+		async getResearches(page: number){
+			await this.getAllDocs(page)
+			this.researches = this.allDocs.filter((doc: IDocumentoSimplificado) => {
 				return doc.documentoArea.toLowerCase() === 'pesquisa' ? true : false
 				
 			})
 
-			return researches
 		}
 
 	},
