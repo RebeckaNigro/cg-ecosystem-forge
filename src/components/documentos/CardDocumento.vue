@@ -1,10 +1,10 @@
 <template>
-	<div class="card-container d-flex flex-column justify-content-evenly align-items-start p-3">
+	<div class="card-container d-flex flex-column justify-content-evenly align-items-start p-3 ">
 		<div class="d-flex justify-content-between w-100">
 			<span v-for="tag, index in documento.tags" :key="index" class="font-light">
 				#{{ tag.descricao }}
 			</span>
-			<div>
+			<div > 
 				<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer me-3"
 					@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
 	
@@ -15,7 +15,7 @@
 		</div>
 		<div class="nome-documento">{{ documento.nome }}</div>
 		<div class="nome-autor font-normal">{{ documento.autor }}</div>
-		<div class="descricao-documento font-normal text-start">{{ documento.descricao }}</div>
+		<p class="descricao-documento font-normal text-start overflow-hidden">{{ documento.descricao }}</p>
 		<div class="atualizacao text-start font-normal">Atualizado em: {{ friendlyDateTime(documento.ultimaOperacao) }}
 		</div>
 	</div>
@@ -51,7 +51,6 @@ onMounted(async () => {
 	border-radius: 10px;
 	height: 270px;
 	margin: 10px 0;
-
 
 	.nome-documento {
 		font-weight: 600;

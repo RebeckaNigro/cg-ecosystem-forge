@@ -12,9 +12,10 @@
 			paragraph="Tenha acesso às principais pesquisas disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS"
 		/>
     </Banner>
-    <section id="pesquisa-documento" class="container">
-		<div class="row my-5 gap-5">
-			<FilterComponent
+	<Spinner v-if="loading"/>
+    <section id="pesquisa-documento" class="container" v-if="!loading">
+		<div class="row my-5 gap-5 justify-content-end">
+			<!-- <FilterComponent
 				field="área"
 				:items="[]"
 				type="documento"
@@ -26,12 +27,13 @@
 				:items="[]"
 				type="documento"
 				class="col"
-			/>
+			/> -->
 
 			<SearchComponent
-				:items="[]"
+				:items="documentoStore.researches"
 				type="documento"
-				class="col align-self-end"
+				class="col-3"
+				@search-result="filtrarDocumentos"
 			/>
 		</div>
 
@@ -45,90 +47,57 @@
 						:documento="doc"
 						class="col w-75"
 						:has-download-option="true"
+						:key="index"
 					/>
 				</div>
 			</div>
 		</div>
+
+		<Spinner v-if="loadingMoreContent"/>
+		<button class="green-btn-primary w-25 my-5" @click="addMoreResearchs" v-if="!loadingMoreContent">
+			Ver mais
+		</button>
     </section>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref} from 'vue';
+import { onMounted, ref} from 'vue';
 import Banner from '../../../components/general/Banner.vue';
 import CardDocumento from '../../../components/documentos/CardDocumento.vue';
 import ExternalHeader from '../../../components/general/ExternalHeader.vue';
-import FilterComponent from '../../../components/general/FilterComponent.vue';
 import SearchComponent from '../../../components/general/SearchComponent.vue';
 import { IDocumentoSimplificado } from '../../../stores/documentos/types';
 import { useDocumentStore } from '../../../stores/documentos/store';
-
-const dummyResearchs = reactive([
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    },
-    {
-        title: 'NOME DA PESQUISA',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-        downloadPath: ''
-    }
-])
+import Spinner from '../../../components/general/Spinner.vue';
 
 const documentoStore = useDocumentStore()
 const researches = ref<IDocumentoSimplificado[]>([])
-const documento = ref<IDocumentoSimplificado>({
-	id: 1,
-	nome: "Alo",
-	descricao: "Lorem ipsum dolor sit amet consectetur. Tortor non aliquam enim in nunc at aliquam.",
-	documentoArea: "Pesquisa",
-	ultimaOperacao: "2023-07-03T10:58:54.14",
-	autor: "Genilsin",
-	tags: [{descricao: 'inovacao', id: 7}],
-	data: '2023-07-03T14:58:54.067'
-})
+const page = ref(1)
+const loading = ref(false)
+const loadingMoreContent = ref(false)
 
 
 onMounted(async () => {
-    researches.value = await documentoStore.getResearches()
-	console.log(researches.value);
-	
+	loading.value = true
+    await documentoStore.getResearches(page.value)
+	researches.value = documentoStore.researches
+	loading.value = false
 })
+
+const addMoreResearchs = async () => {
+	loadingMoreContent.value = true
+	page.value++
+	await documentoStore.getResearches(page.value)
+	researches.value = documentoStore.researches
+	loadingMoreContent.value = false
+}
+
+const filtrarDocumentos = (
+    documentosFiltrados: Array<IDocumentoSimplificado>
+  ) => {
+    researches.value = documentosFiltrados
+  }
+
 </script>
 
 <style scoped lang="scss">
