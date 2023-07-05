@@ -152,8 +152,8 @@ namespace Ecossistema.Services.Services
                 if (dado.EnderecoId == null)
                 {
                     var endereco = dado.Endereco;
-
-                    dado.EnderecoId = await _enderecoService.Vincular(endereco, dataAtual, usuarioId, resposta);
+                    if(endereco != null)
+                        dado.EnderecoId = await _enderecoService.Vincular(endereco, dataAtual, usuarioId, resposta);
 
                     if (dado.EnderecoId == 0) return resposta;
                 }
@@ -198,26 +198,30 @@ namespace Ecossistema.Services.Services
                     _unitOfWork.Eventos.Update(objAlt);
 
                     resposta.Retorno = _unitOfWork.Complete() > 0;
-                    if (item.Arquivo.Count > 0)
+                    if(item.Arquivo != null)
                     {
-                        var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
-                        if (encontra == 0)
+                        if (item.Arquivo.Count > 0)
                         {
-                            await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivo, usuarioId, dataAtual, resposta);
-                        }
-                        else
-                        {
-                            IFormFile arquivo = item.Arquivo[item.Arquivo.Count - 1];
-                            ArquivoDto arquivoDto = new ArquivoDto();
-                            arquivoDto.Id = encontra;
-                            arquivoDto.NomeOriginal = arquivo.FileName;
-                            arquivoDto.Extensao = arquivo.ContentType;
-                            await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
-                            _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
-                            resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
-                        }
+                            var encontra = await _arquivoService.EncontraArquivoId(dado.Id.Value, EOrigem.Evento);
+                            if (encontra == 0)
+                            {
+                                await _arquivoService.Vincular(EOrigem.Evento, idEvento, item.Arquivo, usuarioId, dataAtual, resposta);
+                            }
+                            else
+                            {
+                                IFormFile arquivo = item.Arquivo[item.Arquivo.Count - 1];
+                                ArquivoDto arquivoDto = new ArquivoDto();
+                                arquivoDto.Id = encontra;
+                                arquivoDto.NomeOriginal = arquivo.FileName;
+                                arquivoDto.Extensao = arquivo.ContentType;
+                                await _arquivoService.ExcluirDoDiretorio(idEvento, "evento");
+                                _arquivoService.SalvarArquivo(encontra, arquivo, EOrigem.Evento);
+                                resposta = await _arquivoService.Atualizar(arquivoDto, EOrigem.Evento, usuarioId);
+                            }
 
+                        }
                     }
+                    
 
                     if (item.Tags != null)
                     {
