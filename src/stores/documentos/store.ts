@@ -118,19 +118,11 @@ export const useDocumentStore = defineStore("documentStore", {
 			try {
 				const response = await httpRequest.get(`api/documento/listarTodos?paginacao=${page.toString()}`)
 				if (response.data.codigo === 200) {
-					this.response.putResponse(
-						response.data.codigo,
-						response.data.retorno,
-						response.data.resposta
-					)
-					this.allDocs = []
-					this.allDocs.concat(response.data.retorno)
-
-					
+					page === 1 ? this.allDocs = response.data.retorno
+					: this.allDocs = this.allDocs.concat(response.data.retorno)
+		
 				}else{
 					this.response.putError(response.data.codigo, response.data.resposta)
-					
-					
 				}
 			} catch (error) {
 				console.error(error)

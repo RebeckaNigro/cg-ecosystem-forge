@@ -4,7 +4,7 @@
 			<span v-for="tag, index in documento.tags" :key="index" class="font-light">
 				#{{ tag.descricao }}
 			</span>
-			<div>
+			<div > 
 				<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer me-3"
 					@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
 	
