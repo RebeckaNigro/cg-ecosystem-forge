@@ -8,6 +8,7 @@ const allDocs: Array<IDocumentoSimplificado> = []
 const allUserDocs: Array<IDocumentoSimplificado> = []
 const allUserLastDocs: Array<IDocumentoSimplificado> = []
 const researches: Array<IDocumentoSimplificado> = []
+const editais: Array<IDocumentoSimplificado> = []
 export const useDocumentStore = defineStore("documentStore", {
 	state: () => {
 		return {
@@ -16,7 +17,8 @@ export const useDocumentStore = defineStore("documentStore", {
 			allDocs,
 			allUserDocs,
 			allUserLastDocs,
-			researches
+			researches,
+			editais
 		}
 	},
 	persist: false,
@@ -215,7 +217,15 @@ export const useDocumentStore = defineStore("documentStore", {
 				
 			})
 
-		}
+		},
+		async getEditais(page: number){
+			await this.getAllDocs(page)
+			this.editais = this.allDocs.filter((doc: IDocumentoSimplificado) => {
+				return doc.documentoArea.toLowerCase() === 'edital' ? true : false
+				
+			})
+
+		},
 
 	},
 

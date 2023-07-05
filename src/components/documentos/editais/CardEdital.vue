@@ -1,16 +1,23 @@
 <template>
 	<div class="card-container">
 		<div class="edital-info">
-			<p>Nome e descrição do edital</p>
-			<span>Atualizado em 01/01/2000 às 12:00</span>
+			<p>{{documento.nome}}</p>
+			<p>{{documento.descricao}}</p>
+			<span>Atualizado em {{friendlyDateTime(documento.ultimaOperacao)}}</span>
 		</div>
-		<div class="ver-edital">
+		<div class="ver-edital" @click="$router.push({name: 'DocumentoExpandido', params: { documentoId: documento.id}})">
 			<img src="../../../../public/view_icon.svg" alt="Visualizar edital">
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { IDocumentoSimplificado } from '../../../stores/documentos/types';
+import { friendlyDateTime } from '../../../utils/formatacao/datetime';
+
+const props = defineProps<{
+	documento: IDocumentoSimplificado
+}>()
 </script>
 
 <style scoped lang="scss">

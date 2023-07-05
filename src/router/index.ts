@@ -23,6 +23,7 @@ import EsqueciSenha from "../components/esqueciSenha/EsqueciSenha.vue"
 import RedefinirSenha from "../components/esqueciSenha/RedefinirSenha.vue"
 import Perfil from "../views/perfil/Perfil.vue"
 import DocumentoExpandido from '../views/documentos/expandido/DocumentoExpandido.vue'
+import Editais from '../views/documentos/editais/Editais.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -117,6 +118,14 @@ const routes: RouteRecordRaw[] = [
     path: "/pesquisas",
     name: "Pesquisas",
     component: Pesquisa,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: "/editais",
+    name: "Editais",
+    component: Editais,
     meta: {
       public: true
     }
