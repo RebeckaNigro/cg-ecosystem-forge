@@ -142,7 +142,7 @@
 			</div>
 		</div>
 		
-		<!--LOCAL DO EVENTO E CPF-->
+		<!--LOCAL DO EVENTO E CEP-->
 		<div class="row">
 			<div class="col-12 col-md-6 mb-3 mb-md-0" :class="evento.tipoEventoId == 2 ? 'col-md-12': ''">
 				<!-- LOCAL DO EVENTO -->
@@ -157,7 +157,7 @@
 				<div class="mb-3" >
 					<div class="text-start">
 						<label for="cep" class="form-label-primary d-inline">CEP
-							<a href="https://buscacepinter.correios.com.br/app/endereco/index.php">(Não sei meu CEP)</a></label>
+							<a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">(Não sei meu CEP)</a></label>
 					</div>
 
 					<input type="text" id="cep" class="form-input-primary" v-model="evento.endereco.cep" @blur="buscarCEP"
@@ -258,27 +258,27 @@
 
 		<div class="mx-auto card-position box p-5 mb-5">
 			<div class="mb-5">
-				<img :src="base64Image" class="w-100 max-image-width" alt="capa evento" />
+				<img :src="base64Image" class="w-100 img-fluid" alt="capa evento" />
 			</div>
 
 			<h1 class="text-start">{{ evento.titulo }}</h1>
 			<div class="d-flex mt-4 mb-2">
 				<img src="/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
-				<div class="d-flex align-items-center mx-2 fw-bold">
+				<div class="d-flex align-items-center mx-2">
 					{{ evento.responsavel }}
 				</div>
 			</div>
 
 			<div class="d-flex mt-4 mb-2">
 				<img src="/icons/calendar-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
-				<div class="d-flex align-items-center mx-2 fw-bold">
+				<div class="d-flex align-items-center mx-2">
 					{{ dataFormatada }}
 				</div>
 			</div>
 
 			<div class="d-flex mt-4 mb-2">
 				<img src="/icons/pin-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
-				<div class="d-flex align-items-center mx-2 fw-bold">
+				<div class="d-flex align-items-center mx-2">
 					{{
 						evento.tipoEventoId == 1
 						? `${evento.local} - ${enderecoFormatado}`

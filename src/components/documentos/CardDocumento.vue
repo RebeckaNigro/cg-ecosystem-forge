@@ -5,7 +5,7 @@
 				#{{ tag.descricao }}
 			</span>
 			<div > 
-				<img src="/public/view_icon.svg" alt="Visualizar documento" class="hover-pointer me-3"
+				<img src="/view_icon.svg" alt="Visualizar documento" class="hover-pointer me-3"
 					@click="$router.push({ name: 'DocumentoExpandido', params: { documentoId: documento.id } })">
 	
 					<a :href="downloadLink" class="hover-pointer" v-if="hasDownloadOption">

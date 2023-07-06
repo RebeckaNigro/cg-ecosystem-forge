@@ -212,7 +212,7 @@
         />
         <img
           v-else
-          src="/public/noticias/noticia-expandida/default-news-cover.svg"
+          src="/noticias/noticia-expandida/default-news-cover.svg"
           class="w-100 mt-5 img-fluid"
           alt="capa noticia"
         />

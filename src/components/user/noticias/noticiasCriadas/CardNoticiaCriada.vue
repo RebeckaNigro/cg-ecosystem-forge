@@ -6,7 +6,7 @@
           :src="
             noticia.arquivo
               ? 'data:image/png;base64, ' + noticia.arquivo
-              : '/public/noticias/noticia-expandida/default-news-cover.svg'
+              : '/noticias/noticia-expandida/default-news-cover.svg'
           "
           alt="news-image"
           class="image-limiter"
@@ -17,7 +17,7 @@
         <div class="container-mascara-rascunho">
           <div class="mascara-rascunho">
             <img
-              src="/public/noticias/noticia-expandida/default-news-cover.svg"
+              src="/noticias/noticia-expandida/default-news-cover.svg"
               alt="news-image"
               class="image-limiter"
             />
@@ -40,7 +40,7 @@
 
           <div class="col-6 col-md-4 text-end p-0" v-if="!props.isRascunho">
             <img
-              src="/public/view_icon.svg"
+              src="/view_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -51,7 +51,7 @@
               "
             />
             <img
-              src="/public/edit_icon.svg"
+              src="/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -62,7 +62,7 @@
               "
             />
             <img
-              src="/public/delete_icon.svg"
+              src="/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"
@@ -71,13 +71,13 @@
 
           <div class="col-6 col-md-4 text-end" v-else>
             <img
-              src="/public/edit_icon.svg"
+              src="/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="loadFormComRascunho"
             />
             <img
-              src="/public/delete_icon.svg"
+              src="/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDeleteRascunho"
