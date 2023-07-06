@@ -71,6 +71,7 @@ export const useEventoStore = defineStore("eventoStore", {
             response.data.retorno,
             response.data.resposta
           )
+		  this.eventosUsuarioLogado = []
           for (const event of response.data.retorno) {
             this.eventosUsuarioLogado.push(event)
           }

@@ -6,7 +6,7 @@
 			<span>Atualizado em {{friendlyDateTime(documento.ultimaOperacao)}}</span>
 		</div>
 		<div class="ver-edital" @click="$router.push({name: 'DocumentoExpandido', params: { documentoId: documento.id}})">
-			<img src="../../../../public/view_icon.svg" alt="Visualizar edital">
+			<img src="/view_icon.svg" alt="Visualizar edital">
 		</div>
 	</div>
 </template>

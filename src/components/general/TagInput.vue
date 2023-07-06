@@ -12,7 +12,7 @@
 		<div v-for="(tag, index) in tags"
 		:key="tag" class="tag">
 			<span>{{ tag }}</span>
-			<img src="../../../public/close_icon.svg" alt="Remover tag" class="remove-tag ms-1" @click="removeTag(index)">
+			<img src="/close_icon.svg" alt="Remover tag" class="remove-tag ms-1" @click="removeTag(index)">
 		</div>
 	</div>
 
