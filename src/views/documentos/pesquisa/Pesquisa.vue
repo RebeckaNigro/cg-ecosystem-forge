@@ -32,7 +32,7 @@
 			<SearchComponent
 				:items="documentoStore.researches"
 				type="documento"
-				class="col-3"
+				class="col-lg-3 col-md-5 col-7"
 				@search-result="filtrarDocumentos"
 			/>
 		</div>
@@ -42,7 +42,7 @@
 
 			<div class="row">
 
-				<div v-for="(doc, index) in researches" class="col-4">
+				<div v-for="(doc, index) in researches" class="col-lg-4 col-md-6 col-12">
 					<CardDocumento
 						:documento="doc"
 						class="col w-75"

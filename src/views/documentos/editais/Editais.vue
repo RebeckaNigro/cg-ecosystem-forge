@@ -17,7 +17,7 @@
 			<SearchComponent
 				:items="novosEditais"
 				type="documento"
-				class="col-3 align-self-end"
+				class="col-lg-3 col-md-5 col-7 align-self-end"
 				@search-result="filtrarEditais"
 			/>
 		</div>

@@ -202,12 +202,12 @@
           {{ authorName }}
         </div>
       </div>
-      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(noticia.dataPublicacao) }}</time>
-      <div class="mb-5">
+      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(dataFormatada) }}</time>
+      <div class="mb-5 mt-4">
         <img
           v-if="base64Image"
           :src="base64Image"
-          class="w-100 max-image-width"
+          class="w-100 img-fluid"
           alt="capa noticia"
         />
         <img
@@ -490,7 +490,8 @@
   }
 
   const visualizar = async () => {
-    dataFormatada.value = brDateString(data.value)
+    dataFormatada.value = data.value.concat(`T${hora.value}`)
+	
 
     if (arquivo.value) {
       const resultado = await fileToBase64(arquivo.value)
