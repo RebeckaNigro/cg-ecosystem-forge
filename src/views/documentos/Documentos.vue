@@ -23,7 +23,7 @@
 					<div class="row mt-4 justify-content-center gap-5">
 						<CardSessao
 							title="Pesquisas"
-							text="Em breve."
+							text="Tenha acesso às principais pesquisas disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS"
 							:has-icon="true"
 							iconPath="/search_icon_2.svg"
 							:has-download="false"
@@ -33,7 +33,7 @@
 						/>
 							<CardSessao
 							title="Editais"
-							text="Em breve."
+							text="Tenha acesso aos principais editais disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS"
 							:has-icon="true"
 							iconPath="/list_icon.svg"
 							:has-download="false"

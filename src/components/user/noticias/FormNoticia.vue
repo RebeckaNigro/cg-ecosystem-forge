@@ -202,7 +202,7 @@
           {{ authorName }}
         </div>
       </div>
-      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(dataFormatada) }}</time>
+      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(dataFormatada!) }}</time>
       <div class="mb-5 mt-4">
         <img
           v-if="base64Image"
@@ -491,7 +491,6 @@
 
   const visualizar = async () => {
     dataFormatada.value = data.value.concat(`T${hora.value}`)
-	
 
     if (arquivo.value) {
       const resultado = await fileToBase64(arquivo.value)
