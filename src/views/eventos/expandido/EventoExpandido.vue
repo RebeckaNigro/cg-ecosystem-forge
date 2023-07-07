@@ -21,7 +21,7 @@
 				<div class="mb-5">
 					<img class="img-fluid w-100" :src="evento.arquivos[0]
 							? 'data:image/png;base64, ' + evento.arquivos[0].arquivo
-							: '/public/eventos/eventoExpandido/default-event-cover.svg'
+							: '/eventos/eventoExpandido/default-event-cover.svg'
 						" alt="capa do evento" />
 				</div>
 	
@@ -112,7 +112,7 @@
 
 		<div class="btn-up-container" @click="handleNavigateUp">
 			<button class="btn-up">
-				<img src="/public/arrow_up.svg" alt="Seta para cima" />
+				<img src="/arrow_up.svg" alt="Seta para cima" />
 				Subir pro topo
 			</button>
 		</div>

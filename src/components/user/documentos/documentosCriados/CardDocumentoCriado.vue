@@ -11,7 +11,7 @@
 
           <div class="col-6 col-md-4 text-end d-flex justify-content-end">
             <img
-              src="/public/view_icon.svg"
+              src="/view_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -22,7 +22,7 @@
               "
             />
             <img
-              src="/public/edit_icon.svg"
+              src="/edit_icon.svg"
               alt=""
               class="image-icon-button"
               @click="
@@ -33,7 +33,7 @@
               "
             />
             <img
-              src="/public/delete_icon.svg"
+              src="/delete_icon.svg"
               alt=""
               class="image-icon-button"
               @click="confirmDelete"

@@ -22,9 +22,9 @@
 				<div class="dropdown dropdown-center" v-if="userStore.loggedUser.token" id="profile">
 					<button class="border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
 						>
-						<img src="/public/noticias/noticia-expandida/user.svg" alt="Ícone usuário" class="img-fluid" />
+						<img src="/noticias/noticia-expandida/user.svg" alt="Ícone usuário" class="img-fluid" />
 						<span class="px-2">{{ userStore.loggedUser.userName }}</span>
-						<img src="/public/arrow_down_icon.svg" alt="Abrir opções" class="img-fluid" />
+						<img src="/arrow_down_icon.svg" alt="Abrir opções" class="img-fluid" />
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="profile">
 

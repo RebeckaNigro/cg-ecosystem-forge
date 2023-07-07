@@ -1,7 +1,7 @@
 <template>
 	<div class="input-icon-container overflow-hidden">
 		<i class="icon overflow-hidden">
-			<img src="../../../public/search_icon.svg" class="input-icon-image" @click="search" />
+			<img src="/search_icon.svg" class="input-icon-image" @click="search" />
 		</i>
 		<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar"
 			class="form-input-primary search-input px-3" v-model="searchWord" @keydown.enter="search" />

@@ -29,7 +29,7 @@
           >
             <div>
               <img
-                src="/public/edit_icon.svg"
+                src="/edit_icon.svg"
                 alt=""
                 class="hover-pointer img-fluid"
                 @click="
@@ -40,7 +40,7 @@
                 "
               />
               <img
-                src="/public/delete_icon.svg"
+                src="/delete_icon.svg"
                 alt=""
                 class="hover-pointer img-fluid"
                 @click="confirmDelete(documento.id)"

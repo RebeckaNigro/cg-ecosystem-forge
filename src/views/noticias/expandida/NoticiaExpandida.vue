@@ -25,7 +25,7 @@
 			</div>
 			<img class="w-100 img-fluid" :src="noticia.arquivo
 					? 'data:image/png;base64, ' + noticia.arquivo
-					: '/public/noticias/noticia-expandida/default-news-cover.svg'
+					: '/noticias/noticia-expandida/default-news-cover.svg'
 				" alt="Capa da notícia" />
 			<p class="subtitulo" id="first-paraghap">
 				{{ noticia.subTitulo }}
@@ -39,7 +39,7 @@
 
 		<div class="btn-up-container" @click="handleNavigateUp">
 			<button class="btn-up">
-				<img src="/public/noticias/noticia-expandida/arrow_up.svg" alt="Seta para cima" />
+				<img src="/noticias/noticia-expandida/arrow_up.svg" alt="Seta para cima" />
 				Subir ao topo
 			</button>
 		</div>
