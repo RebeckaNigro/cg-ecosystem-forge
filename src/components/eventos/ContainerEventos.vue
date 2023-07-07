@@ -1,46 +1,44 @@
 <template>
-  <section id="eventos-content" class="ghp pt-5">
-    <header>
-      <h1 class="dark-title">EVENTOS</h1>
-    </header>
-
-	<Spinner
-		spinner-color-class="text-dark"
-		v-if="loadingContent"
-	/>
-	<div class="card-evento-container pb-5">
-		<nav v-for="(container, containerIndex) in eventos" :key="containerIndex">
-			<CardEvento
-			:evento="container"
-			/>
-		</nav>
-	</div>
+  <section id="eventos-content" class="pt-5">
+	<div class="container">
+		<header>
+		  <h1 class="dark-title">EVENTOS</h1>
+		</header>
 	
-    <footer>
-      <!-- <button type="button" @click.prevent="setSelectedPage(selectedPage - 1)" class="carousel-control-prev-icon"/>
-      <div class="box">
-        <button type="button" v-for="(indicator, index) in indicators" :key="indicator" class="indicator" :class="{'active': selectedPage === index}" @click.prevent="setSelectedPage(index)"/>
-      </div>
-      <button type="button" @click.prevent="setSelectedPage(selectedPage + 1)" class="carousel-control-next-icon"/> -->
-      <GeneralBtn 
-        btnText="VER MAIS"
-        :isExternalLink="false"
-        link="#"
-        bgColor="#639280"
-        width="200px"
-        textColor="#fff"
-        height="40px"
-        id="know_more"
-        @click="addEventsToView()"
-		class="mb-4"
-		:class="{'d-none': (page*6) > eventoStore.eventos.length }"
+		<Spinner
+			spinner-color-class="text-dark"
+			v-if="loadingContent"
+		/>
+		<div class="row pb-3">
+			<div class="col mb-4" v-for="(container, containerIndex) in eventos" :key="containerIndex">
+				<CardEvento
+					:evento="container"
+				/>
+			</div>
+		</div>
 		
-      />
-	  <Spinner
-		spinner-color-class="text-dark"
-		v-if="loadingMoreContent"
-	/>
-    </footer>
+		<footer>
+	
+		  <GeneralBtn 
+			btnText="VER MAIS"
+			:isExternalLink="false"
+			link="#"
+			bgColor="#639280"
+			width="200px"
+			textColor="#fff"
+			height="40px"
+			id="know_more"
+			@click="addEventsToView()"
+			class="mb-4"
+			:class="{'d-none': (page*6) > eventoStore.eventos.length }"
+			
+		  />
+		  <Spinner
+			spinner-color-class="text-dark"
+			v-if="loadingMoreContent"
+		/>
+		</footer>
+	</div>
 		
   
 
@@ -107,24 +105,6 @@ onMounted(async () => {
 	
     } 
 
-
-	.card-evento-container{
-		width: 100%;
-		display: grid;
-		margin: 0 auto;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 48px 32px;
-
-		@media (max-width: 820px) {
-			max-width: 520px;
-			grid-template-columns: 1fr 1fr;
-		}
-
-		@media (max-width: 580px) {
-			max-width: 280px;
-			grid-template-columns: 1fr;
-		}
-	}
   @media (max-width: 991px) {
     section#eventos-content {
       header {

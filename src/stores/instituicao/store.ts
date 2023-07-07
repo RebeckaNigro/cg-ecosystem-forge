@@ -6,7 +6,7 @@ import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 
 const PERFIL_BASE_RESOURCE = "/api/instituicao"
 
-const instituicao: Instituicao = {
+const instituicao: IInstituicao = {
   id: -1,
   razaoSocial: "",
   cnpj: "",
@@ -47,6 +47,20 @@ export const useInstituicaoStore = defineStore("instituicaoStore", {
         console.error(error)
         this.response.putError(222, error.message)
       }
-    }
+    },
+	async getInstituicaoById(instituicaoId: number){
+		try{
+			const response = await httpRequest.get(`${PERFIL_BASE_RESOURCE}/buscarInstituicaoPorId?Id=${instituicaoId.toString()}`)
+			this.instituicao = response.data.retorno
+			this.response.putResponse(
+				response.data.codigo,
+				response.data.retorno,
+				response.data.resposta
+			)
+		}catch(error){
+			console.error(error);
+			this.response.putError(222, error.message)
+		}
+	}
   }
 })

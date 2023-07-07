@@ -1,7 +1,7 @@
 <template>
 	<div class="input-icon-container overflow-hidden">
 		<i class="icon overflow-hidden">
-			<img src="../../../public/search_icon.svg" class="input-icon-image" @click="search" />
+			<img src="/search_icon.svg" class="input-icon-image" @click="search" />
 		</i>
 		<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar"
 			class="form-input-primary search-input px-3" v-model="searchWord" @keydown.enter="search" />
@@ -28,11 +28,12 @@ const props = defineProps({
 const emit = defineEmits(["search-result"])
 const results = ref([])
 const searchWord = ref("")
+let emptyInput = false
 
 const search = () => {
 	if (!searchWord.value) {
 		results.value = props.items
-
+		emptyInput = true
 		sendSearchResult()
 		return
 	}
@@ -131,7 +132,7 @@ const search = () => {
 }
 
 const sendSearchResult = () => {
-	emit("search-result", results.value)
+	emit("search-result", results.value, emptyInput)
 }
 
 onMounted(() => { })

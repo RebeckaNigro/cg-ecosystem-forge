@@ -1,57 +1,74 @@
 <template>
+	<Banner path="/documentos/editais.png" img-alt="Pesquisas" figcaption="Pesquisas" :img-overlay="true">
+		<ExternalHeader title="Editais"
+			paragraph="Tenha acesso aos principais editais disponibilizados pelo Ecossistema Local de Inovação - Campo Grande - MS" />
 
-	<section id="editais-container" class="container-fluid">
+	</Banner>
+	<section id="editais-container" class="container my-5">
 
-		<!--
-		Filtros e pesquisa
-	-->
-		<main class="ghp row mt-5 mb-5">
+		<div class="row justify-content-end">
+			<!-- <FilterComponent
+				:items="[]"
+				type="documento"
+				field="status"
+				class="col-3"
+			/> -->
+
+			<SearchComponent
+				:items="novosEditais"
+				type="documento"
+				class="col-lg-3 col-md-5 col-7 align-self-end"
+				@search-result="filtrarEditais"
+			/>
+		</div>
+		<Spinner v-if="loading"/>
+		<main class="row mt-5 mb-5" v-if="!loading">
 
 			<div class="d-flex w-100 mb-4">
-				<div>
-					<a class="dropdown-toggle" href="#" @click="novosEditaisToggle">
+				<div @click="novosEditaisToggle" class="d-flex hover-pointer align-items-center">
+					<span class="dark-title text-nowrap font-semibold">
 						Novos editais
-					</a>
+					</span>
+					<img src="/parceiros/arrow-down.svg" alt="Mostrar editais" class="mx-2">
 				</div>
-				
-				<hr class="w-100 ms-3">
+
+				<hr class="w-100">
 			</div>
 
-			<div v-if="isNovosEditaisVisible">
-				<div v-for="card, index of dummyEdicts" >
-					<CardEdital/>
+			<div v-if="isNovosEditaisVisible" class="px-4">
+				<div v-for="card, index of novosEditais">
+					<CardEdital :documento="card" />
 				</div>
-	
-				<GeneralBtn
-					btnText="Ver mais"
-					:isExternalLink="false"
-					link=""
-					bgColor="#639280"
-					width="150px"
-					textColor="#fff"
-					height="45px"
-					id="ver-mais"
-				/>
+
+				<Spinner v-if="loadingMoreContent"/>
+			
+
+				<button class="green-btn-primary w-25" v-if="!loadingMoreContent" @click="addMoreEditais">
+					Ver mais
+				</button>
 			</div>
 
 			<div class="d-flex w-100 mb-4">
-				<div>
-					<a class="dropdown-toggle" href="#">
+				<div class="d-flex hover-pointer align-items-center">
+					<span class="dark-title text-nowrap font-semibold">
 						Em andamento
-					</a>
+					</span>
+					<img src="/parceiros/arrow-down.svg" alt="Mostrar editais" class="mx-2">
 				</div>
-				
-				<hr class="w-100 ms-3">
+
+				<hr class="w-100">
 			</div>
 
+
 			<div class="d-flex w-100 mb-4">
-				<div>
-					<a class="dropdown-toggle" href="#">
+				<div class="d-flex hover-pointer align-items-center">
+					<span class="dark-title text-nowrap font-semibold">
 						Concluídos
-					</a>
+					</span>
+					<img src="/parceiros/arrow-down.svg" alt="Mostrar editais" class="mx-2">
 				</div>
-				
-				<hr class="w-100 ms-3">
+
+				<hr class="w-100">
 			</div>
 
 		</main>
@@ -59,35 +76,45 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import CardEdital from '../../../components/documentos/editais/CardEdital.vue';
 import GeneralBtn from '../../../components/buttons/GeneralBtn.vue';
+import Banner from '../../../components/general/Banner.vue';
+import ExternalHeader from '../../../components/general/ExternalHeader.vue';
+import SearchComponent from '../../../components/general/SearchComponent.vue';
+import {useDocumentStore } from '../../../stores/documentos/store'
+import { IDocumentoSimplificado } from '../../../stores/documentos/types';
+import Spinner from '../../../components/general/Spinner.vue';
 
+const loading = ref(false)
+const loadingMoreContent = ref(false)
 const isNovosEditaisVisible = ref(true)
 
-const dummyEdicts = reactive([
-	{
-		title: 'NOME DO EDITAL',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-		downloadPath: ''
-	},
-	{
-		title: 'NOME DO EDITAL',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-		downloadPath: ''
-	},
-	{
-		title: 'NOME DO EDITAL',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-		downloadPath: ''
-	},
-	{
-		title: 'NOME DO EDITAL',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus vel quidem reprehenderit iste vero exercitationem veniam! Eveniet eius sequi dolorem cupiditate? Porro alias harum similique aliquid eos soluta deserunt distinctio?',
-		downloadPath: ''
-	}
-	
-])
+const documentoStore = useDocumentStore()
+const page = ref(1)
+const novosEditais = ref<IDocumentoSimplificado[]>([])
+
+onMounted(async () => {
+	loading.value = true
+	await documentoStore.getEditais(page.value)
+	novosEditais.value = documentoStore.editais
+	loading.value = false	
+})
+
+const filtrarEditais = (
+    documentosFiltrados: Array<IDocumentoSimplificado>
+  ) => {
+    novosEditais.value = documentosFiltrados
+}
+
+const addMoreEditais = async () => {
+	loadingMoreContent.value = true
+	page.value++
+	await documentoStore.getEditais(page.value)
+	novosEditais.value = documentoStore.editais
+	loadingMoreContent.value = false
+}
+
 
 const novosEditaisToggle = () => {
 	isNovosEditaisVisible.value = !isNovosEditaisVisible.value
@@ -97,13 +124,4 @@ const novosEditaisToggle = () => {
 
 <style scoped lang="scss">
 
-#editais-container{
-
-	.dropdown-toggle{
-		text-decoration: none;
-		color: #000;
-		font-weight: 600;
-		font-size: 1.4rem;
-	}
-}
 </style>

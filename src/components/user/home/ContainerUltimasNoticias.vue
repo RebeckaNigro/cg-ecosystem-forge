@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto box p-5 mb-5">
+  <div class="mx-auto box p-lg-5 py-4 px-3 mb-5">
     <div class="text-center">
       <h1 class="fs-5 fw-bold">Últimas notícias enviadas</h1>
     </div>
@@ -14,7 +14,7 @@
       >
         <div class="row g-0 px-2">
           <div
-            class="col-lg-10 d-flex align-items-center py-2 hover-pointer"
+            class="col-md-10 col-8 d-flex text-start align-items-center py-2 hover-pointer"
             @click="
               $router.push({
                 name: 'NoticiaExpandida',
@@ -25,13 +25,13 @@
             {{ noticia.titulo }}
           </div>
           <div
-            class="col-lg-2 d-flex align-items-center justify-content-end left-separator"
+            class="col-md-2 col-4 d-flex align-items-center justify-content-center left-separator"
           >
-            <div class="container-normal">
+            <div>
               <img
-                src="/public/edit_icon.svg"
+                src="/edit_icon.svg"
                 alt=""
-                class="image-icon-button hover-pointer"
+                class="img-fluid hover-pointer"
                 @click="
                   $router.push({
                     name: 'GerenciaNoticia',
@@ -40,9 +40,9 @@
                 "
               />
               <img
-                src="/public/delete_icon.svg"
+                src="/delete_icon.svg"
                 alt=""
-                class="image-icon-button hover-pointer"
+                class="img-fluid hover-pointer"
                 @click="confirmDelete(noticia.id)"
               />
             </div>
@@ -51,8 +51,8 @@
       </div>
     </div>
 
-    <div class="text-center row container-fluid mt-5 gy-2">
-      <div class="col-lg-6">
+    <div class="text-center row mt-5">
+      <div class="col-5 col-xlg-6">
         <button
           class="green-btn-outlined"
           @click="
@@ -64,7 +64,7 @@
           VER MAIS
         </button>
       </div>
-      <div class="col-lg-6">
+      <div class="col-7 col-xlg-6">
         <button
           class="green-btn-primary"
           @click="$router.push({ name: 'GerenciaNoticia' })"
@@ -133,4 +133,4 @@ import { Modal } from "bootstrap"
   })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

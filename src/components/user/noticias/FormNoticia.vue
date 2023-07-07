@@ -5,7 +5,8 @@
   <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
     EDITE SUA NOTÍCIA!
   </h1>
-  <form class="mx-auto card-position box p-5 mb-5" v-if="!isVisualizacao">
+  <form class="container box p-5 mb-5" v-if="!isVisualizacao">
+	<!--TITULO-->
     <div class="mb-3">
       <label for="titulo" class="form-label-primary">Título*</label>
       <input
@@ -20,6 +21,7 @@
       </div>
     </div>
 
+	<!--SUBTITULO-->
     <div class="mb-3">
       <label for="subtitulo" class="form-label-primary">Subtitulo</label>
       <input
@@ -30,35 +32,34 @@
       />
     </div>
 
+	<!--IMAGEM-->
     <div class="mb-3">
       <label for="arquivo" class="form-label-primary">Imagem de capa*</label>
       <div class="imagem-divulgacao d-flex">
-        <div>
-          <label for="imagem-input" class="borda-cinza" />
-          <input
-            class="form-input-primary"
-            type="file"
-            name="imagem-input"
-            accept="image/png, image/jpg,image/jpeg"
-            id="imagem-input"
-            @change="(e) => onFileChanged(e)"
-          />
+        <div class="row align-items-center">
+			<div class="col-12 col-md">
+				<label for="imagem-input" class="borda-cinza">
+					Dimensão recomendada: 1090x460
+				</label>
+				<input
+				  class="form-input-primary"
+				  type="file"
+				  name="imagem-input"
+				  accept="image/png, image/jpg,image/jpeg"
+				  id="imagem-input"
+				  @change="(e) => onFileChanged(e)"
+				/>
+			</div>
+
+			<div class="col-12 col-md">
+				<span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
+
+			</div>
         </div>
-        <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
       </div>
     </div>
 
-    <!-- <div class="mb-3">
-      <input
-        type="text"
-        id="tags"
-        class="form-input-primary"
-        :class="v$.tags.$error ? 'is-invalid' : ''"
-        v-model="newTag"
-        @keyup.enter="addTag"
-      />
-    </div> -->
-
+    <!--TAGS-->
     <div class="mb-3">
       <label for="tags" class="form-label-primary">Tags</label>
       <AutocompleteComponent
@@ -83,8 +84,8 @@
       </div>
     </div>
 
+	<!--DATA-->
     <label for="data" class="form-label-primary mb-2">PUBLICADA EM:</label>
-
     <div class="row mb-3">
       <div class="col-sm-4">
         <input
@@ -114,11 +115,11 @@
         </div>
       </div>
     </div>
-
+	
+	<!--CORPO DA NOTICIA-->
     <label for="data" class="form-label-primary mt-5 mb-2"
       >CORPO DO TEXTO*</label
     >
-
     <div>
       <QuillEditor
         ref="customEditor"
@@ -135,32 +136,32 @@
     </div>
 
     <Spinner v-if="sendingNews" />
-
-    <div class="row container-fluid">
-      <div class="col-sm-4" v-if="!editFlag">
+	<!--BOTOES-->
+    <div class="row">
+      <div class="col-sm-4 mt-md-3" v-if="!editFlag">
         <button
           type="button"
-          class="gray-btn-primary button-specific"
+          class="gray-btn-primary w-100 mt-4 mb-3 my-md-4"
           @click="salvarRascunho"
         >
           SALVAR RASCUNHO
         </button>
       </div>
 
-      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="mt-md-3">
         <button
           type="button"
-          class="green-btn-outlined button-specific"
+          class="green-btn-outlined w-100 my-3 my-md-4"
           @click="visualizar"
         >
           PRÉ-VISUALIZAR
         </button>
       </div>
 
-      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1">
+      <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1 mt-md-3">
         <button
           type="button"
-          class="green-btn-primary button-specific"
+          class="green-btn-primary w-100 my-3 my-md-4"
           @click="cadastrar"
         >
           ENVIAR
@@ -169,13 +170,13 @@
     </div>
   </form>
 
-  <div v-else>
+  <!--PREVIEW-->
+  <div v-if="isVisualizacao">
     <div class="breadcrumb-container">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li
             class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'Noticias' })"
           >
             Notícias
           </li>
@@ -188,31 +189,31 @@
         </ol>
       </nav>
     </div>
-    <div class="mx-auto card-position box p-5 mb-5">
+    <div class="mx-auto card-position box p-5 mb-5 align-items-start">
       <h1 class="text-start">{{ noticia.titulo }}</h1>
-      <h5 class="text-start mx-3">{{ noticia.subTitulo }}</h5>
+      <h5 class="text-start font-normal">{{ noticia.subTitulo }}</h5>
       <div class="d-flex mt-4 mb-2">
         <img
           src="/icons/user-circle.svg"
           alt="icone usuario"
           class="icone-usuario"
         />
-        <div class="d-flex align-items-center mx-2 fw-bold">
+        <div class="d-flex align-items-center mx-2 font-semibold">
           {{ authorName }}
         </div>
       </div>
-      <div class="text-start mx-2">{{ dataFormatada }}</div>
-      <div class="mb-5">
+      <time class="text-start mx-2 d-flex ">{{ friendlyDateTime(dataFormatada!) }}</time>
+      <div class="mb-5 mt-4">
         <img
           v-if="base64Image"
           :src="base64Image"
-          class="w-100 max-image-width"
+          class="w-100 img-fluid"
           alt="capa noticia"
         />
         <img
           v-else
-          src="/public/noticias/noticia-expandida/default-news-cover.svg"
-          class="w-100 max-image-width"
+          src="/noticias/noticia-expandida/default-news-cover.svg"
+          class="w-100 mt-5 img-fluid"
           alt="capa noticia"
         />
       </div>
@@ -262,7 +263,7 @@
   import { useConfirmStore } from "../../../stores/confirm/store"
   import { useTagStore } from "../../../stores/tag/store"
   import { required, helpers } from "@vuelidate/validators"
-  import { brDateString } from "../../../utils/formatacao/datetime"
+  import { brDateString, friendlyDateTime } from "../../../utils/formatacao/datetime"
   import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime"
   import { fileToBase64 } from "../../../utils/image/converter"
   import ConfirmModal from "../../general/ConfirmModal.vue"
@@ -489,7 +490,7 @@
   }
 
   const visualizar = async () => {
-    dataFormatada.value = brDateString(data.value)
+    dataFormatada.value = data.value.concat(`T${hora.value}`)
 
     if (arquivo.value) {
       const resultado = await fileToBase64(arquivo.value)
@@ -576,20 +577,18 @@
 </script>
 
 <style scoped>
-  .button-specific {
-    width: 100%;
-    margin: 2rem 1rem;
-    box-sizing: border-box;
-  }
-
-  .align-correction {
-    margin-bottom: 0.2rem;
-  }
+ form{
+	max-width: 1000px;
+ }
 
   .icone-usuario {
     width: 30px;
   }
 
+  	time {
+		color: #6b6a64;
+		font-size: .9rem;
+	}
   .imagem-divulgacao div {
     margin-top: 0;
     width: fit-content;
@@ -599,10 +598,12 @@
     width: 100%;
     max-width: 400px;
     margin-left: 0;
+	padding-top: 120px;
     background-color: #fff;
     background-image: url("/user/eventos/cloud_icon.svg");
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 50% 40%;
+	cursor: pointer;
   }
 
   input#imagem-input {

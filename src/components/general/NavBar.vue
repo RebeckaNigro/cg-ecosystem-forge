@@ -5,10 +5,10 @@
 				<MenuLateral />
 
 				<router-link class="navbar-brand" to="/">
-					<img src="/colorful_logo.svg" alt="logo" />
+					<img src="/colorful_logo.svg" alt="logo" class="img-fluid" />
 				</router-link>
 			</div>
-			<section class="container-links d-none d-lg-flex fs-5 m-auto flex-wrap dark-title">
+			<section class="container-links d-none d-xl-flex fs-5 m-auto flex-wrap dark-title">
 				<router-link :to="link.path" v-for="link in maisInfos"
 					class="navbar-text my-auto mx-lg-3 text-decoration-none">{{ link.title }}</router-link>
 			</section>
@@ -18,28 +18,13 @@
 					v-if="!userStore.loggedUser.token">
 					LOGIN
 				</button>
-				<!--<div class="profile dropdown dropdown-center dropdown-responsive" v-if="userStore.loggedUser.token">
-					<div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="profile">
-						<img src="/public/noticias/noticia-expandida/user.svg" alt="Ícone usuário" />
-						<span>{{ userStore.loggedUser.userName }}</span>
-						<img src="/public/arrow_down_icon.svg" alt="Abrir opções" />
-					</div>
-					<ul class="dropdown-menu profile-dropdown" aria-labelledby="profile">
-						<li class="light-title" id="logout" @click="logout">
-							Sair
-						</li>
-					</ul>
-					<div class="profile-dropdown" v-if="isProfileDropdownOpen">
-						<span type="button" class="light-title" id="logout" @click="logout">Sair</span>
-					</div>
-				</div>-->
 
 				<div class="dropdown dropdown-center" v-if="userStore.loggedUser.token" id="profile">
 					<button class="border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
 						>
-						<img src="/public/noticias/noticia-expandida/user.svg" alt="Ícone usuário" />
+						<img src="/noticias/noticia-expandida/user.svg" alt="Ícone usuário" class="img-fluid" />
 						<span class="px-2">{{ userStore.loggedUser.userName }}</span>
-						<img src="/public/arrow_down_icon.svg" alt="Abrir opções" />
+						<img src="/arrow_down_icon.svg" alt="Abrir opções" class="img-fluid" />
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="profile">
 
@@ -51,7 +36,7 @@
 					</ul>
 				</div>
 
-				<div class="dropdown dropstart dropdown-responsive">
+				<div class="dropdown dropstart d-xl-none">
 					<button class="btn btn-secondary dropdown-toggle dropdown-toggle-responsive" type="button"
 						id="menuInfos" data-bs-toggle="dropdown" aria-expanded="false">
 					</button>
@@ -74,7 +59,6 @@ import { RouterLink, useRouter } from "vue-router"
 import { useUserStore } from "../../stores/user/store"
 import MenuLateral from "./MenuLateral.vue"
 
-const isProfileDropdownOpen = ref(false)
 
 const maisInfos = reactive([
 	{
@@ -111,10 +95,6 @@ const logout = () => {
 	router.push({ name: "Login" })
 }
 
-const handleProfileDropdown = () => {
-	isProfileDropdownOpen.value = !isProfileDropdownOpen.value
-}
-
 onMounted(() => {
 	// TODO: terminar centralização relativa
 	const logo: HTMLElement = document.querySelector(".navbar-brand")!
@@ -137,20 +117,8 @@ nav.navbar {
 	background: #efefef;
 }
 
-a {
-	img {
-		width: 70%;
-		min-width: 60px;
-	}
-}
-
-
-.dropdown-responsive {
-	display: none;
-}
 #profile {
 	.dropdown-menu{
-		
 		background-color: #efefef;
 		font-weight: 500;
 		border: 1px solid #505050;
@@ -189,57 +157,8 @@ button#login {
 	font-weight: 700;
 }
 
-.profile {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-right: 1rem;
-	font-weight: 500;
-	cursor: pointer;
-
-	span {
-		margin-left: 0.9rem;
-		margin-right: 0.4rem;
-	}
-
-
-}
-
-.profile-dropdown {
-	display: flex;
-	position: absolute;
-	top: 5.6rem;
-	right: 1rem;
-	flex-direction: column;
-	justify-content: center;
-	background: #efefef;
-	font-weight: 500;
-	border: 1px solid #505050;
-	border-top: none;
-	border-radius: 0 0 10px 10px;
-	z-index: 4;
-	padding: 0.6rem 0;
-	min-width: 180px;
-	max-width: 300px;
-
-	.profile-dropdown-text {
-		text-decoration: none;
-		color: #1e1e1e;
-		font-weight: 500;
-		margin-bottom: 1rem;
-		padding-bottom: 0.6rem;
-		border-bottom: 1px solid #1e1e1e;
-	}
-
-	span {
-		color: #1e1e1e;
-		font-size: 1rem;
-		font-weight: 500;
-	}
-}
 
 @media (max-width: 767px) {
-
 
 	button#login {
 		font-size: 0.6rem;
@@ -250,16 +169,13 @@ button#login {
 
 @media (max-width: 1024px) {
 
-	a {
-		img {
-			width: 60px;
+	#profile {
+		button{
+			span{
+				font-size: .9rem;
+			}
 		}
 	}
-
-	.dropdown-responsive {
-		display: block;
-	}
-
 
 	button#login {
 		font-size: 0.5rem;

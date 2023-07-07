@@ -10,7 +10,7 @@ import EventoExpandido from "../views/eventos/expandido/EventoExpandido.vue"
 import Noticias from "../views/noticias/Noticias.vue"
 import NoticiaExpandida from "../views/noticias/expandida/NoticiaExpandida.vue"
 import Documentos from "../views/documentos/Documentos.vue"
-import DocumentosPesquisa from "../views/documentos/pesquisa/DocumentosPesquisa.vue"
+import Pesquisa from "../views/documentos/pesquisa/Pesquisa.vue"
 import Login from "../views/login/Login.vue"
 import UserHome from "../views/user/UserHome.vue"
 import GerenciaNoticia from "../views/user/noticias/GerenciaNoticia.vue"
@@ -23,6 +23,7 @@ import EsqueciSenha from "../components/esqueciSenha/EsqueciSenha.vue"
 import RedefinirSenha from "../components/esqueciSenha/RedefinirSenha.vue"
 import Perfil from "../views/perfil/Perfil.vue"
 import DocumentoExpandido from '../views/documentos/expandido/DocumentoExpandido.vue'
+import Editais from '../views/documentos/editais/Editais.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -114,9 +115,17 @@ const routes: RouteRecordRaw[] = [
 	  }
 	},
   {
-    path: "/documentos/:tipoDocumento",
-    name: "DocumentosPesquisa",
-    component: DocumentosPesquisa,
+    path: "/pesquisas",
+    name: "Pesquisas",
+    component: Pesquisa,
+    meta: {
+      public: true
+    }
+  },
+  {
+    path: "/editais",
+    name: "Editais",
+    component: Editais,
     meta: {
       public: true
     }
@@ -213,7 +222,12 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name == 'EventoExpandido' || to.name == 'NoticiaExpandida' || to.name == 'DocumentoExpandido') {
+      return {top: 0}
+    }
+  },
 })
 
 router.beforeEach((to, from, next) => {

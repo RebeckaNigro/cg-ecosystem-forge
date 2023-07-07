@@ -20,25 +20,6 @@
   )
   const alertStore = useAlertStore()
 
-  // const props = defineProps({
-  //   mensagem: {
-  //     type: String,
-  //     default: "Teste"
-  //   },
-  //   tipo: {
-  //     type: String,
-  //     default: "info"
-  //   },
-  //   dispensavel: {
-  //     type: Boolean,
-  //     default: true
-  //   },
-  //   timeout: {
-  //     type: Boolean,
-  //     default: true
-  //   }
-  // })
-
   const closeAlert = () => {
     alertStore.visible = false
   }
