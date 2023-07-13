@@ -23,9 +23,9 @@ npm run dev
 *Antes de executar este comando é importante mudar a url base da API para o respectivo ambiente:*
 
 Caminho: /src/utils/http/index.ts
-* Desenvolvimento: http://dev-ecossistemadeinovacaocg.com.br
-* Homologação: https://hom-ecossistemadeinovacaocg.com.br
-* Produção: https://ecossistemadeinovacaocg.com.br
+* Desenvolvimento: http://dev-api.ecossistemadeinovacaocg.com.br
+* Homologação: https://hom-api.ecossistemadeinovacaocg.com.br
+* Produção: https://api.ecossistemadeinovacaocg.com.br
 
 !!!!
 *Além de modificar o ID do tipo usuário sem instituição de acordo com o ambiente:*
