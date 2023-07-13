@@ -1,11 +1,47 @@
-# Vue 3 + Typescript + Vite
+# Ecossistema local de inovação de Campo Grande - MS
 
-This template should help get you started developing with Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Front-end do projeto do Ecossistema implementado utilizando Vue 3, TypeScript e Vite.
 
-## Recommended IDE Setup
+## IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
 
-## Type Support For `.vue` Imports in TS
+## Como executar o projeto
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's `.vue` type support plugin by running `Volar: Switch TS Plugin on/off` from VSCode command palette.
+### Instalar dependências
+```
+npm install
+```
+
+### Iniciar ambiente de desenvolvimento
+```
+npm run dev
+```
+
+### Gerar arquivos para produção
+!!!!
+*Antes de executar este comando é importante mudar a url base da API para o respectivo ambiente:*
+
+Caminho: /src/utils/http/index.ts
+* Desenvolvimento: http://dev-ecossistemadeinovacaocg.com.br
+* Homologação: https://hom-ecossistemadeinovacaocg.com.br
+* Produção: https://ecossistemadeinovacaocg.com.br
+
+!!!!
+*Além de modificar o ID do tipo usuário sem instituição de acordo com o ambiente:*
+Caminho: /src/utils/constantes.ts -> const ID_SEM_INSTITUICAO
+* Desenvolvimento: 14
+* Homologação: 5
+* Produção: 3
+```
+npm run build
+```
+Os arquivos para publicação no servidor estão na pasta '/dist'.
+
+#### Informações adicionais
+
+[Repositório de componentes e funções prontas](https://dev.azure.com/startupsesims/Labs/_git/reutilizaveis)
+
+[Documento de padrões a serem seguidos para novas funcionalidades/projetos](https://sesims.sharepoint.com/:w:/s/Startup513/EaMDAk2k_-REjXMhjqN65n0B1mlstVSkJeFwiLK80itMpA?e=T1hN2k)
+
+[Documento de padrões para controle de versão](https://sesims.sharepoint.com/:w:/s/Startup513/ETF6DDxgyJ1CgaPOBmJQJ94BEW8DIYRZ0k9YHUChnX7AwQ?e=rSrCVU)
