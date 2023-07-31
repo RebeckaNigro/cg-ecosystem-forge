@@ -37,6 +37,7 @@ const search = () => {
 		sendSearchResult()
 		return
 	}
+	emptyInput = false
 	switch (props.type) {
 		case "noticia":
 			results.value = props.items.filter((item: NoticiaSimplificada) => {
