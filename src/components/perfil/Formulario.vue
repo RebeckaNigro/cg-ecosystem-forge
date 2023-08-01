@@ -161,7 +161,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, computed } from "vue"
+import { onMounted, ref, computed, watch } from "vue"
 import { getFromCEP, httpRequest } from "../../utils/http"
 import { usePerfilStore } from "../../stores/perfil/store"
 import { useAlertStore } from "../../stores/alert/store"
@@ -178,6 +178,7 @@ import { isPasswordValid } from "./../../utils/validator/validations"
 import Spinner from "../general/Spinner.vue"
 import { ID_SEM_INSTITUICAO } from "../../utils/constantes"
 import { IPerfil } from "../../stores/perfil/types"
+import { CEPMask, CPFMask } from "../../utils/formatacao/masks"
 
 const perfilStore = usePerfilStore()
 const alertStore = useAlertStore()
@@ -271,7 +272,6 @@ const changeConfirmPasswordVisibility = () => {
 		? "/visibility-on.svg"
 		: "/visibility-off.svg"
 }
-const instituicoes = ref({})
 
 const getInstituicoes = async () => { }
 
@@ -284,7 +284,9 @@ const cadastrar = async () => {
 		console.dir(v$.value)
 		if (!v$.value.$error) {
 			sendingPerfil.value = true
-
+			perfil.value.cpf = perfil.value.cpf.replaceAll('.', '').replaceAll('-', '')
+			perfil.value.cep = perfil.value.cep.replaceAll('-', '')
+			
 			await perfilStore.postPerfil(perfil.value)
 			sendingPerfil.value = false
 			const resposta = perfilStore.perfilResponse.getResponse()
@@ -326,6 +328,7 @@ const resetForm = () => {
 
 const buscarCEP = async () => {
 	if (perfil.value.cep) {
+		perfil.value.cep = perfil.value.cep.replaceAll('-', '')
 		try {
 			const enderecoCompleto = await getFromCEP(perfil.value.cep)
 
@@ -346,6 +349,14 @@ const buscarCEP = async () => {
 	}
 }
 
+watch(perfil.value, () => {
+	if(perfil.value.cpf)
+		perfil.value.cpf = CPFMask(perfil.value.cpf)
+	
+	if(perfil.value.cep)
+		perfil.value.cep = CEPMask(perfil.value.cep)
+		
+})
 onMounted(async () => {
 	getInstituicoes()
 	console.log(perfil.value);
