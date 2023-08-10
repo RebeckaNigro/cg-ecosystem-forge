@@ -68,9 +68,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpGet("listarTodas")]
-        public async Task<RespostaPadrao> ListarTodas(int paginacao)
+        public async Task<RespostaPadrao> ListarTodas(int paginacao, int? autorId)
         {
-            return await _noticiaService.ListarTodas(paginacao);
+            return await _noticiaService.ListarTodas(paginacao, autorId);
         }
 
         [Authorize(Roles = "UsuarioComum")]

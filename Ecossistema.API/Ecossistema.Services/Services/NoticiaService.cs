@@ -389,12 +389,20 @@ namespace Ecossistema.Services.Services
             return resposta;
         }
 
-        public async Task<RespostaPadrao> ListarTodas(int paginacao)
+        public async Task<RespostaPadrao> ListarTodas(int paginacao, int? autorId)
         {
             var resposta = new RespostaPadrao();
-
-            var query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+            IEnumerable<Noticia> query = new List<Noticia>();
+            if(autorId != null)
+            {
+                query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado && x.UsuarioCriacaoId == autorId);
+            }
+            else
+            {
+                query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
                                                                  && x.Aprovado);
+            }
 
             var fim = paginacao * 6;
             var inicio = fim - 6;
