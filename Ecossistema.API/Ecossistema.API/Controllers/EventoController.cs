@@ -68,7 +68,7 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarUltimos()
         {
             var listagem = "ultimos";
-            return await _eventoService.ListarEventos(listagem, null, 0);
+            return await _eventoService.ListarEventos(listagem, null, 0, null);
         }
 
         [HttpGet("listarUltimosPorUsuarioId")]
@@ -77,15 +77,15 @@ namespace Ecossistema.API.Controllers
             var listagem = "ultimosPorUsuarioId";
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
-            return await _eventoService.ListarEventos(listagem, idLogin, 0);
+            return await _eventoService.ListarEventos(listagem, idLogin, 0, null);
         }
 
         //[Authorize(Roles = UserRolesDto.UsuarioComum)]
         [HttpGet("listarTodos")]
-        public async Task<RespostaPadrao> ListarTodos(int paginacao)
+        public async Task<RespostaPadrao> ListarTodos(int paginacao, string? organizador)
         {
             var listagem = "todos";
-            return await _eventoService.ListarEventos(listagem, null, paginacao);
+            return await _eventoService.ListarEventos(listagem, null, paginacao, organizador);
         }
 
         [Authorize(Roles = "UsuarioComum")]
@@ -95,7 +95,7 @@ namespace Ecossistema.API.Controllers
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
             var listagem = "id";
-            return await _eventoService.ListarEventos(listagem, idLogin, paginacao);
+            return await _eventoService.ListarEventos(listagem, idLogin, paginacao, null);
         }
 
         [HttpGet("detalhes")]
