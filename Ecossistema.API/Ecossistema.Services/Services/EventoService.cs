@@ -348,13 +348,21 @@ namespace Ecossistema.Services.Services
         }
 
        
-        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao, string organizador)
         {
             var resposta = new RespostaPadrao();
             try
             {
-                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
+                IEnumerable<Evento> query = new List<Evento>();
+                if (organizador != null)
+                {
+                    query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado 
+                    && x.Responsavel == organizador);
+                }
+                else
+                {
+                    query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado);
+                }
 
                 var id = 0;
 
