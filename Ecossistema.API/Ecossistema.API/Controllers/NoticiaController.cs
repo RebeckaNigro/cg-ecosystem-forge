@@ -87,5 +87,11 @@ namespace Ecossistema.API.Controllers
         {
             return await _noticiaService.Detalhes(id);
         }
+        [HttpGet("autores")]
+        public async Task<RespostaPadrao> ListarAutores()
+        {
+            return await _noticiaService.ListarAutores();
+        }
+
     }
 }
