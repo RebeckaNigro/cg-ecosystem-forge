@@ -18,5 +18,6 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> ListarTodas(int paginacao, int? autorId);
         Task<RespostaPadrao> ListarPorUsuarioId(string idLogin, int paginacao);
         Task<RespostaPadrao> Detalhes(int id);
+        Task<RespostaPadrao> ListarAutores();
     }
 }

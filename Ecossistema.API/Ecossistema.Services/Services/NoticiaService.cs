@@ -331,6 +331,64 @@ namespace Ecossistema.Services.Services
             return noticias;
         }
 
+        public async Task<RespostaPadrao> ListarAutores()
+        {
+            RespostaPadrao resposta = new RespostaPadrao();
+            try
+            {
+                List<PessoaNomeDto> pessoas = new List<PessoaNomeDto>();
+                HashSet<int> idsPessoasAdicionadas = new HashSet<int>();
+                var noticias = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo && x.Aprovado);
+                var usuarios = await _unitOfWork.Usuarios.FindAllAsync(x => x.Ativo && x.Aprovado);
+
+                var noticiasOrdenadas = (
+                    from n in noticias
+                    orderby n.UsuarioCriacaoId 
+                select n
+                ).ToList();
+                
+                var usuarioNoticiaLista = usuarios
+                    .Select(usuario => new UsuarioNoticiaDto
+                    {
+                        Id = usuario.Id,
+                        PessoaId = usuario.PessoaId
+                    })
+                    .ToList();
+
+                var usuariosRelacionados = (
+                    from n in noticiasOrdenadas
+                    join u in usuarioNoticiaLista on n.UsuarioCriacaoId equals u.Id
+                    select u
+                ).ToList()
+                .Distinct();
+
+                foreach(var u in usuariosRelacionados)
+                {
+                    var busca = await _unitOfWork.Pessoas.FindAsync(x => x.Id == u.PessoaId);
+                    {
+                        if (busca != null && !idsPessoasAdicionadas.Contains(busca.Id))
+                        {
+                            idsPessoasAdicionadas.Add(busca.Id);
+                            var pessoa = new PessoaNomeDto();
+                            pessoa.Id = busca.Id;
+                            pessoa.NomeCompleto = busca.NomeCompleto;
+                            pessoas.Add(pessoa);
+                        }
+                    }
+                }
+                
+                resposta.Retorno = pessoas;
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetBadRequest(ex.Message);
+                return resposta;
+            }
+           
+        }
+
+
         public async Task<RespostaPadrao> ListarUltimas()
         {
             var resposta = new RespostaPadrao();
