@@ -121,5 +121,11 @@ namespace Ecossistema.API.Controllers
         {
             return await _eventoService.ListarTiposEnderecos();
         }
+
+        [HttpGet("listarOrganizadores")]
+        public async Task<RespostaPadrao> ListarOrganizadores()
+        {
+            return await _eventoService.ListarOrganizadores();
+        }
     }
 }
