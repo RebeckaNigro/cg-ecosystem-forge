@@ -1024,6 +1024,34 @@ namespace Ecossistema.Services.Services
             return true;
         }
 
+        public async Task<RespostaPadrao> ListarOrganizadores()
+        {
+            RespostaPadrao resposta = new RespostaPadrao();
+            try
+            {
+                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado);
+                var result = query.Select(x => new
+                {
+                    responsavel = x.Responsavel
+                })
+                .OrderBy(x => x.responsavel)
+                .Distinct();
+                if (result.Count() > 0)
+                {
+                    resposta.Retorno = result;
+                }
+                else
+                    resposta.SetNaoEncontrado("Nenhum organizador encontrado");
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetBadRequest(ex.Message);
+                return resposta;
+            }
+            
+        }
+
         #endregion
     }
 }
