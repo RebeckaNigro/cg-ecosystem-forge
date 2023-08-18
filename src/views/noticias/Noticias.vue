@@ -8,11 +8,11 @@
 		<div class="container mt-5">
 			<div class="row justify-content-between align-items-end">
 				<div class="col-sm-12 col-md-4 col-lg-3 mb-4 mb-md-0">
-					<!-- <FilterComponent 
-						:items="noticiaStore.allNews" 
+					<FilterComponent 
+						:items="noticiaStore.authors" 
 						type="noticiaExterna" 
 						field="autor"
-						@filter-result="filtrarNoticias" /> -->
+						@filter-result="filtrarNoticias" />
 				</div>
 				<div class="col-sm-12 col-md-4 col-lg-3">
 					<SearchComponent :items="noticiaStore.allNews" type="noticia" @search-result="filtrarNoticias" />
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import Banner from "../../components/general/Banner.vue"
 import ContainerCardsNoticia from "../../components/noticias/ContainerCardsNoticia.vue"
 import ContainerUltimasNoticias from "../../components/noticias/ContainerUltimasNoticias.vue"
@@ -65,6 +65,10 @@ const filtrarNoticias = (noticiasFiltradas: INoticiaSimplificada[], inputVazio: 
 		isResultsVisible.value = false
 	}
 }
+
+onMounted(async () => {
+	await noticiaStore.getAuthorsList()
+})
 </script>
 
 <style scoped lang="scss">
