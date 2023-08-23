@@ -6,7 +6,7 @@
       <button type="button" data-bs-target="#destaquesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-      <div v-for="(data, index) in carouselData" :key="index" class="carousel-item" :class="{'active': index === 0}">
+      <div v-for="(data, index) in carouselData" :key="data.id" class="carousel-item" :class="{'active': index === 0}">
         <img :src="data.arquivo 
 			? 'data:image/png;base64,' + data.arquivo
 			: '/eventos/eventoExpandido/default-event-cover.svg'" 

@@ -92,17 +92,17 @@
 							{{ instituicao.descricao }}
 						</p>
 
-						<!-- <div class="row mt-4 pe-lg-5">
-							<div class="col-md-7 mb-md-0 mb-3">
+						<div class="row mt-4 pe-lg-5 justify-content-end">
+							<!-- <div class="col-md-7 mb-md-0 mb-3">
 								<button class="green-btn-outlined text-uppercase">
 									Página do organizador
 								</button>
-							</div>
+							</div>-->
 
 							<div class="col-md-5">
-								<button class="green-btn-primary text-uppercase">Mais eventos</button>
+								<button class="green-btn-primary text-uppercase" @click="$router.push({ name: 'Eventos'})">Mais eventos</button>
 							</div>
-						</div> -->
+						</div> 
 					</div>
 				</div>
 				

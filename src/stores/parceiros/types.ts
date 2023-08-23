@@ -12,7 +12,8 @@ export interface PartnerInterface {
   endereco: string
   instaLink: string
   linkedinLink: string
-  wppLink: string
+  wppLink: string,
+  cnpj: string
 }
 
 export interface IPartnerSimplificado{

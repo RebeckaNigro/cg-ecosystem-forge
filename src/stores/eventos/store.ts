@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { IEvento, EnderecoExistente, IUltimoEvento, Evento, IEventoSimplificado } from "./types"
+import { IEvento, EnderecoExistente, IUltimoEvento, Evento, IEventoSimplificado, IOrganizador } from "./types"
 import { defineStore } from "pinia"
 import { httpRequest, getLastContent } from "../../utils/http"
 import { validateEventoInput } from "../../utils/eventos/validation"
@@ -10,6 +10,9 @@ const ultimosEventos: Array<IEventoSimplificado> = []
 const eventos: Array<IUltimoEvento> = []
 const eventosUsuarioLogado: Array<IEventoSimplificado> = []
 const ultimosEventosUsuarioLogado: Array<IUltimoEvento> = []
+const organizadores: IOrganizador[] = []
+const eventosFiltrados: Array<IEventoSimplificado> = []
+
 export const useEventoStore = defineStore("eventoStore", {
   state: () => {
     return {
@@ -19,7 +22,10 @@ export const useEventoStore = defineStore("eventoStore", {
       eventos,
       eventosUsuarioLogado,
 	  ultimosEventosUsuarioLogado,
-      loadRascunho: false
+      loadRascunho: false,
+	  organizadores,
+	  eventosFiltrados,
+	  filterPage: 1
     }
   },
   persist: false,
@@ -216,6 +222,35 @@ export const useEventoStore = defineStore("eventoStore", {
       } catch (error) {
         console.error(error)
       }
-    }
+    },
+	async getOrganizersList(){
+		try {
+			const response = await httpRequest.get('api/evento/listarOrganizadores')
+	
+			if (response.data.codigo === 200) { 
+				this.organizadores = []
+			  response.data.retorno.forEach((organizador: IOrganizador) => {
+				this.organizadores.push(organizador)
+			  });		  
+			}
+		  } catch (error) {
+			console.error(error)
+		  }
+	},
+	async filterEvents(page: number,organizador: string){
+
+		try{
+			const response = await httpRequest.get(`/api/evento/listarTodos?paginacao=${page}&organizador=${organizador}`)
+			if (response.data.codigo === 200) {
+				this.eventosFiltrados = []
+				response.data.retorno.forEach((evento: IEventoSimplificado) => {
+				  this.eventosFiltrados.push(evento)
+				});	
+			
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
   }
 })
