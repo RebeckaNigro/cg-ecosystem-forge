@@ -68,9 +68,9 @@ namespace Ecossistema.API.Controllers
         }
 
         [HttpGet("listarTodas")]
-        public async Task<RespostaPadrao> ListarTodas(int paginacao)
+        public async Task<RespostaPadrao> ListarTodas(int paginacao, int? autorId)
         {
-            return await _noticiaService.ListarTodas(paginacao);
+            return await _noticiaService.ListarTodas(paginacao, autorId);
         }
 
         [Authorize(Roles = "UsuarioComum")]
@@ -87,5 +87,11 @@ namespace Ecossistema.API.Controllers
         {
             return await _noticiaService.Detalhes(id);
         }
+        [HttpGet("autores")]
+        public async Task<RespostaPadrao> ListarAutores()
+        {
+            return await _noticiaService.ListarAutores();
+        }
+
     }
 }

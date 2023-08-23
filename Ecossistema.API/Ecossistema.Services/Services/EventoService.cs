@@ -348,13 +348,21 @@ namespace Ecossistema.Services.Services
         }
 
        
-        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao, string organizador)
         {
             var resposta = new RespostaPadrao();
             try
             {
-                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado);
+                IEnumerable<Evento> query = new List<Evento>();
+                if (organizador != null)
+                {
+                    query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado 
+                    && x.Responsavel == organizador);
+                }
+                else
+                {
+                    query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado);
+                }
 
                 var id = 0;
 
@@ -427,15 +435,21 @@ namespace Ecossistema.Services.Services
 
                     })
                 .Distinct()
-                .Skip(inicio)
-                .Take(6)
                 .OrderByDescending(x => x.dataInicio)
                 .ToList();
-                    resposta.Retorno = result;
+                    
                     if (result.Count == 0)
                     {
                         resposta.SetNaoEncontrado("Nenhum evento encontrado");
                     }
+                    else if (paginacao > 0)
+                    {
+                        result = result
+                            .Skip(inicio)
+                            .Take(6)
+                            .ToList();
+                    }
+                    resposta.Retorno = result;
                 }
                 else if (listagem == "ultimos")
                 {
@@ -1014,6 +1028,34 @@ namespace Ecossistema.Services.Services
                 return false;
             }
             return true;
+        }
+
+        public async Task<RespostaPadrao> ListarOrganizadores()
+        {
+            RespostaPadrao resposta = new RespostaPadrao();
+            try
+            {
+                var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Ativo && x.Aprovado);
+                var result = query.Select(x => new
+                {
+                    responsavel = x.Responsavel
+                })
+                .OrderBy(x => x.responsavel)
+                .Distinct();
+                if (result.Count() > 0)
+                {
+                    resposta.Retorno = result;
+                }
+                else
+                    resposta.SetNaoEncontrado("Nenhum organizador encontrado");
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.SetBadRequest(ex.Message);
+                return resposta;
+            }
+            
         }
 
         #endregion
