@@ -9,8 +9,8 @@
 			<div class="row justify-content-between align-items-end">
 				<div class="col-sm-12 col-md-4 col-lg-3 mb-4 mb-md-0">
 					<FilterComponent 
-						:items="noticiaStore.authors" 
-						type="noticiaExterna" 
+						:items="noticiaStore.allNews" 
+						type="noticiaAutor" 
 						field="autor"
 						@filter-result="filtrarNoticias" />
 				</div>
@@ -23,8 +23,10 @@
 			</div>
 		</div>
 
+		<span v-if="searchResults.length == 0 && isResultsVisible">Nenhuma notícia encontrada.</span>
+
 		<div class="search-results-container dark-body-text" v-if="isResultsVisible">
-			<div v-for="(container, containerIndex) in searchResults" :key="containerIndex">
+			<div v-for="(container, containerIndex) in searchResults" :key="container.id">
 				<CardNoticia :is-relacionada="false" :noticia="container" @click="
 					$router.push({
 						name: 'NoticiaExpandida',
@@ -54,7 +56,7 @@ import SearchComponent from "../../components/general/SearchComponent.vue"
 import FilterComponent from "../../components/general/FilterComponent.vue"
 
 const noticiaStore = useNoticiaStore()
-const searchResults = ref<Array<INoticiaSimplificada>>()
+const searchResults = ref<Array<INoticiaSimplificada>>([])
 const isResultsVisible = ref(false)
 
 const filtrarNoticias = (noticiasFiltradas: INoticiaSimplificada[], inputVazio: boolean) => {
@@ -66,9 +68,6 @@ const filtrarNoticias = (noticiasFiltradas: INoticiaSimplificada[], inputVazio: 
 	}
 }
 
-onMounted(async () => {
-	await noticiaStore.getAuthorsList()
-})
 </script>
 
 <style scoped lang="scss">

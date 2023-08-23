@@ -221,7 +221,8 @@ export const useNoticiaStore = defineStore("noticiaStore", {
 		try {
 			const response = await httpRequest.get('api/noticia/autores')
 	
-			if (response.data.codigo === 200) {
+			if (response.data.codigo === 200) { 
+				this.authors = []
 			  response.data.retorno.forEach((author: IAutor) => {
 				this.authors.push(author)
 			  });		  
@@ -236,12 +237,11 @@ export const useNoticiaStore = defineStore("noticiaStore", {
 		try{
 			const response = await httpRequest.get(`/api/noticia/listarTodas?paginacao=${page}&autorId=${autorId}`)
 			if (response.data.codigo === 200) {
-				// response.data.retorno.forEach((noticia: INoticiaSimplificada) => {
-				//   this.filteredNews.push(noticia)
-				// });	
-				console.log(response.data.retorno);
-				
-				return response.data.retorno	  
+				this.filteredNews = []
+				response.data.retorno.forEach((noticia: INoticiaSimplificada) => {
+				  this.filteredNews.push(noticia)
+				});	
+				  
 			  }
 		} catch (error) {
 			console.error(error)

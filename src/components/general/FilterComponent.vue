@@ -4,13 +4,14 @@
 		<div>
 			<select name="filtro" id="filtro" class="form-input-primary borda-cinza-claro cinza" v-model="selectedOption"
 				@change="doFilter($event)">
-				<option value="">{{ (type == 'evento' || type == 'documento' || type == 'noticiaExterna') ? 'Todos' : 'Todas'
+				<option value="">{{ (type == 'evento' || type == 'documento' || type == 'eventoOrganizador') ? 'Todos' : 'Todas'
 				}}</option>
 				<option v-for="(option, index) in menuOptions" :key="index" :value="option.value">
 					{{ option.text }}
 				</option>
 			</select>
 		</div>
+		<progress v-if="carregando">Carregando...</progress>
 	</div>
 </template>
 
@@ -23,6 +24,8 @@ import { EventoSimplificado } from "../../stores/eventos/types"
 import { IDocumentoSimplificado } from "../../stores/documentos/types"
 import { IPartnerSeccionado } from "../../stores/parceiros/types"
 import { useNoticiaStore } from "../../stores/noticias/store"
+import { useEventoStore } from "../../stores/eventos/store"
+import { TRUE } from "sass"
 
 const props = defineProps<{
 	field: string
@@ -31,13 +34,15 @@ const props = defineProps<{
 }>()
 
 const noticiaStore = useNoticiaStore()
+const eventoStore = useEventoStore()
 
+const carregando = ref(false)
 const emit = defineEmits(["filter-result"])
 const menuOptions = ref<FilterOption[]>([])
 const results = ref<any[]>([])
 const selectedOption = ref("")
 
-onMounted(() => {
+onMounted(async () => {
 	switch (props.type) {
 		case "noticia":
 			menuOptions.value.push(new FilterOption("Últimos 7 dias", "7"))
@@ -63,17 +68,25 @@ onMounted(() => {
 			menuOptions.value.push(new FilterOption('Governo', 'governo'))
 			menuOptions.value.push(new FilterOption('Sociedade organizada', 'sociedade organizada'))
 			break
-		case 'noticiaExterna':
-			props.items.forEach(item => {
+		case 'noticiaAutor':
+			await noticiaStore.getAuthorsList()
+			noticiaStore.authors.forEach(item => {
 				menuOptions.value.push(new FilterOption(item.nomeCompleto, item.id.toString()))
 			})
+			break
+		case 'eventoOrganizador':
+			await eventoStore.getOrganizersList()
+			eventoStore.organizadores.forEach(item => {
+				menuOptions.value.push(new FilterOption(item.responsavel, item.responsavel.toLowerCase()))
+				
+			})
+			break
 	} 
 })
 
 const doFilter = async (event: any) => {
 	if (event.target.value) {
 		selectedOption.value = event.target.value
- 
 
 		if (props.type == "noticia") { 
 			const dataReferencia = new Date()
@@ -119,22 +132,37 @@ const doFilter = async (event: any) => {
 			})
 			results.value = item
 			sendSearchResult()
-		}else if (props.type == 'noticiaExterna'){
-			// results.value = noticiaStore.allNews.filter((noticia) => {
-			// 	return noticia.nomeUsuario.toLowerCase() === selectedOption.value.toLowerCase()
-			// }) 
-			
-			results.value = await noticiaStore.filterNews(1, Number(selectedOption.value))
+		}else if (props.type == 'noticiaAutor'){
+			carregando.value = true
+			await noticiaStore.filterNews(0, Number(selectedOption.value))
+			results.value = noticiaStore.filteredNews
+			carregando.value = false
 			sendSearchResult()
+		}else if(props.type == 'eventoOrganizador'){
+			carregando.value = true
+			await eventoStore.filterEvents(0, selectedOption.value)
+			results.value = eventoStore.eventosFiltrados
+			carregando.value = false
+			sendSearchResult()
+		} 
+	} else {  
+		if(props.type == 'noticiaAutor'){
+			results.value = noticiaStore.allNews
+			sendSearchResult(true)
+			return
 		}
-	} else {
+		if(props.type == 'eventoOrganizador'){
+			results.value = eventoStore.eventos
+			sendSearchResult(true)
+			return
+		}
 		results.value = props.items
 		sendSearchResult()
 	}
 }
 
-const sendSearchResult = () => { 
-	emit("filter-result", results.value)
+const sendSearchResult = (mostrarTodos: boolean = false) => { 
+	emit("filter-result", results.value, mostrarTodos)
 }
 </script>
 
