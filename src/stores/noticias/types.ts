@@ -86,3 +86,8 @@ export interface INoticiaSimplificada {
   arquivo: string
   nomeUsuario: string
 }
+
+export interface IAutor{
+	id: number
+	nomeCompleto: string
+}

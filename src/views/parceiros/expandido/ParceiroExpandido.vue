@@ -4,13 +4,13 @@
 		<div class="d-flex h-100 w-100 partner-logo-container">
 			<div class="box">
 				<img v-if="hasLogo" :src="parceiroSelecionado.logoPath" alt="Logo Parceiro" id="parceiro-logo">
-				<h1 v-else class="dark-title">Logo<br>Parceiro</h1>
+				<p v-else class="dark-title">Logo<br>Parceiro</p>
 			</div>
 		</div>
 	</div>
 	
 	<ExpandedBody :partner-name="parceiroSelecionado.parceiroNome" :first-paragraph="parceiroSelecionado.primeiroParagrafo"
-		:sub-title="parceiroSelecionado.subTitulo" :second-paragraph="parceiroSelecionado.segundoParagrafo" />
+		:sub-title="parceiroSelecionado.subTitulo" :second-paragraph="parceiroSelecionado.segundoParagrafo" :cnpj="parceiroSelecionado.cnpj"/>
 	<ContatoParceiro :instaLink="parceiroSelecionado.instaLink" :linkedinLink="parceiroSelecionado.linkedinLink"
 		:wppLink="parceiroSelecionado.wppLink" :email-contato="parceiroSelecionado.emailContato"
 		:telefone="parceiroSelecionado.telefone" :website="parceiroSelecionado.website"
@@ -44,7 +44,8 @@ const parceiroSelecionado = computed(() => { // computed que retorna o parceiro 
 		emailContato: '',
 		telefone: '',
 		website: '',
-		endereco: ''
+		endereco: '',
+		cnpj: ''
 	}
 })
 const imageWidthBiggerThanHeight = () => {

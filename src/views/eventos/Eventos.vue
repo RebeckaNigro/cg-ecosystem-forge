@@ -11,12 +11,12 @@
 
 			<div class="row justify-content-between align-items-end">
 				<div class="col-sm-12 col-md-4 col-lg-3 mb-4 mb-md-0">
-					<!-- <FilterComponent
-						:items="eventoStore.eventos"
-						type="eventoExterno"
+					<FilterComponent
+						:items="eventoStore.organizadores"
+						type="eventoOrganizador"
 						field="organizador"
 						@filter-result="filtrarEventos"
-					/> -->
+					/>
 				</div>
 
 				<div class="col-sm-12 col-md-4 col-lg-3">
@@ -30,10 +30,12 @@
 			</div>
 		</div>
 
+		<span v-if="searchResults.length == 0 && isSearchResultsVisible">Nenhum evento encontrado.</span>
+
 		<div class="search-results-container" v-if="isSearchResultsVisible">
-			<nav v-for="(container, containerIndex) in searchResults" :key="containerIndex">
+			<div v-for="(container, containerIndex) in searchResults" :key="container.id">
 				<CardEvento :evento="container" />
-			</nav>
+			</div>
 		</div>
 
 		<div v-if="!isSearchResultsVisible">

@@ -4,6 +4,7 @@
 		<span>PARCEIRO DO ECOSSISTEMA</span>
 		<main>
 		  <h1>{{ partnerName }}</h1>
+		  <h2 class="fs-6 cnpj" v-if="cnpj">CNPJ: {{ cnpj  }}</h2>
 		  <article class="px-md-5 px-4">
 			&nbsp&nbsp&nbsp{{ firstParagraph }}
 		  </article>
@@ -37,6 +38,10 @@ const props = defineProps({
   secondParagraph: {
     type: String,
     required: false
+  },
+  cnpj: {
+	type: String,
+	required: false
   }
 })
 </script>
@@ -61,6 +66,10 @@ const props = defineProps({
         margin-top: 1rem;
 		font-weight: 600;
       }
+	  h2{
+		color: #505050;
+		font-weight: 300;
+	  }
       article {
         margin-top: 3rem;
         margin-bottom: 2rem;

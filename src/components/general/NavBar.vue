@@ -78,7 +78,7 @@ const maisInfos = reactive([
 		path: "/documentos"
 	},
 	{
-		title: "AGENDA",
+		title: "EVENTOS",
 		path: "/eventos"
 	},
 	{

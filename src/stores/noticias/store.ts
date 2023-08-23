@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { INoticia, INoticiaSimplificada } from "./types"
+import { IAutor, INoticia, INoticiaSimplificada } from "./types"
 import { getLastContent, httpRequest } from "../../utils/http"
 import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
 
@@ -7,6 +7,9 @@ const lastNews: Array<INoticiaSimplificada> = []
 const allNews: Array<INoticiaSimplificada> = []
 const allUserNews: Array<INoticiaSimplificada> = []
 const userLastNews: Array<INoticiaSimplificada> = []
+const authors: IAutor[] = []
+const filteredNews: INoticiaSimplificada[] = []
+
 export const useNoticiaStore = defineStore("noticiaStore", {
   state: () => {
     return {
@@ -15,7 +18,9 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       allNews,
       allUserNews,
 	  userLastNews,
-      loadRascunho: false
+      loadRascunho: false,
+	  authors,
+	  filteredNews
     }
   },
   persist: false,
@@ -127,10 +132,7 @@ export const useNoticiaStore = defineStore("noticiaStore", {
 			this.allNews = response.data.retorno
 		  }else{
 			this.allNews = this.allNews.concat(response.data.retorno)
-		  }
-		  console.log(this.allNews);
-		  
-       
+		  }       
         }
       } catch (error) {
         console.error(error)
@@ -213,7 +215,38 @@ export const useNoticiaStore = defineStore("noticiaStore", {
       } catch (error) {
         console.error(error)
       }
-    }
+    },
+
+	async getAuthorsList(){
+		try {
+			const response = await httpRequest.get('api/noticia/autores')
+	
+			if (response.data.codigo === 200) { 
+				this.authors = []
+			  response.data.retorno.forEach((author: IAutor) => {
+				this.authors.push(author)
+			  });		  
+			}
+		  } catch (error) {
+			console.error(error)
+		  }
+	},
+	async filterNews(page: number, autorId: number){
+		console.log(autorId);
+		
+		try{
+			const response = await httpRequest.get(`/api/noticia/listarTodas?paginacao=${page}&autorId=${autorId}`)
+			if (response.data.codigo === 200) {
+				this.filteredNews = []
+				response.data.retorno.forEach((noticia: INoticiaSimplificada) => {
+				  this.filteredNews.push(noticia)
+				});	
+				  
+			  }
+		} catch (error) {
+			console.error(error)
+		}
+	}
   },
   getters: {}
 })

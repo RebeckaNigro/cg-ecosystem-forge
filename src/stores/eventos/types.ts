@@ -206,3 +206,7 @@ export class EventoRascunho {
     this.instituicao = instituicao
   }
 }
+
+export interface IOrganizador{
+	responsavel: string
+}
