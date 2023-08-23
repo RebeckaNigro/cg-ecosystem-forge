@@ -13,12 +13,12 @@ namespace Ecossistema.Services.Interfaces
         Task<RespostaPadrao> Editar(EventoArquivosDto dado, string token);
         Task<RespostaPadrao> Excluir(int id, string idLogin);
         //Task<RespostaPadrao> ListarUltimas();
-        Task<RespostaPadrao> ListarEventos(string listagem, string id, int paginacao);
+        Task<RespostaPadrao> ListarEventos(string listagem, string id, int paginacao, string filtro);
         Task<RespostaPadrao> Detalhes(int id);
         Task<RespostaPadrao> ListarTiposEventos();
         Task<RespostaPadrao> ListarEnderecos(int instituicaoId, int tipoEnderecoId);
         Task<RespostaPadrao> ListarTiposEnderecos();
-        
+        Task<RespostaPadrao> ListarOrganizadores();
     }
 }
 
