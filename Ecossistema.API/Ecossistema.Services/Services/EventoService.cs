@@ -435,15 +435,21 @@ namespace Ecossistema.Services.Services
 
                     })
                 .Distinct()
-                .Skip(inicio)
-                .Take(6)
                 .OrderByDescending(x => x.dataInicio)
                 .ToList();
-                    resposta.Retorno = result;
+                    
                     if (result.Count == 0)
                     {
                         resposta.SetNaoEncontrado("Nenhum evento encontrado");
                     }
+                    else if (paginacao > 0)
+                    {
+                        result = result
+                            .Skip(inicio)
+                            .Take(6)
+                            .ToList();
+                    }
+                    resposta.Retorno = result;
                 }
                 else if (listagem == "ultimos")
                 {

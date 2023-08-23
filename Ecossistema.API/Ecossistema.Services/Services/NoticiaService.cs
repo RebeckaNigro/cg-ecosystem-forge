@@ -450,11 +450,19 @@ namespace Ecossistema.Services.Services
         public async Task<RespostaPadrao> ListarTodas(int paginacao, int? autorId)
         {
             var resposta = new RespostaPadrao();
+            if(paginacao < 0)
+            {
+                paginacao = 0;
+            }
             IEnumerable<Noticia> query = new List<Noticia>();
             if(autorId != null)
             {
+                var usuarios = await _unitOfWork.Usuarios.FindAllAsync(x => x.Ativo
+                                                                 && x.Aprovado && x.PessoaId == autorId);
+                var usuario = usuarios.FirstOrDefault();
+                
                 query = await _unitOfWork.Noticias.FindAllAsync(x => x.Ativo
-                                                                 && x.Aprovado && x.UsuarioCriacaoId == autorId);
+                                                                 && x.Aprovado && x.UsuarioCriacaoId == usuario.Id);
             }
             else
             {
@@ -476,10 +484,17 @@ namespace Ecossistema.Services.Services
                 x.Arquivo
             })
             .Distinct()
-            .Skip(inicio)
-            .Take(6)
             .OrderByDescending(x => x.DataPublicacao)
             .ToList();
+
+            if (paginacao > 0)
+            {
+                result = result
+                .OrderByDescending(x => x.DataPublicacao)
+                .Skip(inicio)
+                .Take(6)
+                .ToList();
+            }
 
             resposta.Retorno = result;
             if (result.Count == 0)
