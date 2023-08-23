@@ -19,20 +19,7 @@
 		
 		<footer>
 	
-		  <GeneralBtn 
-			btnText="VER MAIS"
-			:isExternalLink="false"
-			link="#"
-			bgColor="#639280"
-			width="200px"
-			textColor="#fff"
-			height="40px"
-			id="know_more"
-			@click="addEventsToView()"
-			class="mb-4"
-			:class="{'d-none': (page*6) > eventoStore.eventos.length }"
-			
-		  />
+		  <button type="button" class="green-btn-primary w-25 mb-4" @click="addEventsToView">VER MAIS</button>
 		  <Spinner
 			spinner-color-class="text-dark"
 			v-if="loadingMoreContent"
@@ -49,32 +36,19 @@
 
 import { onMounted, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
-import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { useEventoStore } from '../../stores/eventos/store';
 import { IEventoSimplificado } from '../../stores/eventos/types';
 import Spinner from '../general/Spinner.vue';
 
 const eventoStore = useEventoStore()
-const selectedPage = ref(0)
-const indicators = ref(3)
+
 const loadingContent = ref(false)
 const loadingMoreContent = ref(false)
 const page = ref(1)
 let eventos = ref<Array<IEventoSimplificado>>()
 
-const setSelfMargin = (num: number) => {
-  if (num === 1) return 'm-auto'
-  return num === 0 ? 'mr-auto' : 'ml-auto'
-}
-const setSelectedPage = (page: number) => {
-  if (page >= indicators.value) {
-    selectedPage.value = 0
-  } else if (page < 0) {
-    selectedPage.value = indicators.value
-  } else {
-    selectedPage.value = page
-  }
-}
+
+
 const addEventsToView = async () => {
 	page.value++
 	loadingMoreContent.value = true
