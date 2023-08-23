@@ -21,19 +21,9 @@
       </div>
     </div>
 	<Spinner v-else :spinner-color-class="'text-dark'" />
-    
-    <GeneralBtn
-      btnText="VER MAIS"
-      :isExternalLink="false"
-      link="#"
-      bgColor="#639280"
-      width="200px"
-      textColor="#fff"
-      height="40px"
-      id="know_more"
-      @click="addNewsToView()"
-      
-    />
+
+
+	<button type="button" class="green-btn-primary w-25" @click="addNewsToView">VER MAIS</button>
 	<Spinner v-if="loadingMoreNews" :spinner-color-class="'text-dark'" />
   </div>
 </template>

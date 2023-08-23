@@ -11,7 +11,7 @@
 				</option>
 			</select>
 		</div>
-		<progress v-if="carregando">Carregando...</progress>
+		<span v-if="carregando">Carregando...</span>
 	</div>
 </template>
 
@@ -25,7 +25,6 @@ import { IDocumentoSimplificado } from "../../stores/documentos/types"
 import { IPartnerSeccionado } from "../../stores/parceiros/types"
 import { useNoticiaStore } from "../../stores/noticias/store"
 import { useEventoStore } from "../../stores/eventos/store"
-import { TRUE } from "sass"
 
 const props = defineProps<{
 	field: string
