@@ -20,6 +20,7 @@ namespace Ecossistema.Domain.Entities
 
         public Evento(int instituicaoId,
                       int tipoEventoId,
+                      int areaEventoId,
                       string titulo,
                       string descricao,
                       DateTime dataInicio,
@@ -34,6 +35,7 @@ namespace Ecossistema.Domain.Entities
         {
             InstituicaoId = instituicaoId;
             TipoEventoId = tipoEventoId;
+            AreaEventoId = areaEventoId;
             Titulo = titulo;
             Descricao = descricao;
             DataInicio = dataInicio;
@@ -56,6 +58,9 @@ namespace Ecossistema.Domain.Entities
         public virtual Instituicao Instituicao { get; set; }
         public int TipoEventoId { get; set; }
         public virtual TipoEvento TipoEvento { get; set; }
+        public int? AreaEventoId { get; set; }
+        public virtual AreaEvento AreaEvento { get; set; }
+
         public string Titulo { get; set; }
         public string Descricao { get; set; }
         public DateTime DataInicio { get; set; }
