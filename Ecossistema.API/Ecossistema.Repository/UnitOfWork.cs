@@ -15,6 +15,7 @@ namespace Ecossistema.Data
         public IBaseRepository<Aprovacao> Aprovacoes { get; private set; }
         public IBaseRepository<Arquivo> Arquivos { get; private set; }
         public IBaseRepository<ArquivoOrigem> ArquivosOrigens { get; private set; }
+        public IBaseRepository<AreaEvento> AreasEventos { get; private set; }
 
         #endregion
 
@@ -165,6 +166,7 @@ namespace Ecossistema.Data
             #region A
 
             Aprovacoes = new BaseRepository<Aprovacao>(_context);
+            AreasEventos = new BaseRepository<AreaEvento>(_context);
             Arquivos = new BaseRepository<Arquivo>(_context);
             ArquivosOrigens = new BaseRepository<ArquivoOrigem>(_context);
 

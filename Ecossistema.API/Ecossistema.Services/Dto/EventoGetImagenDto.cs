@@ -16,7 +16,7 @@ namespace Ecossistema.Services.Dto
         public DateTime? DataTermino { get; set; }
         public string? Local { get; set; }
         public int UsuarioId { get; set; }
-
+        public int? AreaEventoId { get; set; }
         public Byte[]? Arquivo { get; set; }
         public List<TagDto>? Tags { get; set; }
         public DateTime? DataOperacao { get; set; }
