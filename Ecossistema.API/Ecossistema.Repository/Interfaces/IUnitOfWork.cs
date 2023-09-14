@@ -16,6 +16,8 @@ namespace Ecossistema.Data.Interfaces
         IBaseRepository<Arquivo> Arquivos { get; }
         IBaseRepository<ArquivoOrigem> ArquivosOrigens { get; }
 
+        IBaseRepository<AreaEvento> AreasEventos { get; }
+
         #endregion
 
         #region B

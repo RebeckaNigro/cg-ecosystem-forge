@@ -68,7 +68,7 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarUltimos()
         {
             var listagem = "ultimos";
-            return await _eventoService.ListarEventos(listagem, null, 0, null);
+            return await _eventoService.ListarEventos(listagem, null, 0, null, 0);
         }
 
         [HttpGet("listarUltimosPorUsuarioId")]
@@ -77,7 +77,7 @@ namespace Ecossistema.API.Controllers
             var listagem = "ultimosPorUsuarioId";
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
-            return await _eventoService.ListarEventos(listagem, idLogin, 0, null);
+            return await _eventoService.ListarEventos(listagem, idLogin, 0, null, 0);
         }
 
         //[Authorize(Roles = UserRolesDto.UsuarioComum)]
@@ -85,7 +85,7 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarTodos(int paginacao, string? organizador)
         {
             var listagem = "todos";
-            return await _eventoService.ListarEventos(listagem, null, paginacao, organizador);
+            return await _eventoService.ListarEventos(listagem, null, paginacao, organizador, 0);
         }
 
         [Authorize(Roles = "UsuarioComum")]
@@ -95,7 +95,15 @@ namespace Ecossistema.API.Controllers
             var token = Request.Headers["Authorization"];
             var idLogin = User.Claims.FirstOrDefault().Value;
             var listagem = "id";
-            return await _eventoService.ListarEventos(listagem, idLogin, paginacao, null);
+            return await _eventoService.ListarEventos(listagem, idLogin, paginacao, null, 0);
+        }
+
+        [HttpGet("listarEventosPorArea")]
+        public async Task<RespostaPadrao> ListarPorArea(int areaEventoId)
+        {
+            var listagem = "area";
+            var paginacao = 0;
+            return await _eventoService.ListarEventos(listagem, null, paginacao, null, areaEventoId);
         }
 
         [HttpGet("detalhes")]
@@ -108,6 +116,12 @@ namespace Ecossistema.API.Controllers
         public async Task<RespostaPadrao> ListarTiposEventos()
         {
             return await _eventoService.ListarTiposEventos();
+        }
+
+        [HttpGet("listarAreasEventos")]
+        public async Task<RespostaPadrao> ListarAreasEventos()
+        {
+            return await _eventoService.ListarAreasEventos();
         }
 
         [HttpGet("listarEnderecos")]
