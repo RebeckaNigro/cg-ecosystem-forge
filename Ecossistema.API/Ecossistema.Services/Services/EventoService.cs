@@ -350,7 +350,7 @@ namespace Ecossistema.Services.Services
         }
 
        
-        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao, string organizador)
+        public async Task<RespostaPadrao> ListarEventos(string listagem, string idLogin, int paginacao, string organizador, int areaEventoId)
         {
             var resposta = new RespostaPadrao();
             try
@@ -386,6 +386,7 @@ namespace Ecossistema.Services.Services
                     evento[evento.Count - 1].Titulo = item.Titulo;
                     evento[evento.Count - 1].DataInicio = item.DataInicio;
                     evento[evento.Count - 1].DataTermino = item.DataTermino;
+                    evento[evento.Count - 1].AreaEventoId = item.AreaEventoId;
                     evento[evento.Count - 1].Local = item.Local;
                     evento[evento.Count - 1].UsuarioId = item.UsuarioCriacaoId;
                     var temp = await _arquivoService.ObterArquivos(EOrigem.Evento, item.Id, resposta);
@@ -518,7 +519,30 @@ namespace Ecossistema.Services.Services
                         resposta.SetNaoEncontrado("Não existe evento cadastrado referente ao id informado");
                     resposta.Retorno = result;
                 }
-            
+                else if (listagem == "area")
+                {
+                    var result = evento.Select(x => new
+                    {
+                        id = x.Id,
+                        titulo = x.Titulo,
+                        dataInicio = x.DataInicio,
+                        dataTermino = x.DataTermino,
+                        local = x.Local,
+                        arquivo = x.Arquivo,
+                        tags = x.Tags,
+                        usuarioId = x.UsuarioId,
+                        areaEventoId = x.AreaEventoId,
+                        ultimaAtualizacao = x.DataOperacao
+
+                    }).Where(x => x.areaEventoId == areaEventoId).ToList()
+                .Distinct()
+                .OrderByDescending(x => x.dataInicio)
+                .ToList();
+                    if (result.Count == 0)
+                        resposta.SetNaoEncontrado("Não existe evento cadastrado referente a área informada");
+                    resposta.Retorno = result;
+                }
+
             }
             catch(Exception ex)
             {
@@ -604,6 +628,26 @@ namespace Ecossistema.Services.Services
             })
             .Distinct()
             .OrderBy(x => x.tipoEvento);
+
+            if (result.Any()) resposta.Retorno = result;
+            else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
+
+            return resposta;
+        }
+
+        public async Task<RespostaPadrao> ListarAreasEventos()
+        {
+            var resposta = new RespostaPadrao();
+
+            var query = await _unitOfWork.AreasEventos.FindAllAsync(x => x.Ativo);
+
+            var result = query.Select(x => new
+            {
+                areaEventoId = x.Id,
+                areaEvento = x.Descricao
+            })
+            .Distinct()
+            .OrderBy(x => x.areaEventoId);
 
             if (result.Any()) resposta.Retorno = result;
             else resposta.SetNaoEncontrado("Nenhum registro encontrado!");
