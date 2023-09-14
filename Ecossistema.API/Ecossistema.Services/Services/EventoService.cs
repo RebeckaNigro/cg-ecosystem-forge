@@ -73,6 +73,7 @@ namespace Ecossistema.Services.Services
 
                 var obj = new Evento((int)dado.InstituicaoId,
                                           (int)dado.TipoEventoId,
+                                          (int)dado.AreaEventoId,
                                           dado.Titulo,
                                           dado.Descricao,
                                           (DateTime)dado.DataInicio,
@@ -183,6 +184,7 @@ namespace Ecossistema.Services.Services
 
                     objAlt.InstituicaoId = (int)dado.InstituicaoId;
                     objAlt.TipoEventoId = (int)dado.TipoEventoId;
+                    objAlt.AreaEventoId = (int)dado.AreaEventoId;
                     objAlt.Titulo = (string)dado.Titulo;
                     objAlt.Descricao = (string)dado.Descricao;
                     objAlt.DataInicio = (DateTime)dado.DataInicio;
@@ -535,7 +537,7 @@ namespace Ecossistema.Services.Services
             {
                 var arquivos = await _arquivoService.ObterArquivos(EOrigem.Evento, id, resposta);
 
-                var includes = new[] { "Instituicao", "TipoEvento", "Aprovacao", "Endereco", "TagsItens.Tag" };
+                var includes = new[] { "Instituicao", "TipoEvento" ,"Aprovacao", "AreaEvento", "Endereco", "TagsItens.Tag" };
 
                 var query = await _unitOfWork.Eventos.FindAllAsync(x => x.Id == id, includes);
                 var evento = query.FirstOrDefault();
@@ -546,7 +548,8 @@ namespace Ecossistema.Services.Services
                     instituicaoId = x.InstituicaoId,
                     instituicao = x.Instituicao != null ? x.Instituicao.RazaoSocial : null,
                     tipoEventoId = x.TipoEventoId,
-                    tipoEvento = x.TipoEvento != null ? x.Descricao : null,
+                    tipoEvento = x.TipoEvento != null ? x.TipoEvento.Descricao : null,
+                    areaEventoId = x.AreaEventoId,
                     titulo = x.Titulo,
                     descricao = x.Descricao,
                     dataInicio = x.DataInicio,
@@ -678,6 +681,8 @@ namespace Ecossistema.Services.Services
             || !await ValidarInstituicaoIdCadastrada(dado, resposta)
             || !ValidarTipoEventoIdValida(dado, resposta)
             || !await ValidarTipoEventoIdCadastrada(dado, resposta)
+            || !ValidarAreaEventoIdValida(dado, resposta)
+            || !await ValidarAreaEventoIdCadastrada(dado, resposta)
             || !ValidarTituloInformada(dado, resposta)
             || !ValidarTituloTamanho(dado, resposta)
             || !ValidarDescricaoInformada(dado, resposta)
@@ -837,6 +842,29 @@ namespace Ecossistema.Services.Services
             if (!query.Any())
             {
                 resposta.SetNaoEncontrado("Não existe cadastro para o tipo de evento informado!");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarAreaEventoIdValida(EventoDto dado, RespostaPadrao resposta)
+        {
+            if (!ValidacaoUtil.ValidarInteiroValido(dado.AreaEventoId))
+            {
+                resposta.SetCampoInvalido("AreaEventoId");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ValidarAreaEventoIdCadastrada(EventoDto dado, RespostaPadrao resposta)
+        {
+            var query = await _unitOfWork.TiposEventos.FindAllAsync(x => x.Id == (int)dado.AreaEventoId
+                                                                      && x.Ativo);
+
+            if (!query.Any())
+            {
+                resposta.SetNaoEncontrado("Não existe cadastro para a área de evento informado!");
                 return false;
             }
             return true;
