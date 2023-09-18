@@ -147,7 +147,7 @@ nav.navbar {
 
 
 button#login {
-	background-color: #639280;
+	background-color: var(--orange);
 	color: #fff;
 	width: 120px;
 	height: 40px;
