@@ -2,23 +2,23 @@
   <div>
     <div class="mx-auto card-form box p-5">
       <div class="text-center mt-3 mb-2">
-        <h1 class="titulo-principal">ESQUECI MINHA SENHA</h1>
+        <h1 class="titulo-principal">Inserir código de recuperação</h1>
       </div>
       <form id="login-form">
         <div>
-          <label for="email" class="form-label-primary"
-            >Digite seu e-mail</label
+          <label for="codigo" class="form-label-primary"
+            >Código de recuperação</label
           >
           <input
             type="text"
-            id="email"
+            id="codigo"
             class="form-input-primary"
-            :class="v$.email.$error ? 'is-invalid' : ''"
-            v-model="usuario.email"
-            placeholder="e-maildousuario@email.com"
+            :class="v$.codigo.$error ? 'is-invalid' : ''"
+            v-model="usuario.codigo"
+            placeholder=""
           />
-          <div v-if="v$.email.$error" class="invalid-feedback">
-            {{ v$.email.$errors[0].$message }}
+          <div v-if="v$.codigo.$error" class="invalid-feedback">
+            {{ v$.codigo.$errors[0].$message }}
           </div>
         </div>
 
@@ -44,9 +44,13 @@
               </button>
             </div>
           </div>
-          
-            <Spinner v-if="waitingResponse"/>
-          
+          <div
+            v-if="waitingResponse"
+            class="spinner-border m-auto"
+            role="status"
+          >
+            <Spinner />
+          </div>
         </div>
       </form>
     </div>
@@ -56,26 +60,23 @@
 <script setup lang="ts">
   import { ref, computed } from "vue"
   import useValidate from "@vuelidate/core"
-  import { required, email, helpers } from "@vuelidate/validators"
+  import { required, helpers, numeric } from "@vuelidate/validators"
   import Spinner from "../general/Spinner.vue"
-import { useModalStore } from "../../stores/modal/store"
 import { useRecuperacaoSenhaStore } from "../../stores/recuperacao-senha/store"
 import { useRouter } from "vue-router"
 
-	const modalStore = useModalStore()
+  const usuario = ref({
+    codigo: ""
+  })
 	const recuperacaoSenhaStore = useRecuperacaoSenhaStore()
 	const router = useRouter()
-  const usuario = ref({
-    email: ""
-  })
-
   const waitingResponse = ref(false)
 
   const usuarioRules = computed(() => {
     return {
-      email: {
-        required: helpers.withMessage("E-mail é obrigatório.", required),
-        email: helpers.withMessage("E-mail inválido.", email)
+      codigo: {
+        required: helpers.withMessage("Código é obrigatório.", required),
+        codigo: helpers.withMessage("Código inválido.", numeric)
       }
     }
   })
@@ -83,24 +84,11 @@ import { useRouter } from "vue-router"
   const v$ = useValidate(usuarioRules, usuario)
 
   const enviar = async () => {
-		// modalStore.showSuccessModal("O código de recuperação foi enviado para o e-mail informado")
     v$.value.$validate()
-
     if (!v$.value.$error) {
+			recuperacaoSenhaStore.info.otp = usuario.value.codigo
+			router.push("/redefinir-senha")
       waitingResponse.value = true
-			recuperacaoSenhaStore.info.email = usuario.value.email
-			await recuperacaoSenhaStore.enviarEmailComCodigo(usuario.value.email)
-			if(recuperacaoSenhaStore.response.code === 200){
-				modalStore.showSuccessModal("O código de recuperação foi enviado para o e-mail informado")
-				setTimeout(() => {
-					modalStore.closeModal()
-					router.push("/codigo")
-				}, 3000)
-				waitingResponse.value = false
-			}else{
-				waitingResponse.value = false
-				modalStore.showErrorModal(recuperacaoSenhaStore.response.message)
-			}
     }
     waitingResponse.value = false
   }
