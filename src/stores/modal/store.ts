@@ -66,7 +66,7 @@ export const useModalStore = defineStore("modalStore", {
 
     closeModal() {
       //@ts-ignore
-		this.modalInstance.toggle()
+		this.modalInstance.hide()
     }
   },
   persist: false
