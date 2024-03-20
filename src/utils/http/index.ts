@@ -5,7 +5,7 @@ import axios, {
 } from "axios"
 import router from "./../../router"
 import { useUserStore } from "../../stores/user/store"
-export const baseURL = "http://dev-api.ecossistemadeinovacaocg.com.br"
+export const baseURL = "https://hom-api.ecossistemadeinovacaocg.com.br"
 
 // TODO: provide axios instance throught provide/inject
 // TODO: enhance headers when api routes gets private
