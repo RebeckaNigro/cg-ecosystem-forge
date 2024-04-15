@@ -5,11 +5,12 @@ import axios, {
 } from "axios"
 import router from "./../../router"
 import { useUserStore } from "../../stores/user/store"
+export const baseURL = "https://hom-api.ecossistemadeinovacaocg.com.br"
 
 // TODO: provide axios instance throught provide/inject
 // TODO: enhance headers when api routes gets private
 export const httpRequest: AxiosInstance = axios.create({
-  baseURL: "http://dev-api.ecossistemadeinovacaocg.com.br",
+  baseURL: baseURL,
   headers: {
     "Content-type": "application/json",
 	"Access-Control-Allow-Origin": "*"

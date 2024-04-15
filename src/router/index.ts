@@ -24,6 +24,7 @@ import RedefinirSenha from "../components/esqueciSenha/RedefinirSenha.vue"
 import Perfil from "../views/perfil/Perfil.vue"
 import DocumentoExpandido from '../views/documentos/expandido/DocumentoExpandido.vue'
 import Editais from '../views/documentos/editais/Editais.vue'
+import Codigo from "../components/esqueciSenha/Codigo.vue"
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -142,6 +143,14 @@ const routes: RouteRecordRaw[] = [
 		path: "/esqueci-a-senha",
 		name: "EsqueciSenha",
 		component: EsqueciSenha,
+		meta: {
+			public: true
+		}
+	},
+	{
+		path: "/codigo",
+		name: "CodigoRecuperacao",
+		component: Codigo,
 		meta: {
 			public: true
 		}
