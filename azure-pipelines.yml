@@ -13,10 +13,14 @@ pool:
   name: Default
   
 steps:
- - bash: |
+- bash: |
     npm i
     echo "export const ID_SEM_INSTITUICAO=3" > ./src/utils/constantes.ts
-    sed -i 's|https://hom-api\.ecossistemadeinovacaocg\.com\.br|$(api_url)|g'
+    sed -i 's|https://hom-api\.ecossistemadeinovacaocg\.com\.br|$(API_URL)|g'
     npm run build
+    swa deploy ./dist
     # Build now is in /dist folder
+  env:
+    SWA_CLI_DEPLOYMENT_TOKEN: $(DEPLOY_TOKEN)
+
        
