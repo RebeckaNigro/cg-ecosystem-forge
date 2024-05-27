@@ -1,0 +1,22 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+resources:
+  - repo: self
+
+pool:
+  name: Default
+  
+steps:
+ - bash: |
+    npm i
+    echo "export const ID_SEM_INSTITUICAO=3" > ./src/utils/constantes.ts
+    sed -i 's|https://hom-api\.ecossistemadeinovacaocg\.com\.br|$(api_url)|g'
+    npm run build
+    # Build now is in /dist folder
+       
