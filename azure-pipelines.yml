@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  name: Default
+
+steps:
+- bash: |
+    mv .gitignore Ecossistema.API/
+    rm -rf .git
+    git clone https://%24api-ecossistema:$PUSH_PASSWORD@api-ecossistema.scm.azurewebsites.net:443/api-ecossistema.git
+    rm -rf api-ecossistema/*
+    mv Ecossistema.API/* api-ecossistema/
+    cd api-ecossistema
+    git checkout -b master
+    git config user.email startup@local.com
+    git config user.name 'Azure Agent'
+    git add .
+    NOW=$( date '+%F_%H:%M:%S' )
+    git commit -m "Deploy commit $NOW"
+    git push --set-upstream origin master
+  env:
+    PUSH_PASSWORD: $(GIT_PASSWORD)
