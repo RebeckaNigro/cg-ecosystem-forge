@@ -47,7 +47,7 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddDbContext<EcossistemaContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddCors(options =>
@@ -76,7 +76,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 
-// Adding Jwt Bearer
+// Adding Jwt Bearer 
 .AddJwtBearer(options =>
 {
     options.SaveToken = true;
