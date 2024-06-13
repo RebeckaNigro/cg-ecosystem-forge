@@ -12,8 +12,9 @@ pool:
 steps:
 - bash: |
     mv .gitignore ./Ecossistema.API/
-    ls | echo
+    ls
     rm -rf ./.git
+    ls
     git clone https://%24api-ecossistema:$PUSH_PASSWORD@api-ecossistema.scm.azurewebsites.net:443/api-ecossistema.git
     echo "here"
     cd api-ecossistema
