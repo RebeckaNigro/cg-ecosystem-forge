@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("./appsettings.json")
+builder.Configuration.AddJsonFile("./appsettings.json");
 
 ConfigurationManager configuration = builder.Configuration; //identity
 
