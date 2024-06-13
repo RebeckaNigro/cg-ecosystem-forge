@@ -20,4 +20,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY --from=build /src/Ecossistema.API/appsettings.json /app/appsettings.json
+COPY --from=build /src/Ecossistema.API/wwwroot/ /app/wwwroot/
 ENTRYPOINT ["dotnet", "Ecossistema.API.dll"]
