@@ -19,6 +19,7 @@ steps:
     cd ..
     mv -f Ecossistema.API/* api-ecossistema/
     cd api-ecossistema
+    cp Ecossistema.API/appsettings.json ./
     git config user.email startup@local.com
     git config user.name 'Azure Agent'
     git add .
