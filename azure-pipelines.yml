@@ -14,9 +14,9 @@ steps:
     mv .gitignore Ecossistema.API/
     rm -rf .git
     git clone https://%24api-ecossistema:$PUSH_PASSWORD@api-ecossistema.scm.azurewebsites.net:443/api-ecossistema.git
-    mv api-ecossistema/.git ./
-    rm -rf api-ecossistema/*
-    mv .git ./api-ecossistema/
+    cd api-ecossistema
+    rm -rf ./Ecossistema*
+    cd ..
     mv -f Ecossistema.API/* api-ecossistema/
     cd api-ecossistema
     git checkout -b master
