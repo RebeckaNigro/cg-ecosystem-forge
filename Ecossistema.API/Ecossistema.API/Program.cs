@@ -11,7 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("./appsettings.json")
+
 ConfigurationManager configuration = builder.Configuration; //identity
+
 
 // Add services to the container.
 
@@ -137,8 +140,8 @@ app.Use(async (context, next) =>
     if (context.Response.StatusCode == 401 && context.Response.Headers.ContainsKey("Token-Expired"))
     {
         context.Response.Headers.Remove("Token-Expired");
-        context.Response.StatusCode = 440; // Código de erro que representa um token expirado
-        await context.Response.WriteAsJsonAsync(new { message = "Token expirado. Por favor, faça login novamente." });
+        context.Response.StatusCode = 440; // CÃ³digo de erro que representa um token expirado
+        await context.Response.WriteAsJsonAsync(new { message = "Token expirado. Por favor, faÃ§a login novamente." });
     }
 });
 
