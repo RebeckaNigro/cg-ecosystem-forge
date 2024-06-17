@@ -160,7 +160,7 @@
 							<a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">(Não sei meu CEP)</a></label>
 					</div>
 
-					<input type="text" id="cep" class="form-input-primary" v-model="evento.endereco.cep" @blur="buscarCEP"
+					<input type="text" id="cep" class="form-input-primary" v v-model="evento.endereco.cep" @blur="buscarCEP"
 						v-if="evento.tipoEventoId == 1" />
 				</div>
 			</div>
@@ -313,7 +313,7 @@
 // import ImageUploader from "quill-image-uploader"
 
 import useValidate from "@vuelidate/core"
-import { ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useEventoStore } from "../../../stores/eventos/store"
 import { useModalStore } from "../../../stores/modal/store"
@@ -418,6 +418,16 @@ const eventoRules = ref({
 	}
 })
 
+function CEPMask(field: string) {
+ return field
+  .replace(/\D/g, '')
+  .replace(/(\d{5})(\d)/, '$1-$2')
+  .replace(/(-\d{3})\d+?$/, '$1')
+}
+
+watch(evento.value.endereco.cep,() => {
+	evento.value.endereco.cep = CEPMask(evento.value.endereco.cep)
+})
 const v$ = useValidate(eventoRules, evento)
 
 const allTags = ref<CustomTag[]>()
@@ -726,9 +736,10 @@ const resetarEvento = () => {
 
 const buscarCEP = async () => {
 	if (evento.value.endereco.cep) {
+		const temp = evento.value.endereco.cep.split('-').join('')
 		gettingAddress.value = true
 		try {
-			const enderecoCompleto = await getFromCEP(evento.value.endereco.cep)
+			const enderecoCompleto = await getFromCEP(temp)
 
 			if (enderecoCompleto.errors) {
 				alertStore.showTimeoutErrorMessage("Erro ao buscar CEP!")
