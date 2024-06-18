@@ -425,7 +425,8 @@ function CEPMask(field: string) {
   .replace(/(-\d{3})\d+?$/, '$1')
 }
 
-watch(evento.value.endereco.cep,() => {
+watch(() => evento.value.endereco.cep,(value) => {
+	console.log('hruehr')
 	evento.value.endereco.cep = CEPMask(evento.value.endereco.cep)
 })
 const v$ = useValidate(eventoRules, evento)
