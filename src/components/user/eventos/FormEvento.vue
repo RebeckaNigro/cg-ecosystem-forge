@@ -426,8 +426,7 @@ function CEPMask(field: string) {
 }
 
 watch(() => evento.value.endereco.cep,(value) => {
-	console.log('hruehr')
-	evento.value.endereco.cep = CEPMask(evento.value.endereco.cep)
+	evento.value.endereco.cep = CEPMask(value)
 })
 const v$ = useValidate(eventoRules, evento)
 
@@ -543,6 +542,7 @@ const onFileChanged = (event: Event) => {
 }
 
 const cadastrar = async () => {
+	evento.value.endereco.cep = evento.value.endereco.cep.split('-').join('')
 	const formValidation = await v$.value.$validate()
 	if (!horaInicio.value) invalidHoraInicio.value = true
 	else invalidHoraInicio.value = false
@@ -606,9 +606,6 @@ const cadastrar = async () => {
 	evento.value.arquivo = arquivo.value
 
 	if (evento.value.tipoEventoId == 2) evento.value.endereco = null
-
-	console.log(`ENVIANDO A REQUISIÇÃO ASSIM: `)
-	console.dir(evento.value)
 
 	if (evento.value.id > 0) {
 		sendingEvent.value = true
