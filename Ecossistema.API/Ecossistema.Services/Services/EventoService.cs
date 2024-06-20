@@ -48,7 +48,10 @@ namespace Ecossistema.Services.Services
             var objAlt = await _unitOfWork.Usuarios.FindAsync(x => x.AspNetUserId == aspNetId);
             var usuarioId = objAlt.Id;
             var dado = ConverterEvento(item);
-            dado.AreaEventoId = 1;
+            if(dado.AreaEventoId == null)
+            {
+                dado.AreaEventoId = 1;
+            }
 
             if (!await ValidarIncluir(dado, item.Arquivo, resposta)) return resposta;
 
