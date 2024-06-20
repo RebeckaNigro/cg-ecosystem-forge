@@ -21,6 +21,8 @@ var configuracaoEmail = builder.Configuration.GetSection("ConfiguracaoEmail")
 var urls = builder.Configuration.GetSection("UrlStrings")
                 .Get<UrlStringsDto>();
 
+urls.ApiUrl = System.Environment.GetEnvironmentVariable("API_URL") ?? urls.ApiUrl;
+
 builder.Services.AddSingleton(urls);
 
 builder.Services.AddSingleton(configuracaoEmail);
