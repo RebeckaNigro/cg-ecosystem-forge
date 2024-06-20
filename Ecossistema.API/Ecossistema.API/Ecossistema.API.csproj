@@ -20,10 +20,6 @@
     <ProjectReference Include="..\Ecossistema.Services\Ecossistema.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\RepositoryFiles\NoticiasImagens\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<Content Update="appsettings.json">
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
