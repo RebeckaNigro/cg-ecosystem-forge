@@ -38,13 +38,20 @@ export const useEventoStore = defineStore("eventoStore", {
   persist: false,
   actions: {
     async postEvent(novoEvento: IEvento) {
-      const data = {
-        ...novoEvento,
-        endereco: {
-          ...novoEvento.endereco,
-          cep: novoEvento.endereco.cep.split("-").join(""),
-        },
-      };
+      let data;
+      if (novoEvento.endereco) {
+        data = {
+          ...novoEvento,
+          endereco: {
+            ...novoEvento.endereco,
+            cep: (novoEvento.endereco.cep = novoEvento.endereco
+              ? novoEvento.endereco?.cep.split("-").join("")
+              : null),
+          },
+        };
+      } else {
+        data = { ...novoEvento };
+      }
 
       try {
         const formData = new FormData();
@@ -201,12 +208,14 @@ export const useEventoStore = defineStore("eventoStore", {
         if (eventoEdicao.endereco) {
           data = {
             ...eventoEdicao,
-            endereco: {
-              ...eventoEdicao.endereco,
-              cep: (eventoEdicao.endereco.cep = eventoEdicao.endereco?.cep
-                .split("-")
-                .join("")),
-            },
+            endereco: eventoEdicao.endereco
+              ? {
+                  ...eventoEdicao.endereco,
+                  cep: (eventoEdicao.endereco.cep = eventoEdicao.endereco
+                    ? eventoEdicao.endereco?.cep.split("-").join("")
+                    : null),
+                }
+              : null,
           };
         } else {
           data = { ...eventoEdicao };
