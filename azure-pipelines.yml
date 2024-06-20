@@ -10,21 +10,16 @@ pool:
   name: Default
 
 steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'eldorado percepcao registry-HUB'
+    repository: 'ecossistema'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: 'latest'
 - bash: |
-    mv .gitignore ./Ecossistema.API/
-    rm -rf ./.git
-    git clone https://%24api-ecossistema:$PUSH_PASSWORD@api-ecossistema.scm.azurewebsites.net:443/api-ecossistema.git
-    cd api-ecossistema
-    rm -rf ./E*
-    cd ..
-    mv -f Ecossistema.API/* api-ecossistema/
-    cd api-ecossistema
-    cp Ecossistema.API/appsettings.json ./
-    git config user.email startup@local.com
-    git config user.name 'Azure Agent'
-    git add .
-    NOW=$( date '+%F_%H:%M:%S' )
-    git commit -m "Deploy commit $NOW"
-    git push --set-upstream origin master
+    curl -X GET -H "X-TOKEN: $TOKEN" \
+    https://startupsesi.brazilsouth.cloudapp.azure.com/push-hook?project=ecossistema
+  displayName: "Alert server via webhook"
   env:
-    PUSH_PASSWORD: $(GIT_PASSWORD)
+    TOKEN: $(PUSH-TOKEN)
