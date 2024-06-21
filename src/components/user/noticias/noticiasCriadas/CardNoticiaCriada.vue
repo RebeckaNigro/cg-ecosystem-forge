@@ -22,18 +22,14 @@
               class="image-limiter"
             />
           </div>
-          <div
-            class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text"
-          >
+          <div class="text-danger fs-5 my-2 fw-bold fst-italic mascara-rascunho-text">
             (Rascunho)
           </div>
         </div>
       </div>
 
       <div class="container">
-        <div
-          class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
-        >
+        <div class="row mt-2 mx-2 justify-content-between align-items-center d-flex">
           <div class="col-6 col-md-8 text-start p-0">
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
@@ -46,7 +42,7 @@
               @click="
                 $router.push({
                   name: 'NoticiaExpandida',
-                  params: { noticiaId: props.noticia.id }
+                  params: { noticiaId: props.noticia.id },
                 })
               "
             />
@@ -57,16 +53,11 @@
               @click="
                 $router.push({
                   name: 'GerenciaNoticia',
-                  params: { noticiaId: noticia.id }
+                  params: { noticiaId: noticia.id },
                 })
               "
             />
-            <img
-              src="/delete_icon.svg"
-              alt=""
-              class="image-icon-button"
-              @click="confirmDelete"
-            />
+            <img src="/delete_icon.svg" alt="" class="image-icon-button" @click="confirmDelete" />
           </div>
 
           <div class="col-6 col-md-4 text-end" v-else>
@@ -106,123 +97,117 @@
 </template>
 
 <script setup lang="ts">
-  import { INoticiaSimplificada } from "./../../../../stores/noticias/types"
-  import { useNoticiaStore } from "../../../../stores/noticias/store"
-  import { useModalStore } from "../../../../stores/modal/store"
-  import { useConfirmStore } from "../../../../stores/confirm/store"
-  import { brDateString, friendlyDateTime } from "./../../../../utils/formatacao/datetime"
-  import { ref, onMounted, onUpdated } from "vue"
-  import ConfirmModal from "../../../general/ConfirmModal.vue"
-  import router from "../../../../router"
-  import { Modal } from "bootstrap"
+import { INoticiaSimplificada } from './../../../../stores/noticias/types';
+import { useNoticiaStore } from '../../../../stores/noticias/store';
+import { useModalStore } from '../../../../stores/modal/store';
+import { useConfirmStore } from '../../../../stores/confirm/store';
+import { brDateString, friendlyDateTime } from './../../../../utils/formatacao/datetime';
+import { ref, onMounted, onUpdated } from 'vue';
+import ConfirmModal from '../../../general/ConfirmModal.vue';
+import router from '../../../../router';
+import { Modal } from 'bootstrap';
 
-  const noticiaStore = useNoticiaStore()
-  const modalStore = useModalStore()
-  const confirmStore = useConfirmStore()
+const noticiaStore = useNoticiaStore();
+const modalStore = useModalStore();
+const confirmStore = useConfirmStore();
 
-  const emit = defineEmits(["update-list"])
+const emit = defineEmits(['update-list']);
 
-  const props = defineProps<{
-    noticia: INoticiaSimplificada
-    isRascunho: boolean
-  }>()
+const props = defineProps<{
+  noticia: INoticiaSimplificada;
+  isRascunho: boolean;
+}>();
 
-  const dataFormatada = ref("")
-  const dataOperacaoFormatada = ref("")
-  const tagsFormatadas = ref("")
+const dataFormatada = ref('');
+const dataOperacaoFormatada = ref('');
+const tagsFormatadas = ref('');
 
-  const confirmDelete = () => {
-	const modalDOM: any = document.querySelector('#confirmNewsModal')
+const confirmDelete = () => {
+  const modalDOM: any = document.querySelector('#confirmNewsModal');
 
-    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
-    confirmStore.showConfirmModal(
-      "Tem certeza que desesja remover esta notícia?",
-      props.noticia.id
-    )
-  }
+  confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM));
+  confirmStore.showConfirmModal('Tem certeza que desesja remover esta notícia?', props.noticia.id);
+};
 
-  const confirmDeleteRascunho = () => {
-	const modalDOM: any = document.querySelector('#confirmNewsModal')
+const confirmDeleteRascunho = () => {
+  const modalDOM: any = document.querySelector('#confirmNewsModal');
 
-    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM))
-    confirmStore.showConfirmModal(
-      "Tem certeza que desesja remover este rascunho?",
-      null
-    )
-  }
+  confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM));
+  confirmStore.showConfirmModal('Tem certeza que desesja remover este rascunho?', null);
+};
 
-  const confirmado = async () => {
-    confirmStore.closeConfirm()
+const confirmado = async () => {
+  confirmStore.closeConfirm();
 
-    if (confirmStore.options.parameter != null) {
-      await noticiaStore.deleteNews(confirmStore.options.parameter as number)
+  if (confirmStore.options.parameter != null) {
+    await noticiaStore.deleteNews(confirmStore.options.parameter as number);
 
-      const res = noticiaStore.response.getResponse()
-      if (res.code === 200) {
-        emit("update-list")
-        modalStore.showSuccessModal("Notícia removida com sucesso!")
-      } else {
-        modalStore.showErrorModal("Erro ao remover notícia!")
-      }
+    const res = noticiaStore.response.getResponse();
+    if (res.code === 200) {
+      emit('update-list');
+      modalStore.showSuccessModal('Notícia removida com sucesso!');
     } else {
-      localStorage.removeItem("noticiaRascunho")
-      emit("update-list")
-      modalStore.showSuccessModal("Rascunho removido com sucesso!")
+      modalStore.showErrorModal('Erro ao remover notícia!');
     }
+  } else {
+    localStorage.removeItem('noticiaRascunho');
+    emit('update-list');
+    modalStore.showSuccessModal('Rascunho removido com sucesso!');
   }
+};
 
-  const loadFormComRascunho = () => {
-    noticiaStore.loadRascunho = true
-    router.push({
-      name: "GerenciaNoticia"
-    })
-  }
+const loadFormComRascunho = () => {
+  noticiaStore.loadRascunho = true;
+  router.push({
+    name: 'GerenciaNoticia',
+  });
+};
 
-  onMounted(() => {
-    dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
-    if (props.noticia.dataOperacao)
-      dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao)
+onMounted(() => {
+  dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString());
+  if (props.noticia.dataOperacao)
+    dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao);
 
-    const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
-    tagsFormatadas.value = prependHashtag.join("  ")
-  })
+  const prependHashtag = props.noticia.tags.map((tag) => '#' + tag.descricao);
+  tagsFormatadas.value = prependHashtag.join('  ');
+});
 
-  onUpdated(() => {
-    dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString())
+onUpdated(() => {
+  dataFormatada.value = brDateString(props.noticia.dataPublicacao.toString());
 
-    if (props.noticia.dataOperacao)
-      dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao)
-    const prependHashtag = props.noticia.tags.map((tag) => "#" + tag.descricao)
-    tagsFormatadas.value = prependHashtag.join("  ")
-  })
+  if (props.noticia.dataOperacao)
+    dataOperacaoFormatada.value = friendlyDateTime(props.noticia.dataOperacao);
+  const prependHashtag = props.noticia.tags.map((tag) => '#' + tag.descricao);
+  tagsFormatadas.value = prependHashtag.join('  ');
+});
 </script>
 
 <style scoped>
-  .image-icon-button {
-    cursor: pointer;
-  }
+.image-icon-button {
+  cursor: pointer;
+}
 
-  .image-limiter {
-    width: 100%;
-    height: 300px;
-	object-fit: cover;
-  }
+.image-limiter {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
 
-  .mascara-rascunho {
-    display: flex;
-    background-color: black;
-    opacity: 20%;
-    justify-content: center;
-    align-items: center;
-  }
+.mascara-rascunho {
+  display: flex;
+  background-color: black;
+  opacity: 20%;
+  justify-content: center;
+  align-items: center;
+}
 
-  .container-mascara-rascunho {
-	display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.container-mascara-rascunho {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .mascara-rascunho-text {
-    position: absolute;
-  }
+.mascara-rascunho-text {
+  position: absolute;
+}
 </style>

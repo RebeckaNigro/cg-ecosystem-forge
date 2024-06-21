@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import { IDocumento, IDocumentoSimplificado } from "../documentos/types";
-import { getLastContent, httpRequest } from "../../utils/http";
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
+import { defineStore } from 'pinia';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { getLastContent, httpRequest } from '../../utils/http';
+import { IDocumento, IDocumentoSimplificado } from '../documentos/types';
 
 const lastDocs: Array<IDocumentoSimplificado> = [];
 const allDocs: Array<IDocumentoSimplificado> = [];
@@ -9,10 +9,10 @@ const allUserDocs: Array<IDocumentoSimplificado> = [];
 const allUserLastDocs: Array<IDocumentoSimplificado> = [];
 const researches: Array<IDocumentoSimplificado> = [];
 const editais: Array<IDocumentoSimplificado> = [];
-export const useDocumentStore = defineStore("documentStore", {
+export const useDocumentStore = defineStore('documentStore', {
   state: () => {
     return {
-      response: new GeneralResponseHandler(0, "none", "no request made yet"),
+      response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
       lastDocs,
       allDocs,
       allUserDocs,
@@ -26,41 +26,27 @@ export const useDocumentStore = defineStore("documentStore", {
     async postDocument(novoDocumento: IDocumento) {
       try {
         const formData = new FormData();
-        formData.append("nome", novoDocumento.nome);
-        formData.append("descricao", novoDocumento.descricao);
+        formData.append('nome', novoDocumento.nome);
+        formData.append('descricao', novoDocumento.descricao);
 
-        formData.append(
-          "documentoAreaId",
-          novoDocumento.documentoAreaid.toString()
-        );
-        formData.append(
-          "instituicaoId",
-          novoDocumento.instituicaoId.toString()
-        );
-        formData.append("data", novoDocumento.data.toString());
+        formData.append('documentoAreaId', novoDocumento.documentoAreaid.toString());
+        formData.append('instituicaoId', novoDocumento.instituicaoId.toString());
+        formData.append('data', novoDocumento.data.toString());
         if (novoDocumento.tags.length > 0) {
           novoDocumento.tags.forEach((tag, index) => {
             formData.append(`tags[${index}].descricao`, tag.descricao);
           });
         }
-        formData.append("arquivo", novoDocumento.arquivo);
-        const response = await httpRequest.post(
-          "/api/documento/incluir",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-        this.response.putResponse(
-          response.data.codigo,
-          response.data.dado,
-          response.data.resposta
-        );
+        formData.append('arquivo', novoDocumento.arquivo);
+        const response = await httpRequest.post('/api/documento/incluir', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        this.response.putResponse(response.data.codigo, response.data.dado, response.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI");
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
           console.error(error);
         }
       }
@@ -68,7 +54,7 @@ export const useDocumentStore = defineStore("documentStore", {
     },
 
     async getLastDocs() {
-      const response = await getLastContent("documento");
+      const response = await getLastContent('documento');
       if (response.data.codigo === 200) {
         this.lastDocs = [];
         for (const news of response.data.retorno) {
@@ -79,9 +65,7 @@ export const useDocumentStore = defineStore("documentStore", {
 
     async getUserDocs() {
       try {
-        const response = await httpRequest.get(
-          "/api/documento/listarPorUsuarioId"
-        );
+        const response = await httpRequest.get('/api/documento/listarPorUsuarioId');
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -100,9 +84,7 @@ export const useDocumentStore = defineStore("documentStore", {
 
     async getUserLastDocs() {
       try {
-        const response = await httpRequest.get(
-          "/api/documento/listarUltimosPorUsuarioId"
-        );
+        const response = await httpRequest.get('/api/documento/listarUltimosPorUsuarioId');
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -138,9 +120,7 @@ export const useDocumentStore = defineStore("documentStore", {
 
     async deleteDoc(documentId: number) {
       try {
-        const response = await httpRequest.delete(
-          `/api/documento/excluir?id=${documentId}`
-        );
+        const response = await httpRequest.delete(`/api/documento/excluir?id=${documentId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -152,7 +132,7 @@ export const useDocumentStore = defineStore("documentStore", {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Erro ao remover documento.");
+          this.response.putError(661, 'Erro ao remover documento.');
           console.error(error);
         }
       }
@@ -161,47 +141,35 @@ export const useDocumentStore = defineStore("documentStore", {
     async putDoc(documentoEdicao: IDocumento) {
       try {
         const formData = new FormData();
-        formData.append("Id", documentoEdicao.id.toString());
-        formData.append("nome", documentoEdicao.nome);
-        formData.append("descricao", documentoEdicao.descricao);
+        formData.append('Id', documentoEdicao.id.toString());
+        formData.append('nome', documentoEdicao.nome);
+        formData.append('descricao', documentoEdicao.descricao);
 
-        formData.append(
-          "documentoAreaId",
-          documentoEdicao.documentoAreaid.toString()
-        );
-        formData.append(
-          "instituicaoId",
-          documentoEdicao.instituicaoId.toString()
-        );
-        formData.append("data", documentoEdicao.data);
+        formData.append('documentoAreaId', documentoEdicao.documentoAreaid.toString());
+        formData.append('instituicaoId', documentoEdicao.instituicaoId.toString());
+        formData.append('data', documentoEdicao.data);
         if (documentoEdicao.tags.length > 0) {
           documentoEdicao.tags.forEach((tag, index) => {
             formData.append(`tags[${index}].descricao`, tag.descricao);
           });
         }
-        formData.append("arquivo", documentoEdicao.arquivo);
-        const res = await httpRequest.put("/api/documento/editar", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+        formData.append('arquivo', documentoEdicao.arquivo);
+        const res = await httpRequest.put('/api/documento/editar', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
-        this.response.putResponse(
-          res.data.codigo,
-          res.data.dado,
-          res.data.resposta
-        );
+        this.response.putResponse(res.data.codigo, res.data.dado, res.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI");
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
           console.error(error);
         }
       }
     },
     async getDocDetailsById(documentId: number) {
       try {
-        const response = await httpRequest.get(
-          `/api/documento/detalhes?id=${documentId}`
-        );
+        const response = await httpRequest.get(`/api/documento/detalhes?id=${documentId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -218,13 +186,13 @@ export const useDocumentStore = defineStore("documentStore", {
     async getResearches(page: number) {
       await this.getAllDocs(page);
       this.researches = this.allDocs.filter((doc: IDocumentoSimplificado) => {
-        return doc.documentoArea.toLowerCase() === "pesquisa" ? true : false;
+        return doc.documentoArea.toLowerCase() === 'pesquisa' ? true : false;
       });
     },
     async getEditais(page: number) {
       await this.getAllDocs(page);
       this.editais = this.allDocs.filter((doc: IDocumentoSimplificado) => {
-        return doc.documentoArea.toLowerCase() === "edital" ? true : false;
+        return doc.documentoArea.toLowerCase() === 'edital' ? true : false;
       });
     },
   },

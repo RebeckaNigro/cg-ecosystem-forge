@@ -7,18 +7,14 @@
     <Spinner v-if="loadingNews" />
 
     <div class="container-fluid">
-      <div
-        class="custom-list-item"
-        v-for="noticia in noticiaStore.userLastNews"
-        :key="noticia.id"
-      >
+      <div class="custom-list-item" v-for="noticia in noticiaStore.userLastNews" :key="noticia.id">
         <div class="row g-0 px-2">
           <div
             class="col-md-10 col-8 d-flex text-start align-items-center py-2 hover-pointer"
             @click="
               $router.push({
                 name: 'NoticiaExpandida',
-                params: { noticiaId: noticia.id }
+                params: { noticiaId: noticia.id },
               })
             "
           >
@@ -35,7 +31,7 @@
                 @click="
                   $router.push({
                     name: 'GerenciaNoticia',
-                    params: { noticiaId: noticia.id }
+                    params: { noticiaId: noticia.id },
                   })
                 "
               />
@@ -57,7 +53,7 @@
           class="green-btn-outlined"
           @click="
             $router.push({
-              name: 'NoticiasCriadas'
+              name: 'NoticiasCriadas',
             })
           "
         >
@@ -65,10 +61,7 @@
         </button>
       </div>
       <div class="col-7 col-xlg-6">
-        <button
-          class="green-btn-primary"
-          @click="$router.push({ name: 'GerenciaNoticia' })"
-        >
+        <button class="green-btn-primary" @click="$router.push({ name: 'GerenciaNoticia' })">
           CRIAR NOTÍCIA
         </button>
       </div>
@@ -84,53 +77,50 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from "vue"
-  import Spinner from "../../general/Spinner.vue"
-  import ConfirmModal from "../../general/ConfirmModal.vue"
-  import { useNoticiaStore } from "../../../stores/noticias/store"
-  import { useConfirmStore } from "../../../stores/confirm/store"
-  import { useModalStore } from "../../../stores/modal/store"
-import { Modal } from "bootstrap"
+import { onMounted, ref } from 'vue';
+import Spinner from '../../general/Spinner.vue';
+import ConfirmModal from '../../general/ConfirmModal.vue';
+import { useNoticiaStore } from '../../../stores/noticias/store';
+import { useConfirmStore } from '../../../stores/confirm/store';
+import { useModalStore } from '../../../stores/modal/store';
+import { Modal } from 'bootstrap';
 
-  const noticiaStore = useNoticiaStore()
-  const confirmStore = useConfirmStore()
-  const modalStore = useModalStore()
-  const loadingNews = ref(false)
+const noticiaStore = useNoticiaStore();
+const confirmStore = useConfirmStore();
+const modalStore = useModalStore();
+const loadingNews = ref(false);
 
-  const confirmDelete = (id: number) => {
-	const modalDOM: any = document.querySelector('#confirmNewsModal')
+const confirmDelete = (id: number) => {
+  const modalDOM: any = document.querySelector('#confirmNewsModal');
 
-    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!)
-    
-    confirmStore.showConfirmModal(
-      "Tem certeza que desesja remover esta notícia?",
-      id
-    )
+  confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!);
+
+  confirmStore.showConfirmModal('Tem certeza que desesja remover esta notícia?', id);
+};
+
+const confirmado = async () => {
+  confirmStore.closeConfirm();
+
+  await noticiaStore.deleteNews(confirmStore.options.parameter as number);
+
+  const res = noticiaStore.response.getResponse();
+  if (res.code === 200) {
+    loadLastNews();
+    modalStore.showSuccessModal('Notícia removida com sucesso!');
+  } else {
+    modalStore.showErrorModal('Erro ao remover notícia!');
   }
+};
 
-  const confirmado = async () => {
-    confirmStore.closeConfirm()
+const loadLastNews = async () => {
+  loadingNews.value = true;
+  await noticiaStore.getUserLastNews();
+  loadingNews.value = false;
+};
 
-    await noticiaStore.deleteNews(confirmStore.options.parameter as number)
-
-    const res = noticiaStore.response.getResponse()
-    if (res.code === 200) {
-      loadLastNews()
-      modalStore.showSuccessModal("Notícia removida com sucesso!")
-    } else {
-      modalStore.showErrorModal("Erro ao remover notícia!")
-    }
-  }
-
-  const loadLastNews = async () => {
-    loadingNews.value = true
-    await noticiaStore.getUserLastNews()
-    loadingNews.value = false
-  }
-
-  onMounted(async () => {
-    loadLastNews()
-  })
+onMounted(async () => {
+  loadLastNews();
+});
 </script>
 
 <style scoped lang="scss"></style>

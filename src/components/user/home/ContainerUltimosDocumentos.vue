@@ -18,7 +18,7 @@
             @click="
               $router.push({
                 name: 'DocumentoExpandido',
-                params: { documentoId: documento.id }
+                params: { documentoId: documento.id },
               })
             "
           >
@@ -35,7 +35,7 @@
                 @click="
                   $router.push({
                     name: 'GerenciaDocumento',
-                    params: { documentoId: documento.id }
+                    params: { documentoId: documento.id },
                   })
                 "
               />
@@ -57,7 +57,7 @@
           class="green-btn-outlined"
           @click="
             $router.push({
-              name: 'DocumentosCriados'
+              name: 'DocumentosCriados',
             })
           "
         >
@@ -65,10 +65,7 @@
         </button>
       </div>
       <div class="col-7 col-xlg-6">
-        <button
-          class="green-btn-primary"
-          @click="$router.push({ name: 'GerenciaDocumento' })"
-        >
+        <button class="green-btn-primary" @click="$router.push({ name: 'GerenciaDocumento' })">
           CRIAR DOCUMENTO
         </button>
       </div>
@@ -84,57 +81,51 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from "vue"
-  import Spinner from "../../general/Spinner.vue"
-  import ConfirmModal from "../../general/ConfirmModal.vue"
-  import { useDocumentStore } from "../../../stores/documentos/store"
-  import { useConfirmStore } from "../../../stores/confirm/store"
-  import { useModalStore } from "../../../stores/modal/store"
-import { Modal } from "bootstrap"
+import { onMounted, ref } from 'vue';
+import Spinner from '../../general/Spinner.vue';
+import ConfirmModal from '../../general/ConfirmModal.vue';
+import { useDocumentStore } from '../../../stores/documentos/store';
+import { useConfirmStore } from '../../../stores/confirm/store';
+import { useModalStore } from '../../../stores/modal/store';
+import { Modal } from 'bootstrap';
 
-  const documentoStore = useDocumentStore()
-  const confirmStore = useConfirmStore()
-  const modalStore = useModalStore()
-  const loadingDocs = ref(false)
+const documentoStore = useDocumentStore();
+const confirmStore = useConfirmStore();
+const modalStore = useModalStore();
+const loadingDocs = ref(false);
 
-  const confirmDelete = (id: number) => {
-	const modalDOM: any = document.querySelector('#confirmLastsDocsModal')
+const confirmDelete = (id: number) => {
+  const modalDOM: any = document.querySelector('#confirmLastsDocsModal');
 
-    confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!)
-    confirmStore.showConfirmModal(
-      "Tem certeza que desesja remover este documento?",
-      id
-    )
+  confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM)!);
+  confirmStore.showConfirmModal('Tem certeza que desesja remover este documento?', id);
+};
+
+const confirmado = async () => {
+  confirmStore.closeConfirm();
+
+  if (confirmStore.options.parameter != null) {
+    await documentoStore.deleteDoc(confirmStore.options.parameter as number);
+    const res = documentoStore.response.getResponse();
+
+    if (res.code === 200) {
+      loadLastDocs();
+      modalStore.showSuccessModal('Documento removido com sucesso!');
+    } else {
+      modalStore.showErrorModal('Erro ao remover documento!');
+    }
   }
+};
 
-  const confirmado = async () => {
-    confirmStore.closeConfirm()
-	
-	if(confirmStore.options.parameter != null){
-		await documentoStore.deleteDoc(confirmStore.options.parameter as number)
-		const res = documentoStore.response.getResponse()
-		
-		if (res.code === 200) {
-			loadLastDocs()
-			modalStore.showSuccessModal("Documento removido com sucesso!")
-		} else {
-			modalStore.showErrorModal("Erro ao remover documento!")
-		}
-	}
+const loadLastDocs = async () => {
+  loadingDocs.value = true;
+  await documentoStore.getUserLastDocs();
+  loadingDocs.value = false;
+};
 
-	
-  }
-
-  const loadLastDocs = async () => {
-    loadingDocs.value = true
-    await documentoStore.getUserLastDocs()
-    loadingDocs.value = false
-  }
-
-  onMounted(async () => {
-    loadLastDocs()
-  })
+onMounted(async () => {
+  loadLastDocs();
+});
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

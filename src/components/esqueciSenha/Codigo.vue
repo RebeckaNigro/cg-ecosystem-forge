@@ -6,9 +6,7 @@
       </div>
       <form id="login-form">
         <div>
-          <label for="codigo" class="form-label-primary"
-            >Código de recuperação</label
-          >
+          <label for="codigo" class="form-label-primary">Código de recuperação</label>
           <input
             type="text"
             id="codigo"
@@ -44,11 +42,7 @@
               </button>
             </div>
           </div>
-          <div
-            v-if="waitingResponse"
-            class="spinner-border m-auto"
-            role="status"
-          >
+          <div v-if="waitingResponse" class="spinner-border m-auto" role="status">
             <Spinner />
           </div>
         </div>
@@ -58,65 +52,64 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from "vue"
-  import useValidate from "@vuelidate/core"
-  import { required, helpers, numeric } from "@vuelidate/validators"
-  import Spinner from "../general/Spinner.vue"
-import { useRecuperacaoSenhaStore } from "../../stores/recuperacao-senha/store"
-import { useRouter } from "vue-router"
+import { ref, computed } from 'vue';
+import useValidate from '@vuelidate/core';
+import { required, helpers, numeric } from '@vuelidate/validators';
+import Spinner from '../general/Spinner.vue';
+import { useRecuperacaoSenhaStore } from '../../stores/recuperacao-senha/store';
+import { useRouter } from 'vue-router';
 
-  const usuario = ref({
-    codigo: ""
-  })
-	const recuperacaoSenhaStore = useRecuperacaoSenhaStore()
-	const router = useRouter()
-  const waitingResponse = ref(false)
+const usuario = ref({
+  codigo: '',
+});
+const recuperacaoSenhaStore = useRecuperacaoSenhaStore();
+const router = useRouter();
+const waitingResponse = ref(false);
 
-  const usuarioRules = computed(() => {
-    return {
-      codigo: {
-        required: helpers.withMessage("Código é obrigatório.", required),
-        codigo: helpers.withMessage("Código inválido.", numeric)
-      }
-    }
-  })
+const usuarioRules = computed(() => {
+  return {
+    codigo: {
+      required: helpers.withMessage('Código é obrigatório.', required),
+      codigo: helpers.withMessage('Código inválido.', numeric),
+    },
+  };
+});
 
-  const v$ = useValidate(usuarioRules, usuario)
+const v$ = useValidate(usuarioRules, usuario);
 
-  const enviar = async () => {
-    v$.value.$validate()
-    if (!v$.value.$error) {
-			recuperacaoSenhaStore.info.otp = usuario.value.codigo
-			router.push("/redefinir-senha")
-      waitingResponse.value = true
-    }
-    waitingResponse.value = false
+const enviar = async () => {
+  v$.value.$validate();
+  if (!v$.value.$error) {
+    recuperacaoSenhaStore.info.otp = usuario.value.codigo;
+    router.push('/redefinir-senha');
+    waitingResponse.value = true;
   }
+  waitingResponse.value = false;
+};
 </script>
 
 <style scoped lang="scss">
-  .titulo-principal {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: black;
-    margin: 1rem 0 3rem 0;
-  }
+.titulo-principal {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: black;
+  margin: 1rem 0 3rem 0;
+}
 
+.card-form {
+  width: 50%;
+  margin: 12% auto;
+  transition: width 0.8s;
+}
+
+.button-container {
+  margin: 3rem 0 1rem 0;
+}
+
+@media (max-width: 768px) {
   .card-form {
-    width: 50%;
-    margin: 12% auto;
-    transition: width 0.8s;
+    width: 90%;
+    margin: 10% auto;
   }
-
-  .button-container {
-    margin: 3rem 0 1rem 0;
-  }
-
-  @media (max-width: 768px) {
-    .card-form {
-      width: 90%;
-      margin: 10% auto;
-    }
-  }
-
+}
 </style>

@@ -1,20 +1,15 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-} from "axios";
-import router from "./../../router";
-import { useUserStore } from "../../stores/user/store";
-export const baseURL =
-  "https://startupsesi.brazilsouth.cloudapp.azure.com/ecossistema";
+import axios, { AxiosInstance } from 'axios';
+import { useUserStore } from '../../stores/user/store';
+import router from './../../router';
+export const baseURL = 'https://startupsesi.brazilsouth.cloudapp.azure.com/ecossistema';
 
 // TODO: provide axios instance throught provide/inject
 // TODO: enhance headers when api routes gets private
 export const httpRequest: AxiosInstance = axios.create({
   baseURL: baseURL,
   headers: {
-    "Content-type": "application/json",
-    "Access-Control-Allow-Origin": "*",
+    'Content-type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
 });
 
@@ -34,8 +29,7 @@ httpRequest.interceptors.response.use(
   (response: any) => {
     const userStore = useUserStore();
 
-    if (response.data.codigo == 440 || response.status == 440)
-      userStore.disconnected = true;
+    if (response.data.codigo == 440 || response.status == 440) userStore.disconnected = true;
     return response;
   },
   (error) => {
@@ -45,7 +39,7 @@ httpRequest.interceptors.response.use(
       userStore.logout();
       userStore.disconnected = true;
 
-      router.push({ name: "Login" });
+      router.push({ name: 'Login' });
     }
 
     return error;
@@ -54,9 +48,7 @@ httpRequest.interceptors.response.use(
 
 export const getFromCEP = async (cep: string) => {
   try {
-    const response = await (
-      await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`)
-    ).json();
+    const response = await (await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`)).json();
     return response;
   } catch (error) {
     return error;
@@ -65,7 +57,7 @@ export const getFromCEP = async (cep: string) => {
 
 export const getLastContent = async (contentType: string) => {
   let response = null;
-  if (contentType === "evento" || contentType === "documento") {
+  if (contentType === 'evento' || contentType === 'documento') {
     response = await httpRequest.get(`/api/${contentType}/listarUltimos`);
   } else {
     response = await httpRequest.get(`/api/${contentType}/listarUltimas`);

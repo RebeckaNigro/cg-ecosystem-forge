@@ -1,39 +1,39 @@
 export interface IPerfil {
-  id: number
-  nomeCompleto: string
-  cpf: string
-  dataNascimento: Date
-  telefone: string
-  cargo: string
-  instituicaoId: number
-  uf: string
-  cidade: string
-  logradouro: string
-  bairro: string
-  numero: string
-  cep: string
-  email: string
-  password: string
-  confirmPassword: string
+  id: number;
+  nomeCompleto: string;
+  cpf: string;
+  dataNascimento: Date;
+  telefone: string;
+  cargo: string;
+  instituicaoId: number;
+  uf: string;
+  cidade: string;
+  logradouro: string;
+  bairro: string;
+  numero: string;
+  cep: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export class Perfil implements IPerfil {
-  id!: number
-  nomeCompleto!: string
-  cpf!: string
-  dataNascimento!: Date
-  telefone!: string
-  cargo!: string
-  instituicaoId!: number
-  uf!: string
-  cidade!: string
-  logradouro!: string
-  bairro!: string
-  numero!: string
-  cep!: string
-  email!: string
-  password!: string
-  confirmPassword!: string
+  id!: number;
+  nomeCompleto!: string;
+  cpf!: string;
+  dataNascimento!: Date;
+  telefone!: string;
+  cargo!: string;
+  instituicaoId!: number;
+  uf!: string;
+  cidade!: string;
+  logradouro!: string;
+  bairro!: string;
+  numero!: string;
+  cep!: string;
+  email!: string;
+  password!: string;
+  confirmPassword!: string;
 
   constructor(
     id: number,
@@ -53,7 +53,7 @@ export class Perfil implements IPerfil {
     password: string,
     confirmPassword: string
   ) {
-    ;[
+    [
       this.id,
       this.nomeCompleto,
       this.cpf,
@@ -69,7 +69,7 @@ export class Perfil implements IPerfil {
       this.cep,
       this.email,
       this.password,
-      this.confirmPassword
-    ] = arguments
+      this.confirmPassword,
+    ] = arguments;
   }
 }

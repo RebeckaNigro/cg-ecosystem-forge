@@ -1,73 +1,73 @@
-import { defineStore } from "pinia"
-export const useModalStore = defineStore("modalStore", {
+import { defineStore } from 'pinia';
+export const useModalStore = defineStore('modalStore', {
   state: () => {
     return {
       modalInstance: {},
       visible: false,
       loading: false,
       options: {
-        message: "",
-        status: ""
-      }
-    }
+        message: '',
+        status: '',
+      },
+    };
   },
   actions: {
     showErrorModal(message: string) {
       this.options = {
         message: message,
-        status: "error"
-      }
-      this.visible = true
-      this.loading = false
-      this.showModal()
+        status: 'error',
+      };
+      this.visible = true;
+      this.loading = false;
+      this.showModal();
     },
 
     showInfoModal(message: string) {
       this.options = {
         message: message,
-        status: "info"
-      }
-      this.visible = true
-      this.loading = false
-      this.showModal()
+        status: 'info',
+      };
+      this.visible = true;
+      this.loading = false;
+      this.showModal();
     },
 
     showSuccessModal(message: string) {
       this.options = {
         message: message,
-        status: "success"
-      }
-      this.visible = true
-      this.loading = false
-      this.showModal()
+        status: 'success',
+      };
+      this.visible = true;
+      this.loading = false;
+      this.showModal();
     },
 
     showWarningModal(message: string) {
       this.options = {
         message: message,
-        status: "warning"
-      }
-      this.visible = true
-      this.loading = false
-      this.showModal()
+        status: 'warning',
+      };
+      this.visible = true;
+      this.loading = false;
+      this.showModal();
     },
 
     showLoadingModal() {
-      this.loading = true
-      this.visible = true
+      this.loading = true;
+      this.visible = true;
 
-      this.showModal()
+      this.showModal();
     },
 
     showModal() {
-	  //@ts-ignore
-      this.modalInstance.show()
+      //@ts-ignore
+      this.modalInstance.show();
     },
 
     closeModal() {
       //@ts-ignore
-		this.modalInstance.hide()
-    }
+      this.modalInstance.hide();
+    },
   },
-  persist: false
-})
+  persist: false,
+});

@@ -1,10 +1,6 @@
 <template>
-  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="evento.id < 0">
-    CRIE SEU EVENTO!
-  </h1>
-  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
-    EDITE SEU EVENTO!
-  </h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="evento.id < 0">CRIE SEU EVENTO!</h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>EDITE SEU EVENTO!</h1>
   <form class="container box p-5 mb-5" v-if="!isVisualizacao">
     <!-- TIPO -->
     <div class="mb-3 text-start">
@@ -17,9 +13,7 @@
           value="1"
           v-model="evento.tipoEventoId"
         />
-        <label
-          for="tipoEventoPresencial"
-          class="form-label-primary d-inline mx-3"
+        <label for="tipoEventoPresencial" class="form-label-primary d-inline mx-3"
           >Presencial</label
         >
         <input
@@ -29,9 +23,7 @@
           value="2"
           v-model="evento.tipoEventoId"
         />
-        <label for="tipoEventoOnline" class="form-label-primary d-inline mx-3"
-          >Online</label
-        >
+        <label for="tipoEventoOnline" class="form-label-primary d-inline mx-3">Online</label>
       </div>
     </div>
 
@@ -92,15 +84,11 @@
 
     <!-- IMAGEM DE CAPA -->
     <div class="mb-3">
-      <label for="arquivo" class="form-label-primary"
-        >Imagem de divulgação</label
-      >
+      <label for="arquivo" class="form-label-primary">Imagem de divulgação</label>
       <div class="imagem-divulgacao d-flex">
         <div class="row align-items-center">
           <div class="col-md col-12">
-            <label for="imagem-input" class="borda-cinza">
-              Dimensão recomendada: 1090x460
-            </label>
+            <label for="imagem-input" class="borda-cinza"> Dimensão recomendada: 1090x460 </label>
             <input
               class="form-input-primary"
               type="file"
@@ -112,9 +100,7 @@
           </div>
 
           <div class="col-md col-12">
-            <span id="nome-imagem" class="form-label-primary">{{
-              fileName
-            }}</span>
+            <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
           </div>
         </div>
       </div>
@@ -124,9 +110,7 @@
     <!-- DATA E HORA DE INICIO -->
     <div class="row mb-3">
       <div class="col-sm-6">
-        <label for="dataInicio" class="form-label-primary mb-2"
-          >Data de início*:</label
-        >
+        <label for="dataInicio" class="form-label-primary mb-2">Data de início*:</label>
         <div class="row px-2">
           <input
             type="date"
@@ -138,11 +122,7 @@
           <div v-if="v$.dataInicio.$error" class="invalid-feedback">
             {{ v$.dataInicio.$errors[0].$message }}
           </div>
-          <div
-            class="col-sm-1 d-flex justify-content-center align-items-center p-0"
-          >
-            às
-          </div>
+          <div class="col-sm-1 d-flex justify-content-center align-items-center p-0">às</div>
           <input
             type="time"
             id="horaInicio"
@@ -150,17 +130,13 @@
             :class="invalidHoraInicio ? 'is-invalid' : ''"
             v-model="horaInicio"
           />
-          <div v-if="invalidHoraInicio" class="invalid-feedback">
-            Hora é obrigatória
-          </div>
+          <div v-if="invalidHoraInicio" class="invalid-feedback">Hora é obrigatória</div>
         </div>
       </div>
 
       <!-- DATA E HORA DE FIM -->
       <div class="col-sm-6 mt-3 mt-md-0">
-        <label for="dataFim" class="form-label-primary mb-2"
-          >Data de término*:</label
-        >
+        <label for="dataFim" class="form-label-primary mb-2">Data de término*:</label>
         <div class="row px-2">
           <input
             type="date"
@@ -172,11 +148,7 @@
           <div v-if="v$.dataTermino.$error" class="invalid-feedback">
             {{ v$.dataTermino.$errors[0].$message }}
           </div>
-          <div
-            class="col-sm-1 d-flex justify-content-center align-items-center p-0"
-          >
-            às
-          </div>
+          <div class="col-sm-1 d-flex justify-content-center align-items-center p-0">às</div>
           <input
             type="time"
             id="horaFim"
@@ -184,9 +156,7 @@
             :class="invalidHoraFim ? 'is-invalid' : ''"
             v-model="horaFim"
           />
-          <div v-if="invalidHoraFim" class="invalid-feedback">
-            Hora é obrigatória
-          </div>
+          <div v-if="invalidHoraFim" class="invalid-feedback">Hora é obrigatória</div>
         </div>
       </div>
     </div>
@@ -194,25 +164,13 @@
     <!-- TAGS -->
     <div class="mb-3">
       <label for="tags" class="form-label-primary">Tags</label>
-      <AutocompleteComponent
-        type="CustomTag"
-        :items="allTags"
-        @selected-value="addTag"
-      />
+      <AutocompleteComponent type="CustomTag" :items="allTags" @selected-value="addTag" />
     </div>
 
     <div class="container-fluid text-start">
-      <div
-        class="tag-element mx-1 mb-4"
-        v-for="(tag, index) in evento.tags"
-        :key="index"
-      >
+      <div class="tag-element mx-1 mb-4" v-for="(tag, index) in evento.tags" :key="index">
         <span>{{ tag.descricao }}</span>
-        <img
-          src="/icons/close-white.svg"
-          alt="Remover tag"
-          @click="deleteTag(index)"
-        />
+        <img src="/icons/close-white.svg" alt="Remover tag" @click="deleteTag(index)" />
       </div>
     </div>
 
@@ -242,12 +200,7 @@
         <!-- LOCAL DO EVENTO -->
         <div class="mb-3">
           <label for="local" class="form-label-primary">Nome do Local</label>
-          <input
-            type="text"
-            id="local"
-            class="form-input-primary"
-            v-model="evento.local"
-          />
+          <input type="text" id="local" class="form-input-primary" v-model="evento.local" />
         </div>
       </div>
 
@@ -257,9 +210,7 @@
           <div class="text-start">
             <label for="cep" class="form-label-primary d-inline"
               >CEP
-              <a
-                href="https://buscacepinter.correios.com.br/app/endereco/index.php"
-                target="_blank"
+              <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank"
                 >(Não sei meu CEP)</a
               ></label
             >
@@ -319,11 +270,7 @@
     <div class="row mb-3" v-if="evento.tipoEventoId == 1">
       <div class="col-12 col-md-6 mb-3 mb-md-0">
         <label for="estado" class="form-label-primary">Estado</label>
-        <input
-          id="estado"
-          class="form-input-primary"
-          v-model="evento.endereco.uf"
-        />
+        <input id="estado" class="form-input-primary" v-model="evento.endereco.uf" />
       </div>
       <div class="col-12 col-md-6">
         <label for="cidade" class="form-label-primary">Cidade</label>
@@ -349,15 +296,8 @@
 
     <!-- LINK -->
     <div class="mb-3">
-      <label for="link" class="form-label-primary"
-        >Link para mais informações</label
-      >
-      <input
-        type="text"
-        id="link"
-        class="form-input-primary"
-        v-model="evento.linkExterno"
-      />
+      <label for="link" class="form-label-primary">Link para mais informações</label>
+      <input type="text" id="link" class="form-input-primary" v-model="evento.linkExterno" />
     </div>
 
     <!-- LOADING SPINNER -->
@@ -376,21 +316,13 @@
       </div>
 
       <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="mt-md-3">
-        <button
-          type="button"
-          class="green-btn-outlined w-100 my-3 my-md-4"
-          @click="visualizar"
-        >
+        <button type="button" class="green-btn-outlined w-100 my-3 my-md-4" @click="visualizar">
           PRÉ-VISUALIZAR
         </button>
       </div>
 
       <div :class="!editFlag ? 'col-sm-4' : 'col-sm-6'" class="fs-xs-1 mt-md-3">
-        <button
-          type="button"
-          class="green-btn-primary w-100 my-3 my-md-4"
-          @click="cadastrar"
-        >
+        <button type="button" class="green-btn-primary w-100 my-3 my-md-4" @click="cadastrar">
           ENVIAR
         </button>
       </div>
@@ -402,18 +334,11 @@
     <div class="breadcrumb-container">
       <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li
-            class="breadcrumb-item unactive"
-            @click="$router.push({ name: 'EventosCriados' })"
-          >
+          <li class="breadcrumb-item unactive" @click="$router.push({ name: 'EventosCriados' })">
             Eventos
           </li>
-          <li class="breadcrumb-item inactive" aria-current="page">
-            Criar Evento
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            Pré-visualizar
-          </li>
+          <li class="breadcrumb-item inactive" aria-current="page">Criar Evento</li>
+          <li class="breadcrumb-item active" aria-current="page">Pré-visualizar</li>
         </ol>
       </nav>
     </div>
@@ -425,38 +350,24 @@
 
       <h1 class="text-start">{{ evento.titulo }}</h1>
       <div class="d-flex mt-4 mb-2">
-        <img
-          src="/icons/user-circle.svg"
-          alt="icone usuario"
-          class="icone-usuario"
-        />
+        <img src="/icons/user-circle.svg" alt="icone usuario" class="icone-usuario" />
         <div class="d-flex align-items-center mx-2">
           {{ evento.responsavel }}
         </div>
       </div>
 
       <div class="d-flex mt-4 mb-2">
-        <img
-          src="/icons/calendar-icon.svg"
-          alt="icone pino de endereço"
-          class="icone-usuario"
-        />
+        <img src="/icons/calendar-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
         <div class="d-flex align-items-center mx-2">
           {{ dataFormatada }}
         </div>
       </div>
 
       <div class="d-flex mt-4 mb-2">
-        <img
-          src="/icons/pin-icon.svg"
-          alt="icone pino de endereço"
-          class="icone-usuario"
-        />
+        <img src="/icons/pin-icon.svg" alt="icone pino de endereço" class="icone-usuario" />
         <div class="d-flex align-items-center mx-2">
           {{
-            evento.tipoEventoId == 1
-              ? `${evento.local} - ${enderecoFormatado}`
-              : evento.linkExterno
+            evento.tipoEventoId == 1 ? `${evento.local} - ${enderecoFormatado}` : evento.linkExterno
           }}
         </div>
       </div>
@@ -475,11 +386,7 @@
         >
           VOLTAR
         </button>
-        <button
-          type="button"
-          class="green-btn-primary col-sm-5 mx-2"
-          @click="cadastrar"
-        >
+        <button type="button" class="green-btn-primary col-sm-5 mx-2" @click="cadastrar">
           ENVIAR
         </button>
       </div>
@@ -498,34 +405,29 @@
 // import BlotFormatter from "quill-blot-formatter"
 // import ImageUploader from "quill-image-uploader"
 
-import useValidate from "@vuelidate/core";
-import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useEventoStore } from "../../../stores/eventos/store";
-import { useModalStore } from "../../../stores/modal/store";
-import { useAlertStore } from "../../../stores/alert/store";
-import { useUserStore } from "../../../stores/user/store";
-import { useConfirmStore } from "../../../stores/confirm/store";
-import { useTagStore } from "../../../stores/tag/store";
-import { useInstituicaoStore } from "../../../stores/instituicao/store";
-import { required, helpers, minValue } from "@vuelidate/validators";
-import { getFromCEP } from "../../../utils/http";
-import { brDateString } from "../../../utils/formatacao/datetime";
-import { dateAndTimeToDatetime } from "../../../utils/formatacao/datetime";
-import { fileToBase64 } from "../../../utils/image/converter";
-import ConfirmModal from "../../general/ConfirmModal.vue";
-import AutocompleteComponent from "../../general/AutocompleteComponent.vue";
-import Spinner from "../../general/Spinner.vue";
-import { CustomTag } from "../../../stores/tag/types";
-import {
-  Evento,
-  EventoRascunho,
-  NovoEndereco,
-  TipoEvento,
-} from "../../../stores/eventos/types";
-import { Instituicao } from "../../../stores/instituicao/types";
-import { end } from "@popperjs/core";
-import { Modal } from "bootstrap";
+import useValidate from '@vuelidate/core';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useEventoStore } from '../../../stores/eventos/store';
+import { useModalStore } from '../../../stores/modal/store';
+import { useAlertStore } from '../../../stores/alert/store';
+import { useUserStore } from '../../../stores/user/store';
+import { useConfirmStore } from '../../../stores/confirm/store';
+import { useTagStore } from '../../../stores/tag/store';
+import { useInstituicaoStore } from '../../../stores/instituicao/store';
+import { required, helpers, minValue } from '@vuelidate/validators';
+import { getFromCEP } from '../../../utils/http';
+import { brDateString } from '../../../utils/formatacao/datetime';
+import { dateAndTimeToDatetime } from '../../../utils/formatacao/datetime';
+import { fileToBase64 } from '../../../utils/image/converter';
+import ConfirmModal from '../../general/ConfirmModal.vue';
+import AutocompleteComponent from '../../general/AutocompleteComponent.vue';
+import Spinner from '../../general/Spinner.vue';
+import { CustomTag } from '../../../stores/tag/types';
+import { Evento, EventoRascunho, NovoEndereco, TipoEvento } from '../../../stores/eventos/types';
+import { Instituicao } from '../../../stores/instituicao/types';
+import { end } from '@popperjs/core';
+import { Modal } from 'bootstrap';
 
 const eventoStore = useEventoStore();
 const alertStore = useAlertStore();
@@ -547,66 +449,60 @@ const authorName = ref<string | null>();
 const invalidHoraInicio = ref(false);
 const invalidHoraFim = ref(false);
 const editFlag = ref(false);
-const enderecoFormatado = ref("");
+const enderecoFormatado = ref('');
 const dataFormatada = ref<string | null>();
 const dataInicioFormatada = ref<string | null>();
 const dataTerminoFormatada = ref<string | null>();
-const horaInicio = ref("");
-const horaFim = ref("");
-const base64Image = ref("");
+const horaInicio = ref('');
+const horaFim = ref('');
+const base64Image = ref('');
 
 const evento = ref({
   id: -1,
   instituicaoId: -1,
   tags: new Array<CustomTag>(),
   tipoEventoId: 1,
-  titulo: "",
-  descricao: "",
-  dataInicio: "",
-  dataTermino: "",
-  local: "",
+  titulo: '',
+  descricao: '',
+  dataInicio: '',
+  dataTermino: '',
+  local: '',
   enderecoId: null,
-  endereco: new NovoEndereco(-1, "", "", "", "", "", "", "", ""),
-  linkExterno: "",
+  endereco: new NovoEndereco(-1, '', '', '', '', '', '', '', ''),
+  linkExterno: '',
   exibirMaps: false,
-  responsavel: "",
+  responsavel: '',
   arquivo: File,
 });
 
 const eventoRules = ref({
   id: -1,
   titulo: {
-    required: helpers.withMessage("Nome é obrigatório.", required),
+    required: helpers.withMessage('Nome é obrigatório.', required),
   },
   descricao: {
-    required: helpers.withMessage("Descrição do evento obrigatória.", required),
+    required: helpers.withMessage('Descrição do evento obrigatória.', required),
   },
   instituicaoId: {
-    minValueValue: helpers.withMessage(
-      "Instituição é obrigatória.",
-      minValue(0)
-    ),
+    minValueValue: helpers.withMessage('Instituição é obrigatória.', minValue(0)),
   },
 
   dataInicio: {
-    required: helpers.withMessage("Data de início é obrigatória.", required),
+    required: helpers.withMessage('Data de início é obrigatória.', required),
   },
   dataTermino: {
-    required: helpers.withMessage("Data de término é obrigatória.", required),
+    required: helpers.withMessage('Data de término é obrigatória.', required),
   },
   responsavel: {
-    required: helpers.withMessage(
-      "Nome do responsável é obrigatório.",
-      required
-    ),
+    required: helpers.withMessage('Nome do responsável é obrigatório.', required),
   },
 });
 
 function CEPMask(field: string) {
   return field
-    .replace(/\D/g, "")
-    .replace(/(\d{5})(\d)/, "$1-$2")
-    .replace(/(-\d{3})\d+?$/, "$1");
+    .replace(/\D/g, '')
+    .replace(/(\d{5})(\d)/, '$1-$2')
+    .replace(/(-\d{3})\d+?$/, '$1');
 }
 
 watch(
@@ -625,27 +521,22 @@ const v$ = useValidate(eventoRules, evento);
 
 const allTags = ref<CustomTag[]>();
 const isVisualizacao = ref(false);
-const fileName = ref("");
+const fileName = ref('');
 const customToolbar = ref([
   [{ font: [] }],
   [{ header: [false, 1, 2, 3, 4, 5, 6] }],
-  [{ size: ["small", false, "large", "huge"] }],
-  ["bold", "italic", "underline", "strike"],
-  [
-    { align: "" },
-    { align: "center" },
-    { align: "right" },
-    { align: "justify" },
-  ],
+  [{ size: ['small', false, 'large', 'huge'] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
   [{ header: 1 }, { header: 2 }],
-  ["blockquote", "code-block"],
-  [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-  [{ script: "sub" }, { script: "super" }],
-  [{ indent: "-1" }, { indent: "+1" }],
+  ['blockquote', 'code-block'],
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ indent: '-1' }, { indent: '+1' }],
   [{ color: [] }, { background: [] }],
-  ["link", "video", "formula"],
-  [{ direction: "rtl" }],
-  ["clean"],
+  ['link', 'video', 'formula'],
+  [{ direction: 'rtl' }],
+  ['clean'],
 ]);
 
 onMounted(async () => {
@@ -676,7 +567,7 @@ onMounted(async () => {
         (item) => item.id == evento.value.instituicaoId
       );
     } else {
-      alertStore.showTimeoutErrorMessage("Erro ao carregar evento!");
+      alertStore.showTimeoutErrorMessage('Erro ao carregar evento!');
     }
   }
 
@@ -693,9 +584,9 @@ const confirmado = () => {
     horaInicio.value,
     horaFim.value
   );
-  localStorage.setItem("eventoRascunho", JSON.stringify(rascunho));
+  localStorage.setItem('eventoRascunho', JSON.stringify(rascunho));
 
-  modalStore.showSuccessModal("Rascunho salvo com sucesso!");
+  modalStore.showSuccessModal('Rascunho salvo com sucesso!');
 };
 
 const buscarTags = async () => {
@@ -709,7 +600,7 @@ const buscarInstituicoes = async () => {
   if (instituicaoStore.response.code == 200) {
     instituicoes.value = instituicaoStore.allInstituicoes;
   } else {
-    alertStore.showTimeoutErrorMessage("Erro ao carregar instituições!");
+    alertStore.showTimeoutErrorMessage('Erro ao carregar instituições!');
   }
 };
 
@@ -727,9 +618,9 @@ const onFileChanged = (event: Event) => {
   }
 
   if (!fileSizeValidation()) {
-    alertStore.showTimeoutWarningMessage("Imagem deve ter no máximo 5MB");
+    alertStore.showTimeoutWarningMessage('Imagem deve ter no máximo 5MB');
     arquivo.value = null;
-    fileName.value = "";
+    fileName.value = '';
     return;
   }
 };
@@ -743,32 +634,21 @@ const cadastrar = async () => {
   else invalidHoraFim.value = false;
 
   if (!formValidation || invalidHoraInicio.value || invalidHoraFim.value) {
-    alertStore.showTimeoutErrorMessage(
-      "Preencha todos os campos obrigatórios."
-    );
+    alertStore.showTimeoutErrorMessage('Preencha todos os campos obrigatórios.');
     return;
   }
 
-  if (
-    evento.value.dataInicio.length <= 10 &&
-    evento.value.dataTermino.length <= 10
-  ) {
-    const dataInicioDateTime = dateAndTimeToDatetime(
-      evento.value.dataInicio,
-      horaInicio.value
-    );
-    const dataTerminoDateTime = dateAndTimeToDatetime(
-      evento.value.dataTermino,
-      horaFim.value
-    );
+  if (evento.value.dataInicio.length <= 10 && evento.value.dataTermino.length <= 10) {
+    const dataInicioDateTime = dateAndTimeToDatetime(evento.value.dataInicio, horaInicio.value);
+    const dataTerminoDateTime = dateAndTimeToDatetime(evento.value.dataTermino, horaFim.value);
     if (new Date(dataInicioDateTime) < new Date()) {
-      alertStore.showTimeoutErrorMessage("Data de início do evento já passou!");
+      alertStore.showTimeoutErrorMessage('Data de início do evento já passou!');
       return;
     }
 
     if (new Date(dataInicioDateTime) > new Date(dataTerminoDateTime)) {
       alertStore.showTimeoutErrorMessage(
-        "Data de início não pode ser maior que a data de término!"
+        'Data de início não pode ser maior que a data de término!'
       );
       return;
     }
@@ -777,28 +657,20 @@ const cadastrar = async () => {
     evento.value.dataTermino = dataTerminoDateTime;
   } else {
     if (new Date(evento.value.dataInicio) < new Date()) {
-      alertStore.showTimeoutErrorMessage("Data de início do evento já passou!");
+      alertStore.showTimeoutErrorMessage('Data de início do evento já passou!');
       return;
     }
 
-    if (
-      new Date(evento.value.dataInicio) > new Date(evento.value.dataTermino)
-    ) {
+    if (new Date(evento.value.dataInicio) > new Date(evento.value.dataTermino)) {
       alertStore.showTimeoutErrorMessage(
-        "Data de início não pode ser maior que a data de término!"
+        'Data de início não pode ser maior que a data de término!'
       );
       return;
     }
   }
 
-  if (
-    arquivo.value &&
-    arquivo.value.type !== "image/jpeg" &&
-    arquivo.value.type !== "image/png"
-  ) {
-    return modalStore.showWarningModal(
-      "A imagem de divulgação deve ser PNG ou JPEG!"
-    );
+  if (arquivo.value && arquivo.value.type !== 'image/jpeg' && arquivo.value.type !== 'image/png') {
+    return modalStore.showWarningModal('A imagem de divulgação deve ser PNG ou JPEG!');
   }
   //
   evento.value.arquivo = arquivo.value;
@@ -815,11 +687,11 @@ const cadastrar = async () => {
     if (res.code === 200) {
       if (deleteRascunhoAfter.value) limparRascunho();
       resetarEvento();
-      modalStore.showSuccessModal("Evento editado com sucesso!");
+      modalStore.showSuccessModal('Evento editado com sucesso!');
     } else if (res.code === 661) {
       console.error(res.message);
     } else {
-      modalStore.showErrorModal("Erro ao editar evento!");
+      modalStore.showErrorModal('Erro ao editar evento!');
     }
   } else {
     sendingEvent.value = true;
@@ -832,11 +704,11 @@ const cadastrar = async () => {
     if (res.code === 200) {
       if (deleteRascunhoAfter.value) limparRascunho();
       resetarEvento();
-      modalStore.showSuccessModal("Evento cadastrado com sucesso!");
+      modalStore.showSuccessModal('Evento cadastrado com sucesso!');
     } else if (res.code === 661) {
       console.error(res.message);
     } else {
-      modalStore.showErrorModal("Erro ao cadastrar evento!");
+      modalStore.showErrorModal('Erro ao cadastrar evento!');
     }
   }
 };
@@ -848,9 +720,7 @@ const visualizar = async () => {
   }
 
   dataInicioFormatada.value = brDateString(evento.value.dataInicio.toString());
-  dataTerminoFormatada.value = brDateString(
-    evento.value.dataTermino.toString()
-  );
+  dataTerminoFormatada.value = brDateString(evento.value.dataTermino.toString());
 
   dataFormatada.value = `${dataInicioFormatada.value} - ${dataTerminoFormatada.value}`;
   enderecoFormatado.value = `${evento.value.endereco.logradouro}, ${evento.value.endereco.numero} - ${evento.value.endereco.bairro}, ${evento.value.endereco.uf}, ${evento.value.endereco.cep}`;
@@ -858,36 +728,30 @@ const visualizar = async () => {
 };
 
 const salvarRascunho = () => {
-  if (localStorage.getItem("eventoRascunho")) {
-    const modalDOM: any = document.querySelector("#confirmFormModal");
+  if (localStorage.getItem('eventoRascunho')) {
+    const modalDOM: any = document.querySelector('#confirmFormModal');
     confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM));
     confirmStore.showConfirmModal(
-      "Rascunho já existente, ao prosseguir o rascunho anterior será perdido. Tem certeza?",
+      'Rascunho já existente, ao prosseguir o rascunho anterior será perdido. Tem certeza?',
       null
     );
   } else {
-    evento.value.dataInicio = dateAndTimeToDatetime(
-      evento.value.dataInicio,
-      horaInicio.value
-    );
-    evento.value.dataTermino = dateAndTimeToDatetime(
-      evento.value.dataTermino,
-      horaFim.value
-    );
+    evento.value.dataInicio = dateAndTimeToDatetime(evento.value.dataInicio, horaInicio.value);
+    evento.value.dataTermino = dateAndTimeToDatetime(evento.value.dataTermino, horaFim.value);
     let rascunho = new EventoRascunho(
       evento.value,
       selectedValue.value,
       horaInicio.value,
       horaFim.value
     );
-    localStorage.setItem("eventoRascunho", JSON.stringify(rascunho));
+    localStorage.setItem('eventoRascunho', JSON.stringify(rascunho));
 
-    modalStore.showSuccessModal("Rascunho salvo com sucesso!");
+    modalStore.showSuccessModal('Rascunho salvo com sucesso!');
   }
 };
 
 const verificaRascunho = () => {
-  const rascunhoStr = localStorage.getItem("eventoRascunho");
+  const rascunhoStr = localStorage.getItem('eventoRascunho');
 
   if (rascunhoStr) {
     const rascunhoFinal = JSON.parse(rascunhoStr);
@@ -898,14 +762,14 @@ const verificaRascunho = () => {
     evento.value.dataTermino = evento.value.dataTermino.substring(0, 10);
     horaInicio.value = rascunhoFinal.horaInicio;
     horaFim.value = rascunhoFinal.horaTermino;
-    alertStore.showTimeoutInfoMessage("Rascunho carregado com sucesso!");
+    alertStore.showTimeoutInfoMessage('Rascunho carregado com sucesso!');
   }
   deleteRascunhoAfter.value = true;
   eventoStore.loadRascunho = false;
 };
 
 const limparRascunho = () => {
-  localStorage.removeItem("eventoRascunho");
+  localStorage.removeItem('eventoRascunho');
 };
 
 const resetarEvento = () => {
@@ -914,31 +778,31 @@ const resetarEvento = () => {
     instituicaoId: -1,
     tags: [],
     tipoEventoId: 1,
-    titulo: "",
-    descricao: "",
-    dataInicio: "",
-    dataTermino: "",
-    local: "",
+    titulo: '',
+    descricao: '',
+    dataInicio: '',
+    dataTermino: '',
+    local: '',
     enderecoId: null,
-    endereco: new NovoEndereco(-1, "", "", "", "", "", "", "", ""),
-    linkExterno: "",
+    endereco: new NovoEndereco(-1, '', '', '', '', '', '', '', ''),
+    linkExterno: '',
     exibirMaps: false,
-    responsavel: "",
+    responsavel: '',
     arquivo: File,
   };
   selectedValue.value = null;
-  customEditor.value.setHTML("");
+  customEditor.value.setHTML('');
 };
 
 const buscarCEP = async () => {
   if (evento.value.endereco.cep) {
-    const temp = evento.value.endereco.cep.split("-").join("");
+    const temp = evento.value.endereco.cep.split('-').join('');
     gettingAddress.value = true;
     try {
       const enderecoCompleto = await getFromCEP(temp);
 
       if (enderecoCompleto.errors) {
-        alertStore.showTimeoutErrorMessage("Erro ao buscar CEP!");
+        alertStore.showTimeoutErrorMessage('Erro ao buscar CEP!');
       } else {
         evento.value.endereco.cidade = enderecoCompleto.city;
         evento.value.endereco.uf = enderecoCompleto.state;
@@ -947,9 +811,7 @@ const buscarCEP = async () => {
       }
     } catch (error) {
       console.log(error);
-      alertStore.showTimeoutErrorMessage(
-        "CEP Incorreto, digite um valor válido."
-      );
+      alertStore.showTimeoutErrorMessage('CEP Incorreto, digite um valor válido.');
     }
     gettingAddress.value = false;
   }
@@ -1001,7 +863,7 @@ form {
   padding-top: 120px;
   margin-left: 0;
   background-color: #fff;
-  background-image: url("/user/eventos/cloud_icon.svg");
+  background-image: url('/user/eventos/cloud_icon.svg');
   background-repeat: no-repeat;
   background-position: 50% 40%;
   cursor: pointer;

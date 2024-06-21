@@ -1,105 +1,105 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia';
 
-export const useAlertStore = defineStore("alertStore", {
+export const useAlertStore = defineStore('alertStore', {
   state: () => {
     return {
       visible: false,
       options: {
-        message: "",
-        type: "",
+        message: '',
+        type: '',
         dispensable: false,
-        timeout: false
-      }
-    }
+        timeout: false,
+      },
+    };
   },
   actions: {
     showErrorMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "error",
+        type: 'error',
         dispensable: true,
-        timeout: false
-      }
-      this.visible = true
+        timeout: false,
+      };
+      this.visible = true;
     },
 
     showWarningMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "warning",
+        type: 'warning',
         dispensable: true,
-        timeout: false
-      }
-      this.visible = true
+        timeout: false,
+      };
+      this.visible = true;
     },
 
     showSuccessMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "success",
+        type: 'success',
         dispensable: true,
-        timeout: false
-      }
-      this.visible = true
+        timeout: false,
+      };
+      this.visible = true;
     },
 
     showInfoMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "info",
+        type: 'info',
         dispensable: true,
-        timeout: false
-      }
-      this.visible = true
+        timeout: false,
+      };
+      this.visible = true;
     },
 
     showTimeoutErrorMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "error",
+        type: 'error',
         dispensable: false,
-        timeout: true
-      }
-      this.visible = true
+        timeout: true,
+      };
+      this.visible = true;
     },
 
     showTimeoutWarningMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "warning",
+        type: 'warning',
         dispensable: false,
-        timeout: true
-      }
-      this.visible = true
+        timeout: true,
+      };
+      this.visible = true;
     },
 
     showTimeoutSuccessMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "success",
+        type: 'success',
         dispensable: false,
-        timeout: true
-      }
-      this.visible = true
+        timeout: true,
+      };
+      this.visible = true;
     },
 
     showTimeoutInfoMessage(message: string) {
-      this.visible = false
+      this.visible = false;
       this.options = {
         message: message,
-        type: "info",
+        type: 'info',
         dispensable: false,
-        timeout: true
-      }
-      this.visible = true
-    }
+        timeout: true,
+      };
+      this.visible = true;
+    },
   },
-  persist: false
-})
+  persist: false,
+});

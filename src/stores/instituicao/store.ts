@@ -1,66 +1,66 @@
 //@ts-nocheck
-import { Instituicao } from "./types"
-import { defineStore } from "pinia"
-import { httpRequest } from "../../utils/http"
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
+import { defineStore } from 'pinia';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { httpRequest } from '../../utils/http';
+import { Instituicao } from './types';
 
-const PERFIL_BASE_RESOURCE = "/api/instituicao"
+const PERFIL_BASE_RESOURCE = '/api/instituicao';
 
 const instituicao: IInstituicao = {
   id: -1,
-  razaoSocial: "",
-  cnpj: "",
-  responsavel: "",
-  instituicaoAreaId: "",
-  instituicaoClassificacaoId: "",
-  descricao: "",
-  missao: "",
-  visao: "",
-  valores: "",
-  tipoInstituicaoId: ""
-}
+  razaoSocial: '',
+  cnpj: '',
+  responsavel: '',
+  instituicaoAreaId: '',
+  instituicaoClassificacaoId: '',
+  descricao: '',
+  missao: '',
+  visao: '',
+  valores: '',
+  tipoInstituicaoId: '',
+};
 
-const allInstituicoes: Array<Instituicao> = []
-export const useInstituicaoStore = defineStore("instituicaoStore", {
+const allInstituicoes: Array<Instituicao> = [];
+export const useInstituicaoStore = defineStore('instituicaoStore', {
   state: () => {
     return {
       instituicao,
       allInstituicoes,
-      response: new GeneralResponseHandler(0, "none", "no request made yet")
-    }
+      response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
+    };
   },
   persist: false,
 
   actions: {
     async getInstituicoes() {
       try {
-        const response = await httpRequest.get(
-          `${PERFIL_BASE_RESOURCE}/buscarInstituicoes`
-        )
-        this.allInstituicoes = response.data.retorno
+        const response = await httpRequest.get(`${PERFIL_BASE_RESOURCE}/buscarInstituicoes`);
+        this.allInstituicoes = response.data.retorno;
         this.response.putResponse(
           response.data.codigo,
           response.data.retorno,
           response.data.resposta
-        )
+        );
       } catch (error) {
-        console.error(error)
-        this.response.putError(222, error.message)
+        console.error(error);
+        this.response.putError(222, error.message);
       }
     },
-	async getInstituicaoById(instituicaoId: number){
-		try{
-			const response = await httpRequest.get(`${PERFIL_BASE_RESOURCE}/buscarInstituicaoPorId?Id=${instituicaoId.toString()}`)
-			this.instituicao = response.data.retorno
-			this.response.putResponse(
-				response.data.codigo,
-				response.data.retorno,
-				response.data.resposta
-			)
-		}catch(error){
-			console.error(error);
-			this.response.putError(222, error.message)
-		}
-	}
-  }
-})
+    async getInstituicaoById(instituicaoId: number) {
+      try {
+        const response = await httpRequest.get(
+          `${PERFIL_BASE_RESOURCE}/buscarInstituicaoPorId?Id=${instituicaoId.toString()}`
+        );
+        this.instituicao = response.data.retorno;
+        this.response.putResponse(
+          response.data.codigo,
+          response.data.retorno,
+          response.data.resposta
+        );
+      } catch (error) {
+        console.error(error);
+        this.response.putError(222, error.message);
+      }
+    },
+  },
+});

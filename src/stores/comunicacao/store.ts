@@ -1,18 +1,13 @@
-import { defineStore } from "pinia";
-import { faleConosco, SetorInterface } from "./types";
-import { validateFaleConoscoInput } from "../../utils/faleConosco/validation";
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
-import axios from "axios";
-import { httpRequest } from "../../utils/http";
+import { defineStore } from 'pinia';
+import { validateFaleConoscoInput } from '../../utils/faleConosco/validation';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { httpRequest } from '../../utils/http';
+import { faleConosco, SetorInterface } from './types';
 
-export const useComunicacaoStore = defineStore("comunicacaoStore", {
+export const useComunicacaoStore = defineStore('comunicacaoStore', {
   state: () => {
     return {
-      faleConoscoResponse: new GeneralResponseHandler(
-        0,
-        "none",
-        "no request made yet"
-      ),
+      faleConoscoResponse: new GeneralResponseHandler(0, 'none', 'no request made yet'),
       faleConoscoSetores: new Array<SetorInterface>(),
     };
   },
@@ -37,10 +32,7 @@ export const useComunicacaoStore = defineStore("comunicacaoStore", {
           mensagem,
         });
         if (faleConoscoInput instanceof faleConosco) {
-          const response = await httpRequest.post(
-            "/api/faleConosco/registrar",
-            faleConoscoInput
-          );
+          const response = await httpRequest.post('/api/faleConosco/registrar', faleConoscoInput);
           this.faleConoscoResponse.putResponse(
             response.data.codigo,
             response.data.dado,
@@ -53,19 +45,14 @@ export const useComunicacaoStore = defineStore("comunicacaoStore", {
         if (error instanceof TypeError) {
           this.faleConoscoResponse.putError(222, error.message);
         } else {
-          this.faleConoscoResponse.putError(
-            661,
-            "Entre em contato com a Startup do SESI"
-          );
+          this.faleConoscoResponse.putError(661, 'Entre em contato com a Startup do SESI');
         }
       }
       return false; // retorno que indica que a resposta chegou
     },
     async getFaleConoscoSetores() {
       try {
-        const response = await httpRequest.get(
-          "/api/faleConoscoSetor/ObterFaleConoscoSetores"
-        );
+        const response = await httpRequest.get('/api/faleConoscoSetor/ObterFaleConoscoSetores');
         this.faleConoscoResponse.putResponse(
           response.data.codigo,
           response.data.retorno,
@@ -77,14 +64,11 @@ export const useComunicacaoStore = defineStore("comunicacaoStore", {
           this.faleConoscoResponse.dado.forEach((e: SetorInterface) => {
             this.faleConoscoSetores.push(e);
           });
-        } else if (
-          response.data.codigo === 661 ||
-          response.data.codigo === 666
-        ) {
+        } else if (response.data.codigo === 661 || response.data.codigo === 666) {
           console.error(response.data.resposta);
         }
       } catch (error) {
-        this.faleConoscoResponse.putError(661, "check console");
+        this.faleConoscoResponse.putError(661, 'check console');
       }
       return false; // retorno que indica que a resposta chegou
     },

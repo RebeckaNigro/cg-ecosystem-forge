@@ -1,11 +1,11 @@
 // função que impede o retorno de undefined ao invocar o axios
 
-import { inject, InjectionKey } from 'vue'
+import { inject, InjectionKey } from 'vue';
 
 export function injectStrict<T>(key: InjectionKey<T>, fallback?: T) {
-  const resolved = inject(key, fallback)
+  const resolved = inject(key, fallback);
   if (!resolved) {
-    throw new Error(`Could not resolve ${key.description}`)
+    throw new Error(`Could not resolve ${key.description}`);
   }
-  return resolved
+  return resolved;
 }

@@ -1,252 +1,232 @@
-import { defineStore } from "pinia"
-import { IAutor, INoticia, INoticiaSimplificada } from "./types"
-import { getLastContent, httpRequest } from "../../utils/http"
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler"
+import { defineStore } from 'pinia';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { getLastContent, httpRequest } from '../../utils/http';
+import { IAutor, INoticia, INoticiaSimplificada } from './types';
 
-const lastNews: Array<INoticiaSimplificada> = []
-const allNews: Array<INoticiaSimplificada> = []
-const allUserNews: Array<INoticiaSimplificada> = []
-const userLastNews: Array<INoticiaSimplificada> = []
-const authors: IAutor[] = []
-const filteredNews: INoticiaSimplificada[] = []
+const lastNews: Array<INoticiaSimplificada> = [];
+const allNews: Array<INoticiaSimplificada> = [];
+const allUserNews: Array<INoticiaSimplificada> = [];
+const userLastNews: Array<INoticiaSimplificada> = [];
+const authors: IAutor[] = [];
+const filteredNews: INoticiaSimplificada[] = [];
 
-export const useNoticiaStore = defineStore("noticiaStore", {
+export const useNoticiaStore = defineStore('noticiaStore', {
   state: () => {
     return {
-      response: new GeneralResponseHandler(0, "none", "no request made yet"),
+      response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
       lastNews,
       allNews,
       allUserNews,
-	  userLastNews,
+      userLastNews,
       loadRascunho: false,
-	  authors,
-	  filteredNews
-    }
+      authors,
+      filteredNews,
+    };
   },
   persist: false,
   actions: {
     async postNews(novaNoticia: INoticia) {
       try {
-        const formData = new FormData()
-        formData.append("titulo", novaNoticia.titulo)
-        formData.append("descricao", novaNoticia.descricao)
-        formData.append("subTitulo", novaNoticia.subTitulo)
-        formData.append("dataPublicacao", novaNoticia.dataPublicacao.toString())
+        const formData = new FormData();
+        formData.append('titulo', novaNoticia.titulo);
+        formData.append('descricao', novaNoticia.descricao);
+        formData.append('subTitulo', novaNoticia.subTitulo);
+        formData.append('dataPublicacao', novaNoticia.dataPublicacao.toString());
 
         if (novaNoticia.tags.length > 0) {
           novaNoticia.tags.forEach((tag, index) => {
-            formData.append(`tags[${index}].descricao`, tag.descricao)
-          })
+            formData.append(`tags[${index}].descricao`, tag.descricao);
+          });
         }
 
-        formData.append("arquivo", novaNoticia.arquivo)
+        formData.append('arquivo', novaNoticia.arquivo);
 
-        const response = await httpRequest.post(
-          "/api/noticia/incluir",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" }
-          }
-        )
+        const response = await httpRequest.post('/api/noticia/incluir', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
 
-        this.response.putResponse(
-          response.data.codigo,
-          response.data.dado,
-          response.data.resposta
-        )
+        this.response.putResponse(response.data.codigo, response.data.dado, response.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
-          this.response.putError(222, error.message)
+          this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI")
-          console.error(error)
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
+          console.error(error);
         }
       }
 
-      return false
+      return false;
     },
 
     async getLastNews() {
-      const response = await getLastContent("noticia")
+      const response = await getLastContent('noticia');
       if (response.data.codigo === 200) {
-        this.lastNews = []
+        this.lastNews = [];
         for (const news of response.data.retorno) {
-          this.lastNews.push(news)
+          this.lastNews.push(news);
         }
       }
     },
-	async getUserLastNews() {
-		try{
-			const response = await httpRequest.get('/api/noticia/listarUltimasPorUsuarioId')
-			if (response.data.codigo === 200) {
-			  this.response.putResponse(
-				response.data.codigo,
-				response.data.retorno,
-				response.data.resposta
-			  )
-			  this.userLastNews = []
-			  for (const news of response.data.retorno) {
-				this.userLastNews.push(news)
-			  }
-			}else{
-				console.error(response.data.resposta);
-				this.response.putError(response.data.codigo, response.data.resposta)
-			}
-		}catch(error){
-			console.error(error)
-		}
-	  },
-
-    async getUserNews(page: number) {
+    async getUserLastNews() {
       try {
-        const response = await httpRequest.get(
-          `/api/noticia/listarPorUsuarioId?paginacao=${page}`
-        )
+        const response = await httpRequest.get('/api/noticia/listarUltimasPorUsuarioId');
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.retorno,
             response.data.resposta
-          )
-          this.allUserNews = []
+          );
+          this.userLastNews = [];
           for (const news of response.data.retorno) {
-            this.allUserNews.push(news)
+            this.userLastNews.push(news);
+          }
+        } else {
+          console.error(response.data.resposta);
+          this.response.putError(response.data.codigo, response.data.resposta);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getUserNews(page: number) {
+      try {
+        const response = await httpRequest.get(`/api/noticia/listarPorUsuarioId?paginacao=${page}`);
+        if (response.data.codigo === 200) {
+          this.response.putResponse(
+            response.data.codigo,
+            response.data.retorno,
+            response.data.resposta
+          );
+          this.allUserNews = [];
+          for (const news of response.data.retorno) {
+            this.allUserNews.push(news);
           }
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
 
     async getAllNews(page: number) {
       try {
-        const response = await httpRequest.get(`api/noticia/listarTodas?paginacao=${page}`)
+        const response = await httpRequest.get(`api/noticia/listarTodas?paginacao=${page}`);
 
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.retorno,
             response.data.resposta
-          )
-		  if(page === 1){
-			this.allNews = response.data.retorno
-		  }else{
-			this.allNews = this.allNews.concat(response.data.retorno)
-		  }       
+          );
+          if (page === 1) {
+            this.allNews = response.data.retorno;
+          } else {
+            this.allNews = this.allNews.concat(response.data.retorno);
+          }
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
 
     async deleteNews(noticiaId: number) {
       try {
-        const response = await httpRequest.delete(
-          `/api/noticia/excluir?id=${noticiaId}`
-        )
+        const response = await httpRequest.delete(`/api/noticia/excluir?id=${noticiaId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.dado,
             response.data.resposta
-          )
+          );
         }
       } catch (error) {
         if (error instanceof TypeError) {
-          this.response.putError(222, error.message)
+          this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Erro ao remover notícia.")
-          console.error(error)
+          this.response.putError(661, 'Erro ao remover notícia.');
+          console.error(error);
         }
       }
     },
 
     async putNews(noticiaEdicao: INoticia) {
       try {
-        const formData = new FormData()
-        formData.append("id", noticiaEdicao.id.toString())
-        formData.append("titulo", noticiaEdicao.titulo)
-        formData.append("descricao", noticiaEdicao.descricao)
-        formData.append("subTitulo", noticiaEdicao.subTitulo)
-        formData.append(
-          "dataPublicacao",
-          noticiaEdicao.dataPublicacao.toString()
-        )
+        const formData = new FormData();
+        formData.append('id', noticiaEdicao.id.toString());
+        formData.append('titulo', noticiaEdicao.titulo);
+        formData.append('descricao', noticiaEdicao.descricao);
+        formData.append('subTitulo', noticiaEdicao.subTitulo);
+        formData.append('dataPublicacao', noticiaEdicao.dataPublicacao.toString());
 
         if (noticiaEdicao.tags.length > 0) {
           noticiaEdicao.tags.forEach((tag, index) => {
-            formData.append(`tags[${index}].descricao`, tag.descricao)
-          })
+            formData.append(`tags[${index}].descricao`, tag.descricao);
+          });
         }
 
-        formData.append("arquivo", noticiaEdicao.arquivo)
-        const res = await httpRequest.put("/api/noticia/editar", formData, {
-          headers: { "Content-Type": "multipart/form-data" }
-        })
-        this.response.putResponse(
-          res.data.codigo,
-          res.data.dado,
-          res.data.resposta
-        )
+        formData.append('arquivo', noticiaEdicao.arquivo);
+        const res = await httpRequest.put('/api/noticia/editar', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        this.response.putResponse(res.data.codigo, res.data.dado, res.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
-          this.response.putError(222, error.message)
+          this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI")
-          console.error(error)
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
+          console.error(error);
         }
       }
     },
 
     async getNewsById(noticiaId: number) {
       try {
-        const response = await httpRequest.get(
-          `/api/noticia/detalhes?Id=${noticiaId}`
-        )
+        const response = await httpRequest.get(`/api/noticia/detalhes?Id=${noticiaId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
             response.data.retorno,
             response.data.resposta
-          )
+          );
         } else {
-          console.log(response.data.codigo)
+          console.log(response.data.codigo);
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
 
-	async getAuthorsList(){
-		try {
-			const response = await httpRequest.get('api/noticia/autores')
-	
-			if (response.data.codigo === 200) { 
-				this.authors = []
-			  response.data.retorno.forEach((author: IAutor) => {
-				this.authors.push(author)
-			  });		  
-			}
-		  } catch (error) {
-			console.error(error)
-		  }
-	},
-	async filterNews(page: number, autorId: number){
-		console.log(autorId);
-		
-		try{
-			const response = await httpRequest.get(`/api/noticia/listarTodas?paginacao=${page}&autorId=${autorId}`)
-			if (response.data.codigo === 200) {
-				this.filteredNews = []
-				response.data.retorno.forEach((noticia: INoticiaSimplificada) => {
-				  this.filteredNews.push(noticia)
-				});	
-				  
-			  }
-		} catch (error) {
-			console.error(error)
-		}
-	}
+    async getAuthorsList() {
+      try {
+        const response = await httpRequest.get('api/noticia/autores');
+
+        if (response.data.codigo === 200) {
+          this.authors = [];
+          response.data.retorno.forEach((author: IAutor) => {
+            this.authors.push(author);
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async filterNews(page: number, autorId: number) {
+      console.log(autorId);
+
+      try {
+        const response = await httpRequest.get(
+          `/api/noticia/listarTodas?paginacao=${page}&autorId=${autorId}`
+        );
+        if (response.data.codigo === 200) {
+          this.filteredNews = [];
+          response.data.retorno.forEach((noticia: INoticiaSimplificada) => {
+            this.filteredNews.push(noticia);
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
-  getters: {}
-})
+  getters: {},
+});

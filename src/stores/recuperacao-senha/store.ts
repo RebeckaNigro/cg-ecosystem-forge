@@ -1,18 +1,16 @@
-import { defineStore } from "pinia";
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
-import { baseURL, httpRequest } from "../../utils/http";
-import { LoggedUser } from "../user/model";
-import axios from "axios";
-import headers from "../../utils/headers";
+import axios from 'axios';
+import { defineStore } from 'pinia';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { baseURL } from '../../utils/http';
 
-export const useRecuperacaoSenhaStore = defineStore("recuperacaoSenhaStore", {
+export const useRecuperacaoSenhaStore = defineStore('recuperacaoSenhaStore', {
   state: () => {
     return {
-      response: new GeneralResponseHandler(0, "none", "no request made yet"),
+      response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
       info: {
-        otp: "",
-        email: "",
-        novaSenha: "",
+        otp: '',
+        email: '',
+        novaSenha: '',
       },
     };
   },
@@ -22,11 +20,11 @@ export const useRecuperacaoSenhaStore = defineStore("recuperacaoSenhaStore", {
       let data = JSON.stringify(email);
 
       const response = await axios.request({
-        method: "post",
+        method: 'post',
         maxBodyLength: Infinity,
-        url: baseURL + "/api/Autenticacao/gerarCodigoRefinirSenha",
+        url: baseURL + '/api/Autenticacao/gerarCodigoRefinirSenha',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         data: data,
       });
@@ -43,11 +41,11 @@ export const useRecuperacaoSenhaStore = defineStore("recuperacaoSenhaStore", {
       console.log(data);
 
       const response = await axios.request({
-        method: "post",
+        method: 'post',
         maxBodyLength: Infinity,
-        url: baseURL + "/api/Autenticacao/refinir-senha",
+        url: baseURL + '/api/Autenticacao/refinir-senha',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         data: data,
       });

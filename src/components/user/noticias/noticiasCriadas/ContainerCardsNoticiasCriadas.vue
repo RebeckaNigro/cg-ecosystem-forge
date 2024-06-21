@@ -2,10 +2,7 @@
   <div class="box mx-auto py-5 px-4 p-lg-5 container position-relative">
     <h1 class="dark-title fs-4 text-start">Notícias criadas</h1>
 
-    <button
-      class="fab green-btn-primary"
-      @click="$router.push({ name: 'GerenciaNoticia' })"
-    >
+    <button class="fab green-btn-primary" @click="$router.push({ name: 'GerenciaNoticia' })">
       + CRIAR NOVA NOTÍCIA
     </button>
 
@@ -50,126 +47,112 @@
 
     <div class="row container-fluid mb-3 mt-5">
       <div class="col-sm-6">
-        <button
-          class="green-btn-outlined button-specific"
-          @click="$router.back()"
-        >
-          Voltar
-        </button>
+        <button class="green-btn-outlined button-specific" @click="$router.back()">Voltar</button>
       </div>
 
       <div class="col-sm-6">
-        <button
-          class="green-btn-primary button-specific"
-          @click="addNewsToView"
-        >
-          Ver mais
-        </button>
+        <button class="green-btn-primary button-specific" @click="addNewsToView">Ver mais</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive, ref } from "vue"
-  import FilterComponent from "../../../../components/general/FilterComponent.vue"
-  import SearchComponent from "../../../../components/general/SearchComponent.vue"
-  import CardNoticiaCriada from "../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue"
-  import Spinner from "../../../../components/general/Spinner.vue"
-  import { useNoticiaStore } from "../../../../stores/noticias/store"
-  import {
-    INoticiaSimplificada,
-    NoticiaSimplificada
-  } from "../../../../stores/noticias/types"
+import { onMounted, reactive, ref } from 'vue';
+import FilterComponent from '../../../../components/general/FilterComponent.vue';
+import SearchComponent from '../../../../components/general/SearchComponent.vue';
+import CardNoticiaCriada from '../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue';
+import Spinner from '../../../../components/general/Spinner.vue';
+import { useNoticiaStore } from '../../../../stores/noticias/store';
+import { INoticiaSimplificada, NoticiaSimplificada } from '../../../../stores/noticias/types';
 
-  const noticiaStore = useNoticiaStore()
-  const lastIndex = ref(6)
-  const loadingNews = ref(false)
-  const page = ref(1)
-  let noticias = ref<Array<INoticiaSimplificada>>()
+const noticiaStore = useNoticiaStore();
+const lastIndex = ref(6);
+const loadingNews = ref(false);
+const page = ref(1);
+let noticias = ref<Array<INoticiaSimplificada>>();
 
-  const rascunho = ref<NoticiaSimplificada>()
+const rascunho = ref<NoticiaSimplificada>();
 
-  const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
-    noticias.value = noticiasFiltradas
+const filtrarNoticias = (noticiasFiltradas: Array<INoticiaSimplificada>) => {
+  noticias.value = noticiasFiltradas;
+};
+
+const addNewsToView = async () => {
+  page.value++;
+  loadingNews.value = true;
+  await noticiaStore.getUserNews(page.value);
+  noticias.value = noticiaStore.allUserNews;
+  loadingNews.value = false;
+};
+
+const reloadNoticias = async () => {
+  loadingNews.value = true;
+
+  if (!localStorage.getItem('noticiaRascunho')) rascunho.value = undefined;
+  await noticiaStore.getUserNews(page.value);
+  noticias.value = noticiaStore.allUserNews;
+  loadingNews.value = false;
+};
+
+const verificaRascunho = () => {
+  const noticiaRascunhoStr = localStorage.getItem('noticiaRascunho');
+
+  if (noticiaRascunhoStr) {
+    const noticiaRascunho = JSON.parse(noticiaRascunhoStr);
+
+    rascunho.value = new NoticiaSimplificada(
+      noticiaRascunho.noticia.id,
+      noticiaRascunho.noticia.titulo,
+      noticiaRascunho.noticia.tags,
+      '',
+      noticiaRascunho.noticia.dataPublicacao,
+      noticiaRascunho.noticia.arquivo,
+      noticiaRascunho.nomeUsuario
+    );
   }
+};
 
-  const addNewsToView = async () => {
-	page.value++
-	loadingNews.value = true
-	await noticiaStore.getUserNews(page.value)
-	noticias.value = noticiaStore.allUserNews
-	loadingNews.value = false
-  }
-
-  const reloadNoticias = async () => {
-    loadingNews.value = true
-
-    if (!localStorage.getItem("noticiaRascunho")) rascunho.value = undefined
-    await noticiaStore.getUserNews(page.value)
-    noticias.value = noticiaStore.allUserNews
-    loadingNews.value = false
-  }
-
-  const verificaRascunho = () => {
-    const noticiaRascunhoStr = localStorage.getItem("noticiaRascunho")
-
-    if (noticiaRascunhoStr) {
-      const noticiaRascunho = JSON.parse(noticiaRascunhoStr)
-
-      rascunho.value = new NoticiaSimplificada(
-        noticiaRascunho.noticia.id,
-        noticiaRascunho.noticia.titulo,
-        noticiaRascunho.noticia.tags,
-        "",
-        noticiaRascunho.noticia.dataPublicacao,
-        noticiaRascunho.noticia.arquivo,
-		noticiaRascunho.nomeUsuario
-      )
-    }
-  }
-
-  onMounted(async () => {
-    loadingNews.value = true
-    await noticiaStore.getUserNews(page.value)
-    noticias.value = noticiaStore.allUserNews
-    verificaRascunho()
-    loadingNews.value = false
-  })
+onMounted(async () => {
+  loadingNews.value = true;
+  await noticiaStore.getUserNews(page.value);
+  noticias.value = noticiaStore.allUserNews;
+  verificaRascunho();
+  loadingNews.value = false;
+});
 </script>
 
 <style scoped lang="scss">
+.fab {
+  position: absolute;
+  top: -1.2rem;
+  right: 3rem;
+  width: 25%;
+}
 
+.button-specific {
+  width: 100%;
+  margin: 1rem 1rem;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 2550px) {
   .fab {
-    position: absolute;
-    top: -1.2rem;
-    right: 3rem;
-	width: 25%;
+    width: 20%;
   }
+}
 
-  .button-specific {
-    width: 100%;
-    margin: 1rem 1rem;
-    box-sizing: border-box;
+@media screen and (max-width: 1200px) {
+  .fab {
+    width: 35%;
   }
+}
 
-  @media screen and (min-width: 2550px) {
-	.fab{
-		width: 20%;
-	}
+@media screen and (max-width: 580px) {
+  .fab {
+    width: 40%;
+    font-size: 12px;
+    right: 1rem;
   }
-
-  @media screen and (max-width: 1200px) {
-	.fab{
-		width: 35%;
-	}
-  }
-
-  @media screen and (max-width: 580px){
-	.fab{
-		width: 40%;
-		font-size: 12px;
-		right: 1rem;
-	}
-  }
+}
 </style>

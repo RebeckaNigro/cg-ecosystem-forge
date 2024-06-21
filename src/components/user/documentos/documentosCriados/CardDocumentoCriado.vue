@@ -2,9 +2,7 @@
   <div>
     <div class="container-fluid box p-3 my-3 h-100 overflow-hidden">
       <div class="container">
-        <div
-          class="row mt-2 mx-2 justify-content-between align-items-center d-flex"
-        >
+        <div class="row mt-2 mx-2 justify-content-between align-items-center d-flex">
           <div class="col-6 col-md-8 text-start">
             <span class="text-secondary fs-6">{{ tagsFormatadas }}</span>
           </div>
@@ -32,12 +30,7 @@
                 })
               "
             />
-            <img
-              src="/delete_icon.svg"
-              alt=""
-              class="image-icon-button"
-              @click="confirmDelete"
-            />
+            <img src="/delete_icon.svg" alt="" class="image-icon-button" @click="confirmDelete" />
           </div>
         </div>
       </div>
@@ -55,9 +48,7 @@
       </p>
 
       <div class="text-start mt-4">
-        <span class="text-secondary px-1"
-          >Atualizado em: {{ dataFormatada }}</span
-        >
+        <span class="text-secondary px-1">Atualizado em: {{ dataFormatada }}</span>
       </div>
     </div>
     <ConfirmModal
@@ -70,38 +61,35 @@
 </template>
 
 <script setup lang="ts">
-import { INoticiaSimplificada } from "../../../../stores/noticias/types";
-import { useDocumentStore } from "../../../../stores/documentos/store";
-import { useModalStore } from "../../../../stores/modal/store";
-import { useConfirmStore } from "../../../../stores/confirm/store";
-import {
-  brDateString,
-  friendlyDateTime,
-} from "../../../../utils/formatacao/datetime";
-import { ref, onMounted, onUpdated } from "vue";
-import ConfirmModal from "../../../general/ConfirmModal.vue";
-import router from "../../../../router";
-import { IDocumentoSimplificado } from "../../../../stores/documentos/types";
-import { Modal } from "bootstrap";
+import { INoticiaSimplificada } from '../../../../stores/noticias/types';
+import { useDocumentStore } from '../../../../stores/documentos/store';
+import { useModalStore } from '../../../../stores/modal/store';
+import { useConfirmStore } from '../../../../stores/confirm/store';
+import { brDateString, friendlyDateTime } from '../../../../utils/formatacao/datetime';
+import { ref, onMounted, onUpdated } from 'vue';
+import ConfirmModal from '../../../general/ConfirmModal.vue';
+import router from '../../../../router';
+import { IDocumentoSimplificado } from '../../../../stores/documentos/types';
+import { Modal } from 'bootstrap';
 
 const documentoStore = useDocumentStore();
 const modalStore = useModalStore();
 const confirmStore = useConfirmStore();
 
-const emit = defineEmits(["update-list"]);
+const emit = defineEmits(['update-list']);
 
 const props = defineProps<{
   documento: IDocumentoSimplificado;
 }>();
 
-const dataFormatada = ref("");
-const tagsFormatadas = ref("");
+const dataFormatada = ref('');
+const tagsFormatadas = ref('');
 
 const confirmDelete = () => {
-  const modalDOM: any = document.querySelector("#confirmDocModal");
+  const modalDOM: any = document.querySelector('#confirmDocModal');
   confirmStore.setConfirmInstance(Modal.getOrCreateInstance(modalDOM));
   confirmStore.showConfirmModal(
-    "Tem certeza que desesja remover este documento?",
+    'Tem certeza que desesja remover este documento?',
     props.documento.id
   );
 };
@@ -114,10 +102,10 @@ const confirmado = async () => {
 
     const res = documentoStore.response.getResponse();
     if (res.code === 200) {
-      emit("update-list");
-      modalStore.showSuccessModal("Documento removido com sucesso!");
+      emit('update-list');
+      modalStore.showSuccessModal('Documento removido com sucesso!');
     } else {
-      modalStore.showErrorModal("Erro ao remover documento!");
+      modalStore.showErrorModal('Erro ao remover documento!');
     }
   }
 };
@@ -126,8 +114,8 @@ onMounted(() => {
   console.log(props.documento);
   dataFormatada.value = friendlyDateTime(props.documento.data.toString());
 
-  const prependHashtag = props.documento.tags.map((tag) => "#" + tag.descricao);
-  tagsFormatadas.value = prependHashtag.join("  ");
+  const prependHashtag = props.documento.tags.map((tag) => '#' + tag.descricao);
+  tagsFormatadas.value = prependHashtag.join('  ');
 });
 
 onUpdated(() => {

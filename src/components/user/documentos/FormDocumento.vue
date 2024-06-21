@@ -2,9 +2,7 @@
   <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-if="documento.id < 0">
     ENVIE SEU DOCUMENTO!
   </h1>
-  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>
-    EDITE SEU DOCUMENTO!
-  </h1>
+  <h1 class="dark-title mt-5 mb-5 fs-2 text-center" v-else>EDITE SEU DOCUMENTO!</h1>
   <form class="container box p-5 mb-5">
     <!-- NOME -->
     <div class="mb-3">
@@ -23,15 +21,8 @@
 
     <!-- DESCRIÇÃO -->
     <div class="mb-3">
-      <label for="descricao" class="form-label-primary"
-        >Descrição do documento</label
-      >
-      <input
-        type="text"
-        id="descricao"
-        class="form-input-primary"
-        v-model="documento.descricao"
-      />
+      <label for="descricao" class="form-label-primary">Descrição do documento</label>
+      <input type="text" id="descricao" class="form-input-primary" v-model="documento.descricao" />
     </div>
 
     <!-- SESSÃO -->
@@ -51,9 +42,7 @@
 
     <!-- INSTITUIÇÕES -->
     <div class="mb-3">
-      <label for="tags" class="form-label-primary"
-        >Instituição responsável*</label
-      >
+      <label for="tags" class="form-label-primary">Instituição responsável*</label>
       <AutocompleteComponent
         type="Instituicao"
         :items="instituicoes"
@@ -79,25 +68,13 @@
     <!-- TAGS -->
     <div class="mb-3">
       <label for="tags" class="form-label-primary">Tags (Opcional)</label>
-      <AutocompleteComponent
-        type="CustomTag"
-        :items="allTags"
-        @selected-value="addTag"
-      />
+      <AutocompleteComponent type="CustomTag" :items="allTags" @selected-value="addTag" />
     </div>
 
     <div class="container-fluid text-start">
-      <div
-        class="tag-element mx-1 mb-4"
-        v-for="(tag, index) in documento.tags"
-        :key="index"
-      >
+      <div class="tag-element mx-1 mb-4" v-for="(tag, index) in documento.tags" :key="index">
         <span>{{ tag.descricao }}</span>
-        <img
-          src="/icons/close-white.svg"
-          alt="Remover tag"
-          @click="deleteTag(index)"
-        />
+        <img src="/icons/close-white.svg" alt="Remover tag" @click="deleteTag(index)" />
       </div>
     </div>
 
@@ -122,9 +99,7 @@
             />
           </div>
           <div class="col-12 col-md">
-            <span id="nome-imagem" class="form-label-primary">{{
-              fileName
-            }}</span>
+            <span id="nome-imagem" class="form-label-primary">{{ fileName }}</span>
           </div>
         </div>
       </div>
@@ -147,11 +122,7 @@
       </div>
 
       <div class="col-sm-6 fs-xs-1 mt-md-3">
-        <button
-          type="button"
-          class="green-btn-primary w-100 my-3 my-md-4"
-          @click="cadastrar"
-        >
+        <button type="button" class="green-btn-primary w-100 my-3 my-md-4" @click="cadastrar">
           ENVIAR
         </button>
       </div>
@@ -169,21 +140,21 @@
 <script setup lang="ts">
 //@ts-nocheck
 
-import useValidate from "@vuelidate/core";
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { useDocumentStore } from "../../../stores/documentos/store";
-import { useModalStore } from "../../../stores/modal/store";
-import { useAlertStore } from "../../../stores/alert/store";
-import { useConfirmStore } from "../../../stores/confirm/store";
-import { useTagStore } from "../../../stores/tag/store";
-import { useInstituicaoStore } from "../../../stores/instituicao/store";
-import { required, helpers, minValue } from "@vuelidate/validators";
-import ConfirmModal from "../../general/ConfirmModal.vue";
-import AutocompleteComponent from "../../general/AutocompleteComponent.vue";
-import Spinner from "../../general/Spinner.vue";
-import { CustomTag } from "../../../stores/tag/types";
-import { Instituicao } from "../../../stores/instituicao/types";
+import useValidate from '@vuelidate/core';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useDocumentStore } from '../../../stores/documentos/store';
+import { useModalStore } from '../../../stores/modal/store';
+import { useAlertStore } from '../../../stores/alert/store';
+import { useConfirmStore } from '../../../stores/confirm/store';
+import { useTagStore } from '../../../stores/tag/store';
+import { useInstituicaoStore } from '../../../stores/instituicao/store';
+import { required, helpers, minValue } from '@vuelidate/validators';
+import ConfirmModal from '../../general/ConfirmModal.vue';
+import AutocompleteComponent from '../../general/AutocompleteComponent.vue';
+import Spinner from '../../general/Spinner.vue';
+import { CustomTag } from '../../../stores/tag/types';
+import { Instituicao } from '../../../stores/instituicao/types';
 
 const documentStore = useDocumentStore();
 const alertStore = useAlertStore();
@@ -200,12 +171,12 @@ const instituicoes = ref<Array<Instituicao>>();
 
 const documento = ref({
   id: -1,
-  nome: "",
-  descricao: "",
+  nome: '',
+  descricao: '',
   tags: new Array<CustomTag>(),
   documentoAreaid: 1,
   instituicaoId: -1,
-  data: "",
+  data: '',
   arquivo: File,
 });
 
@@ -216,20 +187,17 @@ const fileSizeValidation = () => {
 
 const documentoRules = ref({
   nome: {
-    required: helpers.withMessage("Título é obrigatório.", required),
+    required: helpers.withMessage('Título é obrigatório.', required),
   },
   instituicaoId: {
-    minValueValue: helpers.withMessage(
-      "Instituição é obrigatória.",
-      minValue(0)
-    ),
+    minValueValue: helpers.withMessage('Instituição é obrigatória.', minValue(0)),
   },
 });
 
 const v$ = useValidate(documentoRules, documento);
 
 const allTags = ref<CustomTag[]>();
-const fileName = ref("");
+const fileName = ref('');
 
 onMounted(async () => {
   const id = route.params.documentoId;
@@ -246,7 +214,7 @@ onMounted(async () => {
         (item) => item.id == documento.value.instituicaoId
       );
     } else {
-      alertStore.showTimeoutErrorMessage("Erro ao carregar documento!");
+      alertStore.showTimeoutErrorMessage('Erro ao carregar documento!');
     }
   }
 });
@@ -270,7 +238,7 @@ const buscarInstituicoes = async () => {
   if (instituicaoStore.response.code == 200) {
     instituicoes.value = instituicaoStore.allInstituicoes;
   } else {
-    alertStore.showTimeoutErrorMessage("Erro ao carregar instituições!");
+    alertStore.showTimeoutErrorMessage('Erro ao carregar instituições!');
   }
 };
 
@@ -282,9 +250,9 @@ const onFileChanged = (event: Event) => {
   }
 
   if (!fileSizeValidation()) {
-    alertStore.showTimeoutWarningMessage("Imagem deve ter no máximo 5MB");
+    alertStore.showTimeoutWarningMessage('Imagem deve ter no máximo 5MB');
     arquivo.value = null;
-    fileName.value = "";
+    fileName.value = '';
     return;
   }
 };
@@ -294,8 +262,8 @@ const cadastrar = async () => {
 
   documento.value.data = new Date().toISOString();
   if (arquivo.value) {
-    if (arquivo.value.type !== "application/pdf")
-      return modalStore.showWarningModal("O documento deve ser um PDF!");
+    if (arquivo.value.type !== 'application/pdf')
+      return modalStore.showWarningModal('O documento deve ser um PDF!');
   }
 
   documento.value.arquivo = arquivo.value;
@@ -307,11 +275,11 @@ const cadastrar = async () => {
     const res = documentStore.response.getResponse();
     if (res.code === 200) {
       resetarDocumento();
-      modalStore.showSuccessModal("Documento editado com sucesso!");
+      modalStore.showSuccessModal('Documento editado com sucesso!');
     } else if (res.code === 661) {
       console.error(res.message);
     } else {
-      modalStore.showErrorModal("Erro ao editar documento!");
+      modalStore.showErrorModal('Erro ao editar documento!');
     }
   } else {
     sendingDocs.value = true;
@@ -322,11 +290,11 @@ const cadastrar = async () => {
 
     if (res.code === 200) {
       resetarDocumento();
-      modalStore.showSuccessModal("Documento cadastrado com sucesso!");
+      modalStore.showSuccessModal('Documento cadastrado com sucesso!');
     } else if (res.code === 661) {
       console.error(res.message);
     } else {
-      modalStore.showErrorModal("Erro ao cadastrar documento!");
+      modalStore.showErrorModal('Erro ao cadastrar documento!');
     }
   }
 };
@@ -334,15 +302,15 @@ const cadastrar = async () => {
 const resetarDocumento = () => {
   documento.value = {
     id: -1,
-    nome: "",
-    descricao: "",
+    nome: '',
+    descricao: '',
     tags: [],
     documentoAreaid: -1,
     instituicaoId: -1,
-    data: "",
+    data: '',
     arquivo: File,
   };
-  fileName.value = "";
+  fileName.value = '';
 };
 
 const deleteTag = (index: number) => {
@@ -361,8 +329,7 @@ const addTag = (selectedTag: CustomTag) => {
 
 const setInstituicao = (selectedInstituicao: Instituicao) => {
   selectedValue.value = selectedInstituicao;
-  if (selectedInstituicao)
-    documento.value.instituicaoId = selectedInstituicao.id;
+  if (selectedInstituicao) documento.value.instituicaoId = selectedInstituicao.id;
 };
 
 const deleteSelectedInstituicao = () => {
@@ -387,7 +354,7 @@ form {
   margin-left: 0;
   padding-top: 80px;
   background-color: #fff;
-  background-image: url("/user/eventos/cloud_icon.svg");
+  background-image: url('/user/eventos/cloud_icon.svg');
   background-repeat: no-repeat;
   background-position: 50% 20%;
   cursor: pointer;

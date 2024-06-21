@@ -1,7 +1,7 @@
 interface ResponseInterface {
-  code: number
-  dado: any // especificar tipo de dado do retorno 
-  message: string
+  code: number;
+  dado: any; // especificar tipo de dado do retorno
+  message: string;
 }
 
 export class GeneralResponseHandler implements ResponseInterface {
@@ -22,13 +22,13 @@ export class GeneralResponseHandler implements ResponseInterface {
   }
   putError(c: number, m: string) {
     this.code = c;
-    this.message = m
+    this.message = m;
   }
   getResponse(): ResponseInterface {
     return {
       code: this.code,
       dado: this.dado,
-      message: this.message
-    }
+      message: this.message,
+    };
   }
 }

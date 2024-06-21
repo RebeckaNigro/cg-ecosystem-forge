@@ -30,9 +30,7 @@
           </div>
 
           <div class="input-icon-container mb-3">
-            <label for="confirmPassword" class="form-label-primary"
-              >Confirmar Senha</label
-            >
+            <label for="confirmPassword" class="form-label-primary">Confirmar Senha</label>
 
             <i class="icon">
               <img
@@ -86,16 +84,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue";
-import { useUserStore } from "../../stores/user/store";
-import { useAlertStore } from "../../stores/alert/store";
-import { useRouter } from "vue-router";
-import useValidate from "@vuelidate/core";
-import Spinner from "../general/Spinner.vue";
-import { required, email, helpers, sameAs } from "@vuelidate/validators";
-import { isPasswordValid } from "./../../utils/validator/validations";
-import { useRecuperacaoSenhaStore } from "../../stores/recuperacao-senha/store";
-import { useModalStore } from "../../stores/modal/store";
+import { reactive, ref, computed } from 'vue';
+import { useUserStore } from '../../stores/user/store';
+import { useAlertStore } from '../../stores/alert/store';
+import { useRouter } from 'vue-router';
+import useValidate from '@vuelidate/core';
+import Spinner from '../general/Spinner.vue';
+import { required, email, helpers, sameAs } from '@vuelidate/validators';
+import { isPasswordValid } from './../../utils/validator/validations';
+import { useRecuperacaoSenhaStore } from '../../stores/recuperacao-senha/store';
+import { useModalStore } from '../../stores/modal/store';
 
 const router = useRouter();
 
@@ -103,14 +101,14 @@ const alertStore = useAlertStore();
 const userStore = useUserStore();
 
 const usuario = ref({
-  password: "",
-  confirmPassword: "",
+  password: '',
+  confirmPassword: '',
 });
 
 const passwordVisibility = ref(false);
 const confirmPasswordVisibility = ref(false);
-const visibilityIconRef = ref("/visibility-off.svg");
-const confirmVisibilityIconRef = ref("/visibility-off.svg");
+const visibilityIconRef = ref('/visibility-off.svg');
+const confirmVisibilityIconRef = ref('/visibility-off.svg');
 
 const recuperacaoSenhaStore = useRecuperacaoSenhaStore();
 const modalStore = useModalStore();
@@ -120,16 +118,13 @@ const usuarioRules = computed(() => {
     password: {
       required,
       passwordFormat: helpers.withMessage(
-        "Formato da senha: De 8 a 15 caracteres, devendo conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial.",
+        'Formato da senha: De 8 a 15 caracteres, devendo conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial.',
         isPasswordValid
       ),
     },
     confirmPassword: {
       required,
-      sameAs: helpers.withMessage(
-        "Senhas não conferem.",
-        sameAs(usuario.value.password)
-      ),
+      sameAs: helpers.withMessage('Senhas não conferem.', sameAs(usuario.value.password)),
     },
   };
 });
@@ -139,17 +134,15 @@ const v$ = useValidate(usuarioRules, usuario);
 const changePasswordVisibility = () => {
   passwordVisibility.value = !passwordVisibility.value;
 
-  visibilityIconRef.value = passwordVisibility.value
-    ? "/visibility-on.svg"
-    : "/visibility-off.svg";
+  visibilityIconRef.value = passwordVisibility.value ? '/visibility-on.svg' : '/visibility-off.svg';
 };
 
 const changeConfirmPasswordVisibility = () => {
   confirmPasswordVisibility.value = !confirmPasswordVisibility.value;
 
   confirmVisibilityIconRef.value = confirmPasswordVisibility.value
-    ? "/visibility-on.svg"
-    : "/visibility-off.svg";
+    ? '/visibility-on.svg'
+    : '/visibility-off.svg';
 };
 
 const enviar = async () => {
@@ -165,7 +158,7 @@ const enviar = async () => {
       modalStore.showSuccessModal(recuperacaoSenhaStore.response.message);
       setTimeout(() => {
         modalStore.closeModal();
-        router.push("/login");
+        router.push('/login');
       }, 3000);
       waitingResponse.value = false;
     } else {

@@ -1,14 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&display=swap');
-:root{
-	--linear-gradient-background: var(--linear-grandient-orange);
-	--linear-gradient-green: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), #639280;
-	--linear-gradient-orange-1: linear-gradient(164deg, #BD6937 61.88%, #FFF 198.69%);
-	--linear-gradient-orange-2: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #BD6937;
-	--green: #639280;
-	--orange: #BD6937;
+:root {
+  --linear-gradient-background: var(--linear-grandient-orange);
+  --linear-gradient-green: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(255, 255, 255, 0.2) 100%
+    ),
+    #639280;
+  --linear-gradient-orange-1: linear-gradient(164deg, #bd6937 61.88%, #fff 198.69%);
+  --linear-gradient-orange-2: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    #bd6937;
+  --green: #639280;
+  --orange: #bd6937;
 }
-
 
 /* CARD */
 /********/
@@ -105,7 +114,7 @@
 
 .gray-btn-primary {
   font-weight: 700;
-  background: #9C9B9B;
+  background: #9c9b9b;
   border: none;
   color: white;
   border-radius: 25px;
@@ -120,17 +129,17 @@
   box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.25);
 }
 
-.white-btn-primary{
-	font-weight: 700;
-	border: none;
-	color: #639280;
-	border-radius: 25px;
-	width: 100%;
-	height: 50px;
-	cursor: pointer;
-	overflow: hidden;
-	background: #FFFFFF;
-	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+.white-btn-primary {
+  font-weight: 700;
+  border: none;
+  color: #639280;
+  border-radius: 25px;
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* INPUTS */
@@ -253,19 +262,19 @@
   cursor: pointer;
 }
 
-.font-bold{
-	font-weight: 700;
+.font-bold {
+  font-weight: 700;
 }
-.font-semibold{
-	font-weight: 600;
+.font-semibold {
+  font-weight: 600;
 }
 
-.font-medium{
-	font-weight: 500;
+.font-medium {
+  font-weight: 500;
 }
-.font-normal{
-	font-weight: 400;
+.font-normal {
+  font-weight: 400;
 }
-.font-light{
-	font-weight: 300;
+.font-light {
+  font-weight: 300;
 }

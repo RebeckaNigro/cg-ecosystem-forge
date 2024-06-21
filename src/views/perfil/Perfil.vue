@@ -1,11 +1,9 @@
 <template>
-    <Formulario/>
+  <Formulario />
 </template>
 
 <script setup lang="ts">
-import Formulario from "../../components/perfil/Formulario.vue";
+import Formulario from '../../components/perfil/Formulario.vue';
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

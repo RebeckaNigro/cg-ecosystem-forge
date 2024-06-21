@@ -1,147 +1,128 @@
 <template>
-	<div class="input-icon-container overflow-hidden">
-		<i class="icon overflow-hidden">
-			<img src="/search_icon.svg" class="input-icon-image" @click="search" />
-		</i>
-		<input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar"
-			class="form-input-primary search-input px-3" v-model="searchWord" @keydown.enter="search" />
-	</div>
+  <div class="input-icon-container overflow-hidden">
+    <i class="icon overflow-hidden">
+      <img src="/search_icon.svg" class="input-icon-image" @click="search" />
+    </i>
+    <input
+      type="text"
+      name="pesquisar"
+      id="pesquisar"
+      placeholder="Pesquisar"
+      class="form-input-primary search-input px-3"
+      v-model="searchWord"
+      @keydown.enter="search"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-//@ts-nocheck 
-import { onMounted, ref } from "vue"
-import { EventoSimplificado } from "../../stores/eventos/types"
-import { NoticiaSimplificada } from "../../stores/noticias/types"
-import { CustomTag } from "../../stores/tag/types"
-import { IDocumentoSimplificado } from "../../stores/documentos/types"
-import { IPartnerSeccionado, IPartnerSimplificado } from "../../stores/parceiros/types"
+//@ts-nocheck
+import { onMounted, ref } from 'vue';
+import { EventoSimplificado } from '../../stores/eventos/types';
+import { NoticiaSimplificada } from '../../stores/noticias/types';
+import { CustomTag } from '../../stores/tag/types';
+import { IDocumentoSimplificado } from '../../stores/documentos/types';
+import { IPartnerSeccionado, IPartnerSimplificado } from '../../stores/parceiros/types';
 
 const props = defineProps({
-	items: {
-		type: Array,
-		required: true
-	},
-	type: String
-})
+  items: {
+    type: Array,
+    required: true,
+  },
+  type: String,
+});
 
-const emit = defineEmits(["search-result"])
-const results = ref([])
-const searchWord = ref("")
-let emptyInput = false
+const emit = defineEmits(['search-result']);
+const results = ref([]);
+const searchWord = ref('');
+let emptyInput = false;
 
 const search = () => {
-	if (!searchWord.value) {
-		results.value = props.items
-		emptyInput = true
-		sendSearchResult()
-		return
-	}
-	emptyInput = false
-	switch (props.type) {
-		case "noticia":
-			results.value = props.items.filter((item: NoticiaSimplificada) => {
-				if (
-					item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
-					0
-				)
-					return true
+  if (!searchWord.value) {
+    results.value = props.items;
+    emptyInput = true;
+    sendSearchResult();
+    return;
+  }
+  emptyInput = false;
+  switch (props.type) {
+    case 'noticia':
+      results.value = props.items.filter((item: NoticiaSimplificada) => {
+        if (item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0) return true;
 
-				const tagMatch = item.tags.find((tag: CustomTag) => {
-					return tag.descricao
-						.toLowerCase()
-						.indexOf(searchWord.value.toLowerCase()) >= 0
-						? true
-						: false
-				})
+        const tagMatch = item.tags.find((tag: CustomTag) => {
+          return tag.descricao.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0
+            ? true
+            : false;
+        });
 
-				return tagMatch ? true : false
-			})
-			break
+        return tagMatch ? true : false;
+      });
+      break;
 
-		case "evento":
-			results.value = props.items.filter((item: EventoSimplificado) => {
+    case 'evento':
+      results.value = props.items.filter((item: EventoSimplificado) => {
+        if (item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0) return true;
 
-				if (
-					item.titulo.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
-					0
-				)
-					return true
+        if (item.local?.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0) return true;
 
-				if (
-					item.local?.toLowerCase().indexOf(searchWord.value.toLowerCase()) >=
-					0
-				)
-					return true
+        const tagMatch = item.tags.find((tag: CustomTag) => {
+          return tag.descricao.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0
+            ? true
+            : false;
+        });
 
-				const tagMatch = item.tags.find((tag: CustomTag) => {
-					return tag.descricao
-						.toLowerCase()
-						.indexOf(searchWord.value.toLowerCase()) >= 0
-						? true
-						: false
-				})
+        return tagMatch ? true : false;
+      });
+      break;
 
-				return tagMatch ? true : false
-			})
-			break
+    case 'documento':
+      results.value = props.items.filter((item: IDocumentoSimplificado) => {
+        if (item.nome.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0) return true;
 
-		case 'documento':
-			results.value = props.items.filter((item: IDocumentoSimplificado) => {
-				if (
-					item.nome.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0
-				)
-					return true
+        const tagMatch = item.tags.find((tag: CustomTag) => {
+          return tag.descricao.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0
+            ? true
+            : false;
+        });
 
-				const tagMatch = item.tags.find((tag: CustomTag) => {
-					return tag.descricao
-						.toLowerCase()
-						.indexOf(searchWord.value.toLowerCase()) >= 0
-						? true
-						: false
-				})
+        return tagMatch ? true : false;
+      });
+      break;
 
-				return tagMatch ? true : false
-			})
-			break
+    case 'parceiro':
+      const resultsTemp = [];
+      props.items.forEach((item: IPartnerSeccionado, index) => {
+        const r = item.parceiros.filter((p: IPartnerSimplificado) => {
+          return p.nome.toLowerCase().indexOf(searchWord.value.toLowerCase()) >= 0 ? true : false;
+        });
+        if (r.length > 0) {
+          const aux = {
+            tipoInstituicao: item.tipoInstituicao,
+            parceiros: r,
+          };
+          resultsTemp.push(aux);
+        }
+      });
 
-		case 'parceiro':
-			const resultsTemp = []
-			props.items.forEach((item: IPartnerSeccionado, index) => {
-				const r = item.parceiros.filter((p: IPartnerSimplificado) => {
-					return p.nome.toLowerCase()
-						.indexOf(searchWord.value.toLowerCase()) >= 0 ? true : false
-				})
-				if(r.length > 0){
-					const aux = {
-						tipoInstituicao: item.tipoInstituicao,
-						parceiros: r
-					}
-					resultsTemp.push(aux)
-				}
-			
-			})
+      results.value = resultsTemp;
 
-			results.value = resultsTemp
+      break;
+  }
 
-			
-			break
-
-	}
-
-	sendSearchResult()
-}
+  sendSearchResult();
+};
 
 const sendSearchResult = () => {
-	emit("search-result", results.value, emptyInput)
-}
+  emit('search-result', results.value, emptyInput);
+};
 
-onMounted(() => { })
+onMounted(() => {});
 </script>
 
 <style scoped>
 .search-input {
-	border-radius: 50px;
-	border-color: lightgray;
+  border-radius: 50px;
+  border-color: lightgray;
 }
 </style>

@@ -1,20 +1,39 @@
 <template>
-	<div class="partner-header">
-		<img :src="parceiroSelecionado.coverPath" :alt="parceiroSelecionado.parceiroNome" class="cover">
-		<div class="d-flex h-100 w-100 partner-logo-container">
-			<div class="box">
-				<img v-if="hasLogo" :src="parceiroSelecionado.logoPath" alt="Logo Parceiro" id="parceiro-logo">
-				<p v-else class="dark-title">Logo<br>Parceiro</p>
-			</div>
-		</div>
-	</div>
-	
-	<ExpandedBody :partner-name="parceiroSelecionado.parceiroNome" :first-paragraph="parceiroSelecionado.primeiroParagrafo"
-		:sub-title="parceiroSelecionado.subTitulo" :second-paragraph="parceiroSelecionado.segundoParagrafo" :cnpj="parceiroSelecionado.cnpj"/>
-	<ContatoParceiro :instaLink="parceiroSelecionado.instaLink" :linkedinLink="parceiroSelecionado.linkedinLink"
-		:wppLink="parceiroSelecionado.wppLink" :email-contato="parceiroSelecionado.emailContato"
-		:telefone="parceiroSelecionado.telefone" :website="parceiroSelecionado.website"
-		:endereco="parceiroSelecionado.endereco" />
+  <div class="partner-header">
+    <img
+      :src="parceiroSelecionado.coverPath"
+      :alt="parceiroSelecionado.parceiroNome"
+      class="cover"
+    />
+    <div class="d-flex h-100 w-100 partner-logo-container">
+      <div class="box">
+        <img
+          v-if="hasLogo"
+          :src="parceiroSelecionado.logoPath"
+          alt="Logo Parceiro"
+          id="parceiro-logo"
+        />
+        <p v-else class="dark-title">Logo<br />Parceiro</p>
+      </div>
+    </div>
+  </div>
+
+  <ExpandedBody
+    :partner-name="parceiroSelecionado.parceiroNome"
+    :first-paragraph="parceiroSelecionado.primeiroParagrafo"
+    :sub-title="parceiroSelecionado.subTitulo"
+    :second-paragraph="parceiroSelecionado.segundoParagrafo"
+    :cnpj="parceiroSelecionado.cnpj"
+  />
+  <ContatoParceiro
+    :instaLink="parceiroSelecionado.instaLink"
+    :linkedinLink="parceiroSelecionado.linkedinLink"
+    :wppLink="parceiroSelecionado.wppLink"
+    :email-contato="parceiroSelecionado.emailContato"
+    :telefone="parceiroSelecionado.telefone"
+    :website="parceiroSelecionado.website"
+    :endereco="parceiroSelecionado.endereco"
+  />
 </template>
 
 <script setup lang="ts">
@@ -24,123 +43,123 @@ import { useRoute } from 'vue-router';
 import ExpandedBody from '../../../components/parceiros/parceiroExpandido/ExpandedBody.vue';
 import ContatoParceiro from '../../../components/parceiros/parceiroExpandido/ContatoParceiro.vue';
 
-const hasLogo = ref(true) // Essa variável de controle supõe que a empresa parceira tem logo.
-const route = useRoute() // acesso à rota para buscar o id do parceiro
-const parceirosStore = useParceirosStore() // acesso ao store
-const parceiroSelecionado = computed(() => { // computed que retorna o parceiro selecionado para o template
-	const p = parceirosStore.getPartner(route.params.parceiroId.toString());
-	if (p) return p
-	else return {
-		parceiroId: '-1',
-		parceiroNome: 'Algo falhou :(',
-		primeiroParagrafo: '',
-		subTitulo: '',
-		segundoParagrafo: '',
-		coverPath: '',
-		logoPath: '',
-		instaLink: '',
-		linkedinLink: '',
-		wppLink: '',
-		emailContato: '',
-		telefone: '',
-		website: '',
-		endereco: '',
-		cnpj: ''
-	}
-})
+const hasLogo = ref(true); // Essa variável de controle supõe que a empresa parceira tem logo.
+const route = useRoute(); // acesso à rota para buscar o id do parceiro
+const parceirosStore = useParceirosStore(); // acesso ao store
+const parceiroSelecionado = computed(() => {
+  // computed que retorna o parceiro selecionado para o template
+  const p = parceirosStore.getPartner(route.params.parceiroId.toString());
+  if (p) return p;
+  else
+    return {
+      parceiroId: '-1',
+      parceiroNome: 'Algo falhou :(',
+      primeiroParagrafo: '',
+      subTitulo: '',
+      segundoParagrafo: '',
+      coverPath: '',
+      logoPath: '',
+      instaLink: '',
+      linkedinLink: '',
+      wppLink: '',
+      emailContato: '',
+      telefone: '',
+      website: '',
+      endereco: '',
+      cnpj: '',
+    };
+});
 const imageWidthBiggerThanHeight = () => {
-	const logo: HTMLImageElement = document.querySelector('#parceiro-logo')!
+  const logo: HTMLImageElement = document.querySelector('#parceiro-logo')!;
 
-	if (!logo.complete) hasLogo.value = false
-	else if (logo.clientWidth > logo.clientHeight) {
-		logo.classList.add('wider-image')
-	} else if (logo.clientWidth === logo.clientHeight) {
-		logo.classList.add('squared-image')
-	} else {
-		logo.classList.add('taller-image')
-	}
-}
+  if (!logo.complete) hasLogo.value = false;
+  else if (logo.clientWidth > logo.clientHeight) {
+    logo.classList.add('wider-image');
+  } else if (logo.clientWidth === logo.clientHeight) {
+    logo.classList.add('squared-image');
+  } else {
+    logo.classList.add('taller-image');
+  }
+};
 onMounted(() => {
-	imageWidthBiggerThanHeight()
-})
+  imageWidthBiggerThanHeight();
+});
 </script>
 
 <style scoped lang="scss">
 .partner-header {
-	background-repeat: no-repeat;
-	background-position: center;
+  background-repeat: no-repeat;
+  background-position: center;
 
-	position: relative;
+  position: relative;
 
-	.cover {
-		width: 100%;
-		height: 434px;
-		object-fit: fill;
-	}
+  .cover {
+    width: 100%;
+    height: 434px;
+    object-fit: fill;
+  }
 
-	.partner-logo-container {
-		position: absolute;
-		top: 220px;
-		align-items: center;
-		justify-content: center;
+  .partner-logo-container {
+    position: absolute;
+    top: 220px;
+    align-items: center;
+    justify-content: center;
 
-		.box {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-content: center;
-			background-color: #fff;
-			padding: 10px;
-			border-radius: 10px;
+    .box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 10px;
 
-			h1.dark-title {
-				text-align: center;
-				font-size: 1.5rem;
-			}
+      h1.dark-title {
+        text-align: center;
+        font-size: 1.5rem;
+      }
 
-			.wider-image {
-				max-width: 300px;
-				width: 100%;
-				height: 100px;
-			}
+      .wider-image {
+        max-width: 300px;
+        width: 100%;
+        height: 100px;
+      }
 
-			.taller-image {
-				height: 200px;
-				width: 150px;
-			}
+      .taller-image {
+        height: 200px;
+        width: 150px;
+      }
 
-			.squared-image {
-				height: 200px;
-				width: 200px;
-			}
-		}
-	}
+      .squared-image {
+        height: 200px;
+        width: 200px;
+      }
+    }
+  }
 }
 
 @media (max-width: 991px) {
-	.partner-logo-container {
-		h1.dark-title {
-			font-size: 1rem !important;
-		}
-	}
+  .partner-logo-container {
+    h1.dark-title {
+      font-size: 1rem !important;
+    }
+  }
 }
 
 @media (max-width: 580px) {
+  .partner-header {
+    .partner-logo-container {
+      .box {
+        max-width: 250px;
+        max-height: 265px;
+        min-height: 20px;
+        min-width: 20px;
+      }
 
-	.partner-header{
-		.partner-logo-container {
-			.box {
-				max-width: 250px;
-				max-height: 265px;
-				min-height: 20px;
-				min-width: 20px;
-			}
-	
-			h1.dark-title {
-				font-size: 0.5rem !important;
-			}
-		}
-	}
+      h1.dark-title {
+        font-size: 0.5rem !important;
+      }
+    }
+  }
 }
-
 </style>

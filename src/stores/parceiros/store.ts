@@ -1,21 +1,21 @@
-import { defineStore } from "pinia";
-import { PartnerInterface } from "./types";
+import { defineStore } from 'pinia';
+import { PartnerInterface } from './types';
 
 export const useParceirosStore = defineStore('parceirosStore', {
   state: () => {
     return {
-      parceiros: new Array<PartnerInterface>()
-    }
+      parceiros: new Array<PartnerInterface>(),
+    };
   },
   persist: true,
   actions: {
     setPartner(p: PartnerInterface) {
-      this.parceiros.push(p)
-    }
+      this.parceiros.push(p);
+    },
   },
   getters: {
     getPartner: (state) => {
-      return (id: string) => state.parceiros.find((p) => p.parceiroId === id)
-    }
-  }
+      return (id: string) => state.parceiros.find((p) => p.parceiroId === id);
+    },
+  },
 });

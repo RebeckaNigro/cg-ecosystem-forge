@@ -9,33 +9,40 @@ Front-end do projeto do Ecossistema implementado utilizando Vue 3, TypeScript e 
 ## Como executar o projeto
 
 ### Instalar dependências
+
 ```
 npm install
 ```
 
 ### Iniciar ambiente de desenvolvimento
+
 ```
 npm run dev
 ```
 
 ### Gerar arquivos para produção
+
 !!!!
-*Antes de executar este comando é importante mudar a url base da API para o respectivo ambiente:*
+_Antes de executar este comando é importante mudar a url base da API para o respectivo ambiente:_
 
 Caminho: /src/utils/http/index.ts
-* Desenvolvimento: http://dev-api.ecossistemadeinovacaocg.com.br
-* Homologação: https://hom-api.ecossistemadeinovacaocg.com.br
-* Produção: https://api.ecossistemadeinovacaocg.com.br
+
+- Desenvolvimento: http://dev-api.ecossistemadeinovacaocg.com.br
+- Homologação: https://hom-api.ecossistemadeinovacaocg.com.br
+- Produção: https://api.ecossistemadeinovacaocg.com.br
 
 !!!!
-*Além de modificar o ID do tipo usuário sem instituição de acordo com o ambiente:*
+_Além de modificar o ID do tipo usuário sem instituição de acordo com o ambiente:_
 Caminho: /src/utils/constantes.ts -> const ID_SEM_INSTITUICAO
-* Desenvolvimento: 14
-* Homologação: 5
-* Produção: 3
+
+- Desenvolvimento: 14
+- Homologação: 5
+- Produção: 3
+
 ```
 npm run build
 ```
+
 Os arquivos para publicação no servidor estão na pasta '/dist'.
 
 #### Informações adicionais

@@ -43,16 +43,12 @@
 
             <ul class="collapse sub-item" id="menuDocumentOptions">
               <li>
-                <a
-                  :href="$router.resolve({ name: 'DocumentosCriados' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'DocumentosCriados' }).href" class="dropdown-item"
                   >Visualizar documentos</a
                 >
               </li>
               <li>
-                <a
-                  :href="$router.resolve({ name: 'GerenciaDocumento' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'GerenciaDocumento' }).href" class="dropdown-item"
                   >Criar novo documento</a
                 >
               </li>
@@ -76,16 +72,12 @@
 
             <ul class="collapse sub-item" id="menuNewsOptions">
               <li>
-                <a
-                  :href="$router.resolve({ name: 'NoticiasCriadas' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'NoticiasCriadas' }).href" class="dropdown-item"
                   >Visualizar notícias</a
                 >
               </li>
               <li>
-                <a
-                  :href="$router.resolve({ name: 'GerenciaNoticia' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'GerenciaNoticia' }).href" class="dropdown-item"
                   >Criar nova notícia</a
                 >
               </li>
@@ -109,16 +101,12 @@
 
             <ul class="collapse sub-item" id="menuEventsOptions">
               <li>
-                <a
-                  :href="$router.resolve({ name: 'EventosCriados' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'EventosCriados' }).href" class="dropdown-item"
                   >Visualizar eventos</a
                 >
               </li>
               <li>
-                <a
-                  :href="$router.resolve({ name: 'GerenciaEvento' }).href"
-                  class="dropdown-item"
+                <a :href="$router.resolve({ name: 'GerenciaEvento' }).href" class="dropdown-item"
                   >Criar novo evento</a
                 >
               </li>
@@ -131,76 +119,76 @@
 </template>
 
 <script setup lang="ts">
-  import { useUserStore } from "../../stores/user/store"
-  import { RouterLink } from "vue-router"
+import { useUserStore } from '../../stores/user/store';
+import { RouterLink } from 'vue-router';
 
-  const userStore = useUserStore()
+const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss">
-  .sub-item {
-    font-size: 1rem;
-    padding: 0.5rem 0;
+.sub-item {
+  font-size: 1rem;
+  padding: 0.5rem 0;
 
-    a {
-      font-weight: 500;
-      padding-left: 0;
+  a {
+    font-weight: 500;
+    padding-left: 0;
+  }
+}
+.navbar-light {
+  .navbar-toggler {
+    border: unset;
+  }
+
+  .navbar-toggler:focus {
+    outline: 0;
+    box-shadow: none;
+  }
+  .navbar-toggler-icon {
+    background-image: url('../../../public/hamburguer_icon.svg');
+  }
+}
+.offcanvas-start {
+  width: 300px;
+}
+.navbar-nav {
+  margin-top: 1.7rem;
+
+  .divider {
+    background-color: #6b6a64;
+  }
+  .nav-item {
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding-left: 1.5rem;
+
+    .nav-link {
+      color: #000;
+    }
+    ul {
+      margin-left: 3.5rem;
+    }
+    .home-menu,
+    .noticias-menu,
+    .eventos-menu,
+    .documentos-menu {
+      padding: 0;
+      padding-left: 2.5rem;
+      background-size: contain;
+    }
+    .home-menu {
+      background: url('../../../public/home_icon.svg') no-repeat;
+    }
+    .documentos-menu {
+      background: url('../../../public/docs_icon.svg') no-repeat;
+    }
+    .noticias-menu {
+      background: url('../../../public/news_icon.svg') no-repeat;
+    }
+
+    .eventos-menu {
+      background: url('../../../public/events_icon.svg') no-repeat;
     }
   }
-  .navbar-light {
-    .navbar-toggler {
-      border: unset;
-    }
-
-    .navbar-toggler:focus {
-      outline: 0;
-      box-shadow: none;
-    }
-    .navbar-toggler-icon {
-      background-image: url("../../../public/hamburguer_icon.svg");
-    }
-  }
-  .offcanvas-start {
-    width: 300px;
-  }
-  .navbar-nav {
-    margin-top: 1.7rem;
-
-    .divider {
-      background-color: #6b6a64;
-    }
-    .nav-item {
-	  font-weight: 500;
-      font-size: 1.2rem;
-      padding-left: 1.5rem;
-
-      .nav-link {
-        color: #000;
-      }
-      ul {
-        margin-left: 3.5rem;
-      }
-      .home-menu,
-      .noticias-menu,
-      .eventos-menu,
-      .documentos-menu {
-        padding: 0;
-        padding-left: 2.5rem;
-        background-size: contain;
-      }
-      .home-menu {
-        background: url("../../../public/home_icon.svg") no-repeat;
-      }
-      .documentos-menu {
-        background: url("../../../public/docs_icon.svg") no-repeat;
-      }
-      .noticias-menu {
-        background: url("../../../public/news_icon.svg") no-repeat;
-      }
-
-      .eventos-menu {
-        background: url("../../../public/events_icon.svg") no-repeat;
-      }
-    }
-  }
+}
 </style>

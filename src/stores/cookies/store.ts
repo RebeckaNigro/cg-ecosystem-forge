@@ -1,10 +1,10 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export const useCookiesStore = defineStore('cookiesStore', {
   state: () => {
     return {
-      choseCookies: false
-    }
+      choseCookies: false,
+    };
   },
-  persist: true
+  persist: true,
 });

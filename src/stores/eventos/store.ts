@@ -1,16 +1,14 @@
 //@ts-nocheck
+import { defineStore } from 'pinia';
+import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
+import { getLastContent, httpRequest } from '../../utils/http';
 import {
-  IEvento,
   EnderecoExistente,
-  IUltimoEvento,
-  Evento,
+  IEvento,
   IEventoSimplificado,
   IOrganizador,
-} from "./types";
-import { defineStore } from "pinia";
-import { httpRequest, getLastContent } from "../../utils/http";
-import { validateEventoInput } from "../../utils/eventos/validation";
-import { GeneralResponseHandler } from "../../utils/GeneralResponseHandler";
+  IUltimoEvento,
+} from './types';
 
 const enderecosExistentes: Array<EnderecoExistente> = [];
 const ultimosEventos: Array<IEventoSimplificado> = [];
@@ -20,12 +18,12 @@ const ultimosEventosUsuarioLogado: Array<IUltimoEvento> = [];
 const organizadores: IOrganizador[] = [];
 const eventosFiltrados: Array<IEventoSimplificado> = [];
 
-export const useEventoStore = defineStore("eventoStore", {
+export const useEventoStore = defineStore('eventoStore', {
   state: () => {
     return {
       enderecosExistentes,
       ultimosEventos,
-      response: new GeneralResponseHandler(0, "none", "no request made yet"),
+      response: new GeneralResponseHandler(0, 'none', 'no request made yet'),
       eventos,
       eventosUsuarioLogado,
       ultimosEventosUsuarioLogado,
@@ -45,7 +43,7 @@ export const useEventoStore = defineStore("eventoStore", {
           endereco: {
             ...novoEvento.endereco,
             cep: (novoEvento.endereco.cep = novoEvento.endereco
-              ? novoEvento.endereco?.cep.split("-").join("")
+              ? novoEvento.endereco?.cep.split('-').join('')
               : null),
           },
         };
@@ -55,32 +53,24 @@ export const useEventoStore = defineStore("eventoStore", {
 
       try {
         const formData = new FormData();
-        formData.append("evento", JSON.stringify(data));
+        formData.append('evento', JSON.stringify(data));
 
         novoEvento.tags.forEach((tag, index) => {
           formData.append(`tags[${index}].descricao`, tag.descricao);
         });
 
-        formData.append("arquivo", novoEvento.arquivo);
+        formData.append('arquivo', novoEvento.arquivo);
 
-        const response = await httpRequest.post(
-          "/api/evento/incluir",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        const response = await httpRequest.post('/api/evento/incluir', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
 
-        this.response.putResponse(
-          response.data.codigo,
-          response.data.dado,
-          response.data.resposta
-        );
+        this.response.putResponse(response.data.codigo, response.data.dado, response.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI");
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
           console.error(error);
         }
       }
@@ -90,9 +80,7 @@ export const useEventoStore = defineStore("eventoStore", {
 
     async getUserEvents(page: number) {
       try {
-        const response = await httpRequest.get(
-          `/api/evento/listarPorUsuarioId?paginacao=${page}`
-        );
+        const response = await httpRequest.get(`/api/evento/listarPorUsuarioId?paginacao=${page}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -124,14 +112,13 @@ export const useEventoStore = defineStore("eventoStore", {
             for (const addrr of response.data.retorno) {
               this.enderecosExistentes.push(extractExistingAddress(addrr));
             }
-          } else if (response.data.codigo === 404)
-            this.enderecosExistentes = [];
+          } else if (response.data.codigo === 404) this.enderecosExistentes = [];
         }
       } catch (error) {}
     },
 
     async getLastEvents() {
-      const response = await getLastContent("evento");
+      const response = await getLastContent('evento');
       if (response.data.codigo === 200) {
         this.ultimosEventos = [];
         for (const lastEvent of response.data.retorno) {
@@ -142,9 +129,7 @@ export const useEventoStore = defineStore("eventoStore", {
 
     async getUserLastEvents() {
       try {
-        const response = await httpRequest.get(
-          "/api/evento/listarUltimosPorUsuarioId"
-        );
+        const response = await httpRequest.get('/api/evento/listarUltimosPorUsuarioId');
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -182,9 +167,7 @@ export const useEventoStore = defineStore("eventoStore", {
 
     async deleteEvent(eventId: number) {
       try {
-        const response = await httpRequest.delete(
-          `/api/evento/excluir?id=${eventId}`
-        );
+        const response = await httpRequest.delete(`/api/evento/excluir?id=${eventId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -196,7 +179,7 @@ export const useEventoStore = defineStore("eventoStore", {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Erro ao remover evento.");
+          this.response.putError(661, 'Erro ao remover evento.');
           console.error(error);
         }
       }
@@ -212,7 +195,7 @@ export const useEventoStore = defineStore("eventoStore", {
               ? {
                   ...eventoEdicao.endereco,
                   cep: (eventoEdicao.endereco.cep = eventoEdicao.endereco
-                    ? eventoEdicao.endereco?.cep.split("-").join("")
+                    ? eventoEdicao.endereco?.cep.split('-').join('')
                     : null),
                 }
               : null,
@@ -221,7 +204,7 @@ export const useEventoStore = defineStore("eventoStore", {
           data = { ...eventoEdicao };
         }
         const formData = new FormData();
-        formData.append("evento", JSON.stringify(data));
+        formData.append('evento', JSON.stringify(data));
 
         if (eventoEdicao.tags.length > 0) {
           eventoEdicao.tags.forEach((tag, index) => {
@@ -229,21 +212,17 @@ export const useEventoStore = defineStore("eventoStore", {
           });
         }
 
-        formData.append("arquivo", eventoEdicao.arquivos[0].arquivo);
+        formData.append('arquivo', eventoEdicao.arquivos[0].arquivo);
 
-        const res = await httpRequest.put("/api/evento/editar", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+        const res = await httpRequest.put('/api/evento/editar', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
-        this.response.putResponse(
-          res.data.codigo,
-          res.data.dado,
-          res.data.resposta
-        );
+        this.response.putResponse(res.data.codigo, res.data.dado, res.data.resposta);
       } catch (error) {
         if (error instanceof TypeError) {
           this.response.putError(222, error.message);
         } else {
-          this.response.putError(661, "Entre em contato com a Startup do SESI");
+          this.response.putError(661, 'Entre em contato com a Startup do SESI');
           console.error(error);
         }
       }
@@ -251,9 +230,7 @@ export const useEventoStore = defineStore("eventoStore", {
 
     async getEventById(eventoId: number) {
       try {
-        const response = await httpRequest.get(
-          `/api/evento/detalhes?Id=${eventoId}`
-        );
+        const response = await httpRequest.get(`/api/evento/detalhes?Id=${eventoId}`);
         if (response.data.codigo === 200) {
           this.response.putResponse(
             response.data.codigo,
@@ -267,9 +244,7 @@ export const useEventoStore = defineStore("eventoStore", {
     },
     async getOrganizersList() {
       try {
-        const response = await httpRequest.get(
-          "api/evento/listarOrganizadores"
-        );
+        const response = await httpRequest.get('api/evento/listarOrganizadores');
 
         if (response.data.codigo === 200) {
           this.organizadores = [];

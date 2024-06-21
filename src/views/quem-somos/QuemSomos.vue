@@ -21,26 +21,21 @@
         <div class="col-md-6 d-flex flex-column justify-content-center">
           <div class="d-flex flex-column ms-lg-5">
             <p class="text mb-2">
-              O Ecossistema Local de Inovação - Campo Grande - MS, surge do
-              desejo das instituições e unificar as competências tecnológicas de
-              CAMPO GRANDE na direção do incentivo a inovação e tecnologia.
+              O Ecossistema Local de Inovação - Campo Grande - MS, surge do desejo das instituições
+              e unificar as competências tecnológicas de CAMPO GRANDE na direção do incentivo a
+              inovação e tecnologia.
             </p>
 
             <p class="text">
-              Foi feito um estudo preliminar, para apurar o que temos de
-              capacidade tecnológica e ciências para que essas capacidades sejam
-              mais trabalhadas em prol do desenvolvimento socioeconômico de
-              Campo Grande - MS.
+              Foi feito um estudo preliminar, para apurar o que temos de capacidade tecnológica e
+              ciências para que essas capacidades sejam mais trabalhadas em prol do desenvolvimento
+              socioeconômico de Campo Grande - MS.
             </p>
           </div>
         </div>
 
         <div class="col-md-6 d-flex position-relative parte1-foto">
-          <img
-            src="/fundo-achatado-3.svg"
-            alt=""
-            class="position-absolute parte1-fundo"
-          />
+          <img src="/fundo-achatado-3.svg" alt="" class="position-absolute parte1-fundo" />
           <img
             src="/quem-somos/more_about_us.png"
             alt="Foto ilustrativa"
@@ -53,28 +48,22 @@
         <div class="col-md-6 d-flex flex-column justify-content-center">
           <div class="d-flex flex-column justify-content-center ms-lg-5">
             <p class="text mb-2">
-              A partir disso, foi identificado que existem empresas que ainda
-              não se beneficiam da capacidade tecnológica das instituições de
-              ciência, tecnologia e inovação. Ou seja, mapeamos uma distância
-              que pode ser aproveitada!
+              A partir disso, foi identificado que existem empresas que ainda não se beneficiam da
+              capacidade tecnológica das instituições de ciência, tecnologia e inovação. Ou seja,
+              mapeamos uma distância que pode ser aproveitada!
             </p>
 
             <p class="text">
-              Um grande grupo de apoio forma-se aqui para que as para que as
-              ações sejam mais rápidas, efetivas e integradas em busca de
-              melhorar a capacidade da inovação tecnológica e trazer o
-              conhecimento para todos sobre as leis e benefícios proporcionados
-              pela legislação.
+              Um grande grupo de apoio forma-se aqui para que as para que as ações sejam mais
+              rápidas, efetivas e integradas em busca de melhorar a capacidade da inovação
+              tecnológica e trazer o conhecimento para todos sobre as leis e benefícios
+              proporcionados pela legislação.
             </p>
           </div>
         </div>
 
         <div class="col-md-6 d-flex position-relative parte2-foto">
-          <img
-            src="/fundo-achatado-4.svg"
-            alt=""
-            class="position-absolute parte2-fundo"
-          />
+          <img src="/fundo-achatado-4.svg" alt="" class="position-absolute parte2-fundo" />
           <img
             src="/quem-somos/our_story.png"
             alt="Foto ilustrativa"
@@ -91,28 +80,21 @@
             <div class="d-flex flex-column text-start">
               <h3 class="text-uppercase">Missão</h3>
               <p class="mb-2">
-                Apoiar o município de Campo Grande na transformação para um
-                ambiente promotor do empreendedorismo inovador conectando a
-                sociedade às oportunidades por meio da ciência, tecnologia e
-                inovação.
+                Apoiar o município de Campo Grande na transformação para um ambiente promotor do
+                empreendedorismo inovador conectando a sociedade às oportunidades por meio da
+                ciência, tecnologia e inovação.
               </p>
               <h3 class="text-uppercase mt-5">Visão</h3>
               <p class="mb-2">
-                Ser referência nacional e internacional como ecossistema para
-                desenvolvimento e atração de negócios inovadores apoiando a
-                construção de Cidades mais Humanas, Inteligentes e Sustentáveis.
+                Ser referência nacional e internacional como ecossistema para desenvolvimento e
+                atração de negócios inovadores apoiando a construção de Cidades mais Humanas,
+                Inteligentes e Sustentáveis.
               </p>
             </div>
           </div>
 
-          <div
-            class="position-relative col-md-6 d-flex justify-content-center align-items-center"
-          >
-            <img
-              src="/fundo-achatado-1.svg"
-              alt=""
-              class="position-absolute img-achatada"
-            />
+          <div class="position-relative col-md-6 d-flex justify-content-center align-items-center">
+            <img src="/fundo-achatado-1.svg" alt="" class="position-absolute img-achatada" />
             <img
               src="/quem-somos/purpose.png"
               alt="Foto ilustrativa"
@@ -126,27 +108,20 @@
             <div class="d-flex flex-column text-start">
               <h3 class="text-uppercase">Valores</h3>
               <p class="mb-2">
-                Ser referência nacional e internacional como ecossistema para
-                desenvolvimento e atração de negócios inovadores apoiando a
-                construção de Cidades mais Humanas, Inteligentes e Sustentáveis.
+                Ser referência nacional e internacional como ecossistema para desenvolvimento e
+                atração de negócios inovadores apoiando a construção de Cidades mais Humanas,
+                Inteligentes e Sustentáveis.
               </p>
               <h3 class="text-uppercase mt-5">Nosso propósito</h3>
               <p class="mb-2">
-                Disponibilizar caminhos norteadores para todos que desejam
-                empreender, crescer e inovar, independente do formato ou tamanho
-                do negócio. Nosso foco é nos tornarmos referência como polo
-                científico e tecnológico para o Brasil.
+                Disponibilizar caminhos norteadores para todos que desejam empreender, crescer e
+                inovar, independente do formato ou tamanho do negócio. Nosso foco é nos tornarmos
+                referência como polo científico e tecnológico para o Brasil.
               </p>
             </div>
           </div>
-          <div
-            class="position-relative col-md-6 d-flex justify-content-center align-items-center"
-          >
-            <img
-              src="/fundo-achatado-2.svg"
-              alt=""
-              class="position-absolute img-achatada"
-            />
+          <div class="position-relative col-md-6 d-flex justify-content-center align-items-center">
+            <img src="/fundo-achatado-2.svg" alt="" class="position-absolute img-achatada" />
             <img
               src="/quem-somos/purpose-2.png"
               alt="Foto ilustrativa"
@@ -160,9 +135,9 @@
 </template>
 
 <script setup lang="ts">
-import Banner from "../../components/general/Banner.vue";
+import Banner from '../../components/general/Banner.vue';
 
-import ExternalHeader from "../../components/general/ExternalHeader.vue";
+import ExternalHeader from '../../components/general/ExternalHeader.vue';
 </script>
 
 <style scoped lang="scss">
