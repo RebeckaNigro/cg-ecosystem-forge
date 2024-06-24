@@ -12,7 +12,7 @@ pool:
 steps:
 - task: Docker@2
   inputs:
-    containerRegistry: 'eldorado percepcao registry-HUB'
+    containerRegistry: 'eldorado percepcao registry'
     repository: 'ecossistema'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
