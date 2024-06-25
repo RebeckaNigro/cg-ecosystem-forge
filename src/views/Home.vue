@@ -28,7 +28,7 @@
 
               <a
                 class="white-btn-primary text-uppercase text-center align-self-center text-decoration-none"
-                href="https://www.change.org/p/ades%C3%A3o-ao-pacto-de-inova%C3%A7%C3%A3o-ecossistema-de-inova%C3%A7%C3%A3o-de-campo-grande?recruiter=912086725&recruited_by_id=9066d550-e374-11e8-ba51-2f1d6e951c87&utm_source=share_petition&utm_campaign=share_for_starters_page&utm_medium=copylink"
+                href="https://chng.it/Dk5wkWWZsz"
                 target="_blank"
                 >Aderir ao pacto</a
               >
