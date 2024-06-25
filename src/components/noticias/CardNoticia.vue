@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { not } from '@vuelidate/validators';
-import { INoticiaSimplificada } from '../../stores/noticias/types';
+import type { INoticiaSimplificada } from '../../stores/noticias/types';
 
 const props = defineProps<{
   noticia: INoticiaSimplificada | null;

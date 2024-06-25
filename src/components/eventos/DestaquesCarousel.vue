@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { IEventoSimplificado } from '../../stores/eventos/types';
+import type { IEventoSimplificado } from '../../stores/eventos/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 import { brDateString } from '../../utils/formatacao/datetime';
 const props = defineProps<{

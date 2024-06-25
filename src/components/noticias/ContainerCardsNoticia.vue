@@ -26,7 +26,7 @@ import { onMounted, ref } from 'vue';
 import { useNoticiaStore } from '../../stores/noticias/store';
 import CardNoticia from './CardNoticia.vue';
 import Spinner from '../../components/general/Spinner.vue';
-import { INoticiaSimplificada } from '../../stores/noticias/types';
+import type { INoticiaSimplificada } from '../../stores/noticias/types';
 import GeneralBtn from '../buttons/GeneralBtn.vue';
 
 const noticiaStore = useNoticiaStore();

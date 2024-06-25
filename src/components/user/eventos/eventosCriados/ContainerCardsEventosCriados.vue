@@ -70,7 +70,7 @@ import SearchComponent from '../../../../components/general/SearchComponent.vue'
 import CardEventoCriado from '../../../../components/user/eventos/eventosCriados/CardEventoCriado.vue';
 import Spinner from '../../../../components/general/Spinner.vue';
 import { useEventoStore } from '../../../../stores/eventos/store';
-import { IEventoSimplificado, EventoSimplificado } from '../../../../stores/eventos/types';
+import { type IEventoSimplificado, EventoSimplificado } from '../../../../stores/eventos/types';
 
 const eventoStore = useEventoStore();
 const page = ref(1);

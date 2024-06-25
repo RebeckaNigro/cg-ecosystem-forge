@@ -59,7 +59,7 @@ import Banner from '../../components/general/Banner.vue';
 import ContainerCardsNoticia from '../../components/noticias/ContainerCardsNoticia.vue';
 import ContainerUltimasNoticias from '../../components/noticias/ContainerUltimasNoticias.vue';
 import { useNoticiaStore } from '../../stores/noticias/store';
-import { INoticiaSimplificada } from '../../stores/noticias/types';
+import type { INoticiaSimplificada } from '../../stores/noticias/types';
 import CardNoticia from '../../components/noticias/CardNoticia.vue';
 import ExternalHeader from '../../components/general/ExternalHeader.vue';
 import SearchComponent from '../../components/general/SearchComponent.vue';

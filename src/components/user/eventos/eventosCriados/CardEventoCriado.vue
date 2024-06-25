@@ -124,7 +124,7 @@ import { brDateString, friendlyDateTime } from './../../../../utils/formatacao/d
 import { ref, onMounted, onUpdated } from 'vue';
 import ConfirmModal from '../../../general/ConfirmModal.vue';
 import router from '../../../../router';
-import { IEventoSimplificado } from '../../../../stores/eventos/types';
+import type { IEventoSimplificado } from '../../../../stores/eventos/types';
 import { Modal } from 'bootstrap';
 
 const eventoStore = useEventoStore();

@@ -31,8 +31,8 @@ import { adjustStringDateForTimezone } from '../../utils/formatacao/datetime';
 import { NoticiaSimplificada } from './../../stores/noticias/types';
 import { FilterOption } from '../../stores/general/types';
 import { EventoSimplificado } from '../../stores/eventos/types';
-import { IDocumentoSimplificado } from '../../stores/documentos/types';
-import { IPartnerSeccionado } from '../../stores/parceiros/types';
+import type { IDocumentoSimplificado } from '../../stores/documentos/types';
+import type { IPartnerSeccionado } from '../../stores/parceiros/types';
 import { useNoticiaStore } from '../../stores/noticias/store';
 import { useEventoStore } from '../../stores/eventos/store';
 

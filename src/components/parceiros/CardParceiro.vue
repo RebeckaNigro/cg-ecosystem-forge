@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { IPartnerSimplificado } from '../../stores/parceiros/types';
+import type { IPartnerSimplificado } from '../../stores/parceiros/types';
 
 const props = defineProps<{
   cardParceiro: IPartnerSimplificado;

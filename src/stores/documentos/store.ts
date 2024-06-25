@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
 import { getLastContent, httpRequest } from '../../utils/http';
-import { IDocumento, IDocumentoSimplificado } from '../documentos/types';
+import type { IDocumento, IDocumentoSimplificado } from '../documentos/types';
 
 const lastDocs: Array<IDocumentoSimplificado> = [];
 const allDocs: Array<IDocumentoSimplificado> = [];

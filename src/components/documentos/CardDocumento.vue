@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useDocumentStore } from '../../stores/documentos/store';
-import { IDocumentoSimplificado } from '../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../stores/documentos/types';
 import { friendlyDateTime } from '../../utils/formatacao/datetime';
 
 const props = defineProps<{

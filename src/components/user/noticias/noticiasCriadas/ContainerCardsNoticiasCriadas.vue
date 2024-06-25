@@ -64,7 +64,7 @@ import SearchComponent from '../../../../components/general/SearchComponent.vue'
 import CardNoticiaCriada from '../../../../components/user/noticias/noticiasCriadas/CardNoticiaCriada.vue';
 import Spinner from '../../../../components/general/Spinner.vue';
 import { useNoticiaStore } from '../../../../stores/noticias/store';
-import { INoticiaSimplificada, NoticiaSimplificada } from '../../../../stores/noticias/types';
+import { type INoticiaSimplificada, NoticiaSimplificada } from '../../../../stores/noticias/types';
 
 const noticiaStore = useNoticiaStore();
 const lastIndex = ref(6);

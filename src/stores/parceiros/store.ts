@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { PartnerInterface } from './types';
+import type { PartnerInterface } from './types';
 
 export const useParceirosStore = defineStore('parceirosStore', {
   state: () => {

@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useDocumentStore } from '../../../stores/documentos/store';
-import { IDocumento } from '../../../stores/documentos/types';
+import type { IDocumento } from '../../../stores/documentos/types';
 import Spinner from '../../../components/general/Spinner.vue';
 import { brDateString, friendlyDateTime } from '../../../utils/formatacao/datetime';
 import router from '../../../router';

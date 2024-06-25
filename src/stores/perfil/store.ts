@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
 import { httpRequest } from '../../utils/http';
-import { IPerfil } from './types';
+import type { IPerfil } from './types';
 
 const perfil: IPerfil = {
   id: 0,

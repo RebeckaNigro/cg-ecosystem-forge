@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import CardParceiro from './CardParceiro.vue';
 import FilterComponent from '../general/FilterComponent.vue';
-import { IPartnerSeccionado } from '../../stores/parceiros/types';
+import type { IPartnerSeccionado } from '../../stores/parceiros/types';
 import { onMounted, ref } from 'vue';
 import SearchComponent from '../general/SearchComponent.vue';
 

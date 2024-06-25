@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
 import { getLastContent, httpRequest } from '../../utils/http';
-import { IAutor, INoticia, INoticiaSimplificada } from './types';
+import type { IAutor, INoticia, INoticiaSimplificada } from './types';
 
 const lastNews: Array<INoticiaSimplificada> = [];
 const allNews: Array<INoticiaSimplificada> = [];

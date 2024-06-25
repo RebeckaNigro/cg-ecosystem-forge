@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { INoticia, Noticia } from '../../stores/noticias/types';
+import type { INoticia, Noticia } from '../../stores/noticias/types';
 
 const titleIsValid = (t: string) => {
   if (!t || t.length < 2) return false;

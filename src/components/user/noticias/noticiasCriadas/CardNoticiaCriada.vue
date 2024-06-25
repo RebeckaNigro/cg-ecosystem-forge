@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { INoticiaSimplificada } from './../../../../stores/noticias/types';
+import type { INoticiaSimplificada } from './../../../../stores/noticias/types';
 import { useNoticiaStore } from '../../../../stores/noticias/store';
 import { useModalStore } from '../../../../stores/modal/store';
 import { useConfirmStore } from '../../../../stores/confirm/store';

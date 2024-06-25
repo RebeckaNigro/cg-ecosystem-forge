@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { validateFaleConoscoInput } from '../../utils/faleConosco/validation';
 import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
 import { httpRequest } from '../../utils/http';
-import { faleConosco, SetorInterface } from './types';
+import { faleConosco, type SetorInterface } from './types';
 
 export const useComunicacaoStore = defineStore('comunicacaoStore', {
   state: () => {

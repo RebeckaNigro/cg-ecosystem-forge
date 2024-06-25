@@ -50,7 +50,7 @@
 import { onMounted, ref } from 'vue';
 import router from '../../../router';
 import { useNoticiaStore } from '../../../stores/noticias/store';
-import { INoticia } from '../../../stores/noticias/types';
+import type { INoticia } from '../../../stores/noticias/types';
 import { friendlyDateTime } from '../../../utils/formatacao/datetime';
 import Spinner from '../../../components/general/Spinner.vue';
 import { useUserStore } from '../../../stores/user/store';

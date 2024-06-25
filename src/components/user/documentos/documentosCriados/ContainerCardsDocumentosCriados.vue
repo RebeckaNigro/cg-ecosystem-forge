@@ -57,7 +57,7 @@ import SearchComponent from '../../../general/SearchComponent.vue';
 import CardDocumentoCriado from '../../documentos/documentosCriados/CardDocumentoCriado.vue';
 import Spinner from '../../../general/Spinner.vue';
 import { useDocumentStore } from '../../../../stores/documentos/store';
-import { IDocumentoSimplificado } from '../../../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../../../stores/documentos/types';
 
 const documentoStore = useDocumentStore();
 const lastIndex = ref(6);

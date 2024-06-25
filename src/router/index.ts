@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import Codigo from '../components/esqueciSenha/Codigo.vue';
 import EsqueciSenha from '../components/esqueciSenha/EsqueciSenha.vue';
 import RedefinirSenha from '../components/esqueciSenha/RedefinirSenha.vue';

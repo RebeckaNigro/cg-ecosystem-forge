@@ -68,7 +68,7 @@ import Banner from '../../../components/general/Banner.vue';
 import CardDocumento from '../../../components/documentos/CardDocumento.vue';
 import ExternalHeader from '../../../components/general/ExternalHeader.vue';
 import SearchComponent from '../../../components/general/SearchComponent.vue';
-import { IDocumentoSimplificado } from '../../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../../stores/documentos/types';
 import { useDocumentStore } from '../../../stores/documentos/store';
 import Spinner from '../../../components/general/Spinner.vue';
 

@@ -78,7 +78,7 @@ import Banner from '../../../components/general/Banner.vue';
 import ExternalHeader from '../../../components/general/ExternalHeader.vue';
 import SearchComponent from '../../../components/general/SearchComponent.vue';
 import { useDocumentStore } from '../../../stores/documentos/store';
-import { IDocumentoSimplificado } from '../../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../../stores/documentos/types';
 import Spinner from '../../../components/general/Spinner.vue';
 
 const loading = ref(false);

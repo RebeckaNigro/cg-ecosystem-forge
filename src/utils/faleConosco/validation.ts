@@ -1,4 +1,4 @@
-import { faleConosco, faleConoscoInterface } from '../../stores/comunicacao/types';
+import { faleConosco, type faleConoscoInterface } from '../../stores/comunicacao/types';
 
 const nameIsValid = (n: string) => {
   if (!n || n.length < 2 || /[^A-zÀ-ÿ\s]/i.test(n)) return false;

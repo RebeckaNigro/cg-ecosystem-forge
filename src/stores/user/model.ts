@@ -1,4 +1,4 @@
-import { ILoggedUser } from './type';
+import { type ILoggedUser } from './type';
 
 export class LoggedUser implements ILoggedUser {
   userName: string | null;

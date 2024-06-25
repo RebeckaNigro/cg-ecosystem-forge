@@ -26,7 +26,7 @@
 import { onMounted, ref } from 'vue';
 import CardEvento from './CardEvento.vue';
 import { useEventoStore } from '../../stores/eventos/store';
-import { IEventoSimplificado } from '../../stores/eventos/types';
+import type { IEventoSimplificado } from '../../stores/eventos/types';
 import Spinner from '../general/Spinner.vue';
 
 const eventoStore = useEventoStore();

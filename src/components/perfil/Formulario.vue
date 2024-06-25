@@ -224,7 +224,7 @@ import { required, email, minLength, maxLength, sameAs, helpers } from '@vuelida
 import { isPasswordValid } from './../../utils/validator/validations';
 import Spinner from '../general/Spinner.vue';
 import { ID_SEM_INSTITUICAO } from '../../utils/constantes';
-import { IPerfil } from '../../stores/perfil/types';
+import type { IPerfil } from '../../stores/perfil/types';
 import { CEPMask, CPFMask } from '../../utils/formatacao/masks';
 
 const perfilStore = usePerfilStore();
@@ -319,6 +319,7 @@ const cadastrar = async () => {
     alertStore.showWarningMessage('Você precisa aceitar os termos de uso!');
   } else {
     v$.value.$validate();
+    const a = '2';
 
     console.dir(v$.value);
     if (!v$.value.$error) {

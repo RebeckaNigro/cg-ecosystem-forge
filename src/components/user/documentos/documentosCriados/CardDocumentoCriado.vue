@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { INoticiaSimplificada } from '../../../../stores/noticias/types';
+import type { INoticiaSimplificada } from '../../../../stores/noticias/types';
 import { useDocumentStore } from '../../../../stores/documentos/store';
 import { useModalStore } from '../../../../stores/modal/store';
 import { useConfirmStore } from '../../../../stores/confirm/store';
@@ -69,7 +69,7 @@ import { brDateString, friendlyDateTime } from '../../../../utils/formatacao/dat
 import { ref, onMounted, onUpdated } from 'vue';
 import ConfirmModal from '../../../general/ConfirmModal.vue';
 import router from '../../../../router';
-import { IDocumentoSimplificado } from '../../../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../../../stores/documentos/types';
 import { Modal } from 'bootstrap';
 
 const documentoStore = useDocumentStore();

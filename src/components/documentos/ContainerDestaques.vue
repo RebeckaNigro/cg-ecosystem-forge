@@ -20,7 +20,7 @@
 import { onMounted, ref } from 'vue';
 import CardDocumento from './CardDocumento.vue';
 import { useDocumentStore } from '../../stores/documentos/store';
-import { IDocumentoSimplificado } from '../../stores/documentos/types';
+import type { IDocumentoSimplificado } from '../../stores/documentos/types';
 import Spinner from '../general/Spinner.vue';
 
 const documentoStore = useDocumentStore();
