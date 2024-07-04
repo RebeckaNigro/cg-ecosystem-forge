@@ -24,6 +24,7 @@
     </div>
     <div class="carousel-inner">
       <div
+        style="text-align: center;"
         v-for="(data, index) in carouselData"
         :key="data.id"
         class="carousel-item"
@@ -35,7 +36,7 @@
               ? 'data:image/png;base64,' + data.arquivo
               : '/eventos/eventoExpandido/default-event-cover.svg'
           "
-          class="d-block w-100"
+          class="d-block"
           :alt="data.titulo"
           :class="{ 'img-evento-encerrado': checaEventoEncerrado(data) }"
         />
