@@ -24,7 +24,7 @@
     </div>
     <div class="carousel-inner">
       <div
-        style="text-align: center;"
+        align="center"
         v-for="(data, index) in carouselData"
         :key="data.id"
         class="carousel-item"
