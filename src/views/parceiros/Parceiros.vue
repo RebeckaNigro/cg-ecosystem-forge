@@ -88,7 +88,7 @@ const parceirosContainers = reactive([
       {
         logo: '/chumbado/home_parceiros/RedeMS.png',
         id: 21,
-        nome: 'PIME',
+        nome: 'RedeMS',
       },
     ],
     toggle: true,
@@ -131,6 +131,11 @@ const parceirosContainers = reactive([
         logo: '/chumbado/home_parceiros/sistema-s/SENAI.png',
         id: 12,
         nome: 'SENAI',
+      },
+      {
+        logo: '/chumbado/home_parceiros/sistema-s/SEBRAE.png',
+        id: 20,
+        nome: 'SEBRAE',
       },
     ],
     toggle: true,
