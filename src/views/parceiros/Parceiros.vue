@@ -43,6 +43,16 @@ const parceirosContainers = reactive([
         id: 8,
         nome: 'ICT Inova Brasil',
       },
+      {
+        logo: '/chumbado/home_parceiros/eli-cgde/IST.png',
+        id: 24,
+        nome: 'INSTITUTO SENAI DE TECNOLOGIA - EFICIÊNCIA OPERACIONAL',
+      },
+      {
+        logo: '/chumbado/home_parceiros/eli-cgde/ISIBIOMASSA.png',
+        id: 25,
+        nome: 'ISI Biomassa',
+      },
     ],
     toggle: true,
   },
@@ -58,6 +68,11 @@ const parceirosContainers = reactive([
         logo: '/chumbado/home_parceiros/FREITAS.png',
         id: 22 ,
         nome: 'Freitas e Castello Consultoria em Negócios',
+      },
+      {
+        logo: '/chumbado/home_parceiros/FREITAS.png',
+        id: 23 ,
+        nome: 'Luiz Bino Advocacia Empresarial',
       },
     ],
     toggle: true,
