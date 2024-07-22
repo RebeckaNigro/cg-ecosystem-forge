@@ -168,16 +168,10 @@ section.parceiros {
   padding: 3rem 9.3rem;
 }
 
-/*@media (max-width: 1200px) {
+@media (max-width: 1200px) {
   section.parceiros {
     padding: 3rem 2rem;
-  }
-}*/
-
-@media (width:100%) {
-  section.parceiros {
-    padding: 3rem 2rem;
-    text-align: center;
   }
 }
+
 </style>
