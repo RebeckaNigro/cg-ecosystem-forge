@@ -70,7 +70,7 @@ const parceirosContainers = reactive([
         nome: 'Freitas e Castello Consultoria em Negócios',
       },
       {
-        logo: '/chumbado/home_parceiros/FREITAS.png',
+        logo: '/chumbado/home_parceiros/LUIZ.png',
         id: 23 ,
         nome: 'Luiz Bino Advocacia Empresarial',
       },
