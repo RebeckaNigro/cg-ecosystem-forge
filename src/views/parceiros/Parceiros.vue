@@ -50,11 +50,6 @@ const parceirosContainers = reactive([
     tipoInstituicao: 'EMPRESAS',
     parceiros: [
       {
-        logo: '/chumbado/home_parceiros/eli-cgde/RdasArteiras.png',
-        id: 16,
-        nome: 'República das Arteiras',
-      },
-      {
         logo: '/chumbado/home_parceiros/eli-cgde/eng.png',
         id: 9,
         nome: 'ENG Soluções Tecnológicas',
@@ -76,19 +71,9 @@ const parceirosContainers = reactive([
         nome: 'AGINOVA',
       },
       {
-        logo: '/chumbado/home_parceiros/ucdb-e-incubadoras/ucdb.jpg',
-        id: 1,
-        nome: 'UCDB',
-      },
-      {
         logo: '/chumbado/home_parceiros/pmcg-e-incubadora/incubadora-municipal.png',
         id: 13,
         nome: 'Incubadora Municipal',
-      },
-      {
-        logo: '/chumbado/home_parceiros/eli-cgde/ecoinova_oficial.png',
-        id: 14,
-        nome: 'ECOINOVA',
       },
       {
         logo: '/chumbado/home_parceiros/livinglab.png',
@@ -98,6 +83,11 @@ const parceirosContainers = reactive([
       {
         logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
         id: 10,
+        nome: 'PIME',
+      },
+      {
+        logo: '/chumbado/home_parceiros/RedeMS.png',
+        id: 21,
         nome: 'PIME',
       },
     ],
