@@ -49,7 +49,7 @@ const parceirosContainers = reactive([
         nome: 'INSTITUTO SENAI DE TECNOLOGIA - EFICIÊNCIA OPERACIONAL',
       },
       {
-        logo: '/chumbado/home_parceiros/eli-cgde/ISIBIOMASSA.png',
+        logo: "/chumbado/home_parceiros/eli-cgde/BIOMASSA.png",
         id: 25,
         nome: 'ISI Biomassa',
       },
