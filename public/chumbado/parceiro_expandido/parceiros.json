@@ -254,25 +254,9 @@
     "wppLink": "",
     "cnpj": ""
   },
+  
   {
     "parceiroId": "16",
-    "parceiroNome": "REPÚBLICA DAS ARTEIRAS",
-    "primeiroParagrafo": "Somos uma Startup de negócios sociais através de um marketplace de prestação de serviços, voltada para o setor de confecções de vestuário e moda criada a partir de um coletivo de costureiras na periferia sul da nossa capital. Como tal, fazemos parte de uma ampla rede de network com a cadeia produtiva e consumidores deste setor. Outrossim, temos uma trajetória empreendedora que pode ser útil na construção da trilha do empreendedor no Ecossistema.",
-    "subTitulo": "",
-    "segundoParagrafo": "",
-    "coverPath": "/chumbado/parceiro_expandido/capas/capa_arteiras.jpg",
-    "logoPath": "/chumbado/home_parceiros/eli-cgde/RdasArteiras.png",
-    "emailContato": "ivanigrance@gmail.com",
-    "telefone": "67992021181",
-    "website": "",
-    "endereco": "Rua Lins do Rego 08 universitária II, Campo Grande - MS, 79071376",
-    "instaLink": "https://instagram.com/republicadasarteirascg?utm_medium=copy_link",
-    "linkedinLink": "https://www.linkedin.com/company/republica-das-arteiras",
-    "wppLink": "",
-    "cnpj": "30.764.790/0001-42"
-  },
-  {
-    "parceiroId": "17",
     "parceiroNome": "INOVA MS",
     "primeiroParagrafo": "A ICT Inova MS é uma instituição científica e de inovação tecnológica brasileira, criada a partir do novo marco legal da ciência, tecnologia e inovação (lei federal 13.243, de 11 de janeiro de 2016 e decreto 9283/2018), sem fins lucrativos, em conformidade com a lei das OSCIP, com sede em Campo Grande, MS. O Laboratório de Transportes (LATRAN) da UFMS é um dos parceiros da ICT Inova MS, trabalhando com pesquisas e desenvolvimento na área de infraestrutura viária, engenharia de tráfego, planejamento urbano, veículos elétricos e sustentabilidade.",
     "subTitulo": "",
@@ -289,7 +273,7 @@
     "cnpj": ""
   },
   {
-    "parceiroId": "18",
+    "parceiroId": "17",
     "parceiroNome": "SESI MS",
     "primeiroParagrafo": "Com foco na educação empreendedora e ações preventivas em segurança e saúde no trabalho, o SESI tem como visão consolidar-se como uma instituição de referência em educação e em segurança e saúde no trabalho, no fortalecimento da competitividade e no estímulo da gestão inovadora e socialmente responsável da Indústria.",
     "subTitulo": "",
@@ -306,7 +290,7 @@
     "cnpj": "03.769.599/0001-10"
   },
   {
-    "parceiroId": "19",
+    "parceiroId": "18",
     "parceiroNome": "STARTUP SESI FIEMS",
     "primeiroParagrafo": "Oi, somos a Startup SESI FIEMS, transformamos problemas em SOLUÇÕES e ideias em grandes NEGÓCIOS. Nosso propósito é promover a inovação aberta na indústria através do desenvolvimento de pessoas e negócios, criando um ecossistema inovador. Quer saber mais sobre como podemos contribuir para o seu negócio? Te esperamos para um café! ",
     "subTitulo": "Propósito",
@@ -319,6 +303,23 @@
     "endereco": "Rua Barão do Rio Branco, nº 2290, Campo Grande - MS, CEP: 79002-172",
     "instaLink": "https://www.instagram.com/startupsesifiems/",
     "linkedinLink": "https://www.linkedin.com/company/startupfiems/",
+    "wppLink": "",
+    "cnpj": ""
+  },
+  {
+    "parceiroId": "19",
+    "parceiroNome": "Sebrae MS",
+    "primeiroParagrafo": "O Sebrae MS, em rede com diversas instituições da esfera pública, privada e terceiro setor, promove o empreendedorismo inovador e sustentável por meio de mapeamento do ecossistema de inovação no Estado com o objetivo de estimular e desenvolver ambientes de inovação e conectar os atores envolvidos.\n\nA formatação desse mapeamento envolve a discussão com lideranças e setores que contribuem com a inovação, além de atuar para que seja criado um ambiente que permita que esses atores possam dialogar entre si para desenvolvimento de soluções locais para desafios.\n\nAlém disso, dentro de programas com grande capilaridade no Estado como o Cidade Empreendedora tem a inovação com um dos eixos a serem trabalhados junto ao poder público para gerar um ambiente favorável a negócios inovadores.\n\nCom o objetivo de estimular o mercado de inovação e tecnologia, tem participado de feiras tecnológicas fomentando a participação de atores do ecossistema de inovação para promover a integração, conhecimento e aproximar as startups de seus públicos. Também tem estimulado o fortalecimento de incubadoras para dar suporte às iniciativas voltadas à inovação.\n\nO Sebrae MS também possui um laboratório vivo de inovação, o Living Lab MS, inaugurado em 2016, em parceria com 42 instituições públicas e privadas, com o propósito de fomentar o empreendedorismo e a inovação de forma disruptiva.",
+    "subTitulo": "Propósito",
+    "segundoParagrafo": "",
+    "coverPath": "/chumbado/parceiro_expandido/capas/capa_sebrae.jpg",
+    "logoPath": "/chumbado/home_parceiros/sistema-s/SEBRAE.png",
+    "emailContato": "francilene.silva@ms.sebrae.com.br",
+    "telefone": "(67)98103-2584",
+    "website": "https://www.ms.sebrae.com.br/",
+    "endereco": "Av. Mato Grosso, 1661 - Centro, CEP: 79002-950",
+    "instaLink": "https://instagram.com/sebraems",
+    "linkedinLink": "https://www.linkedin.com/company/sebraems",
     "wppLink": "",
     "cnpj": "03.769.599/0017-88"
   }
