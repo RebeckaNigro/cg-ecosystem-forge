@@ -54,6 +54,11 @@ const parceirosContainers = reactive([
         id: 9,
         nome: 'ENG Soluções Tecnológicas',
       },
+      {
+        logo: '/chumbado/home_parceiros/FREITAS.png',
+        id: 22 ,
+        nome: 'Freitas e Castello Consultoria em Negócios',
+      },
     ],
     toggle: true,
   },
@@ -163,9 +168,16 @@ section.parceiros {
   padding: 3rem 9.3rem;
 }
 
-@media (max-width: 1200px) {
+/*@media (max-width: 1200px) {
   section.parceiros {
     padding: 3rem 2rem;
+  }
+}*/
+
+@media (width:100%) {
+  section.parceiros {
+    padding: 3rem 2rem;
+    text-align: center;
   }
 }
 </style>
