@@ -110,6 +110,11 @@ const parceirosContainers = reactive([
         id: 21,
         nome: 'RedeMS',
       },
+      {
+        logo: '/chumbado/home_parceiros/PARK.PNG',
+        id: 26,
+        nome: 'PARKTEC CG',
+      },
     ],
     toggle: true,
   },
