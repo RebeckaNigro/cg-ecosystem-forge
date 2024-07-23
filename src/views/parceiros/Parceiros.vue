@@ -106,15 +106,16 @@ const parceirosContainers = reactive([
         nome: 'Startup Sesi Fiems',
       },
       {
-        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
-        id: 10,
-        nome: 'PIME',
-      },
-      {
         logo: '/chumbado/home_parceiros/PARK.PNG',
         id: 26,
         nome: 'PARKTEC CG',
       },
+      {
+        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
+        id: 10,
+        nome: 'PIME',
+      },
+      
     ],
     toggle: true,
   },
@@ -141,11 +142,7 @@ const parceirosContainers = reactive([
         logo: '/chumbado/home_parceiros/sistema-s/SEBRAE.png',
         id: 20,
         nome: 'SEBRAE',
-      },
-      {
-        logo: '/chumbado/home_parceiros/sistema-s/SESI.png',
-        id: 18,
-        nome: 'SESI',
+        
       },
       {
         logo: '/chumbado/home_parceiros/sistema-s/SENAC.png',
@@ -162,6 +159,12 @@ const parceirosContainers = reactive([
         id: 5,
         nome: 'SENAR MS',
       },
+      {
+        logo: '/chumbado/home_parceiros/sistema-s/SESI.png',
+        id: 18,
+        nome: 'SESI',
+      },
+     
     ],
     toggle: true,
   },
