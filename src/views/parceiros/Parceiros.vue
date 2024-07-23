@@ -25,19 +25,9 @@ import { onMounted, reactive } from 'vue';
 import ExternalHeader from '../../components/general/ExternalHeader.vue';
 
 const parceirosContainers = reactive([
-  {
+{
     tipoInstituicao: 'ICTIs',
     parceiros: [
-      {
-        logo: '/chumbado/home_parceiros/uems-e-incubadoras/uems.png',
-        id: 2,
-        nome: 'UEMS',
-      },
-      {
-        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/ufms.png',
-        id: 3,
-        nome: 'UFMS',
-      },
       {
         logo: '/chumbado/home_parceiros/eli-cgde/ICT-INOVA-BR.png',
         id: 8,
@@ -49,9 +39,19 @@ const parceirosContainers = reactive([
         nome: 'INSTITUTO SENAI DE TECNOLOGIA - EFICIÊNCIA OPERACIONAL',
       },
       {
-        logo: "/chumbado/home_parceiros/eli-cgde/BIOMASSA.png",
+        logo: '/chumbado/home_parceiros/eli-cgde/BIOMASSA.png',
         id: 25,
         nome: 'ISI Biomassa',
+      },
+      {
+        logo: '/chumbado/home_parceiros/uems-e-incubadoras/uems.png',
+        id: 2,
+        nome: 'UEMS',
+      },
+      {
+        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/ufms.png',
+        id: 3,
+        nome: 'UFMS',
       },
     ],
     toggle: true,
@@ -66,12 +66,12 @@ const parceirosContainers = reactive([
       },
       {
         logo: '/chumbado/home_parceiros/FREITAS.png',
-        id: 22 ,
+        id: 22,
         nome: 'Freitas e Castello Consultoria em Negócios',
       },
       {
         logo: '/chumbado/home_parceiros/LUIZ.png',
-        id: 23 ,
+        id: 23,
         nome: 'Luiz Bino Advocacia Empresarial',
       },
     ],
@@ -80,11 +80,6 @@ const parceirosContainers = reactive([
   {
     tipoInstituicao: 'MECANISMOS DE INOVAÇÃO',
     parceiros: [
-      {
-        logo: '/chumbado/home_parceiros/sistema-s/Startup.png',
-        id: 19,
-        nome: 'Startup Sesi Fiems',
-      },
       {
         logo: '/chumbado/home_parceiros/ufms-e-incubadoras/aginova.png',
         id: 4,
@@ -101,14 +96,19 @@ const parceirosContainers = reactive([
         nome: 'Living Lab MS',
       },
       {
-        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
-        id: 10,
-        nome: 'PIME',
-      },
-      {
         logo: '/chumbado/home_parceiros/RedeMS.png',
         id: 21,
         nome: 'RedeMS',
+      },
+      {
+        logo: '/chumbado/home_parceiros/sistema-s/Startup.png',
+        id: 19,
+        nome: 'Startup Sesi Fiems',
+      },
+      {
+        logo: '/chumbado/home_parceiros/ufms-e-incubadoras/pime.png',
+        id: 10,
+        nome: 'PIME',
       },
       {
         logo: '/chumbado/home_parceiros/PARK.PNG',
@@ -138,14 +138,14 @@ const parceirosContainers = reactive([
     tipoInstituicao: 'SOCIEDADE ORGANIZADA',
     parceiros: [
       {
+        logo: '/chumbado/home_parceiros/sistema-s/SEBRAE.png',
+        id: 20,
+        nome: 'SEBRAE',
+      },
+      {
         logo: '/chumbado/home_parceiros/sistema-s/SESI.png',
         id: 18,
         nome: 'SESI',
-      },
-      {
-        logo: '/chumbado/home_parceiros/sistema-s/SENAR-MS.png',
-        id: 5,
-        nome: 'SENAR MS',
       },
       {
         logo: '/chumbado/home_parceiros/sistema-s/SENAC.png',
@@ -158,9 +158,9 @@ const parceirosContainers = reactive([
         nome: 'SENAI',
       },
       {
-        logo: '/chumbado/home_parceiros/sistema-s/SEBRAE.png',
-        id: 20,
-        nome: 'SEBRAE',
+        logo: '/chumbado/home_parceiros/sistema-s/SENAR-MS.png',
+        id: 5,
+        nome: 'SENAR MS',
       },
     ],
     toggle: true,
