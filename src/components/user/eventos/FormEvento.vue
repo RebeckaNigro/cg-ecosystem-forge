@@ -641,10 +641,6 @@ const cadastrar = async () => {
   if (evento.value.dataInicio.length <= 10 && evento.value.dataTermino.length <= 10) {
     const dataInicioDateTime = dateAndTimeToDatetime(evento.value.dataInicio, horaInicio.value);
     const dataTerminoDateTime = dateAndTimeToDatetime(evento.value.dataTermino, horaFim.value);
-    if (new Date(dataInicioDateTime) < new Date()) {
-      alertStore.showTimeoutErrorMessage('Data de início do evento já passou!');
-      return;
-    }
 
     if (new Date(dataInicioDateTime) > new Date(dataTerminoDateTime)) {
       alertStore.showTimeoutErrorMessage(
@@ -656,11 +652,6 @@ const cadastrar = async () => {
     evento.value.dataInicio = dataInicioDateTime;
     evento.value.dataTermino = dataTerminoDateTime;
   } else {
-    if (new Date(evento.value.dataInicio) < new Date()) {
-      alertStore.showTimeoutErrorMessage('Data de início do evento já passou!');
-      return;
-    }
-
     if (new Date(evento.value.dataInicio) > new Date(evento.value.dataTermino)) {
       alertStore.showTimeoutErrorMessage(
         'Data de início não pode ser maior que a data de término!'
