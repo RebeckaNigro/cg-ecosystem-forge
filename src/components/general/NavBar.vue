@@ -5,7 +5,7 @@
         <MenuLateral />
 
         <router-link class="navbar-brand" to="/">
-          <img src="/colorful_logo.svg" alt="logo" class="img-fluid" />
+        <img src="/logonova.svg" alt="logonova" class="img-fluid" width="89%" />
         </router-link>
       </div>
       <section class="container-links d-none d-xl-flex fs-5 m-auto flex-wrap dark-title">
