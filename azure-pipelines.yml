@@ -11,13 +11,12 @@ resources:
 
 pool:
   name: rebecka_azure
-  
-steps:
-  - bash: |
-      curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-      apt-get install -y nodejs
+
+ - bash: |
       npm install -g pnpm @azure/static-web-apps-cli
 
+  # Comandos de build e deploy
+  - bash: |
       pnpm i
       echo "export const ID_SEM_INSTITUICAO=3" > ./src/utils/constantes.ts
       sed -i 's|https://hom-api\.ecossistemadeinovacaocg\.com\.br|$(API_URL)|g' src/utils/http/index.ts
