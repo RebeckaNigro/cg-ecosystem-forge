@@ -14,6 +14,11 @@ pool:
   name: rebecka_azure
 
 steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'    # Ajuste a versão conforme seu projeto
+    displayName: 'Install Node.js'
+
   - bash: |
       pnpm i
       echo "export const ID_SEM_INSTITUICAO=3" > ./src/utils/constantes.ts
@@ -21,6 +26,6 @@ steps:
       pnpm build
       cp ./staticwebapp.config.json ./dist
       pnpx @azure/static-web-apps-cli deploy ./dist --env production
-      # Build now is in /dist folder
     env:
       SWA_CLI_DEPLOYMENT_TOKEN: $(DEPLOY_TOKEN)
+    displayName: 'Install dependencies, build and deploy'
