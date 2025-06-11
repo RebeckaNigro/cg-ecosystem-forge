@@ -6,13 +6,18 @@
 trigger:
   - main
 
-resources:
-  - repo: self
-
 pool:
-  name: rebecka_azure
+  name: rebecka_azure  # seu agente Linux
 
- - bash: |
+steps:
+  # Instala Node.js 18 no ambiente Linux
+  - task: UseNode@1
+    inputs:
+      version: '18.x'
+      checkLatest: true
+
+  # Instala pnpm localmente
+  - bash: |
       npm install -g pnpm @azure/static-web-apps-cli
 
   # Comandos de build e deploy
