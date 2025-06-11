@@ -6,28 +6,20 @@
 trigger:
   - main
 
+resources:
+  - repo: self
+
 pool:
   name: rebecka_azure
 
 steps:
-  - task: UseNode@1
-    inputs:
-      version: '18.x'
-      checkLatest: true
-
   - bash: |
-      export PATH="$PATH:$(dirname $(which node))"
-      echo "Node path: $(which node)"
-      node -v
-      npm install -g pnpm @azure/static-web-apps-cli
-
-  - bash: |
-      export PATH="$PATH:$(dirname $(which node))"
       pnpm i
       echo "export const ID_SEM_INSTITUICAO=3" > ./src/utils/constantes.ts
       sed -i 's|https://hom-api\.ecossistemadeinovacaocg\.com\.br|$(API_URL)|g' src/utils/http/index.ts
       pnpm build
       cp ./staticwebapp.config.json ./dist
       pnpx @azure/static-web-apps-cli deploy ./dist --env production
+      # Build now is in /dist folder
     env:
       SWA_CLI_DEPLOYMENT_TOKEN: $(DEPLOY_TOKEN)
