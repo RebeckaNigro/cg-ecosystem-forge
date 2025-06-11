@@ -21,6 +21,5 @@ steps:
       cp ./staticwebapp.config.json ./dist
       pnpx @azure/static-web-apps-cli deploy ./dist --env production
       # Build now is in /dist folder
-       shell: wsl
     env:
       SWA_CLI_DEPLOYMENT_TOKEN: $(DEPLOY_TOKEN)
