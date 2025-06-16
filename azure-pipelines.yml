@@ -16,16 +16,28 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
+        Write-Host "Node version:"
         node -v
+        Write-Host "PNPM version:"
         pnpm -v
 
+        Write-Host "Installing dependencies..."
         pnpm install
+
+        Write-Host "Gerando constante ID_SEM_INSTITUICAO=3"
         "export const ID_SEM_INSTITUICAO=3" | Out-File -Encoding utf8 -FilePath ./src/utils/constantes.ts
+
+        Write-Host "Substituindo URL base da API na index.ts"
         (Get-Content src/utils/http/index.ts) -replace 'https://hom-api\.ecossistemadeinovacaocg\.com\.br', "${env:API_URL}" | Set-Content src/utils/http/index.ts
 
+        Write-Host "Build do projeto"
         pnpm build
+
+        Write-Host "Copiando arquivo de configuração para a pasta dist"
         Copy-Item -Path ./staticwebapp.config.json -Destination ./dist
+
+        Write-Host "Deploy com Azure Static Web Apps CLI"
         pnpx @azure/static-web-apps-cli deploy ./dist --env production
     env:
       SWA_CLI_DEPLOYMENT_TOKEN: $(DEPLOY_TOKEN)
-      API_URL: $(API_URL)
+      API_URL: https://api.ecossistemadeinovacaocg.com.br
