@@ -1,15 +1,14 @@
-//@ts-nocheck
+  //@ts-nocheck
 import { defineStore } from 'pinia';
 import { GeneralResponseHandler } from '../../utils/GeneralResponseHandler';
 import { getLastContent, httpRequest } from '../../utils/http';
-import {
+import type {
   EnderecoExistente,
   IEvento,
   IEventoSimplificado,
   IOrganizador,
   IUltimoEvento,
 } from './types';
-
 const enderecosExistentes: Array<EnderecoExistente> = [];
 const ultimosEventos: Array<IEventoSimplificado> = [];
 const eventos: Array<IUltimoEvento> = [];

@@ -2,7 +2,7 @@
   <footer class="container-fluid sticky-bottom justify-content-center">
     <div class="row align-items-center justify-content-center w-100">
       <div class="col-11 col-md-2 col-lg-auto ms-2 mx-lg-4 my-3 d-flex">
-        <img src="/logo_with_text.png" alt="white_logo" width="200" class="img-fluid" />
+        <img src="/logo_negativa.png" alt="logo_negativa" width="200" class="img-fluid" />
       </div>
 
       <div
