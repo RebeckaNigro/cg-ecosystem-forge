@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios';
 import { useUserStore } from '../../stores/user/store';
 import router from './../../router';
-export const baseURL = 'https://startupsesi.brazilsouth.cloudapp.azure.com/ecossistema';
+export const baseURL = 'https://api.ecossistemadeinovacaocg.com.br';
 
 // TODO: provide axios instance throught provide/inject
 // TODO: enhance headers when api routes gets private
