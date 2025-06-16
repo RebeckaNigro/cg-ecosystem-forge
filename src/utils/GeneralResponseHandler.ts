@@ -1,4 +1,4 @@
-interface ResponseInterface {
+export interface ResponseInterface {
   code: number;
   dado: any; // especificar tipo de dado do retorno
   message: string;
