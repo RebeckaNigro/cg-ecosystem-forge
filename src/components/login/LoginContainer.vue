@@ -67,7 +67,7 @@
         </div>
       </form>
 
-      <!-- <div class="d-flex align-items-center justify-content-around my-4">
+      <div class="d-flex align-items-center justify-content-around my-4">
 			<hr class="divider">
 			<span>OU</span>
 			<hr class="divider">
@@ -75,7 +75,7 @@
 	
 		<button class="green-btn-outlined text-uppercase" type="button" @click="$router.push({name: 'Perfil'})">
 		Cadastre-se
-		</button> -->
+		</button> 
     </div>
   </div>
 </template>
