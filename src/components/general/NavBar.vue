@@ -8,7 +8,7 @@
         <img src="/logonova.svg" alt="logonova" class="img-fluid" width="89%" />
         </router-link>
       </div>
-      <section class="container-links d-none d-xl-flex fs-5 m-auto flex-wrap dark-title">
+      <section class="container-links d-none d-xl-flex fs-6 m-auto flex-wrap dark-title">
         <router-link
           :to="link.path"
           v-for="link in maisInfos"
