@@ -204,7 +204,9 @@
 
     <div class="row mt-5">
       <div class="col">
-        <button type="button" class="green-btn-outlined">VOLTAR</button>
+        <button type="button" class="green-btn-outlined" @click="$router.push({ name: 'Login' })">
+                VOLTAR
+        </button>
       </div>
 
       <div class="col">
