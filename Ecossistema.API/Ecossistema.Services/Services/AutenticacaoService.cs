@@ -462,7 +462,7 @@ namespace Ecossistema.Services.Services
                 var aspUser = await _userManager.FindByEmailAsync(email);
                 if(aspUser == null)
                 {
-                    resposta.SetErroInterno("Email não econtrado");
+                    resposta.SetErroInterno("Email não encontrado");
                     return resposta;
                 }
                 var a = aspUser.Id;
