@@ -18,7 +18,8 @@ steps:
     Dockerfile: '**/Dockerfile'
     tags: 'latest'
 - bash: |
-    curl -X GET -H "X-TOKEN: $TOKEN" \
+    # Adicionado -v para modo verboso (mais detalhes) e --connect-timeout para evitar longa espera
+    curl -v --connect-timeout 30 -X GET -H "X-TOKEN: $TOKEN" \
     https://startupsesi.brazilsouth.cloudapp.azure.com/push-hook?project=ecossistema
   displayName: "Alert server via webhook"
   env:
