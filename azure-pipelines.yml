@@ -4,10 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- main
 
 pool:
-  name: Default
+  name: rebecka_azure
 
 steps:
 - task: Docker@2
