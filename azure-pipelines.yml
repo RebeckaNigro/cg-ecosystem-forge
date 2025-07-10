@@ -17,10 +17,3 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: 'latest'
-
-- script: |
-    curl -X GET -H "X-TOKEN: %TOKEN%" ^
-    "https://startupsesi.brazilsouth.cloudapp.azure.com/push-hook?project=ecossistema"
-  displayName: "Alert server via webhook"
-  env:
-    TOKEN: $(PUSH-TOKEN)
