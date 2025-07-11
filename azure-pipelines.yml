@@ -17,3 +17,9 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: '$(Build.BuildId)'
+
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'ConexaoAzureServicePrincipal'
+    appName: 'api-ecossistema'
+    containers: 'eldoradopercepcao.azurecr.io/ecossistema:$(Build.BuildId)'
