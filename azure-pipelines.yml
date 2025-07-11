@@ -2,13 +2,13 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
+ 
 trigger:
 - master
-
+ 
 pool:
   name: rebecka_azure
-
+ 
 steps:
 - task: Docker@2
   inputs:
@@ -17,9 +17,3 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: '$(Build.BuildId)'
-
-- task: AzureWebAppContainer@1
-  inputs:
-    azureSubscription: 'ConexaoAzureServicePrincipal'
-    appName: 'api-ecossistema'
-    containers: 'eldoradopercepcao.azurecr.io/ecossistema:$(Build.BuildId)'
