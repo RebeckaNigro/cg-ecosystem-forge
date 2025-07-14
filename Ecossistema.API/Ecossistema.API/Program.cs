@@ -19,17 +19,18 @@ ConfigurationManager configuration = builder.Configuration; //identity
 // Add services to the container.
 
 var configuracaoEmail = builder.Configuration.GetSection("ConfiguracaoEmail")
-    .Get<ConfiguracaoEmail>();
+    .Get<ConfiguracaoEmail>() 
+    ?? throw new InvalidOperationException("A seção de configuração 'ConfiguracaoEmail' não foi encontrada ou está vazia.");
 
 var urls = builder.Configuration.GetSection("UrlStrings")
-                .Get<UrlStringsDto>();
+                .Get<UrlStringsDto>()
+                ?? throw new InvalidOperationException("A seção de configuração 'UrlStrings' não foi encontrada ou está vazia.");
 
 urls.ApiUrl = System.Environment.GetEnvironmentVariable("API_URL") ?? urls.ApiUrl;
 
 builder.Services.AddSingleton(urls);
 
 builder.Services.AddSingleton(configuracaoEmail);
-builder.Services.AddSingleton(urls);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();
