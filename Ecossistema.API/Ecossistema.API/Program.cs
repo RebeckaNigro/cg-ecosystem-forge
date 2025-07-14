@@ -9,30 +9,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+ 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("./appsettings.json");
-
+ 
 ConfigurationManager configuration = builder.Configuration; //identity
-
-
+ 
+ 
 // Add services to the container.
-
+ 
 var configuracaoEmail = builder.Configuration.GetSection("ConfiguracaoEmail")
-    .Get<ConfiguracaoEmail>() 
-    ?? throw new InvalidOperationException("A seção de configuração 'ConfiguracaoEmail' não foi encontrada ou está vazia.");
-
+    .Get<ConfiguracaoEmail>();
+ 
 var urls = builder.Configuration.GetSection("UrlStrings")
-                .Get<UrlStringsDto>()
-                ?? throw new InvalidOperationException("A seção de configuração 'UrlStrings' não foi encontrada ou está vazia.");
-
+                .Get<UrlStringsDto>();
+ 
 urls.ApiUrl = System.Environment.GetEnvironmentVariable("API_URL") ?? urls.ApiUrl;
-
+ 
 builder.Services.AddSingleton(urls);
-
+ 
 builder.Services.AddSingleton(configuracaoEmail);
+builder.Services.AddSingleton(urls);
 builder.Services.AddControllers();
-
+ 
 builder.Services.AddScoped<IAprovacaoService, AprovacaoService>();
 builder.Services.AddScoped<IArquivoService, ArquivoService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
@@ -46,16 +45,16 @@ builder.Services.AddScoped<IInstituicaoService, InstituicaoService>();
 builder.Services.AddScoped<INoticiaService, NoticiaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ITagService, TagService>();
-
-
+ 
+ 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+ 
 builder.Services.AddDbContext<EcossistemaContext>(options =>
 {
     options.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+ 
 builder.Services.AddCors(options =>
     {
         options.AddPolicy("CorsPolicy",
@@ -67,13 +66,13 @@ builder.Services.AddCors(options =>
         );
     }
 );
-
-
+ 
+ 
 // For Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<EcossistemaContext>()
     .AddDefaultTokenProviders();
-
+ 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -81,7 +80,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-
+ 
 // Adding Jwt Bearer 
 .AddJwtBearer(options =>
 {
@@ -107,39 +106,39 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
-
+ 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();  //identity
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+ 
 var app = builder.Build();
-
+ 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+ 
 //app.UseHttpsRedirection();
-
+ 
 app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowAnyOrigin()
 );
-
+ 
 app.UseRouting();
-
+ 
 app.UseCors("CorsPolicy");
-
+ 
 app.UseAuthentication();
-
+ 
 app.Use(async (context, next) =>
 {
     await next();
-
+ 
     if (context.Response.StatusCode == 401 && context.Response.Headers.ContainsKey("Token-Expired"))
     {
         context.Response.Headers.Remove("Token-Expired");
@@ -147,11 +146,11 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsJsonAsync(new { message = "Token expirado. Por favor, faça login novamente." });
     }
 });
-
+ 
 app.UseStaticFiles();
-
+ 
 app.UseAuthorization();
-
+ 
 app.MapControllers();
-
+ 
 app.Run();
