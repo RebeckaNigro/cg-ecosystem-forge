@@ -121,10 +121,10 @@ onMounted(() => {
       margin: 5px 0;
     }
     time {
-      background-image: url('/public/calendar_icon.svg');
+      background-image: url('/calendar_icon.svg');
     }
     address {
-      background-image: url('/public/location_icon.svg');
+      background-image: url('/location_icon.svg');
     }
   }
 }

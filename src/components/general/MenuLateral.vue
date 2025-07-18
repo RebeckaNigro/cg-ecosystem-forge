@@ -145,7 +145,7 @@ const userStore = useUserStore();
     box-shadow: none;
   }
   .navbar-toggler-icon {
-    background-image: url('../../../public/hamburguer_icon.svg');
+    background-image: url('../../../hamburguer_icon.svg');
   }
 }
 .offcanvas-start {
@@ -177,17 +177,17 @@ const userStore = useUserStore();
       background-size: contain;
     }
     .home-menu {
-      background: url('../../../public/home_icon.svg') no-repeat;
+      background: url('../../../home_icon.svg') no-repeat;
     }
     .documentos-menu {
-      background: url('../../../public/docs_icon.svg') no-repeat;
+      background: url('../../../docs_icon.svg') no-repeat;
     }
     .noticias-menu {
-      background: url('../../../public/news_icon.svg') no-repeat;
+      background: url('../../../news_icon.svg') no-repeat;
     }
 
     .eventos-menu {
-      background: url('../../../public/events_icon.svg') no-repeat;
+      background: url('../../../events_icon.svg') no-repeat;
     }
   }
 }

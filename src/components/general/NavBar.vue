@@ -139,7 +139,7 @@ nav.navbar {
   }
 }
 .dropdown-toggle-responsive {
-  background: url('/public/menu_icon.svg') no-repeat;
+  background: url('/menu_icon.svg') no-repeat;
   border: none;
   display: flex;
   height: 24px;

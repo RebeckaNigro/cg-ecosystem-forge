@@ -130,7 +130,7 @@ onMounted(async () => {
       font-weight: 600;
       font-size: 1rem;
       color: #000;
-      background: url('/public/noticias/noticia-expandida/user.svg');
+      background: url('/noticias/noticia-expandida/user.svg');
       background-repeat: no-repeat;
       background-position-y: center;
       background-size: contain;
